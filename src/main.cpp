@@ -26,6 +26,8 @@ long messageCounter = 0;
 uint64_t lastTxTime = 0;
 uint64_t txDuration;
 uint64_t minimumPause;                 // For 1% duty cycle compliance
+bool pendingGpsTransmit = false;
+bool gpsInitialized = false;  
 
 // Interrupt callback - keep this minimal and fast!
 void rx() {
@@ -38,12 +40,34 @@ void initializeDisplay(uint8_t textSize = 1, uint8_t rotation = 1) {
     display.setRotation(rotation);          // Rotate the display
     display.setTextSize(textSize);          // Set text size
 }
-void transmitPacket() {
-  // Create message identifying this as a Wireless Tracker with useful data
-  String message = "Msg# " + String(messageCounter++);
-  message += "\nBat:" + String(heltec_battery_percent()) + "%";
-  message += "\nTemp:" + String(heltec_temperature(), 1) + "C";
-  message += "\nUptime:" + String(millis()/1000) + "s";
+
+void initializeGPS() {
+  initializeDisplay();
+  if (!gpsInitialized) {
+    both.println("Initializing GPS...");
+    heltec_gnss_begin();
+    gpsInitialized = true;
+    both.println("GPS initialized");
+    delay(1000); // Give GPS a moment to start
+  }
+}
+void transmitPacket(bool sendGPS = false) {
+    String message;
+  
+  if (sendGPS) {
+    // Create GPS location message
+    message = "GPS Loc";
+    message += "\nLat:" + String(heltec_gnss_latitude(), 6);
+    message += "\nLon:" + String(heltec_gnss_longitude(), 6);
+    message += "\nAlt:" + String(heltec_gnss_altitude_meters(), 1) + "m";
+    message += "\nSats:" + String(heltec_gnss_satellites());
+  } else {
+    // Create regular status message
+    message = "Msg# " + String(messageCounter++);
+    message += "\nBat:" + String(heltec_battery_percent()) + "%";
+    message += "\nTemp:" + String(heltec_temperature(), 1) + "C";
+    message += "\nUptime:" + String(millis()/1000) + "s";
+  }
   
   both.printf("TX %s ", message.c_str());
   
@@ -136,32 +160,60 @@ void setup() {
   } else {
     both.println("Manual tx (press button)");
   }
+  both.println("Button = GPS location");
   both.println("Wireless Tracker ready!");
   both.println("---");
-  delay(2000);
 }
 
 void loop() {
-  heltec_loop(); // Handle power button and other library functions
+  heltec_loop();
   
-  // Check if we can legally transmit (1% duty cycle compliance)
   bool txLegal = millis() > lastTxTime + minimumPause;
-  
-  // Auto-transmit every PAUSE seconds OR manual transmit on button press
   bool timeToTransmit = (PAUSE > 0) && (millis() - lastTxTime > (PAUSE * 1000));
-  bool buttonPressed = button.isSingleClick();
-  
-  if ((timeToTransmit && txLegal) || (buttonPressed && txLegal)) {
-    initializeDisplay(2);
-    transmitPacket();
-  } else if (buttonPressed && !txLegal) {
-    // User pressed button but we need to wait for duty cycle
-    int waitSeconds = ((minimumPause - (millis() - lastTxTime)) / 1000) + 1;
-    initializeDisplay();
-    both.printf("Duty cycle limit - wait %i seconds\n", waitSeconds);
+  bool buttonPressed = button.isSingleClick();   // register button press
+ 
+  if (buttonPressed) { // if button is pressed, we'll send GPS info
+    initializeGPS();
+    
+    // Check GPS status after initialization
+    if (gpsInitialized) {
+      heltec_gnss_update();
+      int sats = heltec_gnss_satellites();
+      
+      if (sats == 0) {
+        // No satellites - just show message and don't queue transmission
+        initializeDisplay(2);
+        both.println("GPS Status");
+        both.println("No satellites");
+        both.println("acquired");
+        delay(2000);
+        return; // Exit early, don't set pendingGpsTransmit
+      } else {
+        // Has satellites - queue the transmission
+        pendingGpsTransmit = true;
+        initializeDisplay(2);
+        both.printf("GPS ready\n%i satellites\nQueued for TX", sats);
+        delay(1000);
+      }
+    }
   }
   
-  // Check if we received a packet
+  if (pendingGpsTransmit && txLegal) {
+    if (gpsInitialized) {
+      heltec_gnss_update();
+    }
+    initializeDisplay(2);
+    transmitPacket(true); 
+    pendingGpsTransmit = false;
+  } else if (timeToTransmit && txLegal) {
+    initializeDisplay(2);
+    transmitPacket(false);
+  } else if (pendingGpsTransmit && !txLegal) {
+    int waitSeconds = ((minimumPause - (millis() - lastTxTime)) / 1000) + 1;
+    initializeDisplay(2);
+    both.printf("GPS Tx queued\nDuty cycle\nWait %i secs", waitSeconds);
+  }
+  
   if (rxFlag) {
     handleReceivedPacket();
   }
