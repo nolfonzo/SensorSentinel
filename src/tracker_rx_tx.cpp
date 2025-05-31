@@ -70,7 +70,7 @@ void transmitPacket(bool sendGPS = false) {
     message = "#" + String(messageCounter++);
     message += "\nBat:" + String(heltec_battery_percent()) + "%";
     message += "\nTemp:" + String(heltec_temperature(), 1) + "C";
-    message += "\nUptime:" + String(millis()/1000) + "s";
+    message += "\nUp:" + String(millis()/1000) + "s";
   }
   
   both.printf("TX %s ", message.c_str());
