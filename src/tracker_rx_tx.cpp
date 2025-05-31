@@ -1,8 +1,10 @@
 /**
  * Universal Heltec LoRa Bidirectional Transceiver
+ * - Improved to fully leverage the library
+ * - No chipset-specific references
  */
 
-// Enable power button functionality (long press = sleep)
+// Enable power button functionality
 #define HELTEC_POWER_BUTTON
 
 // Include the Heltec library
@@ -10,10 +12,7 @@
 
 // Configuration
 #define PAUSE               10          // Seconds between auto-transmissions (0 = manual only)
-#define FREQUENCY           915.0       // MHz (use 868.0 for Europe)
-#define BANDWIDTH           125.0       // kHz
-#define SPREADING_FACTOR    9           // 6-12 (higher = longer range, slower)
-#define TRANSMIT_POWER      14          // dBm (0-22, but check local regulations)
+// Removed all radio-specific configuration, trusting the library defaults
 
 // Global variables
 String rxdata;
@@ -103,7 +102,7 @@ void transmitPacket(bool sendGPS = false) {
     
     // Resume listening
     radio.setDio1Action(rx);
-    RADIOLIB_OR_HALT(radio.startReceive(RADIOLIB_SX126X_RX_TIMEOUT_INF));
+    RADIOLIB_OR_HALT(radio.startReceive());
   #else
     both.println("\nRadio not available");
   #endif
@@ -133,7 +132,7 @@ void handleReceivedPacket() {
     }
     
     // Continue listening
-    RADIOLIB_OR_HALT(radio.startReceive(RADIOLIB_SX126X_RX_TIMEOUT_INF));
+    RADIOLIB_OR_HALT(radio.startReceive());
   #endif
 }
 
@@ -158,22 +157,9 @@ void setup() {
     // Set interrupt callback for received packets
     radio.setDio1Action(rx);
     
-    // Configure radio parameters
-    both.printf("Frequency: %.1f MHz\n", FREQUENCY);
-    RADIOLIB_OR_HALT(radio.setFrequency(FREQUENCY));
-    
-    both.printf("Bandwidth: %.1f kHz\n", BANDWIDTH);
-    RADIOLIB_OR_HALT(radio.setBandwidth(BANDWIDTH));
-    
-    both.printf("Spreading Factor: %i\n", SPREADING_FACTOR);
-    RADIOLIB_OR_HALT(radio.setSpreadingFactor(SPREADING_FACTOR));
-    
-    both.printf("TX Power: %i dBm\n", TRANSMIT_POWER);
-    RADIOLIB_OR_HALT(radio.setOutputPower(TRANSMIT_POWER));
-    
     // Start listening for packets
     both.println("Starting to listen...");
-    RADIOLIB_OR_HALT(radio.startReceive(RADIOLIB_SX126X_RX_TIMEOUT_INF));
+    RADIOLIB_OR_HALT(radio.startReceive());
   #else
     both.println("No radio available");
   #endif
