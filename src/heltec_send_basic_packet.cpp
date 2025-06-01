@@ -26,7 +26,7 @@ void transmitPacket() {
   String message = "#" + String(messageCounter++);
   message += "\nBat:" + String(heltec_battery_percent()) + "%";
   message += "\nTemp:" + String(heltec_temperature(), 1) + "C";
-  message += "\nUp:" + String(millis()/1000) + "s";
+  message += "\nup:" + String(millis()/1000) + "s";  // Changed "Up:" to "up:" to match receiver parsing
   
   heltec_clear_display(2, 1);
   both.printf("TX %s ", message.c_str());
@@ -63,7 +63,7 @@ void transmitPacket() {
     
     // Display when the next transmission can occur
     int nextTxSec = (minimumPause / 1000);
-    both.printf("Next TX in %d sec\n", nextTxSec);
+    both.printf("\nNext TX in %d sec\n\n", nextTxSec);
     
     lastTxTime = millis();
   #else
@@ -72,10 +72,7 @@ void transmitPacket() {
 }
 
 void setup() {
-  // Initialize serial for debug output
-  Serial.begin(115200);
-  
-  // Initialize Heltec library
+  // Initialize Heltec library (this initializes serial for us)
   heltec_setup();
   
   // Install GPIO ISR service (critical for interrupts to work)
@@ -84,26 +81,19 @@ void setup() {
   // Display board information
   heltec_clear_display(1, 1);
   both.println("Heltec LoRa Sender");
+  both.printf("Board: %s\n", heltec_get_board_name());
   
   heltec_clear_display(1, 1);
   both.println("Initializing...");
   
-  #ifndef HELTEC_NO_RADIO_INSTANCE
-    // Initialize radio
-    int state = radio.begin();
-    if (state == RADIOLIB_ERR_NONE) {
-      both.println("Radio initialized!");
-    } else {
-      both.printf("Radio init failed: %d\n", state);
-      while (true) { delay(1000); }  // Hang if radio fails
-    }
-  #else
-    both.println("No radio available");
-  #endif
-  
   both.printf("Auto-tx using %0.1f%% duty cycle\n", DUTY_CYCLE_PERCENT);
   both.println("Button = Manual TX");
   both.println("Ready!");
+  
+  Serial.println("\n====== LoRa Sender Ready ======");
+  Serial.printf("Battery: %d%%\n", heltec_battery_percent());
+  Serial.printf("CPU Temp: %.1f°C\n", heltec_temperature());
+  Serial.println("===============================\n");
 }
 
 void loop() {
@@ -132,4 +122,7 @@ void loop() {
   if (lastTxTime == 0) {
     transmitPacket();
   }
+  
+  // Small delay to prevent tight looping
+  delay(10);
 }

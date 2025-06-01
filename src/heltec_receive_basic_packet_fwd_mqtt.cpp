@@ -16,9 +16,6 @@ uint32_t packetCounter = 0;          // Counter for received packets
 unsigned long lastStatusTime = 0;    // For periodic status updates
 const unsigned long statusInterval = 30000; // Status update every 30 seconds
 
-// WiFi client required by mqtt_gateway
-WiFiClient wifiClient;
-
 // Packet handler callback
 void handlePacket(String &data, float rssi, float snr) {
   packetCounter++;
@@ -114,6 +111,15 @@ void setup() {
   both.println("LoRa MQTT Gateway");
   both.printf("Board: %s\n", heltec_get_board_name());
   
+  // Connect to WiFi - this must be done before MQTT setup
+  both.println("Connecting to WiFi...");
+  if (heltec_wifi_begin(15)) {  // Try up to 15 connection attempts
+    both.printf("WiFi connected: %s\n", heltec_wifi_ip().c_str());
+  } else {
+    both.println("WiFi connection failed");
+    Serial.println("WARNING: WiFi not connected, MQTT will not work!");
+  }
+  
   // Setup MQTT with time sync
   heltec_mqtt_setup(true);  // Updated to use heltec_ prefix
   
@@ -124,12 +130,17 @@ void setup() {
   Serial.println("\n====== LoRa MQTT Gateway Ready ======");
   Serial.printf("MQTT server: %s\n", MQTT_SERVER);
   Serial.printf("Gateway IP: %s\n", heltec_wifi_ip().c_str());  // Updated to use heltec_ prefix
+  Serial.printf("Gateway MAC: %s\n", heltec_wifi_mac().c_str());
+  Serial.printf("WiFi status: %s\n", heltec_wifi_status_string().c_str());
   Serial.println("=====================================\n");
 }
 
 void loop() {
   // Handle button, power control, display updates, and packet processing
   heltec_loop();
+  
+  // Maintain WiFi connection
+  heltec_wifi_maintain();
   
   // Maintain MQTT connection using the new module
   heltec_mqtt_maintain();  // Updated to use heltec_ prefix
@@ -144,6 +155,11 @@ void loop() {
     
     // Also update the display
     heltec_mqtt_display_status(packetCounter);  // Updated to use heltec_ prefix
+    
+    // Show current WiFi status
+    Serial.printf("WiFi status: %s (RSSI: %d dBm)\n", 
+                 heltec_wifi_status_string().c_str(),
+                 heltec_wifi_rssi());
     
     Serial.println("=====================================\n"); 
   }

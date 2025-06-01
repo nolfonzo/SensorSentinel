@@ -104,7 +104,16 @@ boolean heltec_mqtt_setup(boolean syncTimeOnConnect) {
     // Sync time if requested
     if (syncTimeOnConnect) {
       both.println("Syncing time...");
-      heltec_mqtt_sync_time();
+      
+      // Use the timezone defined in platformio.ini
+      #ifdef TIMEZONE_OFFSET
+      long timezone = TIMEZONE_OFFSET;
+      Serial.printf("Using timezone offset from config: %ld seconds\n", timezone);
+      heltec_mqtt_sync_time(timezone, 0);
+      #else
+      // Fallback if not defined
+      heltec_mqtt_sync_time(36000, 0);  // Default to Sydney (UTC+10)
+      #endif
     }
     
     // Connect to MQTT

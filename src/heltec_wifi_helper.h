@@ -13,6 +13,9 @@
 class PrintSplitter;
 extern PrintSplitter both;
 
+// Declare external WiFiClient
+extern WiFiClient wifiClient;
+
 // Function to clear display - forward declaration
 void heltec_clear_display(uint8_t textSize, uint8_t rotation);
 

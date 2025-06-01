@@ -1,7 +1,6 @@
 /**
  * Universal Heltec LoRa Bidirectional Transceiver
- * - Improved to fully leverage the library
- * - No chipset-specific references
+ * - Using the library's packet subscription system
  */
 
 // Enable power button functionality
@@ -12,21 +11,29 @@
 
 // Configuration
 #define PAUSE               10          // Seconds between auto-transmissions (0 = manual only)
-// Removed all radio-specific configuration, trusting the library defaults
 
 // Global variables
-String rxdata;
-volatile bool rxFlag = false;          // Set by interrupt when packet received
 long messageCounter = 0;
 uint64_t lastTxTime = 0;
 uint64_t txDuration;
 uint64_t minimumPause;                 // For 1% duty cycle compliance
 bool pendingGpsTransmit = false;
 bool gpsInitialized = false;  
+String lastTxMessage = "";
 
-// Interrupt callback for packet reception
-void rx() {
-  rxFlag = true;
+// Packet receive callback function
+void onPacketReceived(String &data, float rssi, float snr) {
+  // It's a received packet from another device
+  heltec_clear_display(2, 1);
+  both.printf("RX %s", data.c_str());
+  both.printf("\nRSSI: %.1f dBm", rssi);
+  both.printf("\nSNR: %.1f dB", snr);
+  both.println("\n---");
+  
+  // Brief LED flash for received packet
+  heltec_led(25);
+  delay(100);
+  heltec_led(0);
 }
 
 void initializeGPS() {
@@ -48,6 +55,7 @@ void initializeGPS() {
 }
 
 void transmitPacket(bool sendGPS = false) {
+  // First, prepare all our data before unsubscribing
   String message;
   
   #ifdef HELTEC_GNSS
@@ -73,11 +81,13 @@ void transmitPacket(bool sendGPS = false) {
     message += "\nUp:" + String(millis()/1000) + "s";
   }
   
+  // Clear the display and show TX message BEFORE unsubscribing
+  heltec_clear_display(2, 1);
   both.printf("TX %s ", message.c_str());
   
   #ifndef HELTEC_NO_RADIO_INSTANCE
-    // Disable interrupt during transmission
-    radio.clearDio1Action();
+    // Now unsubscribe just before transmission
+    heltec_unsubscribe_packets();
     
     // LED on during transmission
     heltec_led(50);
@@ -86,6 +96,9 @@ void transmitPacket(bool sendGPS = false) {
     txDuration = millis();
     int state = radio.transmit(message);
     txDuration = millis() - txDuration;
+    
+    // Immediately resubscribe after transmission
+    heltec_subscribe_packets(onPacketReceived);
     
     // LED off
     heltec_led(0);
@@ -99,40 +112,8 @@ void transmitPacket(bool sendGPS = false) {
     // Calculate minimum pause for 1% duty cycle (transmission time * 100)
     minimumPause = txDuration * 100;
     lastTxTime = millis();
-    
-    // Resume listening
-    radio.setDio1Action(rx);
-    RADIOLIB_OR_HALT(radio.startReceive());
   #else
     both.println("\nRadio not available");
-  #endif
-}
-
-void handleReceivedPacket() {
-  rxFlag = false; // Clear the flag
-  
-  #ifndef HELTEC_NO_RADIO_INSTANCE
-    // Read the received data
-    int state = radio.readData(rxdata);
-    
-    if (state == RADIOLIB_ERR_NONE) {
-      heltec_clear_display(2, 1);
-      both.printf("RX %s", rxdata.c_str());
-      both.printf("\nRSSI: %.1f dBm", radio.getRSSI());
-      both.printf("\nSNR: %.1f dB", radio.getSNR());
-      both.println("\n---");
-      
-      // Brief LED flash for received packet
-      heltec_led(25);
-      delay(100);
-      heltec_led(0);
-    } else {
-      heltec_clear_display(2, 1);
-      both.printf("RX Error: %i\n", state);
-    }
-    
-    // Continue listening
-    RADIOLIB_OR_HALT(radio.startReceive());
   #endif
 }
 
@@ -140,7 +121,7 @@ void setup() {
   // Initialize serial for debug output
   Serial.begin(115200);
   
-  // Initialize Heltec library
+  // Initialize Heltec library (this also initializes the radio)
   heltec_setup();
   
   // Display board information
@@ -150,19 +131,11 @@ void setup() {
   heltec_clear_display(1, 1);
   both.println("Initializing...");
   
-  #ifndef HELTEC_NO_RADIO_INSTANCE
-    // Initialize radio
-    RADIOLIB_OR_HALT(radio.begin());
-    
-    // Set interrupt callback for received packets
-    radio.setDio1Action(rx);
-    
-    // Start listening for packets
-    both.println("Starting to listen...");
-    RADIOLIB_OR_HALT(radio.startReceive());
-  #else
-    both.println("No radio available");
-  #endif
+  // Subscribe to packet events using the library's subscription method
+  heltec_subscribe_packets(onPacketReceived);
+  
+  // Start listening for packets (done by heltec_subscribe_packets)
+  both.println("Listening for packets...");
   
   if (PAUSE > 0) {
     both.printf("Auto-tx every %i sec\n", PAUSE);
@@ -182,6 +155,7 @@ void setup() {
 
 void loop() {
   // Handle button, power control, GNSS updates, and display updates
+  // This also calls heltec_process_packets() which processes LoRa packets
   heltec_loop();
   
   bool txLegal = millis() > lastTxTime + minimumPause;
@@ -221,7 +195,7 @@ void loop() {
   #else
     // For non-GNSS boards, button press triggers normal transmission
     if (buttonPressed && txLegal) {
-      heltec_clear_display(2, 1);
+      // Display clearing happens inside transmitPacket
       transmitPacket(false);
     } else if (buttonPressed && !txLegal) {
       int waitSeconds = ((minimumPause - (millis() - lastTxTime)) / 1000) + 1;
@@ -233,7 +207,7 @@ void loop() {
   // Handle pending GPS transmission
   if (pendingGpsTransmit && txLegal) {
     #ifdef HELTEC_GNSS
-      heltec_clear_display(2,1);
+      // Display clearing happens inside transmitPacket
       transmitPacket(true); 
     #endif
     pendingGpsTransmit = false;
@@ -245,12 +219,7 @@ void loop() {
   
   // Handle automatic transmission based on timer
   if (timeToTransmit && txLegal) {
-    heltec_clear_display(2, 1);
+    // Display clearing happens inside transmitPacket
     transmitPacket(false);
-  }
-  
-  // Handle received packet
-  if (rxFlag) {
-    handleReceivedPacket();
   }
 }

@@ -224,6 +224,7 @@ void heltec_delay(int ms);
 // Packet handling functions
 void _handleLoRaRx();
 bool heltec_subscribe_packets(PacketCallback callback);
+bool heltec_unsubscribe_packets();
 void heltec_process_packets();
 
 #endif // HELTEC_UNOFFICIAL_H

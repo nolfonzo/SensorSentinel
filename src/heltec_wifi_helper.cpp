@@ -7,6 +7,7 @@
 #include "heltec_unofficial.h" // For access to the display functions
 
 // Global WiFi variables
+WiFiClient wifiClient;
 bool _wifi_connected = false;
 unsigned long _last_wifi_attempt = 0;
 const unsigned long _wifi_retry_interval = 30000; // 30 seconds between retries

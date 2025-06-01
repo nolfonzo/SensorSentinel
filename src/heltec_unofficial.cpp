@@ -630,12 +630,20 @@ void _handleLoRaRx() {
  */  
 bool heltec_subscribe_packets(PacketCallback callback) {  
   #ifndef HELTEC_NO_RADIOLIB  
-    _packetCallback = callback;  
+    _packetCallback = callback;
     
-    // Set up radio to receive packets  
-    radio.setDio1Action(_handleLoRaRx);  
-    int state = radio.startReceive();  
+    // Clear any previous action first
+    radio.clearDio1Action();
+    delay(10);  // Give it time to clear
     
+    // Set up the new action
+    radio.setDio1Action(_handleLoRaRx);
+    delay(10);  // Let the interrupt setup complete
+    
+    // Start receive
+    int state = radio.startReceive();
+    delay(30);  // Give it more time to enter receive mode
+
     if (state == RADIOLIB_ERR_NONE) {  
       Serial.println("LoRa packet subscription active");  
       return true;  
@@ -648,6 +656,35 @@ bool heltec_subscribe_packets(PacketCallback callback) {
     return false;  
   #endif  
 }  
+/**
+ * @brief Unsubscribe from LoRa packet reception events
+ * 
+ * @return true if unsubscription was successful
+ */
+bool heltec_unsubscribe_packets() {
+  #ifndef HELTEC_NO_RADIOLIB
+    // Clear the callback
+    _packetCallback = NULL;
+    
+    // Clear the interrupt
+    radio.clearDio1Action();
+    delay(20); 
+    // Put radio in standby mode
+    int state = radio.standby();
+    delay(20);
+    
+    if (state == RADIOLIB_ERR_NONE) {
+      Serial.println("LoRa packet subscription disabled");
+      return true;
+    } else {
+      Serial.printf("Failed to put radio in standby: %d\n", state);
+      return false;
+    }
+  #else
+    Serial.println("Radio not available - unsubscription not needed");
+    return false;
+  #endif
+}
 
 /**
  * @brief Process any received packets in the main loop
@@ -658,7 +695,11 @@ bool heltec_subscribe_packets(PacketCallback callback) {
 void heltec_process_packets() {
   #ifndef HELTEC_NO_RADIOLIB
     if (_packetReceived) {
+      // Clear flag immediately to prevent race conditions
       _packetReceived = false;
+      
+      // Temporarily disable interrupt to prevent recursion
+      radio.clearDio1Action();
       
       // Read the packet data
       _packetData = "";
@@ -677,9 +718,16 @@ void heltec_process_packets() {
         Serial.printf("Error reading LoRa packet: %d\n", state);
       }
       
+      // Make sure radio is in a clean state before restarting reception
+      radio.standby();
+      delay(10);
+      
       // Restart reception
-      radio.setDio1Action(_handleLoRaRx);
       radio.startReceive();
+      delay(10);
+      
+      // Re-enable interrupt handler AFTER reception has started
+      radio.setDio1Action(_handleLoRaRx);
     }
   #endif
 }
