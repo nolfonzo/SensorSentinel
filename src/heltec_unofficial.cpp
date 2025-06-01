@@ -511,7 +511,13 @@ void heltec_setup() {
         radio.setSyncWord(0x12);  
       #else  
         // SX1262 default parameters for V3, V3.2, and Tracker  
-
+        radio.setFrequency(915.0);  // or 868.0 for EU regions
+        radio.setBandwidth(125.0);
+        radio.setSpreadingFactor(9);
+        radio.setCodingRate(5);
+        radio.setSyncWord(0x12);
+        radio.setOutputPower(14.0);  // SX1262 can go up to 22 dBm but 14 is a good default
+        radio.setCurrentLimit(140.0);  // mA, good balance of power vs performance
       #endif  
     }  
   #endif  
