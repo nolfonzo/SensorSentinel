@@ -21,6 +21,12 @@
 #include <Arduino.h>   
 #include <HotButton.h>
 
+#define HELTEC_UNOFFICIAL_VERSION "1.0.0"
+
+// Optional power button feature (long press for sleep)
+// Uncomment to enable power button functionality
+#define HELTEC_POWER_BUTTON
+
 // Define V3.2 manually since it doesn't have an Arduino board definition  
 #if !defined(ARDUINO_heltec_wifi_32_lora_V3) && \
     !defined(ARDUINO_heltec_wireless_stick) && \
@@ -30,6 +36,18 @@
   // No specific board detected - default to V3.2  
   #define BOARD_HELTEC_V3_2  
 #endif  
+
+// Radio configuration constants
+#define HELTEC_LORA_FREQ    915.0  // MHz, 868.0 for EU regions
+#define HELTEC_LORA_BW      125.0  // kHz
+#define HELTEC_LORA_SF      9      // Spreading factor
+#define HELTEC_LORA_CR      5      // Coding rate
+#define HELTEC_LORA_SYNC    0x12   // Sync word
+
+// Chip-specific settings
+#define HELTEC_SX1262_POWER   14.0    // dBm
+#define HELTEC_SX1262_CURRENT 140.0   // mA
+#define HELTEC_SX1276_POWER   17      // Different scale for SX1276
 
 // Flag to track if display needs updating (for V3.2)  
 extern bool _display_needs_update;  
@@ -106,10 +124,7 @@ extern HotButton button;
 // Include libraries based on configuration  
 #ifdef HELTEC_GNSS  
   #include <TinyGPSPlus.h>  
-  // GNSS function declarations
-  void heltec_gnss_begin();
-  void heltec_gnss_sleep();
-  bool heltec_gnss_update();
+  // GNSS global variables
   extern TinyGPSPlus gps;
   extern HardwareSerial gpsSerial;
 #endif  
@@ -202,29 +217,159 @@ extern String _packetData;
 extern float _packetRssi;
 extern float _packetSnr;
 
-// Function prototypes  
+// ====== Function Declarations ======
+
+// Basic board functions
+/**
+ * @brief Gets a string describing the current board
+ * @return Board description string
+ */
 const char* heltec_get_board_name();
-void heltec_display_update();  
-void heltec_led(int percent);  
-void heltec_ve(bool state);  
-void heltec_tft_power(bool state);  
-float heltec_vbat();  
-void heltec_deep_sleep(int seconds = 0);  
-int heltec_battery_percent(float vbat = -1);  
-bool heltec_wakeup_was_button();  
-bool heltec_wakeup_was_timer();  
-float heltec_temperature();  
-void heltec_display_power(bool on);  
-void heltec_clear_display(uint8_t textSize = 1, uint8_t rotation = 0);  
-void heltec_setup();  
-void heltec_loop();  
-bool heltec_button_clicked();
+
+/**
+ * @brief Measures ESP32 chip temperature
+ * @return Temperature in degrees celsius
+ */
+float heltec_temperature();
+
+/**
+ * @brief Initializes the Heltec library
+ * This function should be the first thing in setup() of your sketch
+ */
+void heltec_setup();
+
+/**
+ * @brief The main loop for the Heltec library
+ * This function should be called in loop() of your sketch
+ */
+void heltec_loop();
+
+/**
+ * @brief Delay with power button check
+ * @param ms Milliseconds to delay
+ */
 void heltec_delay(int ms);
 
+// Display functions
+/**
+ * @brief Updates the display buffer to the screen
+ * Necessary for V3.2 boards using the Adafruit SSD1306 library
+ */
+void heltec_display_update();
+
+/**
+ * @brief Controls the display power
+ * @param on True to enable, false to disable
+ */
+void heltec_display_power(bool on);
+
+/**
+ * @brief Clears the display and sets text properties
+ * @param textSize Text size (default = 1)
+ * @param rotation Display rotation (default = 0)
+ */
+void heltec_clear_display(uint8_t textSize = 1, uint8_t rotation = 0);
+
+// Power management functions
+/**
+ * @brief Controls the LED brightness
+ * @param percent The brightness percentage (0-100)
+ */
+void heltec_led(int percent);
+
+/**
+ * @brief Controls the VEXT pin (external power)
+ * @param state True to enable, false to disable
+ */
+void heltec_ve(bool state);
+
+/**
+ * @brief Controls the TFT power and backlight for Wireless Tracker
+ * @param state True to enable, false to disable
+ */
+void heltec_tft_power(bool state);
+
+/**
+ * @brief Measures the battery voltage
+ * @return The battery voltage in volts
+ */
+float heltec_vbat();
+
+/**
+ * @brief Calculates the battery percentage
+ * @param vbat The battery voltage or -1 to measure
+ * @return The battery percentage (0-100)
+ */
+int heltec_battery_percent(float vbat = -1);
+
+/**
+ * @brief Puts the device into deep sleep mode
+ * @param seconds The number of seconds to sleep (0 = indefinite)
+ */
+void heltec_deep_sleep(int seconds = 0);
+
+/**
+ * @brief Checks if wakeup was caused by button press
+ * @return True if wakeup was from button press
+ */
+bool heltec_wakeup_was_button();
+
+/**
+ * @brief Checks if wakeup was caused by timer
+ * @return True if wakeup was from timer
+ */
+bool heltec_wakeup_was_timer();
+
+// Button handling
+/**
+ * @brief Checks if the button was clicked
+ * @return True if button was clicked (clears after reading)
+ */
+bool heltec_button_clicked();
+
+// GNSS functions
+#ifdef HELTEC_GNSS
+/**
+ * @brief Initializes the GNSS module
+ */
+void heltec_gnss_begin();
+
+/**
+ * @brief Puts the GNSS module to sleep
+ */
+void heltec_gnss_sleep();
+
+/**
+ * @brief Updates GNSS data if available
+ * @return True if new data was processed
+ */
+bool heltec_gnss_update();
+#endif
+
 // Packet handling functions
+/**
+ * @brief Internal callback handler for LoRa interrupts
+ * (Not called directly by user code)
+ */
 void _handleLoRaRx();
+
+/**
+ * @brief Subscribe to LoRa packet reception events
+ * @param callback Function to be called when a packet is received
+ * @return true if subscription was successful
+ */
 bool heltec_subscribe_packets(PacketCallback callback);
+
+/**
+ * @brief Unsubscribe from LoRa packet reception events
+ * @return true if unsubscription was successful
+ */
 bool heltec_unsubscribe_packets();
+
+/**
+ * @brief Process any received packets in the main loop
+ * This should be called in every iteration of loop()
+ */
 void heltec_process_packets();
 
 #endif // HELTEC_UNOFFICIAL_H

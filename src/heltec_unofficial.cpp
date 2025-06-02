@@ -5,54 +5,20 @@
 
 #include "heltec_unofficial.h"  
 
-// ====== Global variable definitions ======  
+// ====== Constants ======
+// Radio configuration
+#define HELTEC_LORA_FREQ    915.0  // MHz, 868.0 for EU regions
+#define HELTEC_LORA_BW      125.0  // kHz
+#define HELTEC_LORA_SF      9      // Spreading factor
+#define HELTEC_LORA_CR      5      // Coding rate
+#define HELTEC_LORA_SYNC    0x12   // Sync word
 
-// Flag to track if display needs updating (for V3.2)  
-bool _display_needs_update = false;  
+// Chip-specific settings
+#define HELTEC_SX1262_POWER   14.0    // dBm
+#define HELTEC_SX1262_CURRENT 140.0   // mA
+#define HELTEC_SX1276_POWER   17      // Different scale for SX1276
 
-// HotButton instance for the PRG button  
-HotButton button(BUTTON);  
-
-#ifndef HELTEC_NO_RADIOLIB  
-  // Create RadioLib instance based on board type  
-  #if defined(ARDUINO_heltec_wireless_stick) || defined(ARDUINO_heltec_wireless_stick_lite)  
-    // Stick and Stick Lite use SX1276  
-    SX1276 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);  
-  #elif defined(ARDUINO_heltec_wireless_tracker)  
-    // Tracker needs HSPI for LoRa (VSPI used for TFT)  
-    SPIClass* hspi = new SPIClass(HSPI);  
-    SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa, *hspi);  
-  #else  
-    // V3 and V3.2 use SX1262  
-    SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);  
-  #endif  
-#endif  
-
-// Create Display instance based on board type  
-#ifndef HELTEC_NO_DISPLAY  
-  #ifdef ARDUINO_heltec_wireless_tracker  
-    Adafruit_ST7735 display(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);  
-    PrintSplitter both(Serial, display);  
-  #elif defined(ARDUINO_heltec_wifi_32_lora_V3)  
-    SSD1306Wire display(0x3c, SDA_OLED, SCL_OLED, DISPLAY_GEOMETRY);  
-    PrintSplitter both(Serial, display);  
-  #else  
-    Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, RST_OLED);  
-    PrintSplitter both(Serial, display);  
-  #endif  
-#else  
-  // No display - just use Serial  
-  Print &both = Serial;  
-#endif  
-
-#ifdef HELTEC_GNSS  
-  // Global GNSS parser for NMEA-compatible GNSS modules  
-  TinyGPSPlus gps;  
-  // UART1 for GNSS communication  
-  HardwareSerial gpsSerial = HardwareSerial(1);  
-#endif  
-
-// Battery voltage calibration  
+// Battery calibration  
 const float min_voltage = 3.04;  
 const float max_voltage = 4.26;  
 const uint8_t scaled_voltage[100] = {  
@@ -68,10 +34,49 @@ const uint8_t scaled_voltage[100] = {
   94, 90, 81, 80, 76, 73, 66, 52, 32, 7  
 };  
 
-// Button state tracking  
+// ====== Global variables ======
+// Button related
+HotButton button(BUTTON);  
 bool buttonClicked = false;  
 
-// Global variables for packet subscription system  
+// Display update flag (for V3.2)  
+bool _display_needs_update = false;  
+
+// RadioLib instances based on board type  
+#ifndef HELTEC_NO_RADIOLIB  
+  #if defined(ARDUINO_heltec_wireless_stick) || defined(ARDUINO_heltec_wireless_stick_lite)  
+    SX1276 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);  
+  #elif defined(ARDUINO_heltec_wireless_tracker)  
+    SPIClass* hspi = new SPIClass(HSPI);  
+    SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa, *hspi);  
+  #else  
+    SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);  
+  #endif  
+#endif  
+
+// Display instances based on board type  
+#ifndef HELTEC_NO_DISPLAY  
+  #ifdef ARDUINO_heltec_wireless_tracker  
+    Adafruit_ST7735 display(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);  
+    PrintSplitter both(Serial, display);  
+  #elif defined(ARDUINO_heltec_wifi_32_lora_V3)  
+    SSD1306Wire display(0x3c, SDA_OLED, SCL_OLED, DISPLAY_GEOMETRY);  
+    PrintSplitter both(Serial, display);  
+  #else  
+    Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, RST_OLED);  
+    PrintSplitter both(Serial, display);  
+  #endif  
+#else  
+  Print &both = Serial;  
+#endif  
+
+// GNSS related
+#ifdef HELTEC_GNSS  
+  TinyGPSPlus gps;  
+  HardwareSerial gpsSerial = HardwareSerial(1);  
+#endif  
+
+// Packet subscription system  
 PacketCallback _packetCallback = NULL;  
 volatile bool _packetReceived = false;  
 String _packetData;  
@@ -79,7 +84,6 @@ float _packetRssi;
 float _packetSnr;  
 
 // ====== Implementation of PrintSplitter methods ======  
-
 size_t PrintSplitter::write(uint8_t c) {  
   a.write(c);  
   size_t r = b.write(c);  
@@ -98,11 +102,15 @@ size_t PrintSplitter::write(const uint8_t *buffer, size_t size) {
   return r;  
 }  
 
-// ====== Function implementations ======  
+// ====== Internal helper functions ======
+// Interrupt handler for packet reception  
+void _handleLoRaRx() {  
+  _packetReceived = true;  
+}  
 
+// ====== Public API implementations ======
 /**  
  * @brief Gets a string describing the current board  
- *   
  * @return Board description  
  */  
 const char* heltec_get_board_name() {  
@@ -123,8 +131,6 @@ const char* heltec_get_board_name() {
 
 /**  
  * @brief Updates the display buffer to the screen.  
- *   
- * This is necessary for V3.2 boards using the Adafruit SSD1306 library.  
  */  
 void heltec_display_update() {  
   #ifndef HELTEC_NO_DISPLAY  
@@ -139,7 +145,6 @@ void heltec_display_update() {
 
 /**  
  * @brief Controls the LED brightness based on the given percentage.  
- *  
  * @param percent The brightness percentage of the LED (0-100).  
  */  
 void heltec_led(int percent) {  
@@ -155,7 +160,6 @@ void heltec_led(int percent) {
 
 /**  
  * @brief Controls the VEXT pin to enable or disable external power.  
- *  
  * @param state The state of the VEXT pin (true = enable, false = disable).  
  */  
 void heltec_ve(bool state) {  
@@ -164,14 +168,12 @@ void heltec_ve(bool state) {
     digitalWrite(VEXT, LOW);  
     delay(100);  
   } else {  
-    // pulled up, no need to drive it  
     pinMode(VEXT, INPUT);  
   }  
 }  
 
 /**  
  * @brief Controls the TFT power and backlight for Wireless Tracker.  
- *   
  * @param state True to enable, false to disable  
  */  
 void heltec_tft_power(bool state) {  
@@ -192,23 +194,90 @@ void heltec_tft_power(bool state) {
 
 /**  
  * @brief Measures the battery voltage.  
- *  
  * @return The battery voltage in volts.  
  */  
 float heltec_vbat() {  
   pinMode(VBAT_CTRL, OUTPUT);  
   digitalWrite(VBAT_CTRL, LOW);  
   delay(5);  
+  
   float vbat;  
   #ifdef ARDUINO_heltec_wireless_tracker  
     vbat = analogRead(VBAT_ADC) * 4.9 / 4095.0; // 12-bit ADC, Vbat_Read*4.9  
   #else  
     vbat = analogRead(VBAT_ADC) / 238.7; // Original calibration  
   #endif  
-  pinMode(VBAT_CTRL, INPUT);  
+  
+  pinMode(VBAT_CTRL, INPUT);
   return vbat;  
 }  
 
+/**  
+ * @brief Calculates the battery percentage based on the measured voltage.  
+ * @param vbat The battery voltage in volts (default = -1, will measure).  
+ * @return The battery percentage (0-100).  
+ */  
+int heltec_battery_percent(float vbat) {  
+  if (vbat == -1) {  
+    vbat = heltec_vbat();  
+  }  
+  
+  for (int n = 0; n < sizeof(scaled_voltage); n++) {  
+    float step = (max_voltage - min_voltage) / 256;  
+    if (vbat > min_voltage + (step * scaled_voltage[n])) {  
+      return 100 - n;  
+    }  
+  }  
+  return 0;  
+}  
+
+/**  
+ * @brief Measures ESP32 chip temperature  
+ * @return float with temperature in degrees celsius.  
+ */  
+float heltec_temperature() {  
+  return temperatureRead();  
+}  
+
+/**  
+ * @brief Checks if the device woke up from deep sleep due to button press.  
+ * @return True if the wake-up cause is a button press, false otherwise.  
+ */  
+bool heltec_wakeup_was_button() {  
+  return esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0;  
+}  
+
+/**  
+ * @brief Checks if the device woke up from deep sleep due to a timer.  
+ * @return True if the wake-up cause is a timer interrupt, false otherwise.  
+ */  
+bool heltec_wakeup_was_timer() {  
+  return esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_TIMER;  
+}  
+
+/**  
+ * @brief Checks if the button was clicked.  
+ * @return True if the button was clicked, false otherwise.  
+ */  
+bool heltec_button_clicked() {  
+  bool result = buttonClicked;  
+  buttonClicked = false;  // Clear after reading  
+  return result;  
+}  
+
+/**  
+ * @brief For backward compatibility - allows delay with power button check  
+ * @param ms Milliseconds to delay  
+ */  
+void heltec_delay(int ms) {  
+  uint32_t start = millis();  
+  while (millis() - start < ms) {  
+    heltec_loop();  
+    delay(10);  
+  }  
+}  
+
+// ====== GNSS functions ======
 #ifdef HELTEC_GNSS  
   /**  
    * @brief Initializes the GNSS module  
@@ -226,29 +295,233 @@ float heltec_vbat() {
     gpsSerial.end();  
     pinMode(GNSS_TX, INPUT);  
     pinMode(GNSS_RX, INPUT);  
-    // Vext power managed by heltec_ve(false) elsewhere  
   }  
 
   /**  
    * @brief Updates GNSS data if available  
-   *   
    * @return true if new data was processed  
    */  
   bool heltec_gnss_update() {  
     if (!gpsSerial) return false;  
     if (digitalRead(VEXT) == HIGH) return false; // Check VEXT state (LOW=on)  
+    
     while (gpsSerial.available()) {  
       if (gps.encode(gpsSerial.read())) {  
         return true; // New data available  
       }  
-    }  
+    }
     return false;  
   }  
 #endif  
 
+// ====== Display functions ======
+/**  
+ * @brief Controls the display power.  
+ * @param on True to enable, false to disable  
+ */  
+void heltec_display_power(bool on) {  
+  #ifndef HELTEC_NO_DISPLAY  
+    #ifdef ARDUINO_heltec_wireless_tracker  
+      if (on) {  
+        heltec_ve(true);  
+        heltec_tft_power(true);  
+        pinMode(TFT_RST, OUTPUT);  
+        digitalWrite(TFT_RST, HIGH);  
+        delay(1);  
+        digitalWrite(TFT_RST, LOW);  
+        delay(20);  
+        digitalWrite(TFT_RST, HIGH);  
+      } else {  
+        heltec_tft_power(false);  
+      }  
+    #else  
+      if (on) {  
+        // For all boards with OLED displays, control via VEXT  
+        pinMode(VEXT, OUTPUT);  
+        digitalWrite(VEXT, LOW);  // LOW enables power  
+        delay(100);  // Give it time to power up  
+        
+        // Initialize reset pin for OLED  
+        pinMode(RST_OLED, OUTPUT);  
+        digitalWrite(RST_OLED, HIGH);  
+        delay(1);  
+        digitalWrite(RST_OLED, LOW);  
+        delay(10);  
+        digitalWrite(RST_OLED, HIGH);  
+        delay(10);  
+      } else {  
+        #ifdef ARDUINO_heltec_wifi_32_lora_V3  
+          display.displayOff();  
+        #elif defined(BOARD_HELTEC_V3_2) || defined(ARDUINO_heltec_wireless_stick)  
+          display.ssd1306_command(SSD1306_DISPLAYOFF);  
+        #endif  
+        
+        // For all boards, turn off VEXT  
+        digitalWrite(VEXT, HIGH);  // HIGH disables power  
+      }  
+    #endif  
+  #endif  
+}  
+
+/**  
+ * @brief Clears the display and sets text properties.  
+ * @param textSize Text size (default = 1).  
+ * @param rotation Display rotation (default = 0).  
+ */  
+void heltec_clear_display(uint8_t textSize, uint8_t rotation) {  
+  #ifndef HELTEC_NO_DISPLAY  
+    #ifdef ARDUINO_heltec_wireless_tracker  
+      display.fillScreen(ST7735_BLACK);  
+      display.setTextColor(ST7735_WHITE);  
+      display.setCursor(0, 0);  
+      display.setRotation(rotation);  
+      display.setTextSize(textSize);  
+    #elif defined(ARDUINO_heltec_wifi_32_lora_V3)  
+      display.clear();  
+      display.setColor(WHITE);  
+      display.setTextAlignment(TEXT_ALIGN_LEFT);  
+      if (textSize == 1) display.setFont(ArialMT_Plain_10);  
+      else if (textSize == 2) display.setFont(ArialMT_Plain_16);  
+      else display.setFont(ArialMT_Plain_24);  
+    #else  
+      display.clearDisplay();  
+      display.setTextSize(textSize);  
+      display.setTextColor(SSD1306_WHITE);  
+      display.setCursor(0, 0);  
+      display.display();  
+      _display_needs_update = false;  
+    #endif  
+  #endif  
+}  
+
+// ====== Radio functions ======
+
+/**  
+ * @brief Subscribe to LoRa packet reception events  
+ * @param callback Function to be called when a packet is received  
+ * @return true if subscription was successful  
+ */  
+bool heltec_subscribe_packets(PacketCallback callback) {  
+  #ifndef HELTEC_NO_RADIOLIB  
+    // Validate input
+    if (callback == NULL) {
+      Serial.println("Error: NULL callback provided");
+      return false;
+    }
+    
+    // Store the callback
+    _packetCallback = callback;
+    
+    // Reset received flag to ensure clean state
+    _packetReceived = false;
+    
+    // Clear any previous action first
+    radio.clearDio1Action();
+    delay(10);
+    
+    // Set up the new action
+    radio.setDio1Action(_handleLoRaRx);
+    delay(10);
+    
+    // Start receive
+    int state = radio.startReceive();
+    delay(10);
+
+    if (state == RADIOLIB_ERR_NONE) {  
+      Serial.println("LoRa packet subscription active");  
+      return true;  
+    } else {  
+      Serial.printf("Failed to start radio receiver: %d\n", state);  
+      return false;  
+    }  
+  #else  
+    Serial.println("Radio not available - packet subscription failed");  
+    return false;  
+  #endif  
+}  
+
+/**
+ * @brief Unsubscribe from LoRa packet reception events
+ * @return true if unsubscription was successful
+ */
+bool heltec_unsubscribe_packets() {
+  #ifndef HELTEC_NO_RADIOLIB
+    // Clear the callback
+    _packetCallback = NULL;
+    
+    // Reset received flag to ensure clean state
+    _packetReceived = false;
+    
+    // Clear the interrupt
+    radio.clearDio1Action();
+    delay(10); 
+
+    // Put radio in standby mode
+    int state = radio.standby();
+    delay(10);
+    
+    if (state == RADIOLIB_ERR_NONE) {
+      Serial.println("LoRa packet subscription disabled");
+      return true;
+    } else {
+      Serial.printf("Failed to put radio in standby: %d\n", state);
+      return false;
+    }
+  #else
+    Serial.println("Radio not available - unsubscription not needed");
+    return false;
+  #endif
+}
+
+/**
+ * @brief Process any received packets in the main loop
+ */
+void heltec_process_packets() {
+  #ifndef HELTEC_NO_RADIOLIB
+    if (_packetReceived) {
+      // Clear flag immediately to prevent race conditions
+      _packetReceived = false;
+      
+      // Temporarily disable interrupt to prevent recursion
+      radio.clearDio1Action();
+      
+      // Read the packet data
+      _packetData = "";
+      int state = radio.readData(_packetData);
+      
+      if (state == RADIOLIB_ERR_NONE) {
+        // Get signal quality information
+        _packetRssi = radio.getRSSI();
+        _packetSnr = radio.getSNR();
+        
+        // Invoke the callback if registered
+        if (_packetCallback) {
+          _packetCallback(_packetData, _packetRssi, _packetSnr);
+        }
+      } else {
+        Serial.printf("Error reading LoRa packet: %d\n", state);
+      }
+      
+      // Make sure radio is in a clean state before restarting reception
+      radio.standby();
+      delay(10);
+      
+      // Only restart reception if we still have a callback (user might have unsubscribed in callback)
+      if (_packetCallback) {
+        // Restart reception
+        radio.startReceive();
+        delay(10);
+        
+        // Re-enable interrupt handler AFTER reception has started
+        radio.setDio1Action(_handleLoRaRx);
+      }
+    }
+  #endif
+}
+
+// ====== Power management ======
 /**  
  * @brief Puts the device into deep sleep mode.  
- *  
  * @param seconds The number of seconds to sleep before waking up (default = 0).  
  */  
 void heltec_deep_sleep(int seconds) {  
@@ -263,7 +536,6 @@ void heltec_deep_sleep(int seconds) {
     #elif defined(ARDUINO_heltec_wifi_32_lora_V3)  
       display.displayOff();  
     #else  
-      // Adafruit SSD1306 for V3.2 and Wireless Stick  
       display.ssd1306_command(SSD1306_DISPLAYOFF);  
     #endif  
   #endif  
@@ -329,271 +601,91 @@ void heltec_deep_sleep(int seconds) {
   esp_deep_sleep_start();  
 }  
 
-/**  
- * @brief Calculates the battery percentage based on the measured voltage.  
- *  
- * @param vbat The battery voltage in volts (default = -1, will measure).  
- * @return The battery percentage (0-100).  
- */  
-int heltec_battery_percent(float vbat) {  
-  if (vbat == -1) {  
-    vbat = heltec_vbat();  
-  }  
-  for (int n = 0; n < sizeof(scaled_voltage); n++) {  
-    float step = (max_voltage - min_voltage) / 256;  
-    if (vbat > min_voltage + (step * scaled_voltage[n])) {  
-      return 100 - n;  
-    }  
-  }  
-  return 0;  
-}  
-
-/**  
- * @brief Checks if the device woke up from deep sleep due to button press.  
- *   
- * @return True if the wake-up cause is a button press, false otherwise.  
- */  
-bool heltec_wakeup_was_button() {  
-  return esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0;  
-}  
-
-/**  
- * @brief Checks if the device woke up from deep sleep due to a timer.  
- *   
- * @return True if the wake-up cause is a timer interrupt, false otherwise.  
- */  
-bool heltec_wakeup_was_timer() {  
-  return esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_TIMER;  
-}  
-
-/**  
- * @brief Measures ESP32 chip temperature  
- *   
- * @return float with temperature in degrees celsius.  
- */  
-float heltec_temperature() {  
-  // Use Arduino's built-in temperature function instead of ESP-IDF API  
-  // This is available on all ESP32 variants and avoids header inclusion issues  
-  return temperatureRead();  
-}  
-/**  
- * @brief Controls the display power.  
- *   
- * @param on True to enable, false to disable  
- */  
-void heltec_display_power(bool on) {  
-  #ifndef HELTEC_NO_DISPLAY  
-    #ifdef ARDUINO_heltec_wireless_tracker  
-      if (on) {  
-        heltec_ve(true);  
-        heltec_tft_power(true);  
-        pinMode(TFT_RST, OUTPUT);  
-        digitalWrite(TFT_RST, HIGH);  
-        delay(1);  
-        digitalWrite(TFT_RST, LOW);  
-        delay(20);  
-        digitalWrite(TFT_RST, HIGH);  
-      } else {  
-        heltec_tft_power(false);  
-      }  
-    #else  
-      if (on) {  
-        // For all boards with OLED displays, control via VEXT  
-        pinMode(VEXT, OUTPUT);  
-        digitalWrite(VEXT, LOW);  // LOW enables power  
-        delay(100);  // Give it time to power up  
-        
-        // Initialize reset pin for OLED  
-        pinMode(RST_OLED, OUTPUT);  
-        digitalWrite(RST_OLED, HIGH);  
-        delay(1);  
-        digitalWrite(RST_OLED, LOW);  
-        delay(10);  
-        digitalWrite(RST_OLED, HIGH);  
-        delay(10);  
-      } else {  
-        #ifdef ARDUINO_heltec_wifi_32_lora_V3  
-          // For V3, we use ThingPulse's power down command  
-          display.displayOff();  
-        #elif defined(BOARD_HELTEC_V3_2) || defined(ARDUINO_heltec_wireless_stick)  
-          // For V3.2 and Stick using Adafruit library  
-          display.ssd1306_command(SSD1306_DISPLAYOFF);  
-        #endif  
-        
-        // For all boards, turn off VEXT  
-        digitalWrite(VEXT, HIGH);  // HIGH disables power  
-      }  
-    #endif  
-  #endif  
-}  
-
-/**  
- * @brief Clears the display and sets text properties.  
- *  
- * @param textSize Text size (default = 1).  
- * @param rotation Display rotation (default = 0).  
- */  
-void heltec_clear_display(uint8_t textSize, uint8_t rotation) {  
-  #ifndef HELTEC_NO_DISPLAY  
-    #ifdef ARDUINO_heltec_wireless_tracker  
-      display.fillScreen(ST7735_BLACK);  
-      display.setTextColor(ST7735_WHITE);  
-      display.setCursor(0, 0);  
-      display.setRotation(rotation);  
-      display.setTextSize(textSize);  
-    #elif defined(ARDUINO_heltec_wifi_32_lora_V3)  
-      // ThingPulse library for V3  
-      display.clear();  
-      display.setColor(WHITE);  
-      display.setTextAlignment(TEXT_ALIGN_LEFT);  
-      if (textSize == 1) display.setFont(ArialMT_Plain_10);  
-      else if (textSize == 2) display.setFont(ArialMT_Plain_16);  
-      else display.setFont(ArialMT_Plain_24);  
-    #else  
-      // Adafruit SSD1306 library for V3.2 and Wireless Stick  
-      display.clearDisplay();  
-      display.setTextSize(textSize);  
-      display.setTextColor(SSD1306_WHITE);  
-      display.setCursor(0, 0);  
-      display.display();  // Already has display update for V3.2  
-      _display_needs_update = false;  // Reset flag since we just updated  
-    #endif  
-  #endif  
-}  
-
+// ====== Main functions ======
 /**  
  * @brief Initializes the Heltec library.  
- *  
- * This function should be the first thing in setup() of your sketch.  
  */  
 void heltec_setup() {  
   Serial.begin(115200);  
   delay(100);  
-  
-  // Print board information  
-  Serial.println();  
-  Serial.println("Heltec ESP32 LoRa Board Library");  
-  
-  #if defined(ARDUINO_heltec_wifi_32_lora_V3)  
-    Serial.println("Board: WiFi LoRa 32 V3");  
-  #elif defined(BOARD_HELTEC_V3_2)  
-    Serial.println("Board: WiFi LoRa 32 V3.2");  
-  #elif defined(ARDUINO_heltec_wireless_stick)  
-    Serial.println("Board: Wireless Stick");  
-  #elif defined(ARDUINO_heltec_wireless_stick_lite)  
-    Serial.println("Board: Wireless Stick Lite");  
-  #elif defined(ARDUINO_heltec_wireless_tracker)  
-    Serial.println("Board: Wireless Tracker");  
-  #else  
-    Serial.println("Board: Unknown (using V3.2 defaults)");  
-  #endif  
   
   // Initialize SPI for radio  
   #ifdef ARDUINO_heltec_wireless_tracker  
     hspi->begin(SCK, MISO, MOSI, SS);  
   #endif  
   
-    // Initialize RadioLib module  
-  #ifndef HELTEC_NO_RADIOLIB  
-    int radioStatus = radio.begin();  
-    if (radioStatus != RADIOLIB_ERR_NONE) {  
-      Serial.printf("Radio initialization failed with code %d\n", radioStatus);  
-    } else {  
-      Serial.println("Radio initialized successfully");  
-      
-      // Set default radio parameters  
-      #if defined(ARDUINO_heltec_wireless_stick) || defined(ARDUINO_heltec_wireless_stick_lite)  
-        // SX1276 default parameters for Stick and Stick Lite  
-        radio.setFrequency(915.0);  // or 915.0 for US regions  
-        radio.setBandwidth(125.0);  
-        radio.setSpreadingFactor(9);  
-        radio.setCodingRate(5);  
-        radio.setSyncWord(0x12);  
-      #else  
-        // SX1262 default parameters for V3, V3.2, and Tracker  
-        radio.setFrequency(915.0);  // or 868.0 for EU regions
-        radio.setBandwidth(125.0);
-        radio.setSpreadingFactor(9);
-        radio.setCodingRate(5);
-        radio.setSyncWord(0x12);
-        radio.setOutputPower(14.0);  // SX1262 can go up to 22 dBm but 14 is a good default
-        radio.setCurrentLimit(140.0);  // mA, good balance of power vs performance
-      #endif  
-    }  
-  #endif  
-
-  // Initialize display  
+  // Initialize display
   #ifndef HELTEC_NO_DISPLAY  
     #ifdef ARDUINO_heltec_wireless_tracker  
+      // Initialize TFT display for Wireless Tracker
       heltec_display_power(true);  
-      display.initR(INITR_MINI160x80); // Initialize ST7735  
+      display.initR(INITR_MINI160x80);
       display.fillScreen(ST7735_BLACK);  
       display.setTextColor(ST7735_WHITE);  
       display.setTextSize(1);  
-      display.setTextWrap(true);  
+      display.setTextWrap(true);
+      
     #elif defined(ARDUINO_heltec_wifi_32_lora_V3)  
-      // ThingPulse SSD1306 for V3  
+      // Initialize OLED for V3 - ThingPulse library
       heltec_display_power(true);  
       Wire.begin(SDA_OLED, SCL_OLED);  
       display.init();  
       display.setContrast(255);  
-      display.flipScreenVertically();  
-      display.clear();  
-    #else  
-      // For V3.2 and Wireless Stick - Using the known working code approach  
-      // Power on the OLED display  
-      heltec_display_power(true);  
+      display.flipScreenVertically();
       
-      // Initialize I2C  
+    #else  
+      // Initialize OLED for V3.2 and Wireless Stick - Adafruit library
+      heltec_display_power(true);  
       Wire.begin(SDA_OLED, SCL_OLED);  
       
-      // Initialize display  
       if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {  
         Serial.println("SSD1306 allocation failed");  
       } else {  
-        Serial.println("OLED initialized successfully");  
-      }  
-      
-      // Clear the display buffer  
-      display.clearDisplay();  
-      display.setTextSize(1);  
-      display.setTextColor(SSD1306_WHITE);  
-      display.setCursor(0, 0);  
-    #endif  
+        Serial.println("OLED initialized successfully");
+      }
+    #endif
     
-    // Display welcome message  
-    #if defined(ARDUINO_heltec_wifi_32_lora_V3)  
-      display.clear();  
-      display.setFont(ArialMT_Plain_10);  
-      display.setTextAlignment(TEXT_ALIGN_LEFT);  
-      display.drawString(0, 0, "Heltec ESP32 LoRa");  
-      display.drawString(0, 16, "WiFi LoRa 32 V3");  
-      display.display();  
-    #elif defined(BOARD_HELTEC_V3_2)  
-      display.clearDisplay();  
-      display.setTextSize(1);  
-      display.setTextColor(SSD1306_WHITE);  
-      display.setCursor(0, 0);  
-      display.println("Heltec ESP32 LoRa");  
-      display.println("WiFi LoRa 32 V3.2");  
-      display.display();  
-    #elif defined(ARDUINO_heltec_wireless_stick)  
-      display.clearDisplay();  
-      display.setTextSize(1);  
-      display.setCursor(0, 0);  
-      display.println("Heltec");  
-      display.println("Wireless Stick");  
-      display.display();  
-    #elif defined(ARDUINO_heltec_wireless_tracker)  
-      display.fillScreen(ST7735_BLACK);  
-      display.setCursor(0, 0);  
-      display.println("Heltec");  
-      display.println("Wireless Tracker");  
-    #endif  
+    // Clear display and show welcome message
+    heltec_clear_display();
+    both.println("Heltec ESP32 LoRa");
+    both.println(heltec_get_board_name());
+    
+    // ThingPulse library (V3) needs explicit display update that isn't handled by PrintSplitter
+    #if defined(ARDUINO_heltec_wifi_32_lora_V3)
+      display.display();
+    #endif
+  #else
+    // No display - just log to Serial
+    Serial.println("Heltec ESP32 LoRa");  
+    Serial.println(heltec_get_board_name());
+  #endif
+  
+  // Initialize RadioLib module  
+  #ifndef HELTEC_NO_RADIOLIB  
+    int radioStatus = radio.begin();  
+    if (radioStatus != RADIOLIB_ERR_NONE) {  
+      both.printf("Radio initialization failed with code %d\n", radioStatus);  
+    } else {  
+      both.println("Radio initialized successfully");  
+      
+      // Common parameters for all boards
+      radio.setFrequency(HELTEC_LORA_FREQ);
+      radio.setBandwidth(HELTEC_LORA_BW);
+      radio.setSpreadingFactor(HELTEC_LORA_SF);
+      radio.setCodingRate(HELTEC_LORA_CR);
+      radio.setSyncWord(HELTEC_LORA_SYNC);
+
+      // Chip-specific parameters
+      #if defined(ARDUINO_heltec_wireless_stick) || defined(ARDUINO_heltec_wireless_stick_lite)
+        radio.setOutputPower(HELTEC_SX1276_POWER);
+      #else
+        radio.setOutputPower(HELTEC_SX1262_POWER);
+        radio.setCurrentLimit(HELTEC_SX1262_CURRENT);
+      #endif
+    }  
   #endif  
 
   // Initialize the built-in LED  
-  // Configure LED PWM  
   ledcSetup(LED_CHAN, 5000, 8);  
   ledcAttachPin(LED_PIN, LED_CHAN);  
   ledcWrite(LED_CHAN, 0); // Turn off initially  
@@ -603,146 +695,11 @@ void heltec_setup() {
     pinMode(BUTTON, INPUT);  
   #endif  
 
-  delay(2000); // Display welcome message  
-
-  // WiFi initialization removed - handled by wifi_helper library now
-}  
-
-bool heltec_button_clicked() {  
-  bool result = buttonClicked;  
-  buttonClicked = false;  // Clear after reading  
-  return result;  
-}  
-
-// For backward compatibility - allows delay with power button check  
-void heltec_delay(int ms) {  
-  uint32_t start = millis();  
-  while (millis() - start < ms) {  
-    heltec_loop();  
-    delay(10);  
-  }  
-}  
-
-// Internal interrupt handler for packet reception  
-void _handleLoRaRx() {  
-  _packetReceived = true;  
-}  
-
-/**  
- * @brief Subscribe to LoRa packet reception events  
- *   
- * @param callback Function to be called when a packet is received  
- * @return true if subscription was successful  
- */  
-bool heltec_subscribe_packets(PacketCallback callback) {  
-  #ifndef HELTEC_NO_RADIOLIB  
-    _packetCallback = callback;
-    
-    // Clear any previous action first
-    radio.clearDio1Action();
-    delay(10);  // Give it time to clear
-    
-    // Set up the new action
-    radio.setDio1Action(_handleLoRaRx);
-    delay(10);  // Let the interrupt setup complete
-    
-    // Start receive
-    int state = radio.startReceive();
-    delay(30);  // Give it more time to enter receive mode
-
-    if (state == RADIOLIB_ERR_NONE) {  
-      Serial.println("LoRa packet subscription active");  
-      return true;  
-    } else {  
-      Serial.printf("Failed to start radio receiver: %d\n", state);  
-      return false;  
-    }  
-  #else  
-    Serial.println("Radio not available - packet subscription failed");  
-    return false;  
-  #endif  
-}  
-/**
- * @brief Unsubscribe from LoRa packet reception events
- * 
- * @return true if unsubscription was successful
- */
-bool heltec_unsubscribe_packets() {
-  #ifndef HELTEC_NO_RADIOLIB
-    // Clear the callback
-    _packetCallback = NULL;
-    
-    // Clear the interrupt
-    radio.clearDio1Action();
-    delay(20); 
-    // Put radio in standby mode
-    int state = radio.standby();
-    delay(20);
-    
-    if (state == RADIOLIB_ERR_NONE) {
-      Serial.println("LoRa packet subscription disabled");
-      return true;
-    } else {
-      Serial.printf("Failed to put radio in standby: %d\n", state);
-      return false;
-    }
-  #else
-    Serial.println("Radio not available - unsubscription not needed");
-    return false;
-  #endif
-}
-
-/**
- * @brief Process any received packets in the main loop
- * 
- * This should be called in every iteration of loop()
- * It will invoke the callback when packets are received
- */
-void heltec_process_packets() {
-  #ifndef HELTEC_NO_RADIOLIB
-    if (_packetReceived) {
-      // Clear flag immediately to prevent race conditions
-      _packetReceived = false;
-      
-      // Temporarily disable interrupt to prevent recursion
-      radio.clearDio1Action();
-      
-      // Read the packet data
-      _packetData = "";
-      int state = radio.readData(_packetData);
-      
-      if (state == RADIOLIB_ERR_NONE) {
-        // Get signal quality information
-        _packetRssi = radio.getRSSI();
-        _packetSnr = radio.getSNR();
-        
-        // Invoke the callback if registered
-        if (_packetCallback) {
-          _packetCallback(_packetData, _packetRssi, _packetSnr);
-        }
-      } else {
-        Serial.printf("Error reading LoRa packet: %d\n", state);
-      }
-      
-      // Make sure radio is in a clean state before restarting reception
-      radio.standby();
-      delay(10);
-      
-      // Restart reception
-      radio.startReceive();
-      delay(10);
-      
-      // Re-enable interrupt handler AFTER reception has started
-      radio.setDio1Action(_handleLoRaRx);
-    }
-  #endif
+  delay(2000); // Let welcome message be visible
 }
 
 /**
  * @brief The main loop for the Heltec library.
- * 
- * This function should be called in the loop() of your sketch
- * to handle button debouncing and other periodic tasks.
  */
 void heltec_loop() {
   // Handle display updates for V3.2
