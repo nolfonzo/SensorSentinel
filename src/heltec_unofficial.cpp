@@ -624,7 +624,6 @@ void heltec_setup() {
       display.setTextColor(ST7735_WHITE);  
       display.setTextSize(1);  
       display.setTextWrap(true);
-      
     #elif defined(ARDUINO_heltec_wifi_32_lora_V3)  
       // Initialize OLED for V3 - ThingPulse library
       heltec_display_power(true);  
@@ -632,12 +631,10 @@ void heltec_setup() {
       display.init();  
       display.setContrast(255);  
       display.flipScreenVertically();
-      
     #else  
       // Initialize OLED for V3.2 and Wireless Stick - Adafruit library
       heltec_display_power(true);  
       Wire.begin(SDA_OLED, SCL_OLED);  
-      
       if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {  
         Serial.println("SSD1306 allocation failed");  
       } else {  

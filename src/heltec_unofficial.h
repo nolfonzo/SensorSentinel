@@ -268,7 +268,7 @@ void heltec_display_power(bool on);
  * @param textSize Text size (default = 1)
  * @param rotation Display rotation (default = 0)
  */
-void heltec_clear_display(uint8_t textSize = 1, uint8_t rotation = 0);
+void heltec_clear_display(uint8_t textSize = 1, uint8_t rotation = 1);
 
 // Power management functions
 /**
