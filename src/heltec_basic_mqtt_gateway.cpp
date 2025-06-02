@@ -4,7 +4,7 @@
  */
 
 #include "heltec_unofficial.h"
-#include "heltec_mqtt_gateway.h"
+#include "heltec_basic_mqtt_gateway.h"
 #include "heltec_wifi_helper.h"
 
 // Module variables

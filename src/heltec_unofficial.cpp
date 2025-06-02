@@ -5,18 +5,18 @@
 
 #include "heltec_unofficial.h"  
 
-// ====== Constants ======
-// Radio configuration
-#define HELTEC_LORA_FREQ    915.0  // MHz, 868.0 for EU regions
-#define HELTEC_LORA_BW      125.0  // kHz
-#define HELTEC_LORA_SF      9      // Spreading factor
-#define HELTEC_LORA_CR      5      // Coding rate
-#define HELTEC_LORA_SYNC    0x12   // Sync word
+// ====== Constants ======  
+// Radio configuration  
+#define HELTEC_LORA_FREQ    915.0  // MHz, 868.0 for EU regions  
+#define HELTEC_LORA_BW      125.0  // kHz  
+#define HELTEC_LORA_SF      9      // Spreading factor  
+#define HELTEC_LORA_CR      5      // Coding rate  
+#define HELTEC_LORA_SYNC    0x12   // Sync word  
 
-// Chip-specific settings
-#define HELTEC_SX1262_POWER   14.0    // dBm
-#define HELTEC_SX1262_CURRENT 140.0   // mA
-#define HELTEC_SX1276_POWER   17      // Different scale for SX1276
+// Chip-specific settings  
+#define HELTEC_SX1262_POWER   14.0    // dBm  
+#define HELTEC_SX1262_CURRENT 140.0   // mA  
+#define HELTEC_SX1276_POWER   17      // Different scale for SX1276  
 
 // Battery calibration  
 const float min_voltage = 3.04;  
@@ -34,8 +34,8 @@ const uint8_t scaled_voltage[100] = {
   94, 90, 81, 80, 76, 73, 66, 52, 32, 7  
 };  
 
-// ====== Global variables ======
-// Button related
+// ====== Global variables ======  
+// Button related  
 HotButton button(BUTTON);  
 bool buttonClicked = false;  
 
@@ -70,7 +70,7 @@ bool _display_needs_update = false;
   Print &both = Serial;  
 #endif  
 
-// GNSS related
+// GNSS related  
 #ifdef HELTEC_GNSS  
   TinyGPSPlus gps;  
   HardwareSerial gpsSerial = HardwareSerial(1);  
@@ -78,8 +78,11 @@ bool _display_needs_update = false;
 
 // Packet subscription system  
 PacketCallback _packetCallback = NULL;  
+BinaryPacketCallback _binaryPacketCallback = NULL;  
 volatile bool _packetReceived = false;  
 String _packetData;  
+uint8_t _binaryPacketBuffer[256]; // Buffer for binary packet data  
+size_t _binaryPacketLength = 0;  
 float _packetRssi;  
 float _packetSnr;  
 
@@ -102,13 +105,13 @@ size_t PrintSplitter::write(const uint8_t *buffer, size_t size) {
   return r;  
 }  
 
-// ====== Internal helper functions ======
+// ====== Internal helper functions ======  
 // Interrupt handler for packet reception  
 void _handleLoRaRx() {  
   _packetReceived = true;  
 }  
 
-// ====== Public API implementations ======
+// ====== Public API implementations ======  
 /**  
  * @brief Gets a string describing the current board  
  * @return Board description  
@@ -208,7 +211,7 @@ float heltec_vbat() {
     vbat = analogRead(VBAT_ADC) / 238.7; // Original calibration  
   #endif  
   
-  pinMode(VBAT_CTRL, INPUT);
+  pinMode(VBAT_CTRL, INPUT);  
   return vbat;  
 }  
 
@@ -277,7 +280,7 @@ void heltec_delay(int ms) {
   }  
 }  
 
-// ====== GNSS functions ======
+// ====== GNSS functions ======  
 #ifdef HELTEC_GNSS  
   /**  
    * @brief Initializes the GNSS module  
@@ -309,12 +312,12 @@ void heltec_delay(int ms) {
       if (gps.encode(gpsSerial.read())) {  
         return true; // New data available  
       }  
-    }
+    }  
     return false;  
   }  
 #endif  
 
-// ====== Display functions ======
+// ====== Display functions ======  
 /**  
  * @brief Controls the display power.  
  * @param on True to enable, false to disable  
@@ -394,7 +397,7 @@ void heltec_clear_display(uint8_t textSize, uint8_t rotation) {
   #endif  
 }  
 
-// ====== Radio functions ======
+// ====== Radio functions ======  
 
 /**  
  * @brief Subscribe to LoRa packet reception events  
@@ -403,29 +406,29 @@ void heltec_clear_display(uint8_t textSize, uint8_t rotation) {
  */  
 bool heltec_subscribe_packets(PacketCallback callback) {  
   #ifndef HELTEC_NO_RADIOLIB  
-    // Validate input
-    if (callback == NULL) {
-      Serial.println("Error: NULL callback provided");
-      return false;
-    }
+    // Validate input  
+    if (callback == NULL) {  
+      Serial.println("Error: NULL callback provided");  
+      return false;  
+    }  
     
-    // Store the callback
-    _packetCallback = callback;
+    // Store the callback  
+    _packetCallback = callback;  
     
-    // Reset received flag to ensure clean state
-    _packetReceived = false;
+    // Reset received flag to ensure clean state  
+    _packetReceived = false;  
     
-    // Clear any previous action first
-    radio.clearDio1Action();
-    delay(10);
+    // Clear any previous action first  
+    radio.clearDio1Action();  
+    delay(10);  
     
-    // Set up the new action
-    radio.setDio1Action(_handleLoRaRx);
-    delay(10);
+    // Set up the new action  
+    radio.setDio1Action(_handleLoRaRx);  
+    delay(10);  
     
-    // Start receive
-    int state = radio.startReceive();
-    delay(10);
+    // Start receive  
+    int state = radio.startReceive();  
+    delay(10);  
 
     if (state == RADIOLIB_ERR_NONE) {  
       Serial.println("LoRa packet subscription active");  
@@ -440,86 +443,194 @@ bool heltec_subscribe_packets(PacketCallback callback) {
   #endif  
 }  
 
-/**
- * @brief Unsubscribe from LoRa packet reception events
- * @return true if unsubscription was successful
- */
-bool heltec_unsubscribe_packets() {
-  #ifndef HELTEC_NO_RADIOLIB
-    // Clear the callback
-    _packetCallback = NULL;
+/**  
+ * @brief Subscribe to LoRa binary packet reception events  
+ * @param callback Function to be called when a binary packet is received  
+ * @return true if subscription was successful  
+ */  
+bool heltec_subscribe_binary_packets(BinaryPacketCallback callback) {  
+  #ifndef HELTEC_NO_RADIOLIB  
+    // Validate input  
+    if (callback == NULL) {  
+      Serial.println("Error: NULL callback provided");  
+      return false;  
+    }  
     
-    // Reset received flag to ensure clean state
-    _packetReceived = false;
+    // Store the callback  
+    _binaryPacketCallback = callback;  
     
-    // Clear the interrupt
-    radio.clearDio1Action();
-    delay(10); 
+    // Reset received flag to ensure clean state  
+    _packetReceived = false;  
+    
+    // Clear any previous action first  
+    radio.clearDio1Action();  
+    delay(10);  
+    
+    // Set up the new action  
+    radio.setDio1Action(_handleLoRaRx);  
+    delay(10);  
+    
+    // Start receive  
+    int state = radio.startReceive();  
+    delay(10);  
 
-    // Put radio in standby mode
-    int state = radio.standby();
-    delay(10);
-    
-    if (state == RADIOLIB_ERR_NONE) {
-      Serial.println("LoRa packet subscription disabled");
-      return true;
-    } else {
-      Serial.printf("Failed to put radio in standby: %d\n", state);
-      return false;
-    }
-  #else
-    Serial.println("Radio not available - unsubscription not needed");
-    return false;
-  #endif
-}
+    if (state == RADIOLIB_ERR_NONE) {  
+      Serial.println("LoRa binary packet subscription active");  
+      return true;  
+    } else {  
+      Serial.printf("Failed to start radio receiver: %d\n", state);  
+      return false;  
+    }  
+  #else  
+    Serial.println("Radio not available - binary packet subscription failed");  
+    return false;  
+  #endif  
+}  
 
-/**
- * @brief Process any received packets in the main loop
- */
-void heltec_process_packets() {
-  #ifndef HELTEC_NO_RADIOLIB
-    if (_packetReceived) {
-      // Clear flag immediately to prevent race conditions
-      _packetReceived = false;
+/**  
+ * @brief Unsubscribe from LoRa packet reception events  
+ * @return true if unsubscription was successful  
+ */  
+bool heltec_unsubscribe_packets() {  
+  #ifndef HELTEC_NO_RADIOLIB  
+    // Clear the callback  
+    _packetCallback = NULL;  
+    
+    // If neither callback is active, fully disable reception  
+    if (_binaryPacketCallback == NULL) {  
+      // Reset received flag to ensure clean state  
+      _packetReceived = false;  
       
-      // Temporarily disable interrupt to prevent recursion
-      radio.clearDio1Action();
+      // Clear the interrupt  
+      radio.clearDio1Action();  
+      delay(10);   
+
+      // Put radio in standby mode  
+      int state = radio.standby();  
+      delay(10);  
       
-      // Read the packet data
-      _packetData = "";
-      int state = radio.readData(_packetData);
+      if (state == RADIOLIB_ERR_NONE) {  
+        Serial.println("LoRa packet subscription disabled");  
+        return true;  
+      } else {  
+        Serial.printf("Failed to put radio in standby: %d\n", state);  
+        return false;  
+      }  
+    }  
+    return true;  
+  #else  
+    Serial.println("Radio not available - unsubscription not needed");  
+    return false;  
+  #endif  
+}  
+
+/**  
+ * @brief Unsubscribe from LoRa binary packet reception events  
+ * @return true if unsubscription was successful  
+ */  
+bool heltec_unsubscribe_binary_packets() {  
+  #ifndef HELTEC_NO_RADIOLIB  
+    // Clear the callback  
+    _binaryPacketCallback = NULL;  
+    
+    // If neither callback is active, fully disable reception  
+    if (_packetCallback == NULL) {  
+      // Reset received flag to ensure clean state  
+      _packetReceived = false;  
       
-      if (state == RADIOLIB_ERR_NONE) {
-        // Get signal quality information
-        _packetRssi = radio.getRSSI();
-        _packetSnr = radio.getSNR();
+      // Clear the interrupt  
+      radio.clearDio1Action();  
+      delay(10);  
+
+      // Put radio in standby mode  
+      int state = radio.standby();  
+      delay(10);  
+      
+      if (state == RADIOLIB_ERR_NONE) {  
+        Serial.println("LoRa packet subscription disabled");  
+        return true;  
+      } else {  
+        Serial.printf("Failed to put radio in standby: %d\n", state);  
+        return false;  
+      }  
+    }  
+    return true;  
+  #else  
+    Serial.println("Radio not available - unsubscription not needed");  
+    return false;  
+  #endif  
+}  
+
+/**  
+ * @brief Process any received packets in the main loop  
+ */  
+void heltec_process_packets() {  
+  #ifndef HELTEC_NO_RADIOLIB  
+    if (_packetReceived) {  
+      // Clear flag immediately to prevent race conditions  
+      _packetReceived = false;  
+      
+      // Temporarily disable interrupt to prevent recursion  
+      radio.clearDio1Action();  
+      
+      // Check if we have any callbacks registered  
+      bool hasCallbacks = (_packetCallback != NULL || _binaryPacketCallback != NULL);  
+      
+      if (hasCallbacks) {  
+        // Get signal quality information (needed for both callback types)  
+        _packetRssi = radio.getRSSI();  
+        _packetSnr = radio.getSNR();  
         
-        // Invoke the callback if registered
-        if (_packetCallback) {
-          _packetCallback(_packetData, _packetRssi, _packetSnr);
-        }
-      } else {
-        Serial.printf("Error reading LoRa packet: %d\n", state);
-      }
-      
-      // Make sure radio is in a clean state before restarting reception
-      radio.standby();
-      delay(10);
-      
-      // Only restart reception if we still have a callback (user might have unsubscribed in callback)
-      if (_packetCallback) {
-        // Restart reception
-        radio.startReceive();
-        delay(10);
+        // Handle string packet (for backward compatibility)  
+        if (_packetCallback) {  
+          _packetData = "";  
+          int state = radio.readData(_packetData);  
+          
+          if (state == RADIOLIB_ERR_NONE) {  
+            _packetCallback(_packetData, _packetRssi, _packetSnr);  
+          } else {  
+            Serial.printf("Error reading LoRa packet as string: %d\n", state);  
+          }  
+        }  
         
-        // Re-enable interrupt handler AFTER reception has started
-        radio.setDio1Action(_handleLoRaRx);
-      }
-    }
-  #endif
-}
+        // Handle binary packet  
+        if (_binaryPacketCallback) {  
+            // Use RadioLib's API correctly
+            int state = radio.readData(_binaryPacketBuffer, sizeof(_binaryPacketBuffer));
+            
+            if (state == RADIOLIB_ERR_NONE) {
+                // Get the actual packet length
+                _binaryPacketLength = radio.getPacketLength();
+                
+                if (_binaryPacketLength > 0) {
+                _binaryPacketCallback(_binaryPacketBuffer, _binaryPacketLength, _packetRssi, _packetSnr);
+                } else {
+                Serial.println("Received empty binary packet");
+                    }
+            } else {
+                Serial.printf("Error reading LoRa packet as binary: %d\n", state);
+            }
+        } 
+      }  
+      
+      // Make sure radio is in a clean state before restarting reception  
+      radio.standby();  
+      delay(10);  
+      
+      // Only restart reception if we still have a callback (user might have unsubscribed in callback)  
+      if (_packetCallback || _binaryPacketCallback) {  
+        // Restart reception  
+        radio.startReceive();  
+        delay(10);  
+        
+        // Re-enable interrupt handler AFTER reception has started  
+        radio.setDio1Action(_handleLoRaRx);  
+      }  
+    }  
+  #endif  
+}  
 
-// ====== Power management ======
+// ====== Power management ======  
 /**  
  * @brief Puts the device into deep sleep mode.  
  * @param seconds The number of seconds to sleep before waking up (default = 0).  
@@ -601,7 +712,7 @@ void heltec_deep_sleep(int seconds) {
   esp_deep_sleep_start();  
 }  
 
-// ====== Main functions ======
+// ====== Main functions ======  
 /**  
  * @brief Initializes the Heltec library.  
  */  
@@ -614,7 +725,7 @@ void heltec_setup() {
     hspi->begin(SCK, MISO, MOSI, SS);  
   #endif  
   
-  // Initialize display
+    // Initialize display
   #ifndef HELTEC_NO_DISPLAY  
     #ifdef ARDUINO_heltec_wireless_tracker  
       // Initialize TFT display for Wireless Tracker
@@ -636,16 +747,13 @@ void heltec_setup() {
       heltec_display_power(true);  
       Wire.begin(SDA_OLED, SCL_OLED);  
       if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {  
-        Serial.println("SSD1306 allocation failed");  
+        Serial.println("SSD1306 allocation failed\n");  
       } else {  
-        Serial.println("OLED initialized successfully");
+        Serial.println("OLED initialized OK");
       }
     #endif
     
-    // Clear display and show welcome message
     heltec_clear_display();
-    both.println("Heltec ESP32 LoRa");
-    both.println(heltec_get_board_name());
     
     // ThingPulse library (V3) needs explicit display update that isn't handled by PrintSplitter
     #if defined(ARDUINO_heltec_wifi_32_lora_V3)
@@ -653,7 +761,7 @@ void heltec_setup() {
     #endif
   #else
     // No display - just log to Serial
-    Serial.println("Heltec ESP32 LoRa");  
+    Serial.println("\nHeltec ESP32 LoRa");  
     Serial.println(heltec_get_board_name());
   #endif
   
@@ -663,7 +771,7 @@ void heltec_setup() {
     if (radioStatus != RADIOLIB_ERR_NONE) {  
       both.printf("Radio initialization failed with code %d\n", radioStatus);  
     } else {  
-      both.println("Radio initialized successfully");  
+      both.println("Radio initialized OK");  
       
       // Common parameters for all boards
       radio.setFrequency(HELTEC_LORA_FREQ);
