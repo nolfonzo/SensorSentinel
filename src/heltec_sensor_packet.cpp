@@ -3,8 +3,9 @@
  * @brief Implementation of packet handling functions for Heltec boards
  */
 
-#include "Heltec_Sensor_Packet.h"
+#include "heltec_sensor_packet.h"
 #include "heltec_unofficial.h"
+#include <ArduinoJson.h>
 #include <string.h>  // For memcpy
 
 // Get a unique node ID based on ESP32's MAC address
@@ -27,330 +28,818 @@ uint32_t heltec_get_node_id() {
   #endif
 }
 
-// Initialize a sensor packet with basic information
-void heltec_init_sensor_packet(heltec_sensor_packet_t* packet, bool includeGnss, uint32_t counter) {
-  if (packet == nullptr) return;
+/**
+ * @brief Initialize a basic sensor packet with device information
+ * 
+ * Populates a packet with node ID, uptime, pin readings and battery level.
+ * 
+ * @param packet Pointer to sensor packet structure to initialize
+ * @param counter Message sequence counter value
+ */
+bool heltec_init_sensor_packet(heltec_sensor_packet_t* packet, uint32_t counter) {
+  if (!packet) false;
   
-  // Clear the entire packet first
+  // Clear the structure first
   memset(packet, 0, sizeof(heltec_sensor_packet_t));
   
-  // Determine if GNSS is available based solely on the HELTEC_GNSS flag
-  #ifdef HELTEC_GNSS
-    bool gnssAvailable = true;
-  #else
-    bool gnssAvailable = false;
-  #endif
+  // Set message type
+  packet->messageType = HELTEC_MSG_SENSOR;  // Using new constant name
   
-  // Set message type and size based on GNSS availability
-  packet->messageType = (includeGnss && gnssAvailable) ? HELTEC_MSG_GNSS : HELTEC_MSG_BASIC;
-  packet->packetSize = heltec_get_packet_size(packet->messageType);
-  
-  // Set basic packet information
+  // Set basic information
   packet->nodeId = heltec_get_node_id();
   packet->messageCounter = counter;
+  packet->uptime = millis() / 1000;  // Seconds since boot
   
-  // Set timestamp to uptime in seconds or use real time if available
-  #if defined(ESP32) && defined(HELTEC_USE_RTC_TIME)
-    // Use RTC time if available and requested
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    packet->timestamp = tv.tv_sec;
-  #else
-    // Otherwise use uptime
-    packet->timestamp = millis() / 1000;
-  #endif
+  // Get battery information
+  float batteryVolts = heltec_vbat();
+  packet->batteryVoltage = (uint16_t)(batteryVolts * 1000.0f);
+  packet->batteryLevel = heltec_battery_percent(batteryVolts);
   
-  // Set system status from heltec_unofficial functions
-  packet->batteryPercent = heltec_battery_percent();
-  packet->batteryMv = heltec_vbat() * 1000;  // Convert to millivolts
+  // Get pin readings
+  heltec_read_all_pins(&packet->pins);
   
-  // Set RSSI and SNR to 0, will be filled by receiver
-  packet->rssi = 0;
-  packet->snr = 0;
-  
-  // GNSS data if available and requested
-  #ifdef HELTEC_GNSS
-  if (includeGnss) {
-    // Update GNSS data
-    heltec_gnss_update();
-    
-    if (gps.location.isValid()) {
-      packet->latitude = gps.location.lat();
-      packet->longitude = gps.location.lng();
-      packet->altitude = gps.altitude.isValid() ? gps.altitude.meters() : 0;
-      packet->satellites = gps.satellites.isValid() ? gps.satellites.value() : 0;
-      packet->hdop = gps.hdop.isValid() ? gps.hdop.value() * 10 : 0; // Store as uint8_t * 10
-    }
-  }
-  #endif
+  return true;
 }
 
-// Get the size of a packet based on its message type
+/**
+ * @brief Initialize a GNSS packet with device information and location data if available
+ * 
+ * Populates a packet with node ID, uptime, battery level, and current GNSS data.
+ * If no valid GNSS fix is available, location fields are set to zeros.
+ * 
+ * @param packet Pointer to GNSS packet structure to initialize
+ * @param counter Message sequence counter value
+ * @return true if valid location data was available, false if no fix
+ */
+bool heltec_init_gnss_packet(heltec_gnss_packet_t* packet, uint32_t counter) {
+  if (!packet) return false;
+  
+  // Clear the structure first
+  memset(packet, 0, sizeof(heltec_gnss_packet_t));
+  
+  // Set message type
+  packet->messageType = HELTEC_MSG_GNSS;
+  
+  // Set basic information
+  packet->nodeId = heltec_get_node_id();
+  packet->messageCounter = counter;
+  packet->uptime = millis() / 1000;  // Seconds since boot
+  
+  // Get battery information
+  float batteryVolts = heltec_vbat();
+  packet->batteryVoltage = (uint16_t)(batteryVolts * 1000.0f);
+  packet->batteryLevel = heltec_battery_percent(batteryVolts);
+  
+  // Initialize location fields to zero (indicating no fix)
+  // These will stay at zero if no GNSS data is available
+  packet->latitude = 0.0f;
+  packet->longitude = 0.0f;
+  packet->speed = 0.0f;
+  packet->course = 0.0f;
+  packet->hdop = 0;
+  
+  // Attempt to populate with GNSS data if available
+  bool hasValidFix = false;
+  
+  #ifdef HELTEC_GNSS
+  // Update GNSS data
+  heltec_gnss_update();
+  
+  if (gps.location.isValid()) {
+    packet->latitude = gps.location.lat();
+    packet->longitude = gps.location.lng();
+    packet->speed = gps.speed.kmph();
+    packet->course = gps.course.deg();
+    packet->hdop = (uint8_t)(gps.hdop.hdop() * 10);  // Store HDOP as fixed point
+    hasValidFix = true;
+  }
+  #endif
+  
+  return hasValidFix;
+}
+
+/**
+ * @brief Get the size of a packet based on its message type
+ * 
+ * Returns the appropriate size in bytes for a given message type.
+ * Useful for allocating the correct buffer size or validating 
+ * received packet lengths.
+ * 
+ * @param messageType The type of message (HELTEC_MSG_SENSOR or HELTEC_MSG_GNSS)
+ * @return The size of the packet in bytes, or 0 if the message type is unknown
+ */
 size_t heltec_get_packet_size(uint8_t messageType) {
   switch (messageType) {
-    case HELTEC_MSG_BASIC:
-      // Size up to the end of the basic fields (exclude GNSS fields)
-      return offsetof(heltec_sensor_packet_t, latitude);
-      
-    case HELTEC_MSG_GNSS:
-      // Full packet size
+    case HELTEC_MSG_SENSOR:
       return sizeof(heltec_sensor_packet_t);
-      
+    
+    case HELTEC_MSG_GNSS:
+      return sizeof(heltec_gnss_packet_t);
+    
     default:
-      // Unknown message type, return 0 to indicate error
+      // Unknown message type
       return 0;
   }
 }
 
-// Print packet information to Serial for debugging
-void heltec_print_packet_info(const heltec_sensor_packet_t* packet, bool verbose) {
-  if (packet == nullptr) {
-    both.println("Error: Null packet pointer");
-    return;
+
+
+/**
+ * @brief Print detailed information about a packet to Serial
+ * 
+ * Prints header information common to all packets plus specific
+ * information based on the packet type. Useful for debugging
+ * and monitoring.
+ * 
+ * @param packet Pointer to the packet buffer
+ * @param showAll Whether to show all fields including reserved bytes
+ * @return true if the packet was recognized and printed, false otherwise
+ */
+bool heltec_print_packet_info(const void* packet, bool showAll) {
+  if (!packet) {
+    Serial.println("Error: Null packet pointer");
+    return false;
   }
+
+  // Get the message type from the first byte
+  uint8_t messageType = *((uint8_t*)packet);
   
-  Serial.println("=== Sensor Packet Info ===");
-  Serial.printf("Type: 0x%02X (%s)\n", packet->messageType, 
-    packet->messageType == HELTEC_MSG_BASIC ? "Basic" : 
-    packet->messageType == HELTEC_MSG_GNSS ? "GNSS" : "Unknown");
-  Serial.printf("Size: %d bytes\n", packet->packetSize);
-  Serial.printf("Node ID: 0x%08X\n", packet->nodeId);
-  Serial.printf("Message #: %u\n", packet->messageCounter);
-  Serial.printf("Timestamp: %u seconds\n", packet->timestamp);
+  // Print common header information
+  Serial.println("------ Packet Information ------");
   
-  Serial.printf("Battery: %u%% (%u mV)\n", packet->batteryPercent, packet->batteryMv);
-  Serial.printf("RSSI: %d dBm, SNR: %u\n", packet->rssi, packet->snr);
-  
-  if (verbose) {
-    // Print detailed pin information
-    Serial.println("Pin Readings:");
-    Serial.printf("  Digital: 0x%08X\n", packet->pins.boolean);
-    Serial.print("  Analog: [");
-    for (int i = 0; i < HELTEC_ANALOG_COUNT; i++) {
-      Serial.printf("%u%s", packet->pins.analog[i], 
-                i < HELTEC_ANALOG_COUNT-1 ? ", " : "");
+  // Handle different packet types
+  switch (messageType) {
+    case HELTEC_MSG_SENSOR: {
+      const heltec_sensor_packet_t* sensorPacket = (const heltec_sensor_packet_t*)packet;
+      
+      // Print header information
+      Serial.println("Type: Sensor Data");
+      Serial.printf("Node ID: 0x%08X\n", sensorPacket->nodeId);
+      Serial.printf("Msg #: %u\n", sensorPacket->messageCounter);
+      Serial.printf("Uptime: %u seconds\n", sensorPacket->uptime);
+      Serial.printf("Battery: %u%% (%.2fV)\n", 
+                    sensorPacket->batteryLevel, 
+                    sensorPacket->batteryVoltage / 1000.0f);
+      
+      // Print analog pin readings
+      Serial.println("\nAnalog Readings:");
+      for (int i = 0; i < 4; i++) {
+        Serial.printf("  A%d: %u\n", i, sensorPacket->pins.analog[i]);
+      }
+      
+      // Print digital pin readings
+      Serial.println("\nDigital Readings:");
+      for (int i = 0; i < 8; i++) {
+        bool pinState = (sensorPacket->pins.boolean >> i) & 0x01;
+        Serial.printf("  D%d: %d\n", i, pinState);
+      }
+      
+      // Print reserved bytes if requested
+      if (showAll) {
+        Serial.println("\nReserved Bytes:");
+        for (int i = 0; i < sizeof(sensorPacket->reserved); i++) {
+          Serial.printf("  [%d]: 0x%02X\n", i, sensorPacket->reserved[i]);
+        }
+      }
+      
+      return true;
     }
-    Serial.println("]");
+    
+    case HELTEC_MSG_GNSS: {
+      const heltec_gnss_packet_t* gnssPacket = (const heltec_gnss_packet_t*)packet;
+      
+      // Print header information
+      Serial.println("Type: GNSS Location Data");
+      Serial.printf("Node ID: 0x%08X\n", gnssPacket->nodeId);
+      Serial.printf("Msg #: %u\n", gnssPacket->messageCounter);
+      Serial.printf("Uptime: %u seconds\n", gnssPacket->uptime);
+      Serial.printf("Battery: %u%% (%.2fV)\n", 
+                    gnssPacket->batteryLevel, 
+                    gnssPacket->batteryVoltage / 1000.0f);
+      
+      // Print location information
+      Serial.println("\nLocation Data:");
+      Serial.printf("  Latitude: %.6f°\n", gnssPacket->latitude);
+      Serial.printf("  Longitude: %.6f°\n", gnssPacket->longitude);
+      Serial.printf("  Speed: %.1f km/h\n", gnssPacket->speed);
+      Serial.printf("  Course: %.1f°\n", gnssPacket->course);
+      Serial.printf("  HDOP: %.1f\n", gnssPacket->hdop / 10.0f);
+      
+      // Create a Google Maps link
+      Serial.println("\nGoogle Maps Link:");
+      Serial.printf("  https://maps.google.com/maps?q=%.6f,%.6f\n", 
+                    gnssPacket->latitude, gnssPacket->longitude);
+      
+      // Print reserved bytes if requested
+      if (showAll) {
+        Serial.println("\nReserved Bytes:");
+        for (int i = 0; i < sizeof(gnssPacket->reserved); i++) {
+          Serial.printf("  [%d]: 0x%02X\n", i, gnssPacket->reserved[i]);
+        }
+      }
+      
+      return true;
+    }
+    
+    default:
+      Serial.printf("Unknown packet type: 0x%02X\n", messageType);
+      return false;
   }
-  
-  // Print GNSS data if included
-  if (packet->messageType == HELTEC_MSG_GNSS) {
-    Serial.println("GNSS Data:");
-    Serial.printf("  Lat: %.6f, Lon: %.6f\n", packet->latitude, packet->longitude);
-    Serial.printf("  Alt: %d m, Satellites: %u\n", packet->altitude, packet->satellites);
-    Serial.printf("  HDOP: %.1f\n", packet->hdop / 10.0f);
-  }
-  
-  Serial.println("=========================");
-  
-  // Ensure display is updated if needed
-  heltec_display_update();
 }
 
-// Parse a received packet buffer into a packet structure
-bool heltec_parse_packet(uint8_t* buffer, size_t length, heltec_sensor_packet_t* packet) {
-  if (buffer == nullptr || packet == nullptr) {
-    return false;
+
+
+/**
+ * @brief Parse binary data into the appropriate packet structure
+ * 
+ * Examines the message type in the binary data and copies it to the
+ * appropriate output structure if the type and size match expectations.
+ * Prints detailed error messages to Serial when parsing fails.
+ * 
+ * @param data Pointer to the binary data buffer
+ * @param dataSize Size of the binary data in bytes
+ * @param outputPacket Pointer where the parsed packet will be stored
+ * @param outputSize Size of the output structure in bytes
+ * @return Message type if successful, 0 if parsing failed
+ */
+uint8_t heltec_parse_packet(const uint8_t* data, size_t dataSize, void* outputPacket, size_t outputSize) {
+  // Basic validation
+  if (!data) {
+    Serial.println("ERROR: Null input data pointer");
+    return 0;
   }
   
-  // Ensure minimum packet size
-  if (length < offsetof(heltec_sensor_packet_t, latitude)) {
-    Serial.printf("Error: Packet too small (%u bytes)\n", length);
-    return false;
+  if (!outputPacket) {
+    Serial.println("ERROR: Null output packet pointer");
+    return 0;
   }
   
-  // Read message type
-  uint8_t messageType = buffer[0];
-  
-  // Validate message type
-  if (messageType != HELTEC_MSG_BASIC && messageType != HELTEC_MSG_GNSS) {
-    Serial.printf("Error: Invalid message type 0x%02X\n", messageType);
-    return false;
+  if (dataSize == 0) {
+    Serial.println("ERROR: Zero-length input data");
+    return 0;
   }
   
-  // Get expected packet size based on message type
+  // Get the message type from the first byte
+  uint8_t messageType = data[0];
+  
+  // Get the expected size for this message type
   size_t expectedSize = heltec_get_packet_size(messageType);
   
-  // Validate packet size
-  if (length < expectedSize) {
-    Serial.printf("Error: Incomplete packet (%u bytes, expected %u)\n", length, expectedSize);
-    return false;
+  // Validate message type
+  if (expectedSize == 0) {
+    Serial.printf("ERROR: Unknown message type 0x%02X\n", messageType);
+    return 0;
   }
   
-  // Copy only the relevant portion of the packet based on message type
-  memcpy(packet, buffer, expectedSize);
-  
-  // Validate the packet
-  return heltec_validate_packet(packet);
-}
-
-// Validate a packet structure for consistency
-bool heltec_validate_packet(const heltec_sensor_packet_t* packet) {
-  if (packet == nullptr) {
-    return false;
+  // Validate data size
+  if (dataSize < expectedSize) {
+    Serial.printf("ERROR: Incomplete data - expected %u bytes, got %u bytes\n", 
+                  expectedSize, dataSize);
+    return 0;
   }
   
-  // Check message type
-  if (packet->messageType != HELTEC_MSG_BASIC && packet->messageType != HELTEC_MSG_GNSS) {
-    Serial.printf("Error: Invalid message type 0x%02X\n", packet->messageType);
-    return false;
+  // Check if the output buffer is large enough
+  if (outputSize < expectedSize) {
+    Serial.printf("ERROR: Output buffer too small - needs %u bytes, got %u bytes\n", 
+                  expectedSize, outputSize);
+    return 0;
   }
   
-  // Check packet size
-  size_t expectedSize = heltec_get_packet_size(packet->messageType);
-  if (packet->packetSize != expectedSize) {
-    Serial.printf("Error: Invalid packet size (%u, expected %u)\n", 
-                 packet->packetSize, expectedSize);
-    return false;
-  }
-  
-  // Additional validations if needed (e.g., range checks for battery, RSSI, etc.)
-  if (packet->batteryPercent > 100) {
-    Serial.printf("Warning: Invalid battery percentage (%u%%)\n", packet->batteryPercent);
-    // Not fatal, don't return false
-  }
-  
-  // GNSS validation
-  if (packet->messageType == HELTEC_MSG_GNSS) {
-    // Basic range check for latitude (-90 to 90)
-    if (packet->latitude < -90.0f || packet->latitude > 90.0f) {
-      Serial.printf("Error: Invalid latitude (%.6f)\n", packet->latitude);
-      return false;
+  // Handle specific message types
+  switch (messageType) {
+    case HELTEC_MSG_SENSOR: {
+      // Copy the data to the output structure
+      memcpy(outputPacket, data, expectedSize);
+      
+      // Validate the sensor packet
+      heltec_sensor_packet_t* sensorPacket = (heltec_sensor_packet_t*)outputPacket;
+      
+      if (sensorPacket->messageType != HELTEC_MSG_SENSOR) {
+        Serial.println("ERROR: Message type field corrupted after copy");
+        return 0;
+      }
+      
+      if (sensorPacket->batteryLevel > 100) {
+        Serial.printf("ERROR: Invalid battery level: %u%%\n", sensorPacket->batteryLevel);
+        return 0;
+      }
+      
+      if (sensorPacket->batteryVoltage < 2000 || sensorPacket->batteryVoltage > 4500) {
+        Serial.printf("ERROR: Unrealistic battery voltage: %u mV\n", sensorPacket->batteryVoltage);
+        return 0;
+      }
+      
+      Serial.printf("INFO: Successfully parsed SENSOR packet from node 0x%08X (msg #%u)\n", 
+                   sensorPacket->nodeId, sensorPacket->messageCounter);
+      
+      return HELTEC_MSG_SENSOR;
     }
     
-    // Basic range check for longitude (-180 to 180)
-    if (packet->longitude < -180.0f || packet->longitude > 180.0f) {
-      Serial.printf("Error: Invalid longitude (%.6f)\n", packet->longitude);
-      return false;
+    case HELTEC_MSG_GNSS: {
+      // Copy the data to the output structure
+      memcpy(outputPacket, data, expectedSize);
+      
+      // Validate the GNSS packet
+      heltec_gnss_packet_t* gnssPacket = (heltec_gnss_packet_t*)outputPacket;
+      
+      if (gnssPacket->messageType != HELTEC_MSG_GNSS) {
+        Serial.println("ERROR: Message type field corrupted after copy");
+        return 0;
+      }
+      
+      if (gnssPacket->batteryLevel > 100) {
+        Serial.printf("ERROR: Invalid battery level: %u%%\n", gnssPacket->batteryLevel);
+        return 0;
+      }
+      
+      if (gnssPacket->batteryVoltage < 2000 || gnssPacket->batteryVoltage > 4500) {
+        Serial.printf("ERROR: Unrealistic battery voltage: %u mV\n", gnssPacket->batteryVoltage);
+        return 0;
+      }
+      
+      if (fabs(gnssPacket->latitude) > 90.0) {
+        Serial.printf("ERROR: Invalid latitude: %.6f\n", gnssPacket->latitude);
+        return 0;
+      }
+      
+      if (fabs(gnssPacket->longitude) > 180.0) {
+        Serial.printf("ERROR: Invalid longitude: %.6f\n", gnssPacket->longitude);
+        return 0;
+      }
+      
+      Serial.printf("INFO: Successfully parsed GNSS packet from node 0x%08X (msg #%u)\n", 
+                   gnssPacket->nodeId, gnssPacket->messageCounter);
+      Serial.printf("      Location: %.6f, %.6f\n", gnssPacket->latitude, gnssPacket->longitude);
+      
+      return HELTEC_MSG_GNSS;
     }
+    
+    default:
+      // This shouldn't happen as we already checked for unknown message types
+      Serial.printf("ERROR: Unhandled message type 0x%02X\n", messageType);
+      return 0;
   }
-  
-  // All validations passed
-  return true;
 }
 
-// Copy packet data from source to destination
-void heltec_copy_packet(heltec_sensor_packet_t* dest, const heltec_sensor_packet_t* src) {
-  if (dest == nullptr || src == nullptr) return;
+/**
+ * @brief Validate a packet of any supported type
+ * 
+ * Performs comprehensive validation on a packet based on its message type.
+ * Checks packet structure, field values, and internal consistency.
+ * 
+ * @param data Pointer to the packet data
+ * @param dataSize Size of the packet data in bytes
+ * @param verbose Whether to print detailed error messages to Serial
+ * @return true if the packet is valid, false otherwise
+ */
+bool heltec_validate_packet(const void* data, size_t dataSize, bool verbose) {
+  if (!data) {
+    if (verbose) Serial.println("ERROR: Null packet pointer");
+    return false;
+  }
+  
+  // Need at least one byte for the message type
+  if (dataSize < 1) {
+    if (verbose) Serial.println("ERROR: Packet too small to contain message type");
+    return false;
+  }
+  
+  // Get the message type from the first byte
+  uint8_t messageType = *((const uint8_t*)data);
+  
+  // Get the expected size for this message type
+  size_t expectedSize = heltec_get_packet_size(messageType);
+  
+  // Check if it's a known message type
+  if (expectedSize == 0) {
+    if (verbose) Serial.printf("ERROR: Unknown message type 0x%02X\n", messageType);
+    return false;
+  }
+  
+  // Check if the data size matches the expected size
+  if (dataSize != expectedSize) {
+    if (verbose) Serial.printf("ERROR: Incorrect packet size - expected %u bytes, got %u bytes\n", 
+                  expectedSize, dataSize);
+    return false;
+  }
+  
+  // Validate based on message type
+  switch (messageType) {
+    case HELTEC_MSG_SENSOR: {
+      const heltec_sensor_packet_t* packet = (const heltec_sensor_packet_t*)data;
+      
+      // Validate message type (should match what we extracted)
+      if (packet->messageType != HELTEC_MSG_SENSOR) {
+        if (verbose) Serial.println("ERROR: Message type field corrupted");
+        return false;
+      }
+      
+      // Validate node ID (non-zero)
+      if (packet->nodeId == 0) {
+        if (verbose) Serial.println("ERROR: Invalid node ID (zero)");
+        return false;
+      }
+      
+      // Validate battery level
+      if (packet->batteryLevel > 100) {
+        if (verbose) Serial.printf("ERROR: Invalid battery level: %u%%\n", packet->batteryLevel);
+        return false;
+      }
+      
+      // Log a warning for very low voltage that might indicate USB power
+      if (packet->batteryVoltage < 2000 || packet->batteryVoltage > 4500) {
+        Serial.printf("WARNING: Low battery voltage: %u mV (likely USB power)\n", packet->batteryVoltage);
+      }
+      
+      // Validate analog readings (optional - depends on your hardware)
+      // For example, if you know the ADC is 12-bit, values should be 0-4095
+      for (int i = 0; i < 4; i++) {
+        if (packet->pins.analog[i] > 4095) {
+          if (verbose) Serial.printf("ERROR: Analog value A%d exceeds maximum (got %u)\n", 
+                        i, packet->pins.analog[i]);
+          return false;
+        }
+      }
+      
+      // All checks passed
+      return true;
+    }
+    
+    case HELTEC_MSG_GNSS: {
+      const heltec_gnss_packet_t* packet = (const heltec_gnss_packet_t*)data;
+      
+      // Validate message type
+      if (packet->messageType != HELTEC_MSG_GNSS) {
+        if (verbose) Serial.println("ERROR: Message type field corrupted");
+        return false;
+      }
+      
+      // Validate node ID
+      if (packet->nodeId == 0) {
+        if (verbose) Serial.println("ERROR: Invalid node ID (zero)");
+        return false;
+      }
+      
+      // Validate battery level
+      if (packet->batteryLevel > 100) {
+        if (verbose) Serial.printf("ERROR: Invalid battery level: %u%%\n", packet->batteryLevel);
+        return false;
+      }
+      
+      // Log a warning for very low voltage that might indicate USB power
+      if (packet->batteryVoltage < 2000 || packet->batteryVoltage > 4500) {
+        Serial.printf("WARNING: Low battery voltage: %u mV (likely USB power)\n", packet->batteryVoltage);
+      }
+      
+      
+      // Validate latitude (-90 to +90 degrees)
+      if (packet->latitude < -90.0 || packet->latitude > 90.0) {
+        if (verbose) Serial.printf("ERROR: Invalid latitude: %.6f\n", packet->latitude);
+        return false;
+      }
+      
+      // Validate longitude (-180 to +180 degrees)
+      if (packet->longitude < -180.0 || packet->longitude > 180.0) {
+        if (verbose) Serial.printf("ERROR: Invalid longitude: %.6f\n", packet->longitude);
+        return false;
+      }
+      
+      // Validate speed (non-negative)
+      if (packet->speed < 0.0) {
+        if (verbose) Serial.printf("ERROR: Negative speed: %.1f km/h\n", packet->speed);
+        return false;
+      }
+      
+      // Validate course (0-359.99 degrees)
+      if (packet->course < 0.0 || packet->course >= 360.0) {
+        if (verbose) Serial.printf("ERROR: Invalid course: %.1f degrees\n", packet->course);
+        return false;
+      }
+      
+      // Validate HDOP (typically 0-100, higher values indicate poor precision)
+      if (packet->hdop > 200) {  // Very high HDOP suggests bad data
+        if (verbose) Serial.printf("ERROR: Unrealistic HDOP value: %.1f\n", packet->hdop / 10.0f);
+        return false;
+      }
+      
+      // All checks passed
+      return true;
+    }
+    
+    default:
+      // This shouldn't happen (we already checked message type)
+      if (verbose) Serial.printf("ERROR: Unhandled message type 0x%02X\n", messageType);
+      return false;
+  }
+}
+
+bool heltec_copy_packet(void* dest, size_t destSize, const void* src, bool verbose = false) {
+  if (!dest || !src) {
+    if (verbose) Serial.println("ERROR: Null pointer in copy operation");
+    return false;
+  }
+  
+  // Get the message type from the source packet
+  uint8_t messageType = *((const uint8_t*)src);
   
   // Get the appropriate size based on message type
-  size_t copySize = heltec_get_packet_size(src->messageType);
+  size_t copySize = heltec_get_packet_size(messageType);
   
-  // Copy only the relevant portion of the packet
-  memcpy(dest, src, copySize);
-}
-
-#ifdef HELTEC_SENSOR_JSON_SUPPORT
-// Convert packet to JSON string
-
-String heltec_packet_to_json(const heltec_sensor_packet_t* packet, bool pretty) {
-  if (packet == nullptr) {
-    return "{}";
-  }
-  
-  // Create a JSON document with appropriate capacity
-  // Size depends on whether we're including GNSS data and pretty printing
-  const size_t capacity = (packet->messageType == HELTEC_MSG_GNSS) ? 512 : 384;
-  
-  // Use JsonDocument with capacity
-  JsonDocument doc;
-  
-  // Populate the document
-  if (heltec_packet_to_json_doc(packet, doc)) {
-    // Add board information from heltec_unofficial
-    doc["board"] = heltec_get_board_name();
-    
-    // Serialize to string
-    String result;
-    if (pretty) {
-      serializeJsonPretty(doc, result);
-    } else {
-      serializeJson(doc, result);
-    }
-    return result;
-  }
-  
-  // Return empty JSON if conversion failed
-  return "{}";
-}
-
-// Populate an existing JsonDocument with packet data
-bool heltec_packet_to_json_doc(const heltec_sensor_packet_t* packet, JsonDocument& doc) {
-  if (packet == nullptr) {
+  if (copySize == 0) {
+    if (verbose) Serial.printf("ERROR: Unknown packet type 0x%02X\n", messageType);
     return false;
   }
   
-  // Add basic packet information
-  doc["type"] = packet->messageType;
-  doc["type_name"] = (packet->messageType == HELTEC_MSG_BASIC) ? "basic" : 
-                    (packet->messageType == HELTEC_MSG_GNSS) ? "gnss" : "unknown";
-  doc["node_id"] = packet->nodeId;
-  
-  // Format node_id as hex string for easier reading
-  char nodeIdHex[11];
-  sprintf(nodeIdHex, "0x%08X", packet->nodeId);
-  doc["node_id_hex"] = nodeIdHex;
-  
-  doc["counter"] = packet->messageCounter;
-  doc["timestamp"] = packet->timestamp;
-  
-  // Add battery and signal information
-  doc["battery"] = packet->batteryPercent;
-  doc["battery_mv"] = packet->batteryMv;
-  doc["rssi"] = packet->rssi;
-  doc["snr"] = packet->snr;
-  
-  // Add pin readings
-  JsonObject pins = doc["pins"].to<JsonObject>();
-  
-  // Add digital pins with proper board-specific GPIO numbers
-  JsonObject digitalObj = pins["digital"].to<JsonObject>();
-  
-  // Add raw byte value for reference
-  char rawHex[5];
-  sprintf(rawHex, "0x%02X", packet->pins.boolean);
-  digitalObj["raw_byte"] = packet->pins.boolean;
-  digitalObj["raw_hex"] = rawHex;
-  
-  // Get the actual GPIO pin numbers for this board
-  for (int i = 0; i < HELTEC_BOOLEAN_COUNT; i++) {
-    int pinNumber = heltec_get_boolean_pin(i);
-    if (pinNumber >= 0) {
-      char pinName[16];
-      sprintf(pinName, "gpio_%d", pinNumber);
-      bool value = (packet->pins.boolean & (1 << i)) != 0;
-      digitalObj[pinName] = value;
-    }
+  if (destSize < copySize) {
+    if (verbose) Serial.printf("ERROR: Destination buffer too small (need %u, have %u)\n", 
+                             copySize, destSize);
+    return false;
   }
   
-  // Add analog pins with their actual GPIO numbers
-  JsonObject analogObj = pins["analog"].to<JsonObject>();
+  // Perform the copy
+  memcpy(dest, src, copySize);
   
-  for (int i = 0; i < HELTEC_ANALOG_COUNT; i++) {
-    int pinNumber = heltec_get_analog_pin(i);
-    if (pinNumber >= 0) {
-      char pinName[16];
-      sprintf(pinName, "gpio_%d", pinNumber);
-      analogObj[pinName] = packet->pins.analog[i];
-    }
-  }
-  
-  // Add GNSS data if available
-  if (packet->messageType == HELTEC_MSG_GNSS) {
-    JsonObject location = doc["location"].to<JsonObject>();
-    location["lat"] = packet->latitude;
-    location["lon"] = packet->longitude;
-    location["alt"] = packet->altitude;
-    location["satellites"] = packet->satellites;
-    location["hdop"] = packet->hdop / 10.0f;  // Convert to float (stored as uint8_t * 10)
-  }
-  
-  // Add chip temperature if available
-  float temp = heltec_temperature();
-  if (temp > -100.0f) {  // Valid temperature
-    doc["temperature"] = temp;
+  if (verbose) {
+    Serial.printf("INFO: Successfully copied packet type 0x%02X (%u bytes)\n", 
+                 messageType, copySize);
   }
   
   return true;
 }
-#endif // HELTEC_SENSOR_JSON_SUPPORT
+
+/**
+ * @brief Error codes for packet JSON conversion
+ */
+typedef enum {
+  HELTEC_JSON_SUCCESS = 0,
+  HELTEC_JSON_ERROR_NULL_PARAMS = 1,
+  HELTEC_JSON_ERROR_SMALL_BUFFER = 2,
+  HELTEC_JSON_ERROR_UNKNOWN_TYPE = 3,
+  HELTEC_JSON_ERROR_INVALID_DATA = 4,
+  HELTEC_JSON_ERROR_SERIALIZATION = 5
+} heltec_json_error_t;
+
+/**
+ * @brief Convert a packet to a JSON document
+ * 
+ * Takes a packet of any supported type and populates a JsonDocument object.
+ * This allows for further modification of the JSON before serialization.
+ * 
+ * @param packet Pointer to the packet to convert
+ * @param doc JsonDocument to populate
+ * @param errorCode Optional pointer to store error code
+ * @return true if conversion succeeded, false if failed
+ */
+bool heltec_packet_to_json_doc(const void* packet, JsonDocument& doc, 
+                              heltec_json_error_t* errorCode = nullptr) {
+  // Initialize error code to success
+  if (errorCode) *errorCode = HELTEC_JSON_SUCCESS;
+  
+  // Validate input parameters
+  if (!packet) {
+    if (errorCode) *errorCode = HELTEC_JSON_ERROR_NULL_PARAMS;
+    return false;
+  }
+  
+  // Get the message type from the packet
+  uint8_t messageType = *((const uint8_t*)packet);
+  
+  // Clear any existing content in the document
+  try {
+    doc.clear();
+  } catch (...) {
+    // Handle exceptions from ArduinoJson operations
+    if (errorCode) *errorCode = HELTEC_JSON_ERROR_SERIALIZATION;
+    return false;
+  }
+  
+  // Convert different packet types to JSON
+  try {
+    switch (messageType) {
+      case HELTEC_MSG_SENSOR: {
+        const heltec_sensor_packet_t* sensorPacket = (const heltec_sensor_packet_t*)packet;
+        
+        // Validate essential data
+        if (sensorPacket->nodeId == 0) {
+          if (errorCode) *errorCode = HELTEC_JSON_ERROR_INVALID_DATA;
+          return false;
+        }
+        
+        // Add common fields
+        doc["type"] = "sensor";
+        doc["nodeId"] = sensorPacket->nodeId;
+        doc["counter"] = sensorPacket->messageCounter;
+        doc["battery"] = sensorPacket->batteryLevel;
+        doc["voltage"] = sensorPacket->batteryVoltage;
+        doc["uptime"] = sensorPacket->uptime;
+        
+        // Add sensor-specific fields
+        JsonArray analog = doc["analog"].to<JsonArray>();
+        for (int i = 0; i < 4; i++) {
+          analog.add(sensorPacket->pins.analog[i]);
+        }
+        doc["digital"] = sensorPacket->pins.boolean;
+        break;
+      }
+      
+      case HELTEC_MSG_GNSS: {
+        const heltec_gnss_packet_t* gnssPacket = (const heltec_gnss_packet_t*)packet;
+        
+        // Validate essential data
+        if (gnssPacket->nodeId == 0 ||
+            gnssPacket->latitude < -90.0 || gnssPacket->latitude > 90.0 ||
+            gnssPacket->longitude < -180.0 || gnssPacket->longitude > 180.0) {
+          if (errorCode) *errorCode = HELTEC_JSON_ERROR_INVALID_DATA;
+          return false;
+        }
+        
+        // Add common fields
+        doc["type"] = "gnss";
+        doc["nodeId"] = gnssPacket->nodeId;
+        doc["counter"] = gnssPacket->messageCounter;
+        doc["battery"] = gnssPacket->batteryLevel;
+        doc["voltage"] = gnssPacket->batteryVoltage;
+        doc["uptime"] = gnssPacket->uptime;
+        
+        // Add GNSS-specific fields
+        doc["latitude"] = gnssPacket->latitude;
+        doc["longitude"] = gnssPacket->longitude;
+        doc["speed"] = gnssPacket->speed;
+        doc["course"] = gnssPacket->course;
+        doc["hdop"] = (float)gnssPacket->hdop / 10.0;
+        break;
+      }
+      
+      default:
+        // Unknown packet type
+        if (errorCode) *errorCode = HELTEC_JSON_ERROR_UNKNOWN_TYPE;
+        return false;
+    }
+  } catch (...) {
+    // Handle any JSON document manipulation errors
+    if (errorCode) *errorCode = HELTEC_JSON_ERROR_SERIALIZATION;
+    return false;
+  }
+  
+  return true;
+}
+
+/**
+ * @brief Convert a packet to JSON string format
+ * 
+ * Takes a packet of any supported type and converts it to a JSON string.
+ * This is a wrapper around heltec_packet_to_json_doc that handles serialization.
+ * 
+ * @param packet Pointer to the packet to convert
+ * @param buffer Output buffer to store the JSON string
+ * @param bufferSize Size of the output buffer in bytes
+ * @param errorCode Optional pointer to store error code
+ * @param prettyPrint Whether to format the JSON with indentation (default: false)
+ * @return true if conversion succeeded, false if failed
+ */
+bool heltec_packet_to_json(const void* packet, char* buffer, size_t bufferSize, 
+                          heltec_json_error_t* errorCode = nullptr, 
+                          bool prettyPrint = false) {
+  // Initialize error code to success
+  if (errorCode) *errorCode = HELTEC_JSON_SUCCESS;
+  
+  // Validate input parameters
+  if (!packet || !buffer || bufferSize == 0) {
+    if (errorCode) *errorCode = HELTEC_JSON_ERROR_NULL_PARAMS;
+    
+    // If buffer is valid, try to write an error message
+    if (buffer && bufferSize > 0) {
+      snprintf(buffer, bufferSize, "{\"error\":\"Invalid parameters\"}");
+    }
+    return false;
+  }
+  
+
+  
+  // Ensure the buffer always contains valid JSON by default (minimal valid JSON)
+  if (bufferSize >= 3) {
+    buffer[0] = '{';
+    buffer[1] = '}';
+    buffer[2] = '\0';
+  } else if (bufferSize > 0) {
+    buffer[0] = '\0';
+  }
+  
+  // Create a JSON document
+  JsonDocument doc;  // Adjust size based on your needs
+  
+  // Convert packet to JSON document
+  heltec_json_error_t conversionError = HELTEC_JSON_SUCCESS;
+  if (!heltec_packet_to_json_doc(packet, doc, &conversionError)) {
+    // Propagate error code if caller requested it
+    if (errorCode) *errorCode = conversionError;
+    
+    // Generate appropriate error message based on the specific error
+    const char* errorMsg = "Conversion failed";
+    char details[30] = {0};  // For additional error details
+    
+    switch (conversionError) {
+      case HELTEC_JSON_ERROR_NULL_PARAMS:
+        errorMsg = "Invalid parameters";
+        break;
+      case HELTEC_JSON_ERROR_SMALL_BUFFER:
+        errorMsg = "JSON document capacity too small";
+        break;
+      case HELTEC_JSON_ERROR_INVALID_DATA:
+        errorMsg = "Invalid packet data";
+        break;
+      case HELTEC_JSON_ERROR_UNKNOWN_TYPE: {
+        errorMsg = "Unknown packet type";
+        if (packet) {
+          uint8_t messageType = *((const uint8_t*)packet);
+          snprintf(details, sizeof(details), ": 0x%02X", messageType);
+        }
+        break;
+      }
+      case HELTEC_JSON_ERROR_SERIALIZATION:
+        errorMsg = "JSON serialization error";
+        break;
+      default:
+        break;
+    }
+    
+    // Safely generate the error message JSON
+    // Use a minimal JSON object with just the error field to ensure it fits
+    if (details[0] != '\0') {
+      snprintf(buffer, bufferSize, "{\"error\":\"%s%s\"}", errorMsg, details);
+    } else {
+      snprintf(buffer, bufferSize, "{\"error\":\"%s\"}", errorMsg);
+    }
+    
+    return false;
+  }
+  
+  // Pre-check if the buffer might be too small by measuring the JSON size
+  size_t requiredSize = 0;
+  try {
+    requiredSize = prettyPrint ? measureJsonPretty(doc) : measureJson(doc);
+  } catch (...) {
+    if (errorCode) *errorCode = HELTEC_JSON_ERROR_SERIALIZATION;
+    snprintf(buffer, bufferSize, "{\"error\":\"Failed to measure JSON size\"}");
+    return false;
+  }
+  
+  if (requiredSize >= bufferSize) {
+    if (errorCode) *errorCode = HELTEC_JSON_ERROR_SMALL_BUFFER;
+    // Provide detailed error with size information, but make sure it fits
+    snprintf(buffer, bufferSize, "{\"error\":\"Buffer too small\",\"required\":%u}", 
+             (unsigned int)requiredSize);
+    return false;
+  }
+  
+  // Serialize JSON to the output buffer
+  size_t bytesWritten = 0;
+  try {
+    if (prettyPrint) {
+      bytesWritten = serializeJsonPretty(doc, buffer, bufferSize);
+    } else {
+      bytesWritten = serializeJson(doc, buffer, bufferSize);
+    }
+  } catch (...) {
+    // Handle any unexpected exceptions from ArduinoJson
+    if (errorCode) *errorCode = HELTEC_JSON_ERROR_SERIALIZATION;
+    snprintf(buffer, bufferSize, "{\"error\":\"JSON serialization failed\"}");
+    return false;
+  }
+  
+  // Double-check the serialization result
+  if (bytesWritten == 0 || bytesWritten >= bufferSize) {
+    if (errorCode) *errorCode = HELTEC_JSON_ERROR_SERIALIZATION;
+    snprintf(buffer, bufferSize, "{\"error\":\"JSON serialization failed\"}");
+    return false;
+  }
+  
+  return true;
+}
+
+/**
+ * @brief Print a packet as JSON to Serial
+ */
+bool heltec_print_packet_json(const void* packet, bool prettyPrint) {
+  if (!packet) {
+    Serial.println("ERROR: Null packet pointer in heltec_print_packet_json");
+    return false;
+  }
+  
+  // Create a buffer for the JSON string
+  char jsonBuffer[512];  // Adjust size as needed
+  
+  // Convert the packet to JSON
+  if (heltec_packet_to_json(packet, jsonBuffer, sizeof(jsonBuffer), nullptr, prettyPrint)) {
+    // Print a header
+    Serial.println("\nJSON:");
+    
+    // Print the JSON string
+    Serial.println(jsonBuffer);
+    
+    return true;
+  } else {
+    Serial.println("ERROR: Failed to convert packet to JSON");
+    return false;
+  }
+}

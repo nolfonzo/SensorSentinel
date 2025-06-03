@@ -3,8 +3,8 @@
  * @brief MQTT helper functions for Heltec boards
  */
 
-#ifndef HELTEC_BASIC_MQTT_GATEWAY_H
-#define HELTEC_BASIC_MQTT_GATEWAY_H
+#ifndef HELTEC_MQTT_GATEWAY_H
+#define HELTEC_MQTT_GATEWAY_H
 
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
@@ -28,5 +28,6 @@ boolean heltec_mqtt_publish(const char* topic, const char* payload, boolean reta
 boolean heltec_mqtt_publish_json(const char* topic, JsonDocument& doc, boolean retained = false, boolean useFormattedTime = false);
 boolean heltec_mqtt_publish_status(uint32_t packetCounter = 0, JsonDocument* extraInfo = nullptr, boolean useFormattedTime = true);
 void heltec_mqtt_display_status(uint32_t packetCounter = 0);
+String heltec_mqtt_get_client_id();
 
-#endif // HELTEC_BASIC_MQTT_GATEWAY_H
+#endif // HELTEC_MQTT_GATEWAY_H
