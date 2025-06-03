@@ -568,18 +568,6 @@ bool heltec_copy_packet(void* dest, size_t destSize, const void* src, bool verbo
 }
 
 /**
- * @brief Error codes for packet JSON conversion
- */
-typedef enum {
-  HELTEC_JSON_SUCCESS = 0,
-  HELTEC_JSON_ERROR_NULL_PARAMS = 1,
-  HELTEC_JSON_ERROR_SMALL_BUFFER = 2,
-  HELTEC_JSON_ERROR_UNKNOWN_TYPE = 3,
-  HELTEC_JSON_ERROR_INVALID_DATA = 4,
-  HELTEC_JSON_ERROR_SERIALIZATION = 5
-} heltec_json_error_t;
-
-/**
  * @brief Convert a packet to a JSON document
  * 
  * Takes a packet of any supported type and populates a JsonDocument object.
@@ -591,7 +579,7 @@ typedef enum {
  * @return true if conversion succeeded, false if failed
  */
 bool heltec_packet_to_json_doc(const void* packet, JsonDocument& doc, 
-                              heltec_json_error_t* errorCode = nullptr) {
+                              heltec_json_error_t* errorCode) {
   // Initialize error code to success
   if (errorCode) *errorCode = HELTEC_JSON_SUCCESS;
   
@@ -698,8 +686,8 @@ bool heltec_packet_to_json_doc(const void* packet, JsonDocument& doc,
  * @return true if conversion succeeded, false if failed
  */
 bool heltec_packet_to_json(const void* packet, char* buffer, size_t bufferSize, 
-                          heltec_json_error_t* errorCode = nullptr, 
-                          bool prettyPrint = false) {
+                          heltec_json_error_t* errorCode, 
+                          bool prettyPrint) {
   // Initialize error code to success
   if (errorCode) *errorCode = HELTEC_JSON_SUCCESS;
   

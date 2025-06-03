@@ -91,6 +91,49 @@ typedef union {
 } heltec_packet_t;
 
 /**
+ * @brief Error codes for packet JSON conversion
+ */
+typedef enum {
+  HELTEC_JSON_SUCCESS = 0,
+  HELTEC_JSON_ERROR_NULL_PARAMS = 1,
+  HELTEC_JSON_ERROR_SMALL_BUFFER = 2,
+  HELTEC_JSON_ERROR_UNKNOWN_TYPE = 3,
+  HELTEC_JSON_ERROR_INVALID_DATA = 4,
+  HELTEC_JSON_ERROR_SERIALIZATION = 5
+} heltec_json_error_t;
+
+/**
+ * @brief Convert a packet to a JSON document
+ * 
+ * Takes a packet of any supported type and populates a JsonDocument object.
+ * This allows for further modification of the JSON before serialization.
+ * 
+ * @param packet Pointer to the packet to convert
+ * @param doc JsonDocument to populate
+ * @param errorCode Optional pointer to store error code
+ * @return true if conversion succeeded, false if failed
+ */
+bool heltec_packet_to_json_doc(const void* packet, JsonDocument& doc, 
+                              heltec_json_error_t* errorCode = nullptr);
+
+/**
+ * @brief Convert a packet to JSON string format
+ * 
+ * Takes a packet of any supported type and converts it to a JSON string.
+ * This is a wrapper around heltec_packet_to_json_doc that handles serialization.
+ * 
+ * @param packet Pointer to the packet to convert
+ * @param buffer Output buffer to store the JSON string
+ * @param bufferSize Size of the output buffer in bytes
+ * @param errorCode Optional pointer to store error code
+ * @param prettyPrint Whether to format the JSON with indentation (default: false)
+ * @return true if conversion succeeded, false if failed
+ */
+bool heltec_packet_to_json(const void* packet, char* buffer, size_t bufferSize, 
+                          heltec_json_error_t* errorCode = nullptr, 
+                          bool prettyPrint = false);
+
+/**
  * @brief Get a unique node ID based on the ESP32's MAC address
  * 
  * @return 32-bit unique identifier derived from the MAC address

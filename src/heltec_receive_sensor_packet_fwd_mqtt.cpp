@@ -1,95 +1,80 @@
 /**
- * @file heltec_receive_sensor_packet.cpp
- * @brief Sensor packet receiver with MQTT publishing for Heltec boards
+ * @file heltec_receive_sensor_packet_fwd_mqtt.cpp
+ * @brief Sensor and GNSS packet receiver for Heltec boards with MQTT forwarding
+ * 
+ * Listens for incoming packets, displays them, and forwards them to MQTT topics:
+ * - Sensor packets go to lora/sensor
+ * - GNSS packets go to lora/gnss
+ * Uses the heltec_mqtt_gateway for MQTT connectivity.
  */
 
 #include "heltec_unofficial.h"
 #include "heltec_sensor_packet.h"
-#include "heltec_mqtt_gateway.h"      // Include MQTT gateway
-#include "heltec_wifi_helper.h"       // For WiFi connectivity
-#include "heltec_sensor_mqtt_helper.h" // Include our MQTT helper
+#include "heltec_mqtt_gateway.h"
+#include "heltec_wifi_helper.h"
+#include <ArduinoJson.h>
+
+// Configuration
+#define MAX_PACKET_SIZE 256  // Maximum packet size we can handle
+
+// Status update frequency (in seconds)
+#ifndef MQTT_STATUS_FREQ_SECS
+#define MQTT_STATUS_FREQ_SECS 60  // Default to 60 seconds if not defined
+#endif
 
 // Global variables
-heltec_sensor_packet_t lastReceivedPacket;
-bool packetReceived = false;
-uint32_t packetCounter = 0;
-unsigned long lastStatusTime = 0;
+uint8_t packetBuffer[MAX_PACKET_SIZE];  // Buffer to hold received packet
+unsigned long lastPacketTime = 0;
+uint32_t packetsReceived = 0;
+uint32_t packetsForwarded = 0;
 
 // Function prototypes
 void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr);
+bool forwardPacketToMQTT(uint8_t* data, size_t length, float rssi, float snr);
 
 void setup() {
   // Initialize the Heltec board
   heltec_setup();
   
   // Clear display and show startup message
-  heltec_clear_display(1, 0);
-  both.println("Sensor Packet Gateway");
+  heltec_clear_display();
+  both.println("Packet Receiver+MQTT");
   both.printf("Board: %s\n", heltec_get_board_name());
-  
-  // Initialize WiFi
-  both.println("Connecting WiFi...");
-  heltec_display_update();
-  
-  // Connect to WiFi
-  if (heltec_wifi_begin()) {
-    both.println("WiFi connected");
-    both.println(heltec_wifi_ip());
-  } else {
-    both.println("WiFi failed!");
-  }
-  
-  // Initialize MQTT
-  both.println("Setting up MQTT...");
-  heltec_display_update();
-  
-  if (heltec_mqtt_setup(true)) { // true = sync time
-    both.println("MQTT ready");
-  } else {
-    both.println("MQTT setup pending");
-  }
+  both.printf("Battery: %d%% (%.2fV)\n", 
+             heltec_battery_percent(), 
+             heltec_vbat());
   
   // Subscribe to binary packet reception
   if (heltec_subscribe_binary_packets(onBinaryPacketReceived)) {
-    both.println("LoRa RX active");
+    both.println("Subscribed to packets");
   } else {
-    both.println("LoRa subscribe fail");
+    both.println("Subscribe failed!");
   }
   
-  // Show startup complete
-  both.println("Gateway ready!");
-  heltec_display_update();
+  // Let the helper libraries handle WiFi and MQTT connection
+  heltec_wifi_begin();
+  heltec_mqtt_setup(true);  // With time sync
+  
+  // Display initial connection status via the MQTT helper
+  heltec_mqtt_display_status(0);
 }
 
 void loop() {
   // Handle system tasks (including packet processing)
   heltec_loop();
   
-  // Maintain WiFi connection
+  // Let helpers maintain WiFi and MQTT connections
   heltec_wifi_maintain();
-  
-  // Maintain MQTT connection
   heltec_mqtt_maintain();
   
-  // Publish status every 30 seconds
-  if (millis() - lastStatusTime > 300000) {
+  // Publish status update to MQTT based on configured frequency
+  static unsigned long lastStatusTime = 0;
+  if (millis() - lastStatusTime > (MQTT_STATUS_FREQ_SECS * 1000)) {
+    if (heltec_mqtt_get_client().connected()) {
+      heltec_mqtt_publish_status();
+    }
     lastStatusTime = millis();
-    
-    // Create extra info document
-    JsonDocument extraInfo;
-    
-    // Add sensor packet information
-    heltec_sensor_mqtt_add_status(extraInfo);
-    
-    // Publish status
-    heltec_mqtt_publish_status(packetCounter, &extraInfo);
-    
-    // Update display with status
-    heltec_mqtt_display_status(packetCounter);
   }
-  
-  // Use heltec_delay to ensure power button functionality works
-  heltec_delay(10);
 }
 
 /**
@@ -99,65 +84,153 @@ void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr)
   // Turn on LED to indicate reception
   heltec_led(25);
   
-  // Parse the packet (directly from binary data)
-  if (heltec_parse_packet(data, length, &lastReceivedPacket)) {
-    // Update RSSI and SNR in the packet
-    lastReceivedPacket.rssi = rssi;
-    lastReceivedPacket.snr = snr * 10;  // Store as int (dB * 10)
-    
-    // Increment the packet counter
-    packetCounter++;
-    
-    // Clear display and show basic packet information
-    heltec_clear_display(1, 0);
-    Serial.println("\n===== RECEIVED PACKET =====");
-    both.println("Packet Received!");
-    both.printf("#%d\nID: 0x%08X\n", 
-              lastReceivedPacket.messageCounter,
-              lastReceivedPacket.nodeId);
-    both.printf("RSSI: %.1f dB \nSNR: %.1f dB\n", rssi, snr);
-    
-    // Show message type (just the basic type)
-    const char* typeStr = "Unknown";
-    if (lastReceivedPacket.messageType == HELTEC_MSG_BASIC) typeStr = "Basic";
-    if (lastReceivedPacket.messageType == HELTEC_MSG_GNSS) typeStr = "GNSS";
-    both.printf("Type: %s\n", typeStr);
-    
-    // Print full packet details to Serial
-    heltec_print_packet_info(&lastReceivedPacket, true);
-    
-    // Publish to MQTT
-    if (heltec_mqtt_maintain()) { // Check if MQTT is connected
-      if (heltec_sensor_mqtt_publish(&lastReceivedPacket, rssi, snr * 10)) {
-        both.println("MQTT: Published");
-      } else {
-        both.println("MQTT: Publish failed");
-      }
-    } else {
-      both.println("MQTT: Not connected");
-    }
-    
-    #ifdef HELTEC_SENSOR_JSON_SUPPORT
-    // Output JSON to serial
-    String json = heltec_packet_to_json(&lastReceivedPacket, true);
-    Serial.println("\nJSON:");
-    Serial.println(json);
-    #endif
-    
-    // Set flag to indicate we have a valid packet
-    packetReceived = true;
-  } else {
-    // Failed to parse - show error
-    heltec_clear_display(1, 0);
-    both.println("Sensor Packet RX");
-    both.println("Invalid packet");
-    both.printf("Size: %d bytes\n", length);
-    both.printf("RSSI: %.1f dB, \nSNR: %.1f dB\n", rssi, snr);
+  // Check packet size
+  if (length > MAX_PACKET_SIZE) {
+    Serial.printf("ERROR: Packet too large: %u bytes\n", length);
+    heltec_clear_display();
+    both.println("Packet too large!");
+    both.printf("Size: %u bytes (max %u)\n", length, MAX_PACKET_SIZE);
+    both.printf("RSSI: %.1f dB, SNR: %.1f dB\n", rssi, snr);
+    heltec_display_update();
+    heltec_led(0);
+    return;
   }
+  
+  // Store packet in buffer
+  memcpy(packetBuffer, data, length);
+  
+  // Basic validation - just check if it's a known message type with the right size
+  uint8_t messageType = data[0];  // First byte is message type
+  size_t expectedSize = heltec_get_packet_size(messageType);
+  
+  if (expectedSize == 0 || length != expectedSize) {
+    // Unknown packet type or incorrect size
+    Serial.printf("ERROR: Unknown packet type (0x%02X) or wrong size (got %u, expected %u)\n", 
+                 messageType, length, expectedSize);
+    
+    heltec_clear_display();
+    both.println("Invalid packet!");
+    both.printf("Type: 0x%02X, Size: %u\n", messageType, length);
+    both.printf("RSSI: %.1f dB, SNR: %.1f dB\n", rssi, snr);
+    heltec_display_update();
+    heltec_led(0);
+    return;
+  }
+  
+  // Validate the packet contents
+  if (!heltec_validate_packet(packetBuffer, length, true)) {
+    Serial.println("ERROR: Packet validation failed");
+    heltec_clear_display();
+    both.println("Invalid packet data!");
+    both.printf("RSSI: %.1f dB, SNR: %.1f dB\n", rssi, snr);
+    heltec_display_update();
+    heltec_led(0);
+    return;
+  }
+  
+  // Calculate time since last packet (for Serial output only)
+  if (lastPacketTime > 0) {
+    unsigned long timeBetweenPackets = (millis() - lastPacketTime) / 1000;
+    Serial.printf("Time since last packet: ");
+    if (timeBetweenPackets < 60) {
+      Serial.printf("%lu seconds\n", timeBetweenPackets);
+    } else if (timeBetweenPackets < 3600) {
+      Serial.printf("%lu minutes\n", timeBetweenPackets / 60);
+    } else {
+      Serial.printf("%lu hours\n", timeBetweenPackets / 3600);
+    }
+  }
+  
+  // Use the library functions for detailed output to Serial
+  heltec_print_packet_info(packetBuffer, true);  
+  heltec_print_packet_json(packetBuffer, true);
+  Serial.printf("Packets received: %u, Forwarded: %u\n", packetsReceived + 1, packetsForwarded);
+  Serial.println("---------------------------\n"); 
+
+  // Forward the packet to MQTT if connected
+  bool mqttForwarded = false;
+  if (heltec_mqtt_get_client().connected()) {
+    mqttForwarded = forwardPacketToMQTT(packetBuffer, length, rssi, snr);
+  }
+
+  // Display a simple summary on the OLED
+  heltec_clear_display();
+  both.println("Packet Received!");
+//  display.printf("RSSI: %.1f dB, SNR: %.1f dB\n", rssi, snr);
+  
+  // Show packet type
+  const char* typeStr = (messageType == HELTEC_MSG_SENSOR) ? "Sensor" : 
+                        (messageType == HELTEC_MSG_GNSS) ? "GNSS" : "Unknown";
+//  display.printf("Type: %s\n", typeStr);
+  
+  // Show packet size and count
+//  display.printf("Size: %u bytes\n", length);
+//  display.printf("Total Rx: %u\n", packetsReceived + 1);
+  
+  // MQTT status
+  if (heltec_mqtt_get_client().connected()) {
+    if (mqttForwarded) {
+//      display.printf("MQTT: OK (%u fwd)\n", packetsForwarded);
+    } else {
+//      display.println("MQTT: Forward failed");
+    }
+  } else {
+//    display.println("MQTT: Not connected");
+  }
+  
+  heltec_display_update();
+  
+  // Update counters and timers
+  packetsReceived++;
+  lastPacketTime = millis();
   
   // Turn off LED
   heltec_led(0);
+}
+
+/**
+ * Forward a received packet to the appropriate MQTT topic
+ * @return true if forwarding was successful, false otherwise
+ */
+bool forwardPacketToMQTT(uint8_t* data, size_t length, float rssi, float snr) {
+  // Skip if MQTT is not connected
+  if (!heltec_mqtt_get_client().connected()) {
+    return false;
+  }
   
-  // Update display
-  heltec_display_update();
+  // Get message type
+  uint8_t messageType = data[0];
+  
+  // Select the appropriate topic based on message type
+  const char* topic;
+  if (messageType == HELTEC_MSG_SENSOR) {
+    topic = MQTT_TOPIC_SENSOR;
+  } else if (messageType == HELTEC_MSG_GNSS) {
+    topic = MQTT_TOPIC_GNSS;
+  } else {
+    // Unknown type, use default data topic
+    topic = MQTT_TOPIC_SENSOR;
+  }
+  
+  // Create JSON document for the packet data
+  JsonDocument doc;
+  
+  // Convert the packet to JSON
+  if (!heltec_packet_to_json_doc(data, doc)) {
+    Serial.println("ERROR: Failed to convert packet to JSON for MQTT");
+    return false;
+  }
+  
+  // Use the existing publish method
+  // The gateway class will be responsible for adding all metadata
+  bool success = heltec_mqtt_publish_json(topic, doc, false, true);
+  
+  if (success) {
+    Serial.printf("Successfully forwarded packet to MQTT topic: %s\n", topic);
+    packetsForwarded++;
+    return true;
+  } else {
+    Serial.printf("ERROR: Failed to forward packet to MQTT topic: %s\n", topic);
+    return false;
+  }
 }
