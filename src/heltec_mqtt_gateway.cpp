@@ -234,24 +234,6 @@ boolean heltec_mqtt_connect() {
     Serial.printf("Server: %s\n", mqtt_server);
     Serial.printf("Client: %s\n", clientId.c_str());
     
-    // Publish a connection message to the status topic
-    JsonDocument statusDoc;
-    statusDoc["status"] = "connected";
-    statusDoc["ip"] = heltec_wifi_ip();
-    statusDoc["rssi"] = heltec_wifi_rssi();
-    statusDoc["clientId"] = clientId;
-    statusDoc["board"] = heltec_get_board_name();
-    statusDoc["uptime"] = millis() / 1000;
-    
-    char buffer[256];
-    serializeJson(statusDoc, buffer, sizeof(buffer));
-    
-    // Publish with retry
-    if (!mqttClient.publish(mqtt_status_topic, buffer, true)) {
-      Serial.println("WARNING: Failed to publish connection status");
-      // Don't return false here, we're still connected
-    }
-    
     // Sync time if needed
     if (syncTimeOnReconnect) {
       heltec_mqtt_sync_time_default(); // Fixed to use renamed function
@@ -328,7 +310,6 @@ boolean heltec_mqtt_setup(boolean syncTimeOnConnect) {
   
   // Connect to MQTT broker
   boolean connected = heltec_mqtt_connect();
-  
   if (connected) {
     Serial.println("MQTT setup completed successfully");
   } else {
@@ -356,16 +337,6 @@ boolean heltec_mqtt_maintain() {
       Serial.println("MQTT disconnected, attempting reconnection...");
       if (heltec_mqtt_connect()) {
         Serial.println("MQTT reconnected successfully");
-        
-        // Publish a reconnection status message
-        JsonDocument statusDoc;
-        statusDoc["status"] = "reconnected";
-        statusDoc["uptime"] = millis() / 1000;
-        statusDoc["reconnect_count"] = ++reconnectCounter;
-        
-        char buffer[128];
-        serializeJson(statusDoc, buffer, sizeof(buffer));
-        mqttClient.publish(mqtt_status_topic, buffer, true);
       } else {
         Serial.printf("MQTT reconnection failed, will retry in %u seconds (state=%d)\n", 
                      mqttConnectionInterval/1000, mqttClient.state());
@@ -492,9 +463,9 @@ boolean heltec_mqtt_publish_json(const char* topic, JsonDocument& doc, boolean r
   // Add timestamp information
   heltec_mqtt_add_timestamp(doc, useFormattedTime);
   // Add standard metadata to all JSON documents
-  doc["receiver"] = heltec_get_board_name();
-  doc["receiver_ip"] = heltec_wifi_ip();
-  doc["receiver_mac"] = heltec_wifi_mac();
+  doc["GW"] = heltec_get_board_name();
+  doc["GW_ip"] = heltec_wifi_ip();
+  doc["GW_mac"] = heltec_wifi_mac();
   
   // Check size before serialization
   size_t jsonSize = measureJson(doc);
@@ -549,6 +520,8 @@ boolean heltec_mqtt_publish_json(const char* topic, JsonDocument& doc, boolean r
  * @brief Publish device status information to the MQTT status topic
  */
 boolean heltec_mqtt_publish_status(const char* status, boolean retained) {
+  Serial.println("Attempting to publish a status message");
+
   // Don't attempt to publish if not connected
   if (!mqttClient.connected()) {
     Serial.println("ERROR: Cannot publish status - MQTT not connected");
@@ -563,37 +536,25 @@ boolean heltec_mqtt_publish_status(const char* status, boolean retained) {
   statusDoc["client_id"] = heltec_mqtt_get_client_id();
   
   // Add device information
-  statusDoc["device"]["board"] = heltec_get_board_name();
-  statusDoc["device"]["mac"] = heltec_wifi_mac();
-  statusDoc["device"]["ip"] = heltec_wifi_ip();
-  statusDoc["device"]["sdk_ver"] = ESP.getSdkVersion();
+  statusDoc["board"] = heltec_get_board_name();
+  statusDoc["mac"] = heltec_wifi_mac();
+  statusDoc["ip"] = heltec_wifi_ip();
   
   // Add runtime metrics
-  statusDoc["runtime"]["uptime"] = millis() / 1000; // seconds
-  statusDoc["runtime"]["free_heap"] = ESP.getFreeHeap(); // bytes
-  statusDoc["runtime"]["sketch_size"] = ESP.getSketchSize(); // bytes
-  statusDoc["runtime"]["free_sketch_space"] = ESP.getFreeSketchSpace(); // bytes
+  statusDoc["uptime"] = millis() / 1000; // seconds
+  statusDoc["free_heap"] = ESP.getFreeHeap(); // bytes
+  statusDoc["sketch_size"] = ESP.getSketchSize(); // bytes
+  statusDoc["free_sketch_space"] = ESP.getFreeSketchSpace(); // bytes
   
   // Add connection information
-  statusDoc["connection"]["wifi_rssi"] = heltec_wifi_rssi();
-  statusDoc["connection"]["wifi_qual"] = heltec_wifi_quality(); // Now defined above
-  statusDoc["connection"]["mqtt_state"] = mqttClient.state();
-  statusDoc["connection"]["mqtt_con_time"] = (mqttClient.connected() ? 
+  statusDoc["wifi_rssi"] = heltec_wifi_rssi();
+  statusDoc["wifi_qual"] = heltec_wifi_quality(); // Now defined above
+  statusDoc["mqtt_state"] = mqttClient.state();
+  statusDoc["mqtt_con_time"] = (mqttClient.connected() ? 
       (millis() - lastMqttConnectionAttempt) / 1000 : 0); // seconds
-  statusDoc["connection"]["mqtt_recons"] = reconnectCounter;
-  statusDoc["connection"]["mqtt_pubs"] = publishCount;
-  
-  // Add build information
-  #ifdef FIRMWARE_VERSION
-  statusDoc["build"]["version"] = FIRMWARE_VERSION;
-  #else
-  statusDoc["build"]["version"] = "?";
-  #endif
-  
-  #ifdef BUILD_TIMESTAMP
-  statusDoc["build"]["timestamp"] = BUILD_TIMESTAMP;
-  #endif
-  
+  statusDoc["mqtt_recons"] = reconnectCounter;
+  statusDoc["mqtt_pubs"] = publishCount;
+ 
   // Add time information with both formatted and epoch time
   heltec_mqtt_add_timestamp(statusDoc, true);
   

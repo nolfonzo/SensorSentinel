@@ -263,122 +263,57 @@ bool heltec_print_packet_info(const void* packet, bool showAll) {
  * @return Message type if successful, 0 if parsing failed
  */
 uint8_t heltec_parse_packet(const uint8_t* data, size_t dataSize, void* outputPacket, size_t outputSize) {
-  // Basic validation
-  if (!data) {
-    Serial.println("ERROR: Null input data pointer");
-    return 0;
-  }
-  
+  // Check output parameter
   if (!outputPacket) {
     Serial.println("ERROR: Null output packet pointer");
     return 0;
   }
   
-  if (dataSize == 0) {
-    Serial.println("ERROR: Zero-length input data");
+  // Basic validation before attempting to read message type
+  if (!data || dataSize == 0) {
+    Serial.println("ERROR: Invalid input data");
     return 0;
   }
   
-  // Get the message type from the first byte
+  // Get message type and expected size
   uint8_t messageType = data[0];
-  
-  // Get the expected size for this message type
   size_t expectedSize = heltec_get_packet_size(messageType);
   
-  // Validate message type
+  // Check if the message type is valid before proceeding
   if (expectedSize == 0) {
     Serial.printf("ERROR: Unknown message type 0x%02X\n", messageType);
     return 0;
   }
   
-  // Validate data size
-  if (dataSize < expectedSize) {
-    Serial.printf("ERROR: Incomplete data - expected %u bytes, got %u bytes\n", 
-                  expectedSize, dataSize);
-    return 0;
-  }
-  
-  // Check if the output buffer is large enough
+  // Check output buffer size - this is unique to parse and should stay here
   if (outputSize < expectedSize) {
     Serial.printf("ERROR: Output buffer too small - needs %u bytes, got %u bytes\n", 
-                  expectedSize, outputSize);
+                 expectedSize, outputSize);
     return 0;
   }
   
-  // Handle specific message types
-  switch (messageType) {
-    case HELTEC_MSG_SENSOR: {
-      // Copy the data to the output structure
-      memcpy(outputPacket, data, expectedSize);
-      
-      // Validate the sensor packet
-      heltec_sensor_packet_t* sensorPacket = (heltec_sensor_packet_t*)outputPacket;
-      
-      if (sensorPacket->messageType != HELTEC_MSG_SENSOR) {
-        Serial.println("ERROR: Message type field corrupted after copy");
-        return 0;
-      }
-      
-      if (sensorPacket->batteryLevel > 100) {
-        Serial.printf("ERROR: Invalid battery level: %u%%\n", sensorPacket->batteryLevel);
-        return 0;
-      }
-      
-      if (sensorPacket->batteryVoltage < 2000 || sensorPacket->batteryVoltage > 4500) {
-        Serial.printf("ERROR: Unrealistic battery voltage: %u mV\n", sensorPacket->batteryVoltage);
-        return 0;
-      }
-      
-      Serial.printf("INFO: Successfully parsed SENSOR packet from node 0x%08X (msg #%u)\n", 
-                   sensorPacket->nodeId, sensorPacket->messageCounter);
-      
-      return HELTEC_MSG_SENSOR;
-    }
-    
-    case HELTEC_MSG_GNSS: {
-      // Copy the data to the output structure
-      memcpy(outputPacket, data, expectedSize);
-      
-      // Validate the GNSS packet
-      heltec_gnss_packet_t* gnssPacket = (heltec_gnss_packet_t*)outputPacket;
-      
-      if (gnssPacket->messageType != HELTEC_MSG_GNSS) {
-        Serial.println("ERROR: Message type field corrupted after copy");
-        return 0;
-      }
-      
-      if (gnssPacket->batteryLevel > 100) {
-        Serial.printf("ERROR: Invalid battery level: %u%%\n", gnssPacket->batteryLevel);
-        return 0;
-      }
-      
-      if (gnssPacket->batteryVoltage < 2000 || gnssPacket->batteryVoltage > 4500) {
-        Serial.printf("ERROR: Unrealistic battery voltage: %u mV\n", gnssPacket->batteryVoltage);
-        return 0;
-      }
-      
-      if (fabs(gnssPacket->latitude) > 90.0) {
-        Serial.printf("ERROR: Invalid latitude: %.6f\n", gnssPacket->latitude);
-        return 0;
-      }
-      
-      if (fabs(gnssPacket->longitude) > 180.0) {
-        Serial.printf("ERROR: Invalid longitude: %.6f\n", gnssPacket->longitude);
-        return 0;
-      }
-      
-      Serial.printf("INFO: Successfully parsed GNSS packet from node 0x%08X (msg #%u)\n", 
-                   gnssPacket->nodeId, gnssPacket->messageCounter);
-      Serial.printf("      Location: %.6f, %.6f\n", gnssPacket->latitude, gnssPacket->longitude);
-      
-      return HELTEC_MSG_GNSS;
-    }
-    
-    default:
-      // This shouldn't happen as we already checked for unknown message types
-      Serial.printf("ERROR: Unhandled message type 0x%02X\n", messageType);
-      return 0;
+  // Now use validate for comprehensive packet validation
+  if (!heltec_validate_packet(data, dataSize, true)) {
+    return 0; // Validation failed
   }
+  
+  // If we got here, validation passed, so copy the data
+  memcpy(outputPacket, data, expectedSize);
+  
+  // Log success based on message type
+  if (messageType == HELTEC_MSG_SENSOR) {
+    heltec_sensor_packet_t* sensorPacket = (heltec_sensor_packet_t*)outputPacket;
+    Serial.printf("INFO: Successfully parsed SENSOR packet from node 0x%08X (msg #%u)\n", 
+                 sensorPacket->nodeId, sensorPacket->messageCounter);
+  }
+  else if (messageType == HELTEC_MSG_GNSS) {
+    heltec_gnss_packet_t* gnssPacket = (heltec_gnss_packet_t*)outputPacket;
+    Serial.printf("INFO: Successfully parsed GNSS packet from node 0x%08X (msg #%u)\n", 
+                 gnssPacket->nodeId, gnssPacket->messageCounter);
+    Serial.printf("      Location: %.6f, %.6f\n", gnssPacket->latitude, gnssPacket->longitude);
+  }
+  
+  return messageType;
 }
 
 /**
@@ -412,7 +347,7 @@ bool heltec_validate_packet(const void* data, size_t dataSize, bool verbose) {
   
   // Check if it's a known message type
   if (expectedSize == 0) {
-    if (verbose) Serial.printf("ERROR: Unknown message type 0x%02X\n", messageType);
+    if (verbose) Serial.printf("Unknown message type 0x%02X\n", messageType);
     return false;
   }
   
