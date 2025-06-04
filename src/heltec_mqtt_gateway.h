@@ -152,9 +152,8 @@ boolean heltec_mqtt_publish_status();
  * MQTT connection status, packet count, battery level, and uptime.
  * Also logs detailed information to the serial console.
  * 
- * @param packetCounter Number of packets processed (to display)
  */
-void heltec_mqtt_display_status(uint32_t packetCounter);
+void heltec_mqtt_log_status();
 
 /**
  * @brief Get reference to the MQTT client object

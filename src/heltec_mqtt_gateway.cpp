@@ -12,7 +12,6 @@
 static PubSubClient mqttClient(wifiClient);
 static String mqttClientId = "";
 static unsigned long lastMqttConnectionAttempt = 0;
-static boolean syncTimeOnReconnect = false;
 static unsigned long lastPublishTime = 0;
 static uint32_t reconnectCounter = 0;
 static uint32_t publishCount = 0;
@@ -233,12 +232,6 @@ boolean heltec_mqtt_connect() {
     Serial.println("MQTT Connected!");
     Serial.printf("Server: %s\n", mqtt_server);
     Serial.printf("Client: %s\n", clientId.c_str());
-    
-    // Sync time if needed
-    if (syncTimeOnReconnect) {
-      heltec_mqtt_sync_time_default(); // Fixed to use renamed function
-    }
-    
     return true;
   } else {
     int mqttState = mqttClient.state();
@@ -273,8 +266,6 @@ boolean heltec_mqtt_connect() {
  * @brief Setup MQTT with optional time synchronization
  */
 boolean heltec_mqtt_setup(boolean syncTimeOnConnect) {
-  // Store preference for time sync on reconnect
-  syncTimeOnReconnect = syncTimeOnConnect;
   
   // Initialize MQTT client
   if (!heltec_mqtt_init()) {
@@ -517,6 +508,29 @@ boolean heltec_mqtt_publish_json(const char* topic, JsonDocument& doc, boolean r
 }
 
 /**
+ * @brief Display brief MQTT status to Serial
+ * 
+ */
+void heltec_mqtt_log_status() {
+
+  // Log more detailed information to serial
+  Serial.println("----- MQTT Status -----");
+  Serial.printf("WiFi: %s (RSSI: %ddBm, Quality: %d%%)\n", 
+               heltec_wifi_connected() ? "Connected" : "Disconnected",
+               heltec_wifi_rssi(), heltec_wifi_quality());
+  
+  Serial.printf("MQTT: %s (State: %d, Reconnects: %u)\n", 
+               mqttClient.connected() ? "Connected" : "Disconnected",
+               mqttClient.state(), reconnectCounter);
+  
+  Serial.printf("Packets: %u\n", publishCount);
+  Serial.printf("Memory: %u bytes free\n", ESP.getFreeHeap());
+  Serial.printf("Battery: %d%%\n", heltec_battery_percent());
+  Serial.printf("Uptime: %lu minutes\n", millis() / 60000);
+  Serial.println("----------------------");
+}
+
+/**
  * @brief Publish device status information to the MQTT status topic
  */
 boolean heltec_mqtt_publish_status(const char* status, boolean retained) {
@@ -558,6 +572,8 @@ boolean heltec_mqtt_publish_status(const char* status, boolean retained) {
   // Add time information with both formatted and epoch time
   heltec_mqtt_add_timestamp(statusDoc, true);
   
+  // Log the status info to Serial
+  heltec_mqtt_log_status();
   // Publish to status topic
   return heltec_mqtt_publish_json(mqtt_status_topic, statusDoc, retained, true);
 }
@@ -567,29 +583,6 @@ boolean heltec_mqtt_publish_status(const char* status, boolean retained) {
  */
 boolean heltec_mqtt_publish_status() {
   return heltec_mqtt_publish_status("ok", false);
-}
-
-/**
- * @brief Display brief MQTT status to Serial
- * 
- */
-void heltec_mqtt_display_status(uint32_t packetCounter) {
-
-  // Log more detailed information to serial
-  Serial.println("----- MQTT Status -----");
-  Serial.printf("WiFi: %s (RSSI: %ddBm, Quality: %d%%)\n", 
-               heltec_wifi_connected() ? "Connected" : "Disconnected",
-               heltec_wifi_rssi(), heltec_wifi_quality());
-  
-  Serial.printf("MQTT: %s (State: %d, Reconnects: %u)\n", 
-               mqttClient.connected() ? "Connected" : "Disconnected",
-               mqttClient.state(), reconnectCounter);
-  
-  Serial.printf("Packets: %u, Publications: %u\n", packetCounter, publishCount);
-  Serial.printf("Memory: %u bytes free\n", ESP.getFreeHeap());
-  Serial.printf("Battery: %d%%\n", heltec_battery_percent());
-  Serial.printf("Uptime: %lu minutes\n", millis() / 60000);
-  Serial.println("----------------------");
 }
 
 /**

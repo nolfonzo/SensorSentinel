@@ -7,11 +7,11 @@
  */
 
 #include "heltec_unofficial.h"
-#include "heltec_sensor_packet.h"
+#include "heltec_sensor_packet_helper.h"
 
 // Configuration
-#define SENSOR_INTERVAL 30000  // Sensor send interval in milliseconds (30 seconds)
-#define GNSS_INTERVAL   90000  // GNSS send interval in milliseconds (90 seconds)
+// #define SENSOR_INTERVAL 30000  // Sensor send interval in milliseconds 
+// #define GNSS_INTERVAL   90000  // GNSS send interval in milliseconds 
 
 // Forward declarations
 void sendSensorPacket();
@@ -37,8 +37,8 @@ void setup() {
   heltec_display_update();
   
   // Initialize timers with offset to avoid sending both packet types at once
-  lastSensorSendTime = millis() - (SENSOR_INTERVAL - 5000);  // Send first sensor packet in 5 seconds
-  lastGnssSendTime = millis() - (GNSS_INTERVAL - 15000);     // Send first GNSS packet in 15 seconds
+  lastSensorSendTime = millis() - (LORA_PUB_SENSOR_INTERVAL - 5000);  // Send first sensor packet in 5 seconds
+  lastGnssSendTime = millis() - (LORA_PUB_GNSS_INTERVAL - 15000);     // Send first GNSS packet in 15 seconds
   
   delay(2000);
   
@@ -46,8 +46,8 @@ void setup() {
   heltec_clear_display();
   both.println("\nSend Schedule");
   both.println("\nIntervals:");
-  both.printf("Sensor data: %dsec\n", SENSOR_INTERVAL/1000);
-  both.printf("GNSS data: %dsec\n", GNSS_INTERVAL/1000);
+  both.printf("Sensor data: %dsec\n", LORA_PUB_SENSOR_INTERVAL/1000);
+  both.printf("GNSS data: %dsec\n", LORA_PUB_GNSS_INTERVAL/1000);
   both.println("\nTransmitting...");
   heltec_display_update();
   
@@ -59,13 +59,13 @@ void loop() {
   heltec_loop();
   
   // Check if it's time to send a sensor packet
-  if (millis() - lastSensorSendTime >= SENSOR_INTERVAL) {
+  if (millis() - lastSensorSendTime >= LORA_PUB_SENSOR_INTERVAL) {
     sendSensorPacket();
     lastSensorSendTime = millis();
   }
   
   // Check if it's time to send a GNSS packet
-  if (millis() - lastGnssSendTime >= GNSS_INTERVAL) {
+  if (millis() - lastGnssSendTime >= LORA_PUB_GNSS_INTERVAL) {
     sendGnssPacket();
     lastGnssSendTime = millis();
   }

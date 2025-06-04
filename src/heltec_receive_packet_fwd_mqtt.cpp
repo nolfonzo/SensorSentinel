@@ -63,7 +63,7 @@ void setup() {
   heltec_mqtt_setup(true);  // With time sync
   
   // Display initial connection status via the MQTT helper
-  heltec_mqtt_display_status(0);
+  heltec_mqtt_log_status();
 }
 
 void loop() {
@@ -93,7 +93,7 @@ void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr)
 
    // Clear display for output
   heltec_clear_display();
-  both.println("Packet Received!"); 
+  both.println("\nPacket Received!"); 
 
   // Check packet size
   if (length > MAX_LORA_PACKET_SIZE) {
