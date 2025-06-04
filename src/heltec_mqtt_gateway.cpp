@@ -33,10 +33,7 @@ const int mqtt_port = MQTT_PORT;
 const char* mqtt_user = MQTT_USER;
 const char* mqtt_password = MQTT_PASSWORD;
 
-// Map MQTT topics from platformio.ini definitions to the variable names
 const char* mqtt_status_topic = MQTT_TOPIC_STATUS;   // Status topic
-const char* mqtt_sensor_topic = MQTT_TOPIC_SENSOR;   // Sensor topic
-const char* mqtt_gnss_topic = MQTT_TOPIC_GNSS;       // GNSS topic
 
 // Magic constant replaced with a named constant
 #define TIME_SYNC_EPOCH 1600000000  // Sept 2020, indicates time is synced
@@ -175,7 +172,7 @@ boolean heltec_mqtt_init() {
   
   // Log the MQTT configuration
   Serial.printf("MQTT Server: %s:%d\n", mqtt_server, mqtt_port);
-  Serial.printf("MQTT Topics: %s, %s, %s\n", mqtt_sensor_topic, mqtt_gnss_topic, mqtt_status_topic);
+  Serial.printf("MQTT STATUS Topic: %s\n", mqtt_status_topic);
   Serial.printf("MQTT Buffer Size: %u bytes\n", mqttClient.getBufferSize());
   
   return true;

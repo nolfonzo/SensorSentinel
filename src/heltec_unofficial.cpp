@@ -39,9 +39,6 @@ const uint8_t scaled_voltage[100] = {
 HotButton button(BUTTON);  
 bool buttonClicked = false;  
 
-// Display update flag (for V3.2)  
-bool _display_needs_update = false;  
-
 // RadioLib instances based on board type  
 #ifndef HELTEC_NO_RADIOLIB  
   #if defined(ARDUINO_heltec_wireless_stick) || defined(ARDUINO_heltec_wireless_stick_lite)  
@@ -90,18 +87,12 @@ float _packetSnr;
 size_t PrintSplitter::write(uint8_t c) {  
   a.write(c);  
   size_t r = b.write(c);  
-  #if defined(BOARD_HELTEC_V3_2)  
-    _display_needs_update = true;  
-  #endif  
   return r;  
 }  
 
 size_t PrintSplitter::write(const uint8_t *buffer, size_t size) {  
   a.write(buffer, size);  
   size_t r = b.write(buffer, size);  
-  #if defined(BOARD_HELTEC_V3_2)  
-    _display_needs_update = true;  
-  #endif  
   return r;  
 }  
 
@@ -137,11 +128,8 @@ const char* heltec_get_board_name() {
  */  
 void heltec_display_update() {  
   #ifndef HELTEC_NO_DISPLAY  
-    #if defined(BOARD_HELTEC_V3_2)  
-      if (_display_needs_update) {  
-        display.display();  
-        _display_needs_update = false;  
-      }  
+    #if defined(BOARD_HELTEC_V3_2)   
+      display.display();  
     #endif  
   #endif  
 }  
@@ -392,7 +380,6 @@ void heltec_clear_display(uint8_t textSize, uint8_t rotation) {
       display.setTextColor(SSD1306_WHITE);  
       display.setCursor(0, 0);  
       display.display();  
-      _display_needs_update = false;  
     #endif  
   #endif  
 }  

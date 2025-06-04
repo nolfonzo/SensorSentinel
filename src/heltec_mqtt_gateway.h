@@ -11,16 +11,6 @@
 #include <ArduinoJson.h>   // JSON processing library
 #include <WiFi.h>          // ESP32 WiFi library
 
-// External variables to be defined in main sketch
-extern const char* mqtt_server;       // MQTT broker hostname or IP address
-extern const char* mqtt_user;         // MQTT username (can be empty for no auth)
-extern const char* mqtt_password;     // MQTT password (can be empty for no auth)
-extern const char* mqtt_status_topic; // Topic for status messages
-extern const char* mqtt_sensor_topic; // Topic for status messages
-extern const char* mqtt_gnss_topic; // Topic for status messages
-extern const int mqtt_port;                 // MQTT broker port (usually 1883 or 8883 for TLS)
-extern WiFiClient wifiClient;         // WiFi client for MQTT connection
-
 /**
  * @brief Synchronize time via NTP with custom parameters
  * 
