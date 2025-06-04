@@ -566,9 +566,7 @@ boolean heltec_mqtt_publish_status(const char* status, boolean retained) {
   statusDoc["device"]["board"] = heltec_get_board_name();
   statusDoc["device"]["mac"] = heltec_wifi_mac();
   statusDoc["device"]["ip"] = heltec_wifi_ip();
-  statusDoc["device"]["sdk_version"] = ESP.getSdkVersion();
-  statusDoc["device"]["flash_size"] = ESP.getFlashChipSize() / 1024; // KB
-  statusDoc["device"]["cpu_freq"] = ESP.getCpuFreqMHz(); // MHz
+  statusDoc["device"]["sdk_ver"] = ESP.getSdkVersion();
   
   // Add runtime metrics
   statusDoc["runtime"]["uptime"] = millis() / 1000; // seconds
@@ -576,31 +574,24 @@ boolean heltec_mqtt_publish_status(const char* status, boolean retained) {
   statusDoc["runtime"]["sketch_size"] = ESP.getSketchSize(); // bytes
   statusDoc["runtime"]["free_sketch_space"] = ESP.getFreeSketchSpace(); // bytes
   
-  // ESP32 doesn't have getResetReason() like this, use a different approach
-  statusDoc["runtime"]["restart_reason"] = "Unknown"; // Fixed version
-  
   // Add connection information
   statusDoc["connection"]["wifi_rssi"] = heltec_wifi_rssi();
-  statusDoc["connection"]["wifi_quality"] = heltec_wifi_quality(); // Now defined above
+  statusDoc["connection"]["wifi_qual"] = heltec_wifi_quality(); // Now defined above
   statusDoc["connection"]["mqtt_state"] = mqttClient.state();
-  statusDoc["connection"]["mqtt_connected_time"] = (mqttClient.connected() ? 
+  statusDoc["connection"]["mqtt_con_time"] = (mqttClient.connected() ? 
       (millis() - lastMqttConnectionAttempt) / 1000 : 0); // seconds
-  statusDoc["connection"]["mqtt_reconnect_count"] = reconnectCounter;
-  statusDoc["connection"]["mqtt_publish_count"] = publishCount;
+  statusDoc["connection"]["mqtt_recons"] = reconnectCounter;
+  statusDoc["connection"]["mqtt_pubs"] = publishCount;
   
   // Add build information
   #ifdef FIRMWARE_VERSION
   statusDoc["build"]["version"] = FIRMWARE_VERSION;
   #else
-  statusDoc["build"]["version"] = "unknown";
+  statusDoc["build"]["version"] = "?";
   #endif
   
   #ifdef BUILD_TIMESTAMP
   statusDoc["build"]["timestamp"] = BUILD_TIMESTAMP;
-  #endif
-  
-  #ifdef GIT_REVISION
-  statusDoc["build"]["git_revision"] = GIT_REVISION;
   #endif
   
   // Add time information with both formatted and epoch time
@@ -614,7 +605,7 @@ boolean heltec_mqtt_publish_status(const char* status, boolean retained) {
  * @brief Simple overload for status publishing with defaults
  */
 boolean heltec_mqtt_publish_status() {
-  return heltec_mqtt_publish_status("ok", true);
+  return heltec_mqtt_publish_status("ok", false);
 }
 
 /**

@@ -160,7 +160,7 @@ void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr)
 
   } else {
     // Display output for invalid packets
-    both.println("Packet Structure Unknown");
+    both.println("Structure Unknown");
     both.println("Will Fwd Raw Data"); 
     
     // Serial output for invalid packets
@@ -280,7 +280,7 @@ bool forwardPacketToMQTT(uint8_t* data, size_t length, float rssi, float snr) {
     }
   } else {
     // For invalid packets, publish raw binary data directly
-    bool success = heltec_mqtt_get_client().publish(MQTT_TOPIC_DATA, data, length);
+    bool success = heltec_mqtt_get_client().publish(MQTT_TOPIC_DATA, data, length, false);
     
     if (success) {
       packetsForwarded++;
