@@ -7,7 +7,7 @@
  */
 
 #include "heltec_unofficial.h"
-#include "heltec_sensor_packet.h"
+#include "heltec_sensor_packet_helper.h"
 
 // Configuration
 #define MAX_PACKET_SIZE 256  // Maximum packet size we can handle

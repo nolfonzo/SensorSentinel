@@ -45,9 +45,8 @@ bool heltec_wifi_begin(uint8_t maxAttempts) {
     WiFi.setHostname(hostname.c_str());
   #endif
   
-  heltec_clear_display(1, 1);
-  both.print("Connecting to WiFi SSID: ");
-  both.println(WIFI_SSID);
+  Serial.print("Connecting to WiFi SSID: ");
+  Serial.println(WIFI_SSID);
 
   uint8_t attempts = 0;
   unsigned long startTime = millis();
@@ -56,13 +55,12 @@ bool heltec_wifi_begin(uint8_t maxAttempts) {
     // Add timeout check to prevent blocking too long
     if (millis() - startTime > WIFI_CONNECT_TIMEOUT) {
       Serial.println("WiFi connection timeout");
-      both.println("\nConnection timeout");
       _wifi_connected = false;
       return false;
     }
     
     delay(500);
-    both.print(".");
+    Serial.print(".");
     attempts++;
   }
   Serial.println();
@@ -71,18 +69,20 @@ bool heltec_wifi_begin(uint8_t maxAttempts) {
     _wifi_connected = true;
     _last_wifi_attempt = millis();
   
-    both.println("\nWiFi connected!");
-    both.print("SSID: ");
-    both.println(WIFI_SSID);
-    both.print("IP: ");
-    both.println(WiFi.localIP().toString());
-    both.print("RSSI: ");
-    both.print(WiFi.RSSI());
+    Serial.println("\nWiFi connected!");
+    Serial.print("SSID: ");
+    Serial.println(WIFI_SSID);
+    Serial.print("IP: ");
+    Serial.println(WiFi.localIP().toString());
+    Serial.print("RSSI: ");
+    Serial.print(WiFi.RSSI());
     delay(2000);
     return true;
   } else {
     _wifi_connected = false;
-    both.println("\nConnection failed");
+    heltec_clear_display();
+    both.println("\nWIFI Connect failed");
+    heltec_display_update();
     delay(2000);
     return false;
   }
@@ -202,39 +202,26 @@ String heltec_wifi_status_string() {
 
 /**
  * @brief Scan for nearby WiFi networks
- * 
  * @param showOnDisplay Whether to show results on the display
  * @return Number of networks found
  */
-int heltec_wifi_scan(bool showOnDisplay) {
+int heltec_wifi_scan() {
   // Check if cached results are still valid
   if (WiFi.scanComplete() >= 0 && millis() - _last_scan_time < SCAN_CACHE_TIMEOUT) {
     Serial.println("Using cached WiFi scan results");
     
-    if (showOnDisplay) {
-      displayScanResults(WiFi.scanComplete());
-    }
-    
+    displayScanResults(WiFi.scanComplete());
     return WiFi.scanComplete();
   }
   
   // Perform a new scan
   Serial.println("Scanning for WiFi networks...");
-  
-  if (showOnDisplay) {
-    heltec_clear_display(1, 1);
-    both.println("Scanning WiFi...");
-  }
 
   int networksFound = WiFi.scanNetworks();
   _last_scan_time = millis();
   
   Serial.printf("Found %d networks:\n", networksFound);
   
-  if (showOnDisplay) {
-    displayScanResults(networksFound);
-  }
-
   // Print all networks to serial
   for (int i = 0; i < networksFound; i++) {
     Serial.printf("%d: %s (%d dBm) %s\n", i + 1, 
@@ -272,12 +259,11 @@ String heltec_wifi_scan_result(int index) {
  * @param networksFound Number of networks found
  */
 static void displayScanResults(int networksFound) {
-  heltec_clear_display(1, 1);
-  both.printf("Found %d networks:\n", networksFound);
+  Serial.printf("Found %d networks:\n", networksFound);
   
   // Show first 5 networks on display
   for (int i = 0; i < min(5, networksFound); i++) {
-    both.printf("%d: %s (%d dBm)\n", i + 1, 
+    Serial.printf("%d: %s (%d dBm)\n", i + 1, 
               WiFi.SSID(i).c_str(), 
               WiFi.RSSI(i));
   }

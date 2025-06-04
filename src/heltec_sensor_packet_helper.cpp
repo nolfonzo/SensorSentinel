@@ -3,7 +3,7 @@
  * @brief Implementation of packet handling functions for Heltec boards
  */
 
-#include "heltec_sensor_packet.h"
+#include "heltec_sensor_packet_helper.h"
 #include "heltec_unofficial.h"
 #include <ArduinoJson.h>
 #include <string.h>  // For memcpy

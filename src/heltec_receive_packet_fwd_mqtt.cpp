@@ -9,7 +9,7 @@
  */
 
 #include "heltec_unofficial.h"
-#include "heltec_sensor_packet.h"
+#include "heltec_sensor_packet_helper.h"
 #include "heltec_mqtt_gateway.h"
 #include "heltec_wifi_helper.h"
 #include <ArduinoJson.h>
@@ -27,6 +27,11 @@ uint8_t packetBuffer[MAX_LORA_PACKET_SIZE];  // Buffer to hold received packet
 unsigned long lastPacketTime = 0;
 uint32_t packetsReceived = 0;
 uint32_t packetsForwarded = 0;
+
+// Variables for packet processing
+JsonDocument packetJson;      // Reusable JSON document for packet parsing
+String packetMessageType;     // Current packet message type
+bool packetJsonValid = false; // Flag indicating if JSON is valid
 
 // Function prototypes
 void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr);
@@ -85,7 +90,11 @@ void loop() {
 void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr) {
   // Turn on LED to indicate reception
   heltec_led(25);
-  
+
+   // Clear display for output
+  heltec_clear_display();
+  both.println("Packet Received!"); 
+
   // Check packet size
   if (length > MAX_LORA_PACKET_SIZE) {
     Serial.printf("ERROR: Packet too large: %u bytes\n", length);
@@ -94,6 +103,7 @@ void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr)
     both.printf("Size: %u bytes (max %u)\n", length, MAX_LORA_PACKET_SIZE);
     both.printf("RSSI: %.1f dB, SNR: %.1f dB\n", rssi, snr);
     heltec_display_update();
+    delay(2000);
     heltec_led(0);
     return;
   }
@@ -101,8 +111,7 @@ void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr)
   // Store packet in buffer
   memcpy(packetBuffer, data, length);
   
-  // Basic validation - just check if it's a known message type with the right size
-  uint8_t messageType = data[0];  // First byte is message type
+  // Basic validation - check if it's a known message type with the right size
   bool isValidPacket = heltec_validate_packet(packetBuffer, length, true);
   
   // Calculate time since last packet (for Serial output only)
@@ -118,14 +127,43 @@ void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr)
     }
   }
   
-  // Print packet information to Serial
+  // Reset packet processing flag
+  packetJsonValid = false;
+  
   if (isValidPacket) {
-    // Use the library functions for detailed output to Serial
+    // For valid packets, parse the JSON once
+    packetJsonValid = heltec_packet_to_json_doc(packetBuffer, packetJson);
+    
+    if (packetJsonValid) {
+      // Extract the data we need
+      packetMessageType = packetJson["type"].as<String>();
+      uint32_t messageCounter = packetJson["counter"];
+      
+      // Display the extracted information
+      both.printf("Type: %s\n", packetMessageType.c_str());
+      both.printf("Msg #: %u\n", messageCounter);
+    } else {
+      // JSON conversion failed for some reason - this is unexpected!
+      both.println("ERROR: JSON conv fail!");
+      
+      // Print the raw data for debugging
+      Serial.printf("Packet that failed JSON conversion: ");
+      for (size_t i = 0; i < length; i++) {
+        Serial.printf("%02X", packetBuffer[i]);
+      }
+      Serial.println();
+    }
+    
+    // Serial output for valid packets
     heltec_print_packet_info(packetBuffer, true);  
     heltec_print_packet_json(packetBuffer, true);
+
   } else {
-    // For invalid packets, print raw data
-    Serial.println("Packet validation shows unknown structure - forwarding as raw data");
+    // Display output for invalid packets
+    both.println("Packet Structure Unknown");
+    both.println("Will Fwd Raw Data"); 
+    
+    // Serial output for invalid packets
     Serial.printf("Raw data (%u bytes): ", length);
     for (size_t i = 0; i < length; i++) {
       Serial.printf("%02X", packetBuffer[i]);
@@ -133,38 +171,23 @@ void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr)
     Serial.println();
   }
   
-  // Forward the packet to MQTT
+  // Common display elements (outside the if/else block)
+  both.printf("RSSI: %.1f dB,\nSNR: %.1f dB\n", rssi, snr);
+  both.printf("Size: %u bytes\n", length);
+  both.printf("Total Rx: %u\n", packetsReceived + 1);
+  Serial.println("---------------------------");  
+
+  // Forward the packet to MQTT - global variables are used internally
   bool mqttForwarded = forwardPacketToMQTT(packetBuffer, length, rssi, snr);
   
+  // Serial output for packet statistics
   Serial.printf("Packets received: %u, Forwarded: %u\n", packetsReceived + 1, packetsForwarded);
+  Serial.println("---------------------------"); 
   Serial.println("---------------------------\n"); 
-
-  // Display a simple summary on the OLED
-  heltec_clear_display();
   
-  if (isValidPacket) {
-    both.println("Packet Received!");
-    display.printf("RSSI: %.1f dB, SNR: %.1f dB\n", rssi, snr);
-    
-    // Show packet type
-    const char* typeStr = (messageType == HELTEC_MSG_SENSOR) ? "Sensor" : 
-                          (messageType == HELTEC_MSG_GNSS) ? "GNSS" : "Unknown";
-    display.printf("Type: %s\n", typeStr);
-  } else {
-    both.println("Packet Structure Unknown");
-    both.println("Raw Data Forwarded");
-    display.printf("RSSI: %.1f dB, SNR: %.1f dB\n", rssi, snr);
-  }
-  
-  // Show packet size and count
-  display.printf("Size: %u bytes\n", length);
-  display.printf("Total Rx: %u\n", packetsReceived + 1);
-  
-  // MQTT status - display regardless of current connection state
-  if (mqttForwarded) {
-    display.printf("MQTT: OK (%u fwd)\n", packetsForwarded);
-  } else {
-    display.println("MQTT: Forward failed");
+  // MQTT status display
+  if (!mqttForwarded) {
+    both.println("MQTT: Forward failed");
   }
   
   heltec_display_update();
@@ -192,44 +215,68 @@ bool forwardPacketToMQTT(uint8_t* data, size_t length, float rssi, float snr) {
     return false;
   }
   
-  // Validate the packet - now we need to do this here since we don't have the isValidPacket parameter
-  bool isValidPacket = heltec_validate_packet(data, length, true);
+  // Validate the packet if we haven't already validated it
+  bool isValidPacket = packetJsonValid || heltec_validate_packet(data, length, true);
   
   if (isValidPacket) {
-    // For valid packets, convert to JSON and publish to the appropriate topic
-    uint8_t messageType = data[0];
-    
-    // Select the appropriate topic based on message type
+    // For valid packets, use JSON and publish to the appropriate topic
     const char* topic;
-    if (messageType == HELTEC_MSG_SENSOR) {
-      topic = MQTT_TOPIC_SENSOR;
-    } else if (messageType == HELTEC_MSG_GNSS) {
-      topic = MQTT_TOPIC_GNSS;
+    
+    // If we don't have valid JSON yet, try to parse it now
+    if (!packetJsonValid) {
+      JsonDocument localDoc;
+      if (heltec_packet_to_json_doc(data, localDoc)) {
+        // Successfully parsed JSON in this function
+        String msgType = localDoc["type"].as<String>();
+        
+        // Select topic based on message type
+        if (msgType == "sensor") {
+          topic = MQTT_TOPIC_SENSOR;
+        } else if (msgType == "gnss") {
+          topic = MQTT_TOPIC_GNSS;
+        } else {
+          topic = MQTT_TOPIC_DATA;
+        }
+        
+        // Use the existing publish method
+        bool success = heltec_mqtt_publish_json(topic, localDoc, false, true);
+        
+        if (success) {
+          Serial.printf("Successfully forwarded packet to MQTT topic: %s\n", topic);
+          packetsForwarded++;
+          return true;
+        } else {
+          Serial.printf("ERROR: Failed to forward packet to MQTT topic: %s\n", topic);
+          return false;
+        }
+      } else {
+        // Failed to parse JSON - this is unexpected for a valid packet
+        Serial.println("ERROR: Failed to convert valid packet to JSON for MQTT");
+        return false;
+      }
     } else {
-      // Unknown type (shouldn't happen if isValidPacket is true)
-      topic = MQTT_TOPIC_DATA;
-    }
-    
-    // Create JSON document for the packet data
-    JsonDocument doc;
-    
-    // Convert the packet to JSON
-    if (!heltec_packet_to_json_doc(data, doc)) {
-      Serial.println("ERROR: Failed to convert packet to JSON for MQTT");
-      return false;
-    }
-    
-    // Use the existing publish method
-    // The gateway class will be responsible for adding all metadata
-    bool success = heltec_mqtt_publish_json(topic, doc, false, true);
-    
-    if (success) {
-      Serial.printf("Successfully forwarded packet to MQTT topic: %s\n", topic);
-      packetsForwarded++;
-      return true;
-    } else {
-      Serial.printf("ERROR: Failed to forward packet to MQTT topic: %s\n", topic);
-      return false;
+      // We already have valid JSON from the callback function
+      
+      // Select topic based on message type
+      if (packetMessageType == "sensor") {
+        topic = MQTT_TOPIC_SENSOR;
+      } else if (packetMessageType == "gnss") {
+        topic = MQTT_TOPIC_GNSS;
+      } else {
+        topic = MQTT_TOPIC_DATA;
+      }
+      
+      // Use the existing publish method
+      bool success = heltec_mqtt_publish_json(topic, packetJson, false, true);
+      
+      if (success) {
+        Serial.printf("Successfully forwarded packet to MQTT topic: %s\n", topic);
+        packetsForwarded++;
+        return true;
+      } else {
+        Serial.printf("ERROR: Failed to forward packet to MQTT topic: %s\n", topic);
+        return false;
+      }
     }
   } else {
     // For invalid packets, publish raw binary data directly

@@ -208,13 +208,7 @@ boolean heltec_mqtt_connect() {
   // Get client ID
   String clientId = heltec_mqtt_get_client_id();
   
-  // Show connection attempt on display
-  heltec_clear_display();
-  both.println("Connecting to MQTT...");
-  both.printf("Server: %s\n", mqtt_server);
-  both.printf("Client: %s\n", clientId.c_str());
-  heltec_display_update();
-  
+  // Show connection attempt
   Serial.printf("Connecting to MQTT broker %s as %s...", mqtt_server, clientId.c_str());
   
   // Set a shorter connection timeout
@@ -236,14 +230,9 @@ boolean heltec_mqtt_connect() {
   }
   
   if (connectResult) {
-    Serial.println("connected!");
-    
-    // Update display
-    heltec_clear_display();
-    both.println("MQTT Connected!");
-    both.printf("Server: %s\n", mqtt_server);
-    both.printf("Client: %s\n", clientId.c_str());
-    heltec_display_update();
+    Serial.println("MQTT Connected!");
+    Serial.printf("Server: %s\n", mqtt_server);
+    Serial.printf("Client: %s\n", clientId.c_str());
     
     // Publish a connection message to the status topic
     JsonDocument statusDoc;
@@ -293,7 +282,7 @@ boolean heltec_mqtt_connect() {
     both.printf("Error: %d\n", mqttState);
     both.printf("Retry in %d sec\n", mqttConnectionInterval/1000);
     heltec_display_update();
-    
+    delay(2000);
     return false;
   }
 }
@@ -319,7 +308,7 @@ boolean heltec_mqtt_setup(boolean syncTimeOnConnect) {
   
   // Sync time if requested
   if (syncTimeOnConnect) {
-    both.println("Syncing time...");
+    Serial.println("Syncing time...");
     
     // Use the timezone defined in platformio.ini
     #ifdef TIMEZONE_OFFSET
@@ -629,36 +618,11 @@ boolean heltec_mqtt_publish_status() {
 }
 
 /**
- * @brief Display brief MQTT status on the OLED display (5 lines max)
+ * @brief Display brief MQTT status to Serial
+ * 
  */
 void heltec_mqtt_display_status(uint32_t packetCounter) {
-  // Clear the OLED display
-  heltec_clear_display(1, 0);
-  
-  // Line 1: Title
-  both.println("MQTT Status");
-  
-  // Line 2: WiFi and MQTT status combined
-  if (heltec_wifi_connected()) {
-    both.printf("W:%ddBm M:%s\n", 
-                  heltec_wifi_rssi(),
-                  mqttClient.connected() ? "OK" : String(mqttClient.state()).c_str());
-  } else {
-    both.printf("WiFi:X MQTT:%s\n", 
-                  mqttClient.connected() ? "OK" : String(mqttClient.state()).c_str());
-  }
-  
-  // Line 3: Packets and battery
-  both.printf("Pkt:%u Bat:%d%%\n", packetCounter, heltec_battery_percent());
-  
-  // Line 4: Uptime in minutes
-  both.printf("Up:%lu min\n", millis() / 60000);
-  
-  // Line 5: Left blank or for future use
-  
-  // Update the display
-  heltec_display_update();
-  
+
   // Log more detailed information to serial
   Serial.println("----- MQTT Status -----");
   Serial.printf("WiFi: %s (RSSI: %ddBm, Quality: %d%%)\n", 

@@ -1,5 +1,5 @@
 /**
- * @file Heltec_Sensor_Packet.h
+ * @file Heltec_Sensor_Packet_Helper.h
  * @brief Packet structure definitions for Heltec boards
  * 
  * Defines standardized packet formats for sending sensor data 
@@ -13,8 +13,8 @@
  * optimizes bandwidth usage, particularly for LoRa applications.
  */
 
-#ifndef HELTEC_SENSOR_PACKET_H
-#define HELTEC_SENSOR_PACKET_H
+#ifndef HELTEC_SENSOR_PACKET_HELPER_H
+#define HELTEC_SENSOR_PACKET_HELPER_H
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
@@ -292,4 +292,4 @@ bool heltec_gnss_packet_to_json_doc(const heltec_gnss_packet_t* packet, JsonDocu
  */
 bool heltec_validate_packet(const void* data, size_t dataSize, bool verbose = false);
 
-#endif // HELTEC_SENSOR_PACKET_H
+#endif // HELTEC_SENSOR_PACKET__HELPER_H
