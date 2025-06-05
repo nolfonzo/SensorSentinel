@@ -8,7 +8,7 @@
  * Uses the heltec_mqtt_gateway for MQTT connectivity.
  */
 
-#include "heltec_unofficial.h"
+#include "heltec_unofficial_revised.h"
 #include "heltec_sensor_packet_helper.h"
 #include "heltec_mqtt_gateway.h"
 #include "heltec_wifi_helper.h"

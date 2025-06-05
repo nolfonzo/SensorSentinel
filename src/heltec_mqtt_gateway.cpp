@@ -3,7 +3,7 @@
  * @brief Implementation of MQTT helper functions for Heltec boards
  */
 
-#include "heltec_unofficial.h"
+#include "heltec_unofficial_revised.h"
 #include <WiFi.h>  // Include this explicitly for WiFiClient
 #include "heltec_mqtt_gateway.h"
 #include "heltec_wifi_helper.h"

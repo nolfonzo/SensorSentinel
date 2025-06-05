@@ -7,7 +7,7 @@
 #define HELTEC_POWER_BUTTON
 
 // Include the Heltec library
-#include "heltec_unofficial.h"
+#include "heltec_unofficial_revised.h"
 
 // Configuration
 #define PAUSE               10          // Seconds between auto-transmissions (0 = manual only)

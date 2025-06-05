@@ -4,7 +4,7 @@
  */
 
 #include "heltec_sensor_packet_helper.h"
-#include "heltec_unofficial.h"
+#include "heltec_unofficial_revised.h"
 #include <ArduinoJson.h>
 #include <string.h>  // For memcpy
 

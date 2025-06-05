@@ -3,10 +3,10 @@
  * @brief Periodic sensor and GNSS packet sender for Heltec boards
  * 
  * Sends sensor packets every 30 seconds and GNSS packets every 90 seconds
- * using the heltec_unofficial and heltec_sensor_packet libraries.
+ * using the heltec_unofficial_revised and heltec_sensor_packet libraries.
  */
 
-#include "heltec_unofficial.h"
+#include "heltec_unofficial_revised.h"
 #include "heltec_sensor_packet_helper.h"
 
 // Configuration

@@ -9,7 +9,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 
-// Forward declaration for PrintSplitter from heltec_unofficial.h
+// Forward declaration for PrintSplitter from heltec_unofficial_revised.h
 class PrintSplitter;
 extern PrintSplitter both;
 

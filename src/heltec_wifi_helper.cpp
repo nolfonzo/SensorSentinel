@@ -4,7 +4,7 @@
  */
 
 #include "heltec_wifi_helper.h"
-#include "heltec_unofficial.h" // For access to the display functions
+#include "heltec_unofficial_revised.h" // For access to the display functions
 
 // Global WiFi variables
 WiFiClient wifiClient;
