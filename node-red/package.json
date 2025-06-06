@@ -1,5 +1,15 @@
 {
   "scripts": {
     "start": "node-red --userDir ."
+  },
+  "name": "red",
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "node-red-dashboard": "^3.6.5"
   }
 }
