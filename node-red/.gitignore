@@ -1,7 +1,0 @@
-# Runtime files (relative to this directory)
-.config.*
-.flows*.backup
-flows_cred.json*
-.sessions.json
-node_modules/
-*.log

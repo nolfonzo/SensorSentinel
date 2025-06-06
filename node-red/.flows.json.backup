@@ -1,0 +1,156 @@
+[
+    {
+        "id": "62f31c6b53afb626",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ac73cfbba5e1dcae",
+        "type": "ui-base",
+        "name": "My Dashboard",
+        "path": "/dashboard",
+        "appIcon": "",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-notification",
+            "ui-control"
+        ],
+        "showPathInSidebar": false,
+        "headerContent": "page",
+        "navigationStyle": "default",
+        "titleBarStyle": "default",
+        "showReconnectNotification": true,
+        "notificationDisplayTime": 1,
+        "showDisconnectNotification": true,
+        "allowInstall": true
+    },
+    {
+        "id": "c05b66df7c049376",
+        "type": "ui-theme",
+        "name": "Default Theme",
+        "colors": {
+            "surface": "#ffffff",
+            "primary": "#0094CE",
+            "bgPage": "#eeeeee",
+            "groupBg": "#ffffff",
+            "groupOutline": "#cccccc"
+        },
+        "sizes": {
+            "density": "default",
+            "pagePadding": "12px",
+            "groupGap": "12px",
+            "groupBorderRadius": "4px",
+            "widgetGap": "12px"
+        }
+    },
+    {
+        "id": "f519202eda84521a",
+        "type": "ui-page",
+        "name": "Page 1",
+        "ui": "ac73cfbba5e1dcae",
+        "path": "/page1",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "c05b66df7c049376",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": 0,
+                "cols": 3
+            },
+            {
+                "name": "Tablet",
+                "px": 576,
+                "cols": 6
+            },
+            {
+                "name": "Small Desktop",
+                "px": 768,
+                "cols": 9
+            },
+            {
+                "name": "Desktop",
+                "px": 1024,
+                "cols": 12
+            }
+        ],
+        "order": 1,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "883d8d3194f035d9",
+        "type": "ui-group",
+        "name": "Group 1",
+        "page": "f519202eda84521a",
+        "width": 6,
+        "height": 1,
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": true,
+        "disabled": false,
+        "groupType": "default"
+    },
+    {
+        "id": "cc5553a258a8558a",
+        "type": "inject",
+        "z": "62f31c6b53afb626",
+        "name": "",
+        "props": [
+            {
+                "p": "options",
+                "v": "[\"Option 1\", \"Option 2\", \"Option 3\"]",
+                "vt": "json"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "*/1 0 * * *",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 510,
+        "y": 180,
+        "wires": [
+            [
+                "12c6698942600f1c"
+            ]
+        ]
+    },
+    {
+        "id": "12c6698942600f1c",
+        "type": "ui-dropdown",
+        "z": "62f31c6b53afb626",
+        "group": "883d8d3194f035d9",
+        "name": "",
+        "label": "Select Option:",
+        "tooltip": "",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": true,
+        "msgTrigger": "onChange",
+        "x": 540,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    }
+]
