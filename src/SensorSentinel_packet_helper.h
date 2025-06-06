@@ -1,5 +1,5 @@
 /**
- * @file Heltec_Sensor_Packet_Helper.h
+ * @file SensorSentinel_Packet_Helper.h
  * @brief Packet structure definitions for Heltec boards
  * 
  * Defines standardized packet formats for sending sensor data 
@@ -13,18 +13,18 @@
  * optimizes bandwidth usage, particularly for LoRa applications.
  */
 
-#ifndef HELTEC_SENSOR_PACKET_HELPER_H
-#define HELTEC_SENSOR_PACKET_HELPER_H
+#ifndef SensorSentinel_PACKET_HELPER_H
+#define SensorSentinel_PACKET_HELPER_H
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include "heltec_pins.h"  // For heltec_pin_readings_t structure
+#include "SensorSentinel_pins_helper.h"  // For SensorSentinel_pin_readings_t structure
 
 /**
  * @brief Message types for different packet categories
  */
-#define HELTEC_MSG_SENSOR        0x01  // Basic sensor data packet
-#define HELTEC_MSG_GNSS         0x02  // GNSS location data packet
+#define SensorSentinel_MSG_SENSOR        0x01  // Basic sensor data packet
+#define SensorSentinel_MSG_GNSS         0x02  // GNSS location data packet
 
 /**
  * @brief Basic sensor packet structure
@@ -34,7 +34,7 @@
  */
 typedef struct {
   // Header information
-  uint8_t messageType;         // Always HELTEC_MSG_BASIC (0x01)
+  uint8_t messageType;         // Always SensorSentinel_MSG_BASIC (0x01)
   uint32_t nodeId;             // Unique node identifier (from MAC address)
   uint32_t messageCounter;     // Sequence number
   uint32_t uptime;             // uptime in seconds
@@ -42,11 +42,11 @@ typedef struct {
   uint16_t batteryVoltage;     // Battery voltage in millivolts
 
   // Sensor data
-  heltec_pin_readings_t pins;  // All pin readings in a standard format
+  SensorSentinel_pin_readings_t pins;  // All pin readings in a standard format
   
   // Reserved for future expansion
   uint8_t reserved[2];
-} __attribute__((packed)) heltec_sensor_packet_t;
+} __attribute__((packed)) SensorSentinel_sensor_packet_t;
 
 /**
  * @brief GNSS location packet structure
@@ -56,7 +56,7 @@ typedef struct {
  */
 typedef struct {
   // Header information
-  uint8_t messageType;         // Always HELTEC_MSG_GNSS (0x02)
+  uint8_t messageType;         // Always SensorSentinel_MSG_GNSS (0x02)
   uint32_t nodeId;             // Unique node identifier (from MAC address)
   uint32_t messageCounter;     // Sequence number
   uint32_t uptime;             // uptime in seconds
@@ -72,7 +72,7 @@ typedef struct {
   
   // Reserved for future expansion
   uint8_t reserved[2];
-} __attribute__((packed)) heltec_gnss_packet_t;
+} __attribute__((packed)) SensorSentinel_gnss_packet_t;
 
 /**
  * @brief Union for handling different packet types
@@ -86,21 +86,21 @@ typedef union {
     uint32_t nodeId;
     uint32_t messageCounter;
   } header;
-  heltec_sensor_packet_t sensor;
-  heltec_gnss_packet_t gnss;
-} heltec_packet_t;
+  SensorSentinel_sensor_packet_t sensor;
+  SensorSentinel_gnss_packet_t gnss;
+} SensorSentinel_packet_t;
 
 /**
  * @brief Error codes for packet JSON conversion
  */
 typedef enum {
-  HELTEC_JSON_SUCCESS = 0,
-  HELTEC_JSON_ERROR_NULL_PARAMS = 1,
-  HELTEC_JSON_ERROR_SMALL_BUFFER = 2,
-  HELTEC_JSON_ERROR_UNKNOWN_TYPE = 3,
-  HELTEC_JSON_ERROR_INVALID_DATA = 4,
-  HELTEC_JSON_ERROR_SERIALIZATION = 5
-} heltec_json_error_t;
+  SensorSentinel_JSON_SUCCESS = 0,
+  SensorSentinel_JSON_ERROR_NULL_PARAMS = 1,
+  SensorSentinel_JSON_ERROR_SMALL_BUFFER = 2,
+  SensorSentinel_JSON_ERROR_UNKNOWN_TYPE = 3,
+  SensorSentinel_JSON_ERROR_INVALID_DATA = 4,
+  SensorSentinel_JSON_ERROR_SERIALIZATION = 5
+} SensorSentinel_json_error_t;
 
 /**
  * @brief Convert a packet to a JSON document
@@ -113,14 +113,14 @@ typedef enum {
  * @param errorCode Optional pointer to store error code
  * @return true if conversion succeeded, false if failed
  */
-bool heltec_packet_to_json_doc(const void* packet, JsonDocument& doc, 
-                              heltec_json_error_t* errorCode = nullptr);
+bool SensorSentinel_packet_to_json_doc(const void* packet, JsonDocument& doc, 
+                              SensorSentinel_json_error_t* errorCode = nullptr);
 
 /**
  * @brief Convert a packet to JSON string format
  * 
  * Takes a packet of any supported type and converts it to a JSON string.
- * This is a wrapper around heltec_packet_to_json_doc that handles serialization.
+ * This is a wrapper around SensorSentinel_packet_to_json_doc that handles serialization.
  * 
  * @param packet Pointer to the packet to convert
  * @param buffer Output buffer to store the JSON string
@@ -129,8 +129,8 @@ bool heltec_packet_to_json_doc(const void* packet, JsonDocument& doc,
  * @param prettyPrint Whether to format the JSON with indentation (default: false)
  * @return true if conversion succeeded, false if failed
  */
-bool heltec_packet_to_json(const void* packet, char* buffer, size_t bufferSize, 
-                          heltec_json_error_t* errorCode = nullptr, 
+bool SensorSentinel_packet_to_json(const void* packet, char* buffer, size_t bufferSize, 
+                          SensorSentinel_json_error_t* errorCode = nullptr, 
                           bool prettyPrint = false);
 
 /**
@@ -138,7 +138,7 @@ bool heltec_packet_to_json(const void* packet, char* buffer, size_t bufferSize,
  * 
  * @return 32-bit unique identifier derived from the MAC address
  */
-uint32_t heltec_get_node_id();
+uint32_t SensorSentinel_get_node_id();
 
 /**
  * @brief Initialize a basic sensor packet with device information
@@ -149,7 +149,7 @@ uint32_t heltec_get_node_id();
  * @param counter Message sequence counter value
  * @return true if initialization was successful, false otherwise
  */
-bool heltec_init_sensor_packet(heltec_sensor_packet_t* packet, uint32_t counter);
+bool SensorSentinel_init_sensor_packet(SensorSentinel_sensor_packet_t* packet, uint32_t counter);
 
 /**
  * @brief Initialize a GNSS packet with device information
@@ -161,17 +161,17 @@ bool heltec_init_sensor_packet(heltec_sensor_packet_t* packet, uint32_t counter)
  * @param counter Message sequence counter value
  * @return true if initialization was successful, false otherwise
  */
-bool heltec_init_gnss_packet(heltec_gnss_packet_t* packet, uint32_t counter);
+bool SensorSentinel_init_gnss_packet(SensorSentinel_gnss_packet_t* packet, uint32_t counter);
 
 /**
  * @brief Get the size of a packet based on its message type
  * 
  * Returns the appropriate size in bytes for a given message type.
  * 
- * @param messageType The type of message (HELTEC_MSG_BASIC or HELTEC_MSG_GNSS)
+ * @param messageType The type of message (SensorSentinel_MSG_BASIC or SensorSentinel_MSG_GNSS)
  * @return The size of the packet in bytes
  */
-size_t heltec_get_packet_size(uint8_t messageType);
+size_t SensorSentinel_get_packet_size(uint8_t messageType);
 
 /**
  * @brief Print packet information to Serial for debugging
@@ -184,7 +184,7 @@ size_t heltec_get_packet_size(uint8_t messageType);
  * @return true if the packet was successfully printed, false otherwise
  */
 
-bool heltec_print_packet_info(const void* packet, bool showAll = false);
+bool SensorSentinel_print_packet_info(const void* packet, bool showAll = false);
 /**
  * @brief Print a packet as JSON to Serial
  * 
@@ -196,7 +196,7 @@ bool heltec_print_packet_info(const void* packet, bool showAll = false);
  * @return true if conversion and printing succeeded, false otherwise
  */
 
-bool heltec_print_packet_json(const void* packet, bool prettyPrint = true);
+bool SensorSentinel_print_packet_json(const void* packet, bool prettyPrint = true);
 /**
  * @brief Parse a received packet buffer into the appropriate packet structure
  * 
@@ -208,7 +208,7 @@ bool heltec_print_packet_json(const void* packet, bool prettyPrint = true);
  * @param packet Pointer to packet union to populate
  * @return true if parsing was successful, false if packet is invalid
  */
-bool heltec_parse_packet(uint8_t* buffer, size_t length, heltec_packet_t* packet);
+bool SensorSentinel_parse_packet(uint8_t* buffer, size_t length, SensorSentinel_packet_t* packet);
 
 /**
  * @brief Validate a sensor packet structure for consistency
@@ -218,7 +218,7 @@ bool heltec_parse_packet(uint8_t* buffer, size_t length, heltec_packet_t* packet
  * @param packet Pointer to sensor packet structure to validate
  * @return true if the packet is valid, false otherwise
  */
-bool heltec_validate_sensor_packet(const heltec_sensor_packet_t* packet);
+bool SensorSentinel_validate_sensor_packet(const SensorSentinel_sensor_packet_t* packet);
 
 /**
  * @brief Validate a GNSS packet structure for consistency
@@ -228,7 +228,7 @@ bool heltec_validate_sensor_packet(const heltec_sensor_packet_t* packet);
  * @param packet Pointer to GNSS packet structure to validate
  * @return true if the packet is valid, false otherwise
  */
-bool heltec_validate_gnss_packet(const heltec_gnss_packet_t* packet);
+bool SensorSentinel_validate_gnss_packet(const SensorSentinel_gnss_packet_t* packet);
 
 /**
  * @brief Convert sensor packet to a JSON string
@@ -240,7 +240,7 @@ bool heltec_validate_gnss_packet(const heltec_gnss_packet_t* packet);
  * @param pretty Whether to format the JSON with indentation and whitespace
  * @return String containing the JSON representation of the packet
  */
-String heltec_sensor_packet_to_json(const heltec_sensor_packet_t* packet, bool pretty = false);
+String SensorSentinel_sensor_packet_to_json(const SensorSentinel_sensor_packet_t* packet, bool pretty = false);
 
 /**
  * @brief Convert GNSS packet to a JSON string
@@ -252,7 +252,7 @@ String heltec_sensor_packet_to_json(const heltec_sensor_packet_t* packet, bool p
  * @param pretty Whether to format the JSON with indentation and whitespace
  * @return String containing the JSON representation of the packet
  */
-String heltec_gnss_packet_to_json(const heltec_gnss_packet_t* packet, bool pretty = false);
+String SensorSentinel_gnss_packet_to_json(const SensorSentinel_gnss_packet_t* packet, bool pretty = false);
 
 /**
  * @brief Populate an existing JsonDocument with sensor packet data
@@ -264,7 +264,7 @@ String heltec_gnss_packet_to_json(const heltec_gnss_packet_t* packet, bool prett
  * @param doc Reference to a JsonDocument to populate
  * @return true if the document was successfully populated, false otherwise
  */
-bool heltec_sensor_packet_to_json_doc(const heltec_sensor_packet_t* packet, JsonDocument& doc);
+bool SensorSentinel_sensor_packet_to_json_doc(const SensorSentinel_sensor_packet_t* packet, JsonDocument& doc);
 
 /**
  * @brief Populate an existing JsonDocument with GNSS packet data
@@ -276,7 +276,7 @@ bool heltec_sensor_packet_to_json_doc(const heltec_sensor_packet_t* packet, Json
  * @param doc Reference to a JsonDocument to populate
  * @return true if the document was successfully populated, false otherwise
  */
-bool heltec_gnss_packet_to_json_doc(const heltec_gnss_packet_t* packet, JsonDocument& doc);
+bool SensorSentinel_gnss_packet_to_json_doc(const SensorSentinel_gnss_packet_t* packet, JsonDocument& doc);
 
 /**
  * @brief Validate a packet of any supported type
@@ -290,6 +290,6 @@ bool heltec_gnss_packet_to_json_doc(const heltec_gnss_packet_t* packet, JsonDocu
  * @param verbose Whether to print detailed error messages to Serial
  * @return true if the packet is valid, false otherwise
  */
-bool heltec_validate_packet(const void* data, size_t dataSize, bool verbose = false);
+bool SensorSentinel_validate_packet(const void* data, size_t dataSize, bool verbose = false);
 
-#endif // HELTEC_SENSOR_PACKET__HELPER_H
+#endif // SensorSentinel_PACKET__HELPER_H

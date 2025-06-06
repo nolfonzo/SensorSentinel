@@ -1,12 +1,12 @@
 /**
- * @file heltec_mqtt_gateway.cpp
+ * @file SensorSentinel_mqtt_gateway.cpp
  * @brief Implementation of MQTT helper functions for Heltec boards
  */
 
 #include "heltec_unofficial_revised.h"
 #include <WiFi.h>  // Include this explicitly for WiFiClient
-#include "heltec_mqtt_gateway.h"
-#include "heltec_wifi_helper.h"
+#include "SensorSentinel_mqtt_gateway.h"
+#include "SensorSentinel_wifi_helper.h"
 
 // Module variables
 static PubSubClient mqttClient(wifiClient);
@@ -44,8 +44,8 @@ T min(T a, T b) {
 }
 
 // Calculate WiFi signal quality from RSSI
-int heltec_wifi_quality() {
-  int rssi = heltec_wifi_rssi();
+int SensorSentinel_wifi_quality() {
+  int rssi = SensorSentinel_wifi_rssi();
   if (rssi <= -100) {
     return 0;
   } else if (rssi >= -50) {
@@ -75,10 +75,10 @@ const char* getMqttStateString(int state) {
 /**
  * @brief Sync time with NTP servers
  */
-boolean heltec_mqtt_sync_time(long timezone, int daylightOffset,
+boolean SensorSentinel_mqtt_sync_time(long timezone, int daylightOffset,
                       const char* ntpServer1, const char* ntpServer2, 
                       const char* ntpServer3) {
-  if (!heltec_wifi_connected()) {
+  if (!SensorSentinel_wifi_connected()) {
     Serial.println("ERROR: Cannot sync time - WiFi not connected");
     return false;
   }
@@ -113,7 +113,7 @@ boolean heltec_mqtt_sync_time(long timezone, int daylightOffset,
 /**
  * @brief Sync time with default parameters
  */
-boolean heltec_mqtt_sync_time_default() {  // Renamed to avoid ambiguity
+boolean SensorSentinel_mqtt_sync_time_default() {  // Renamed to avoid ambiguity
   // Default NTP servers and timezone
   #ifdef TIMEZONE_OFFSET
   long timezone = TIMEZONE_OFFSET;
@@ -121,16 +121,16 @@ boolean heltec_mqtt_sync_time_default() {  // Renamed to avoid ambiguity
   long timezone = 0; // UTC
   #endif
   
-  return heltec_mqtt_sync_time(timezone, 0, 
+  return SensorSentinel_mqtt_sync_time(timezone, 0, 
                         "pool.ntp.org", "time.nist.gov", "time.google.com");
 }
 
 /**
  * @brief Get a unique client ID for MQTT based on ESP32's MAC address
  */
-String heltec_mqtt_get_client_id() {
+String SensorSentinel_mqtt_get_client_id() {
   // Create a unique client ID based on MAC address
-  String macAddress = heltec_wifi_mac();
+  String macAddress = SensorSentinel_wifi_mac();
   String clientId;
   
   if (macAddress.length() < 9) {
@@ -149,7 +149,7 @@ String heltec_mqtt_get_client_id() {
 /**
  * @brief Initialize the MQTT client with server settings
  */
-boolean heltec_mqtt_init() {
+boolean SensorSentinel_mqtt_init() {
   Serial.println("Initializing MQTT client...");
   
   // Validate MQTT server settings
@@ -167,7 +167,7 @@ boolean heltec_mqtt_init() {
   mqttClient.setServer(mqtt_server, mqtt_port);
   
   // Test client ID generation
-  mqttClientId = heltec_mqtt_get_client_id();
+  mqttClientId = SensorSentinel_mqtt_get_client_id();
   
   // Log the MQTT configuration
   Serial.printf("MQTT Server: %s:%d\n", mqtt_server, mqtt_port);
@@ -180,9 +180,9 @@ boolean heltec_mqtt_init() {
 /**
  * @brief Connect to the MQTT broker
  */
-boolean heltec_mqtt_connect() {
+boolean SensorSentinel_mqtt_connect() {
   // Check WiFi connection first
-  if (!heltec_wifi_connected()) {
+  if (!SensorSentinel_wifi_connected()) {
     Serial.println("ERROR: Cannot connect to MQTT - WiFi not connected");
     return false;
   }
@@ -205,7 +205,7 @@ boolean heltec_mqtt_connect() {
   lastMqttConnectionAttempt = now;
   
   // Get client ID
-  String clientId = heltec_mqtt_get_client_id();
+  String clientId = SensorSentinel_mqtt_get_client_id();
   
   // Show connection attempt
   Serial.printf("Connecting to MQTT broker %s as %s...", mqtt_server, clientId.c_str());
@@ -252,7 +252,7 @@ boolean heltec_mqtt_connect() {
     }
     
     // Update display with error
-    heltec_clear_display();
+    heltec_battery_percent();
     both.println("MQTT Connection Fail");
     both.printf("Error: %d\n", mqttState);
     both.printf("Retry in %d sec\n", mqttConnectionInterval/1000);
@@ -265,16 +265,16 @@ boolean heltec_mqtt_connect() {
 /**
  * @brief Setup MQTT with optional time synchronization
  */
-boolean heltec_mqtt_setup(boolean syncTimeOnConnect) {
+boolean SensorSentinel_mqtt_setup(boolean syncTimeOnConnect) {
   
   // Initialize MQTT client
-  if (!heltec_mqtt_init()) {
+  if (!SensorSentinel_mqtt_init()) {
     Serial.println("ERROR: MQTT initialization failed");
     return false;
   }
   
   // Only proceed if WiFi is connected
-  if (!heltec_wifi_connected()) {
+  if (!SensorSentinel_wifi_connected()) {
     Serial.println("ERROR: WiFi not connected - MQTT setup deferred");
     return false;
   }
@@ -287,20 +287,20 @@ boolean heltec_mqtt_setup(boolean syncTimeOnConnect) {
     #ifdef TIMEZONE_OFFSET
     long timezone = TIMEZONE_OFFSET;
     Serial.printf("Using timezone offset from config: %ld seconds\n", timezone);
-    if (!heltec_mqtt_sync_time(timezone, 0, "pool.ntp.org", "time.nist.gov", "time.google.com")) {
+    if (!SensorSentinel_mqtt_sync_time(timezone, 0, "pool.ntp.org", "time.nist.gov", "time.google.com")) {
       Serial.println("WARNING: Time sync failed, continuing with unsynchronized time");
     }
     #else
     // Fallback if not defined
     Serial.println("WARNING: TIMEZONE_OFFSET not defined, using default UTC+0");
-    if (!heltec_mqtt_sync_time(0, 0, "pool.ntp.org", "time.nist.gov", "time.google.com")) {  // Default to UTC
+    if (!SensorSentinel_mqtt_sync_time(0, 0, "pool.ntp.org", "time.nist.gov", "time.google.com")) {  // Default to UTC
       Serial.println("WARNING: Time sync failed, continuing with unsynchronized time");
     }
     #endif
   }
   
   // Connect to MQTT broker
-  boolean connected = heltec_mqtt_connect();
+  boolean connected = SensorSentinel_mqtt_connect();
   if (connected) {
     Serial.println("MQTT setup completed successfully");
   } else {
@@ -313,9 +313,9 @@ boolean heltec_mqtt_setup(boolean syncTimeOnConnect) {
 /**
  * @brief Maintain MQTT connection - call this regularly in loop()
  */
-boolean heltec_mqtt_maintain() {
+boolean SensorSentinel_mqtt_maintain() {
   // First check WiFi connectivity
-  if (!heltec_wifi_maintain()) {
+  if (!SensorSentinel_wifi_maintain()) {
     // WiFi is not connected, so MQTT can't work
     return false;
   }
@@ -326,7 +326,7 @@ boolean heltec_mqtt_maintain() {
     unsigned long now = millis();
     if (now - lastMqttConnectionAttempt > mqttConnectionInterval) {
       Serial.println("MQTT disconnected, attempting reconnection...");
-      if (heltec_mqtt_connect()) {
+      if (SensorSentinel_mqtt_connect()) {
         Serial.println("MQTT reconnected successfully");
       } else {
         Serial.printf("MQTT reconnection fail, will retry in %u seconds (state=%d)\n", 
@@ -344,7 +344,7 @@ boolean heltec_mqtt_maintain() {
 /**
  * @brief Add timestamp fields to a JSON document
  */
-boolean heltec_mqtt_add_timestamp(JsonDocument& doc, bool useFormattedTime) {
+boolean SensorSentinel_mqtt_add_timestamp(JsonDocument& doc, bool useFormattedTime) {
   // Always include millis timestamp (milliseconds since boot)
   doc["timestamp_ms"] = millis();
   
@@ -380,7 +380,7 @@ boolean heltec_mqtt_add_timestamp(JsonDocument& doc, bool useFormattedTime) {
 /**
  * @brief Publish a message to an MQTT topic
  */
-boolean heltec_mqtt_publish(const char* topic, const char* payload, boolean retained) {
+boolean SensorSentinel_mqtt_publish(const char* topic, const char* payload, boolean retained) {
   // Validate MQTT connection
   if (!mqttClient.connected()) {
     Serial.printf("ERROR: Cannot publish to %s - MQTT not connected\n", topic);
@@ -438,7 +438,7 @@ boolean heltec_mqtt_publish(const char* topic, const char* payload, boolean reta
 /**
  * @brief Publish a JSON document to an MQTT topic
  */
-boolean heltec_mqtt_publish_json(const char* topic, JsonDocument& doc, boolean retained, boolean useFormattedTime) {
+boolean SensorSentinel_mqtt_publish_json(const char* topic, JsonDocument& doc, boolean retained, boolean useFormattedTime) {
   // Validate MQTT connection
   if (!mqttClient.connected()) {
     Serial.printf("ERROR: Cannot publish JSON to %s - MQTT not connected\n", topic);
@@ -452,11 +452,11 @@ boolean heltec_mqtt_publish_json(const char* topic, JsonDocument& doc, boolean r
   }
   
   // Add timestamp information
-  heltec_mqtt_add_timestamp(doc, useFormattedTime);
+  SensorSentinel_mqtt_add_timestamp(doc, useFormattedTime);
   // Add standard metadata to all JSON documents
   doc["GW"] = heltec_get_board_name();
-  doc["GW_ip"] = heltec_wifi_ip();
-  doc["GW_mac"] = heltec_wifi_mac();
+  doc["GW_ip"] = SensorSentinel_wifi_ip();
+  doc["GW_mac"] = SensorSentinel_wifi_mac();
   
   // Check size before serialization
   size_t jsonSize = measureJson(doc);
@@ -511,13 +511,13 @@ boolean heltec_mqtt_publish_json(const char* topic, JsonDocument& doc, boolean r
  * @brief Display brief MQTT status to Serial
  * 
  */
-void heltec_mqtt_log_status() {
+void SensorSentinel_mqtt_log_status() {
 
   // Log more detailed information to serial
   Serial.println("----- MQTT Status -----");
   Serial.printf("WiFi: %s (RSSI: %ddBm, Quality: %d%%)\n", 
-               heltec_wifi_connected() ? "Connected" : "Disconnected",
-               heltec_wifi_rssi(), heltec_wifi_quality());
+               SensorSentinel_wifi_connected() ? "Connected" : "Disconnected",
+               SensorSentinel_wifi_rssi(), SensorSentinel_wifi_quality());
   
   Serial.printf("MQTT: %s (State: %d, Reconnects: %u)\n", 
                mqttClient.connected() ? "Connected" : "Disconnected",
@@ -533,7 +533,7 @@ void heltec_mqtt_log_status() {
 /**
  * @brief Publish device status information to the MQTT status topic
  */
-boolean heltec_mqtt_publish_status(const char* status, boolean retained) {
+boolean SensorSentinel_mqtt_publish_status(const char* status, boolean retained) {
   Serial.println("Attempting to publish a status message");
 
   // Don't attempt to publish if not connected
@@ -547,12 +547,12 @@ boolean heltec_mqtt_publish_status(const char* status, boolean retained) {
   
   // Add basic status information
   statusDoc["status"] = (status != NULL && strlen(status) > 0) ? status : "ok";
-  statusDoc["client_id"] = heltec_mqtt_get_client_id();
+  statusDoc["client_id"] = SensorSentinel_mqtt_get_client_id();
   
   // Add device information
   statusDoc["board"] = heltec_get_board_name();
-  statusDoc["mac"] = heltec_wifi_mac();
-  statusDoc["ip"] = heltec_wifi_ip();
+  statusDoc["mac"] = SensorSentinel_wifi_mac();
+  statusDoc["ip"] = SensorSentinel_wifi_ip();
   
   // Add runtime metrics
   statusDoc["uptime"] = millis() / 1000; // seconds
@@ -561,8 +561,8 @@ boolean heltec_mqtt_publish_status(const char* status, boolean retained) {
   statusDoc["free_sketch_space"] = ESP.getFreeSketchSpace(); // bytes
   
   // Add connection information
-  statusDoc["wifi_rssi"] = heltec_wifi_rssi();
-  statusDoc["wifi_qual"] = heltec_wifi_quality(); // Now defined above
+  statusDoc["wifi_rssi"] = SensorSentinel_wifi_rssi();
+  statusDoc["wifi_qual"] = SensorSentinel_wifi_quality(); // Now defined above
   statusDoc["mqtt_state"] = mqttClient.state();
   statusDoc["mqtt_con_time"] = (mqttClient.connected() ? 
       (millis() - lastMqttConnectionAttempt) / 1000 : 0); // seconds
@@ -570,24 +570,24 @@ boolean heltec_mqtt_publish_status(const char* status, boolean retained) {
   statusDoc["mqtt_pubs"] = publishCount;
  
   // Add time information with both formatted and epoch time
-  heltec_mqtt_add_timestamp(statusDoc, true);
+  SensorSentinel_mqtt_add_timestamp(statusDoc, true);
   
   // Log the status info to Serial
-  heltec_mqtt_log_status();
+  SensorSentinel_mqtt_log_status();
   // Publish to status topic
-  return heltec_mqtt_publish_json(mqtt_status_topic, statusDoc, retained, true);
+  return SensorSentinel_mqtt_publish_json(mqtt_status_topic, statusDoc, retained, true);
 }
 
 /**
  * @brief Simple overload for status publishing with defaults
  */
-boolean heltec_mqtt_publish_status() {
-  return heltec_mqtt_publish_status("ok", false);
+boolean SensorSentinel_mqtt_publish_status() {
+  return SensorSentinel_mqtt_publish_status("ok", false);
 }
 
 /**
  * @brief Get the MQTT client object
  */
-PubSubClient& heltec_mqtt_get_client() {
+PubSubClient& SensorSentinel_mqtt_get_client() {
   return mqttClient;
 }

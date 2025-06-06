@@ -67,21 +67,7 @@ bool buttonClicked = false;
   Print &both = Serial;  
 #endif  
 
-// GNSS related  
-#ifdef HELTEC_GNSS  
-  TinyGPSPlus gps;  
-  HardwareSerial gpsSerial = HardwareSerial(1);  
-#endif  
 
-// Packet subscription system  
-PacketCallback _packetCallback = NULL;  
-BinaryPacketCallback _binaryPacketCallback = NULL;  
-volatile bool _packetReceived = false;  
-String _packetData;  
-uint8_t _binaryPacketBuffer[256]; // Buffer for binary packet data  
-size_t _binaryPacketLength = 0;  
-float _packetRssi;  
-float _packetSnr;  
 
 // ====== Implementation of PrintSplitter methods ======  
 size_t PrintSplitter::write(uint8_t c) {  
@@ -94,12 +80,6 @@ size_t PrintSplitter::write(const uint8_t *buffer, size_t size) {
   a.write(buffer, size);  
   size_t r = b.write(buffer, size);  
   return r;  
-}  
-
-// ====== Internal helper functions ======  
-// Interrupt handler for packet reception  
-void _handleLoRaRx() {  
-  _packetReceived = true;  
 }  
 
 // ====== Public API implementations ======  
@@ -268,42 +248,6 @@ void heltec_delay(int ms) {
   }  
 }  
 
-// ====== GNSS functions ======  
-#ifdef HELTEC_GNSS  
-  /**  
-   * @brief Initializes the GNSS module  
-   */  
-  void heltec_gnss_begin() {  
-    heltec_ve(true);  // Power on GNSS via Vext  
-    delay(100);  
-    gpsSerial.begin(9600, SERIAL_8N1, GNSS_RX, GNSS_TX);  
-  }  
-
-  /**  
-   * @brief Puts the GNSS module to sleep  
-   */  
-  void heltec_gnss_sleep() {  
-    gpsSerial.end();  
-    pinMode(GNSS_TX, INPUT);  
-    pinMode(GNSS_RX, INPUT);  
-  }  
-
-  /**  
-   * @brief Updates GNSS data if available  
-   * @return true if new data was processed  
-   */  
-  bool heltec_gnss_update() {  
-    if (!gpsSerial) return false;  
-    if (digitalRead(VEXT) == HIGH) return false; // Check VEXT state (LOW=on)  
-    
-    while (gpsSerial.available()) {  
-      if (gps.encode(gpsSerial.read())) {  
-        return true; // New data available  
-      }  
-    }  
-    return false;  
-  }  
-#endif  
 
 // ====== Display functions ======  
 /**  
@@ -384,238 +328,7 @@ void heltec_clear_display(uint8_t textSize, uint8_t rotation) {
   #endif  
 }  
 
-// ====== Radio functions ======  
 
-/**  
- * @brief Subscribe to LoRa packet reception events  
- * @param callback Function to be called when a packet is received  
- * @return true if subscription was successful  
- */  
-bool heltec_subscribe_packets(PacketCallback callback) {  
-  #ifndef HELTEC_NO_RADIOLIB  
-    // Validate input  
-    if (callback == NULL) {  
-      Serial.println("Error: NULL callback provided");  
-      return false;  
-    }  
-    
-    // Store the callback  
-    _packetCallback = callback;  
-    
-    // Reset received flag to ensure clean state  
-    _packetReceived = false;  
-    
-    // Clear any previous action first  
-    radio.clearDio1Action();  
-    delay(10);  
-    
-    // Set up the new action  
-    radio.setDio1Action(_handleLoRaRx);  
-    delay(10);  
-    
-    // Start receive  
-    int state = radio.startReceive();  
-    delay(10);  
-
-    if (state == RADIOLIB_ERR_NONE) {  
-      Serial.println("LoRa packet subscription active");  
-      return true;  
-    } else {  
-      Serial.printf("Failed to start radio receiver: %d\n", state);  
-      return false;  
-    }  
-  #else  
-    Serial.println("Radio not available - packet subscription failed");  
-    return false;  
-  #endif  
-}  
-
-/**  
- * @brief Subscribe to LoRa binary packet reception events  
- * @param callback Function to be called when a binary packet is received  
- * @return true if subscription was successful  
- */  
-bool heltec_subscribe_binary_packets(BinaryPacketCallback callback) {  
-  #ifndef HELTEC_NO_RADIOLIB  
-    // Validate input  
-    if (callback == NULL) {  
-      Serial.println("Error: NULL callback provided");  
-      return false;  
-    }  
-    
-    // Store the callback  
-    _binaryPacketCallback = callback;  
-    
-    // Reset received flag to ensure clean state  
-    _packetReceived = false;  
-    
-    // Clear any previous action first  
-    radio.clearDio1Action();  
-    delay(10);  
-    
-    // Set up the new action  
-    radio.setDio1Action(_handleLoRaRx);  
-    delay(10);  
-    
-    // Start receive  
-    int state = radio.startReceive();  
-    delay(10);  
-
-    if (state == RADIOLIB_ERR_NONE) {  
-      Serial.println("LoRa binary packet subscription active");  
-      return true;  
-    } else {  
-      Serial.printf("Failed to start radio receiver: %d\n", state);  
-      return false;  
-    }  
-  #else  
-    Serial.println("Radio not available - binary packet subscription failed");  
-    return false;  
-  #endif  
-}  
-
-/**  
- * @brief Unsubscribe from LoRa packet reception events  
- * @return true if unsubscription was successful  
- */  
-bool heltec_unsubscribe_packets() {  
-  #ifndef HELTEC_NO_RADIOLIB  
-    // Clear the callback  
-    _packetCallback = NULL;  
-    
-    // If neither callback is active, fully disable reception  
-    if (_binaryPacketCallback == NULL) {  
-      // Reset received flag to ensure clean state  
-      _packetReceived = false;  
-      
-      // Clear the interrupt  
-      radio.clearDio1Action();  
-      delay(10);   
-
-      // Put radio in standby mode  
-      int state = radio.standby();  
-      delay(10);  
-      
-      if (state == RADIOLIB_ERR_NONE) {  
-        Serial.println("LoRa packet subscription disabled");  
-        return true;  
-      } else {  
-        Serial.printf("Failed to put radio in standby: %d\n", state);  
-        return false;  
-      }  
-    }  
-    return true;  
-  #else  
-    Serial.println("Radio not available - unsubscription not needed");  
-    return false;  
-  #endif  
-}  
-
-/**  
- * @brief Unsubscribe from LoRa binary packet reception events  
- * @return true if unsubscription was successful  
- */  
-bool heltec_unsubscribe_binary_packets() {  
-  #ifndef HELTEC_NO_RADIOLIB  
-    // Clear the callback  
-    _binaryPacketCallback = NULL;  
-    
-    // If neither callback is active, fully disable reception  
-    if (_packetCallback == NULL) {  
-      // Reset received flag to ensure clean state  
-      _packetReceived = false;  
-      
-      // Clear the interrupt  
-      radio.clearDio1Action();  
-      delay(10);  
-
-      // Put radio in standby mode  
-      int state = radio.standby();  
-      delay(10);  
-      
-      if (state == RADIOLIB_ERR_NONE) {  
-        Serial.println("LoRa packet subscription disabled");  
-        return true;  
-      } else {  
-        Serial.printf("Failed to put radio in standby: %d\n", state);  
-        return false;  
-      }  
-    }  
-    return true;  
-  #else  
-    Serial.println("Radio not available - unsubscription not needed");  
-    return false;  
-  #endif  
-}  
-
-/**  
- * @brief Process any received packets in the main loop  
- */  
-void heltec_process_packets() {  
-  #ifndef HELTEC_NO_RADIOLIB  
-    if (_packetReceived) {  
-      // Clear flag immediately to prevent race conditions  
-      _packetReceived = false;  
-      
-      // Temporarily disable interrupt to prevent recursion  
-      radio.clearDio1Action();  
-      
-      // Check if we have any callbacks registered  
-      bool hasCallbacks = (_packetCallback != NULL || _binaryPacketCallback != NULL);  
-      
-      if (hasCallbacks) {  
-        // Get signal quality information (needed for both callback types)  
-        _packetRssi = radio.getRSSI();  
-        _packetSnr = radio.getSNR();  
-        
-        // Handle string packet (for backward compatibility)  
-        if (_packetCallback) {  
-          _packetData = "";  
-          int state = radio.readData(_packetData);  
-          
-          if (state == RADIOLIB_ERR_NONE) {  
-            _packetCallback(_packetData, _packetRssi, _packetSnr);  
-          } else {  
-            Serial.printf("Error reading LoRa packet as string: %d\n", state);  
-          }  
-        }  
-        
-        // Handle binary packet  
-        if (_binaryPacketCallback) {  
-            // Use RadioLib's API correctly
-            int state = radio.readData(_binaryPacketBuffer, sizeof(_binaryPacketBuffer));
-            
-            if (state == RADIOLIB_ERR_NONE) {
-                // Get the actual packet length
-                _binaryPacketLength = radio.getPacketLength();
-                
-                if (_binaryPacketLength > 0) {
-                _binaryPacketCallback(_binaryPacketBuffer, _binaryPacketLength, _packetRssi, _packetSnr);
-                } else {
-                Serial.println("Received empty binary packet");
-                    }
-            } else {
-                Serial.printf("Error reading LoRa packet as binary: %d\n", state);
-            }
-        } 
-      }  
-      
-      // Make sure radio is in a clean state before restarting reception  
-      radio.standby();  
-      delay(10);  
-      
-      // Only restart reception if we still have a callback (user might have unsubscribed in callback)  
-      if (_packetCallback || _binaryPacketCallback) {  
-        // Restart reception  
-        radio.startReceive();  
-        delay(10);  
-        
-        // Re-enable interrupt handler AFTER reception has started  
-        radio.setDio1Action(_handleLoRaRx);  
-      }  
-    }  
-  #endif  
-}  
 
 // ====== Power management ======  
 /**  
@@ -679,10 +392,7 @@ void heltec_deep_sleep(int seconds) {
     pinMode(RST_OLED, INPUT);  
   #endif  
 
-  // Sleep GNSS if enabled  
-  #ifdef HELTEC_GNSS  
-    heltec_gnss_sleep();  
-  #endif  
+
   
   // Set button wakeup if applicable  
   #ifdef HELTEC_POWER_BUTTON  
@@ -813,12 +523,5 @@ void heltec_loop() {
       heltec_deep_sleep();
     }
   #endif
-  
-  // Handle GNSS updates
-  #ifdef HELTEC_GNSS
-    heltec_gnss_update();
-  #endif
 
-  // Process any pending packet receptions
-  heltec_process_packets();
 }

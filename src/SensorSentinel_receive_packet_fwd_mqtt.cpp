@@ -1,17 +1,18 @@
 /**
- * @file heltec_receive_sensor_packet_fwd_mqtt.cpp
+ * @file SensorSentinel_receive_packet_fwd_mqtt.cpp
  * @brief Sensor and GNSS packet receiver for Heltec boards with MQTT forwarding
  * 
  * Listens for incoming packets, displays them, and forwards them to MQTT topics:
  * - Sensor packets go to lora/sensor
  * - GNSS packets go to lora/gnss
- * Uses the heltec_mqtt_gateway for MQTT connectivity.
+ * Uses the SensorSentinel_mqtt_gateway for MQTT connectivity.
  */
 
 #include "heltec_unofficial_revised.h"
-#include "heltec_sensor_packet_helper.h"
-#include "heltec_mqtt_gateway.h"
-#include "heltec_wifi_helper.h"
+#include "SensorSentinel_packet_helper.h"
+#include "SensorSentinel_mqtt_gateway.h"
+#include "SensorSentinel_wifi_helper.h"
+#include "SensorSentinel_RadioLib_helper.h"
 #include <ArduinoJson.h>
 
 // Configuration
@@ -50,7 +51,7 @@ void setup() {
              heltec_vbat());
   
   // Subscribe to binary packet reception
-  if (heltec_subscribe_binary_packets(onBinaryPacketReceived)) {
+  if (SensorSentinel_subscribe_binary_packets(onBinaryPacketReceived)) {
     both.println("Subscribed to packets");
   } else {
     both.println("Subscribe failed!");
@@ -59,26 +60,29 @@ void setup() {
   heltec_display_update();
    
   // Let the helper libraries handle WiFi and MQTT connection
-  heltec_wifi_begin();
-  heltec_mqtt_setup(true);  // With time sync
+  SensorSentinel_wifi_begin();
+  SensorSentinel_mqtt_setup(true);  // With time sync
   
   // Display initial connection status via the MQTT helper
-  heltec_mqtt_log_status();
+  SensorSentinel_mqtt_log_status();
 }
 
 void loop() {
-  // Handle system tasks (including packet processing)
+  // Handle system tasks
   heltec_loop();
+
+  // Process any pending packet receptions
+  SensorSentinel_process_packets();
   
   // Let helpers maintain WiFi and MQTT connections
-  heltec_wifi_maintain();
-  heltec_mqtt_maintain();
+  SensorSentinel_wifi_maintain();
+  SensorSentinel_mqtt_maintain();
   
   // Publish status update to MQTT based on configured frequency
   static unsigned long lastStatusTime = 0;
   if (millis() - lastStatusTime > (MQTT_STATUS_FREQ_SECS * 1000)) {
-    if (heltec_mqtt_get_client().connected()) {
-      heltec_mqtt_publish_status();
+    if (SensorSentinel_mqtt_get_client().connected()) {
+      SensorSentinel_mqtt_publish_status();
     }
     lastStatusTime = millis();
   }
@@ -112,7 +116,7 @@ void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr)
   memcpy(packetBuffer, data, length);
   
   // Basic validation - check if it's a known message type with the right size
-  bool isValidPacket = heltec_validate_packet(packetBuffer, length, true);
+  bool isValidPacket = SensorSentinel_validate_packet(packetBuffer, length, true);
   
   // Calculate time since last packet (for Serial output only)
   if (lastPacketTime > 0) {
@@ -132,7 +136,7 @@ void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr)
   
   if (isValidPacket) {
     // For valid packets, parse the JSON once
-    packetJsonValid = heltec_packet_to_json_doc(packetBuffer, packetJson);
+    packetJsonValid = SensorSentinel_packet_to_json_doc(packetBuffer, packetJson);
     
     if (packetJsonValid) {
       // Extract the data we need
@@ -155,8 +159,8 @@ void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr)
     }
     
     // Serial output for valid packets
-    heltec_print_packet_info(packetBuffer, true);  
-    heltec_print_packet_json(packetBuffer, true);
+    SensorSentinel_print_packet_info(packetBuffer, true);  
+    SensorSentinel_print_packet_json(packetBuffer, true);
 
   } else {
     // Display output for invalid packets
@@ -210,13 +214,13 @@ void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr)
  */
 bool forwardPacketToMQTT(uint8_t* data, size_t length, float rssi, float snr) {
   // Skip if MQTT is not connected
-  if (!heltec_mqtt_get_client().connected()) {
+  if (!SensorSentinel_mqtt_get_client().connected()) {
     Serial.println("MQTT not connected - cannot forward packet");
     return false;
   }
   
   // Validate the packet if we haven't already validated it
-  bool isValidPacket = packetJsonValid || heltec_validate_packet(data, length, true);
+  bool isValidPacket = packetJsonValid || SensorSentinel_validate_packet(data, length, true);
   
   if (isValidPacket) {
     // For valid packets, use JSON and publish to the appropriate topic
@@ -225,7 +229,7 @@ bool forwardPacketToMQTT(uint8_t* data, size_t length, float rssi, float snr) {
     // If we don't have valid JSON yet, try to parse it now
     if (!packetJsonValid) {
       JsonDocument localDoc;
-      if (heltec_packet_to_json_doc(data, localDoc)) {
+      if (SensorSentinel_packet_to_json_doc(data, localDoc)) {
         // Successfully parsed JSON in this function
         String msgType = localDoc["type"].as<String>();
         
@@ -239,7 +243,7 @@ bool forwardPacketToMQTT(uint8_t* data, size_t length, float rssi, float snr) {
         }
         
         // Use the existing publish method
-        bool success = heltec_mqtt_publish_json(topic, localDoc, false, true);
+        bool success = SensorSentinel_mqtt_publish_json(topic, localDoc, false, true);
         
         if (success) {
           Serial.printf("Successfully forwarded packet to MQTT topic: %s\n", topic);
@@ -267,7 +271,7 @@ bool forwardPacketToMQTT(uint8_t* data, size_t length, float rssi, float snr) {
       }
       
       // Use the existing publish method
-      bool success = heltec_mqtt_publish_json(topic, packetJson, false, true);
+      bool success = SensorSentinel_mqtt_publish_json(topic, packetJson, false, true);
       
       if (success) {
         Serial.printf("Successfully forwarded packet to MQTT topic: %s\n", topic);
@@ -280,7 +284,7 @@ bool forwardPacketToMQTT(uint8_t* data, size_t length, float rssi, float snr) {
     }
   } else {
     // For invalid packets, publish raw binary data directly
-    bool success = heltec_mqtt_get_client().publish(MQTT_TOPIC_DATA, data, length, false);
+    bool success = SensorSentinel_mqtt_get_client().publish(MQTT_TOPIC_DATA, data, length, false);
     
     if (success) {
       packetsForwarded++;

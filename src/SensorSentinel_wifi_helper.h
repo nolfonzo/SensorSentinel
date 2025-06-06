@@ -1,10 +1,10 @@
 /**
- * @file heltec_wifi_helper.h
- * @brief Helper functions for WiFi connectivity on Heltec boards
+ * @file SensorSentinel_wifi_helper.h
+ * @brief Helper functions for WiFi connectivity
  */
 
-#ifndef HELTEC_WIFI_HELPER_H
-#define HELTEC_WIFI_HELPER_H
+#ifndef SensorSentinel_WIFI_HELPER_H
+#define SensorSentinel_WIFI_HELPER_H
 
 #include <Arduino.h>
 #include <WiFi.h>
@@ -25,16 +25,16 @@ extern unsigned long _last_wifi_attempt;
 extern const unsigned long _wifi_retry_interval;
 
 // Public function declarations - these are the only ones that should be in the header
-bool heltec_wifi_begin(uint8_t maxAttempts = 20);
-bool heltec_wifi_maintain();
-bool heltec_wifi_connected();
-int heltec_wifi_rssi();
-void heltec_wifi_disconnect();
-String heltec_wifi_ip();
-String heltec_wifi_mac();
-void heltec_wifi_hostname(const char* hostname);
-String heltec_wifi_status_string();
-int heltec_wifi_scan(bool showOnDisplay = true);
-String heltec_wifi_scan_result(int index);
+bool SensorSentinel_wifi_begin(uint8_t maxAttempts = 20);
+bool SensorSentinel_wifi_maintain();
+bool SensorSentinel_wifi_connected();
+int SensorSentinel_wifi_rssi();
+void SensorSentinel_wifi_disconnect();
+String SensorSentinel_wifi_ip();
+String SensorSentinel_wifi_mac();
+void SensorSentinel_wifi_hostname(const char* hostname);
+String SensorSentinel_wifi_status_string();
+int SensorSentinel_wifi_scan(bool showOnDisplay = true);
+String SensorSentinel_wifi_scan_result(int index);
 
-#endif // HELTEC_WIFI_HELPER_H
+#endif // SensorSentinel_WIFI_HELPER_H

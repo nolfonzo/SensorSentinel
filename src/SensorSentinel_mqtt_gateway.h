@@ -1,10 +1,10 @@
 /**
- * @file heltec_mqtt_gateway.h
+ * @file SensorSentinel_mqtt_gateway.h
  * @brief MQTT helper functions for Heltec boards
  */
 
-#ifndef HELTEC_MQTT_GATEWAY_H
-#define HELTEC_MQTT_GATEWAY_H
+#ifndef SensorSentinel_MQTT_GATEWAY_H
+#define SensorSentinel_MQTT_GATEWAY_H
 
 #include <Arduino.h>
 #include <PubSubClient.h>  // MQTT client library
@@ -21,7 +21,7 @@
  * @param ntpServer3 Tertiary NTP server address
  * @return boolean True if time was synchronized successfully
  */
-boolean heltec_mqtt_sync_time(long timezone, int daylightOffset,
+boolean SensorSentinel_mqtt_sync_time(long timezone, int daylightOffset,
                       const char* ntpServer1, const char* ntpServer2, 
                       const char* ntpServer3);
 
@@ -32,7 +32,7 @@ boolean heltec_mqtt_sync_time(long timezone, int daylightOffset,
  * 
  * @return boolean True if time was synchronized successfully
  */
-boolean heltec_mqtt_sync_time_default();
+boolean SensorSentinel_mqtt_sync_time_default();
 
 /**
  * @brief Generate a unique MQTT client ID based on MAC address
@@ -42,7 +42,7 @@ boolean heltec_mqtt_sync_time_default();
  * 
  * @return String The generated client ID
  */
-String heltec_mqtt_get_client_id();
+String SensorSentinel_mqtt_get_client_id();
 
 /**
  * @brief Initialize the MQTT client with broker settings
@@ -52,7 +52,7 @@ String heltec_mqtt_get_client_id();
  * 
  * @return boolean True if initialization was successful
  */
-boolean heltec_mqtt_init();
+boolean SensorSentinel_mqtt_init();
 
 /**
  * @brief Connect to the MQTT broker
@@ -62,7 +62,7 @@ boolean heltec_mqtt_init();
  * 
  * @return boolean True if connected successfully
  */
-boolean heltec_mqtt_connect();
+boolean SensorSentinel_mqtt_connect();
 
 /**
  * @brief Set up MQTT with optional time synchronization
@@ -73,7 +73,7 @@ boolean heltec_mqtt_connect();
  * @param syncTimeOnConnect Whether to synchronize time during setup (default: true)
  * @return boolean True if setup was successful
  */
-boolean heltec_mqtt_setup(boolean syncTimeOnConnect = true);
+boolean SensorSentinel_mqtt_setup(boolean syncTimeOnConnect = true);
 
 /**
  * @brief Maintain MQTT connection
@@ -83,7 +83,7 @@ boolean heltec_mqtt_setup(boolean syncTimeOnConnect = true);
  * 
  * @return boolean True if connected, false if disconnected
  */
-boolean heltec_mqtt_maintain();
+boolean SensorSentinel_mqtt_maintain();
 
 /**
  * @brief Add timestamp fields to a JSON document
@@ -97,7 +97,7 @@ boolean heltec_mqtt_maintain();
  * @param useFormattedTime Whether to include formatted time strings (default: false)
  * @return boolean True if synchronized time was available
  */
-boolean heltec_mqtt_add_timestamp(JsonDocument& doc, bool useFormattedTime = false);
+boolean SensorSentinel_mqtt_add_timestamp(JsonDocument& doc, bool useFormattedTime = false);
 
 /**
  * @brief Publish a string message to an MQTT topic
@@ -107,7 +107,7 @@ boolean heltec_mqtt_add_timestamp(JsonDocument& doc, bool useFormattedTime = fal
  * @param retained Whether the message should be retained by the broker (default: false)
  * @return boolean True if published successfully
  */
-boolean heltec_mqtt_publish(const char* topic, const char* payload, boolean retained = false);
+boolean SensorSentinel_mqtt_publish(const char* topic, const char* payload, boolean retained = false);
 
 /**
  * @brief Publish a JSON document to an MQTT topic
@@ -121,7 +121,7 @@ boolean heltec_mqtt_publish(const char* topic, const char* payload, boolean reta
  * @param useFormattedTime Whether to include formatted time in timestamps (default: false)
  * @return boolean True if published successfully
  */
-boolean heltec_mqtt_publish_json(const char* topic, JsonDocument& doc, boolean retained = false, boolean useFormattedTime = false);
+boolean SensorSentinel_mqtt_publish_json(const char* topic, JsonDocument& doc, boolean retained = false, boolean useFormattedTime = false);
 
 /**
  * @brief Publish device status to the status topic
@@ -133,17 +133,17 @@ boolean heltec_mqtt_publish_json(const char* topic, JsonDocument& doc, boolean r
  * @param retained Whether the message should be retained by the broker (default: true)
  * @return boolean True if published successfully
  */
-boolean heltec_mqtt_publish_status(const char* status, boolean retained = true);
+boolean SensorSentinel_mqtt_publish_status(const char* status, boolean retained = true);
 
 /**
  * @brief Publish "ok" status with default settings
  * 
- * Simplified version of heltec_mqtt_publish_status that uses "ok" as status
+ * Simplified version of SensorSentinel_mqtt_publish_status that uses "ok" as status
  * and sets the retained flag to true.
  * 
  * @return boolean True if published successfully
  */
-boolean heltec_mqtt_publish_status();
+boolean SensorSentinel_mqtt_publish_status();
 
 /**
  * @brief Display MQTT status on the Heltec OLED display
@@ -153,7 +153,7 @@ boolean heltec_mqtt_publish_status();
  * Also logs detailed information to the serial console.
  * 
  */
-void heltec_mqtt_log_status();
+void SensorSentinel_mqtt_log_status();
 
 /**
  * @brief Get reference to the MQTT client object
@@ -162,7 +162,7 @@ void heltec_mqtt_log_status();
  * 
  * @return PubSubClient& Reference to the MQTT client
  */
-PubSubClient& heltec_mqtt_get_client();
+PubSubClient& SensorSentinel_mqtt_get_client();
 
 /**
  * @brief Calculate WiFi signal quality percentage from RSSI
@@ -173,6 +173,6 @@ PubSubClient& heltec_mqtt_get_client();
  * 
  * @return int Signal quality percentage (0-100)
  */
-int heltec_wifi_quality();
+int SensorSentinel_wifi_quality();
 
-#endif // HELTEC_MQTT_GATEWAY_H
+#endif // SensorSentinel_MQTT_GATEWAY_H

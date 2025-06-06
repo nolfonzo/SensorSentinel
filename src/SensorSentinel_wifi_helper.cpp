@@ -1,9 +1,9 @@
 /**
- * @file heltec_wifi_helper.cpp
- * @brief Implementation of WiFi helper functions for Heltec boards
+ * @file SensorSentinel_wifi_helper.cpp
+ * @brief Implementation of WiFi helper functions
  */
 
-#include "heltec_wifi_helper.h"
+#include "SensorSentinel_wifi_helper.h"
 #include "heltec_unofficial_revised.h" // For access to the display functions
 
 // Global WiFi variables
@@ -26,7 +26,7 @@ static void displayScanResults(int networksFound);
  * @param maxAttempts Maximum number of connection attempts
  * @return true if connected, false otherwise
  */
-bool heltec_wifi_begin(uint8_t maxAttempts) {
+bool SensorSentinel_wifi_begin(uint8_t maxAttempts) {
   if (WiFi.status() == WL_CONNECTED) {
     _wifi_connected = true;
     return true;
@@ -94,7 +94,7 @@ bool heltec_wifi_begin(uint8_t maxAttempts) {
  * 
  * @return Current connection status
  */
-bool heltec_wifi_maintain() {
+bool SensorSentinel_wifi_maintain() {
   if (WiFi.status() == WL_CONNECTED) {
     _wifi_connected = true;
     return true;
@@ -129,7 +129,7 @@ bool heltec_wifi_maintain() {
  * 
  * @return Connection status
  */
-bool heltec_wifi_connected() {
+bool SensorSentinel_wifi_connected() {
   return WiFi.status() == WL_CONNECTED;
 }
 
@@ -138,7 +138,7 @@ bool heltec_wifi_connected() {
  * 
  * @return RSSI value in dBm, or 0 if not connected
  */
-int heltec_wifi_rssi() {
+int SensorSentinel_wifi_rssi() {
   if (WiFi.status() == WL_CONNECTED) {
     return WiFi.RSSI();
   }
@@ -148,7 +148,7 @@ int heltec_wifi_rssi() {
 /**
  * @brief Disconnect from WiFi network
  */
-void heltec_wifi_disconnect() {
+void SensorSentinel_wifi_disconnect() {
   WiFi.disconnect(true);
   _wifi_connected = false;
 }
@@ -158,7 +158,7 @@ void heltec_wifi_disconnect() {
  * 
  * @return IP address as String, or "0.0.0.0" if not connected
  */
-String heltec_wifi_ip() {
+String SensorSentinel_wifi_ip() {
   if (WiFi.status() == WL_CONNECTED) {
     return WiFi.localIP().toString();
   }
@@ -170,7 +170,7 @@ String heltec_wifi_ip() {
  * 
  * @return MAC address as String
  */
-String heltec_wifi_mac() {
+String SensorSentinel_wifi_mac() {
   return WiFi.macAddress();
 }
 
@@ -179,7 +179,7 @@ String heltec_wifi_mac() {
  * 
  * @param hostname The hostname to set
  */
-void heltec_wifi_hostname(const char* hostname) {
+void SensorSentinel_wifi_hostname(const char* hostname) {
   WiFi.setHostname(hostname);
 }
 
@@ -188,7 +188,7 @@ void heltec_wifi_hostname(const char* hostname) {
  * 
  * @return Human-readable WiFi status
  */
-String heltec_wifi_status_string() {
+String SensorSentinel_wifi_status_string() {
   switch (WiFi.status()) {
     case WL_CONNECTED: return "Connected";
     case WL_DISCONNECTED: return "Disconnected";
@@ -205,7 +205,7 @@ String heltec_wifi_status_string() {
  * @param showOnDisplay Whether to show results on the display
  * @return Number of networks found
  */
-int heltec_wifi_scan() {
+int SensorSentinel_wifi_scan() {
   // Check if cached results are still valid
   if (WiFi.scanComplete() >= 0 && millis() - _last_scan_time < SCAN_CACHE_TIMEOUT) {
     Serial.println("Using cached WiFi scan results");
@@ -239,7 +239,7 @@ int heltec_wifi_scan() {
  * @param index Network index (0-based)
  * @return Formatted string with network details or empty string if invalid
  */
-String heltec_wifi_scan_result(int index) {
+String SensorSentinel_wifi_scan_result(int index) {
   if (index < 0 || index >= WiFi.scanComplete()) {
     return "";
   }

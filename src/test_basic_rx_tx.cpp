@@ -39,10 +39,10 @@ void onPacketReceived(String &data, float rssi, float snr) {
 void initializeGPS() {
   heltec_clear_display(2, 1);
   
-  #ifdef HELTEC_GNSS
+  #ifdef SensorSentinel_GNSS
     if (!gpsInitialized) {
       both.println("Initializing GPS...");
-      heltec_gnss_begin();
+      SensorSentinel_gnss_begin();
       gpsInitialized = true;
       both.println("GPS initialized");
       delay(1000); // Give GPS a moment to start
@@ -58,7 +58,7 @@ void transmitPacket(bool sendGPS = false) {
   // First, prepare all our data before unsubscribing
   String message;
   
-  #ifdef HELTEC_GNSS
+  #ifdef SensorSentinel_GNSS
     if (sendGPS && gpsInitialized) {
       // Create GPS location message
       message = "GPS Loc";
@@ -87,7 +87,7 @@ void transmitPacket(bool sendGPS = false) {
   
   #ifndef HELTEC_NO_RADIO_INSTANCE
     // Now unsubscribe just before transmission
-    heltec_unsubscribe_packets();
+    SensorSentinel_unsubscribe_packets();
     
     // LED on during transmission
     heltec_led(50);
@@ -98,7 +98,7 @@ void transmitPacket(bool sendGPS = false) {
     txDuration = millis() - txDuration;
     
     // Immediately resubscribe after transmission
-    heltec_subscribe_packets(onPacketReceived);
+    SensorSentinel_subscribe_packets(onPacketReceived);
     
     // LED off
     heltec_led(0);
@@ -132,9 +132,9 @@ void setup() {
   both.println("Initializing...");
   
   // Subscribe to packet events using the library's subscription method
-  heltec_subscribe_packets(onPacketReceived);
+  SensorSentinel_subscribe_packets(onPacketReceived);
   
-  // Start listening for packets (done by heltec_subscribe_packets)
+  // Start listening for packets (done by SensorSentinel_subscribe_packets)
   both.println("Listening for packets...");
   
   if (PAUSE > 0) {
@@ -143,7 +143,7 @@ void setup() {
     both.println("Manual tx (press button)");
   }
   
-  #ifdef HELTEC_GNSS
+  #ifdef SensorSentinel_GNSS
     both.println("Button = GPS location");
   #else
     both.println("Button = Manual TX");
@@ -155,17 +155,17 @@ void setup() {
 
 void loop() {
   // Handle button, power control, GNSS updates, and display updates
-  // This also calls heltec_process_packets() which processes LoRa packets
+  // This also calls SensorSentinel_process_packets() which processes LoRa packets
   heltec_loop();
   
   bool txLegal = millis() > lastTxTime + minimumPause;
   bool timeToTransmit = (PAUSE > 0) && (millis() - lastTxTime > (PAUSE * 1000));
   bool buttonPressed = heltec_button_clicked();
 
-  #ifdef HELTEC_GNSS
+  #ifdef SensorSentinel_GNSS
     // Update GNSS data continuously if initialized
     if (gpsInitialized) {
-      heltec_gnss_update();
+      SensorSentinel_gnss_update();
     }
     
     if (buttonPressed) { // if button is pressed, we'll send GPS info
@@ -177,7 +177,7 @@ void loop() {
         
         if (sats == 0) {
           // No satellites - just show message and don't queue transmission
-          heltec_clear_display(2,1);
+          SensorSentinel_clear_display(2,1);
           both.println("GPS Status");
           both.println("No satellites");
           both.println("acquired");
@@ -206,7 +206,7 @@ void loop() {
 
   // Handle pending GPS transmission
   if (pendingGpsTransmit && txLegal) {
-    #ifdef HELTEC_GNSS
+    #ifdef SensorSentinel_GNSS
       // Display clearing happens inside transmitPacket
       transmitPacket(true); 
     #endif

@@ -1,5 +1,5 @@
 /**
- * Simplified Heltec LoRa Packet Sender
+ * Simple LoRa Packet Sender
  * - Based on the bidirectional transceiver pattern
  * - Uses proper duty cycle calculation
  */
@@ -81,7 +81,7 @@ void setup() {
   // Display board information
   heltec_clear_display(1, 1);
   both.println("Heltec LoRa Sender");
-  both.printf("Board: %s\n", heltec_get_board_name());
+  both.printf("Board: %s\n", SensorSentinel_get_board_name());
   
   heltec_clear_display(1, 1);
   both.println("Initializing...");

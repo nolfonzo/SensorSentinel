@@ -1,13 +1,13 @@
 /**
- * @file heltec_send_sensor_packet.cpp
- * @brief Periodic sensor and GNSS packet sender for Heltec boards
+ * @file SensorSentinel_send_sensor_packet.cpp
+ * @brief Periodic sensor and GNSS packet sender
  * 
  * Sends sensor packets every 30 seconds and GNSS packets every 90 seconds
- * using the heltec_unofficial_revised and heltec_sensor_packet libraries.
+ * using the heltec_unofficial_revised and SensorSentinel_packeti_helper libraries.
  */
 
 #include "heltec_unofficial_revised.h"
-#include "heltec_sensor_packet_helper.h"
+#include "SensorSentinel_packet_helper.h"
 
 // Configuration
 // #define SENSOR_INTERVAL 30000  // Sensor send interval in milliseconds 
@@ -79,8 +79,8 @@ void loop() {
  */
 void sendSensorPacket() {
   // Create and initialize the sensor packet
-  heltec_sensor_packet_t packet;
-  bool initSuccess = heltec_init_sensor_packet(&packet, sensorPacketCounter++);
+  SensorSentinel_sensor_packet_t packet;
+  bool initSuccess = SensorSentinel_init_sensor_packet(&packet, sensorPacketCounter++);
 
   if (!initSuccess) {
     Serial.println("ERROR: Failed to initialize sensor packet");
@@ -110,15 +110,15 @@ void sendSensorPacket() {
   }
   
   // Turn off LED
-  heltec_led(0);
+  SensorSentinel_led(0);
   
   // Update display
-  heltec_display_update();
+  SensorSentinel_display_update();
   
   // Print detailed packet info to Serial
-  heltec_print_packet_info(&packet, false);
+  SensorSentinel_print_packet_info(&packet, false);
   // Print the packet as JSON
-  heltec_print_packet_json(&packet); 
+  SensorSentinel_print_packet_json(&packet); 
 
   Serial.println("---------------------------\n");
 }
@@ -128,8 +128,8 @@ void sendSensorPacket() {
  */
 void sendGnssPacket() {
   // Create and initialize GNSS packet
-  heltec_gnss_packet_t packet;
-  bool hasFix = heltec_init_gnss_packet(&packet, gnssPacketCounter++);
+  SensorSentinel_gnss_packet_t packet;
+  bool hasFix = SensorSentinel_init_gnss_packet(&packet, gnssPacketCounter++);
   
   // Show basic info on display
   heltec_clear_display();
@@ -167,12 +167,12 @@ void sendGnssPacket() {
   heltec_led(0);
   
   // Update display
-  heltec_display_update();
+  SensorSentinel_display_update();
   
   // Print detailed packet info to Serial
-  heltec_print_packet_info(&packet, false);
+  SensorSentinel_print_packet_info(&packet, false);
   // Print the packet as JSON
-  heltec_print_packet_json(&packet);  
+  SensorSentinel_print_packet_json(&packet);  
 
   Serial.println("---------------------------\n");
 }

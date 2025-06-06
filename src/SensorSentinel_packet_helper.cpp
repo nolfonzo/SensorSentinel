@@ -1,17 +1,17 @@
 /**
- * @file Heltec_Sensor_Packet.cpp
+ * @file SensorSentinel_Sensor_Packet.cpp
  * @brief Implementation of packet handling functions for Heltec boards
  */
 
-#include "heltec_sensor_packet_helper.h"
+#include "SensorSentinel_packet_helper.h"
 #include "heltec_unofficial_revised.h"
 #include <ArduinoJson.h>
 #include <string.h>  // For memcpy
 
 // Get a unique node ID based on ESP32's MAC address
-uint32_t heltec_get_node_id() {
+uint32_t SensorSentinel_get_node_id() {
   // Use WiFi MAC address if WiFi is available
-  #if defined(ESP32) && !defined(HELTEC_NO_WIFI)
+  #if defined(ESP32) && !defined(SensorSentinel_NO_WIFI)
     uint8_t mac[6];
     esp_read_mac(mac, ESP_MAC_WIFI_STA);
     
@@ -36,17 +36,17 @@ uint32_t heltec_get_node_id() {
  * @param packet Pointer to sensor packet structure to initialize
  * @param counter Message sequence counter value
  */
-bool heltec_init_sensor_packet(heltec_sensor_packet_t* packet, uint32_t counter) {
+bool SensorSentinel_init_sensor_packet(SensorSentinel_sensor_packet_t* packet, uint32_t counter) {
   if (!packet) false;
   
   // Clear the structure first
-  memset(packet, 0, sizeof(heltec_sensor_packet_t));
+  memset(packet, 0, sizeof(SensorSentinel_sensor_packet_t));
   
   // Set message type
-  packet->messageType = HELTEC_MSG_SENSOR;  // Using new constant name
+  packet->messageType = SensorSentinel_MSG_SENSOR;  // Using new constant name
   
   // Set basic information
-  packet->nodeId = heltec_get_node_id();
+  packet->nodeId = SensorSentinel_get_node_id();
   packet->messageCounter = counter;
   packet->uptime = millis() / 1000;  // Seconds since boot
   
@@ -56,7 +56,7 @@ bool heltec_init_sensor_packet(heltec_sensor_packet_t* packet, uint32_t counter)
   packet->batteryLevel = heltec_battery_percent(batteryVolts);
   
   // Get pin readings
-  heltec_read_all_pins(&packet->pins);
+  SensorSentinel_read_all_pins(&packet->pins);
   
   return true;
 }
@@ -71,17 +71,17 @@ bool heltec_init_sensor_packet(heltec_sensor_packet_t* packet, uint32_t counter)
  * @param counter Message sequence counter value
  * @return true if valid location data was available, false if no fix
  */
-bool heltec_init_gnss_packet(heltec_gnss_packet_t* packet, uint32_t counter) {
+bool SensorSentinel_init_gnss_packet(SensorSentinel_gnss_packet_t* packet, uint32_t counter) {
   if (!packet) return false;
   
   // Clear the structure first
-  memset(packet, 0, sizeof(heltec_gnss_packet_t));
+  memset(packet, 0, sizeof(SensorSentinel_gnss_packet_t));
   
   // Set message type
-  packet->messageType = HELTEC_MSG_GNSS;
+  packet->messageType = SensorSentinel_MSG_GNSS;
   
   // Set basic information
-  packet->nodeId = heltec_get_node_id();
+  packet->nodeId = SensorSentinel_get_node_id();
   packet->messageCounter = counter;
   packet->uptime = millis() / 1000;  // Seconds since boot
   
@@ -101,9 +101,9 @@ bool heltec_init_gnss_packet(heltec_gnss_packet_t* packet, uint32_t counter) {
   // Attempt to populate with GNSS data if available
   bool hasValidFix = false;
   
-  #ifdef HELTEC_GNSS
+  #ifdef SensorSentinel_GNSS
   // Update GNSS data
-  heltec_gnss_update();
+  SensorSentinel_gnss_update();
   
   if (gps.location.isValid()) {
     packet->latitude = gps.location.lat();
@@ -125,16 +125,16 @@ bool heltec_init_gnss_packet(heltec_gnss_packet_t* packet, uint32_t counter) {
  * Useful for allocating the correct buffer size or validating 
  * received packet lengths.
  * 
- * @param messageType The type of message (HELTEC_MSG_SENSOR or HELTEC_MSG_GNSS)
+ * @param messageType The type of message (SensorSentinel_MSG_SENSOR or SensorSentinel_MSG_GNSS)
  * @return The size of the packet in bytes, or 0 if the message type is unknown
  */
-size_t heltec_get_packet_size(uint8_t messageType) {
+size_t SensorSentinel_get_packet_size(uint8_t messageType) {
   switch (messageType) {
-    case HELTEC_MSG_SENSOR:
-      return sizeof(heltec_sensor_packet_t);
+    case SensorSentinel_MSG_SENSOR:
+      return sizeof(SensorSentinel_sensor_packet_t);
     
-    case HELTEC_MSG_GNSS:
-      return sizeof(heltec_gnss_packet_t);
+    case SensorSentinel_MSG_GNSS:
+      return sizeof(SensorSentinel_gnss_packet_t);
     
     default:
       // Unknown message type
@@ -155,7 +155,7 @@ size_t heltec_get_packet_size(uint8_t messageType) {
  * @param showAll Whether to show all fields including reserved bytes
  * @return true if the packet was recognized and printed, false otherwise
  */
-bool heltec_print_packet_info(const void* packet, bool showAll) {
+bool SensorSentinel_print_packet_info(const void* packet, bool showAll) {
   if (!packet) {
     Serial.println("Error: Null packet pointer");
     return false;
@@ -169,8 +169,8 @@ bool heltec_print_packet_info(const void* packet, bool showAll) {
   
   // Handle different packet types
   switch (messageType) {
-    case HELTEC_MSG_SENSOR: {
-      const heltec_sensor_packet_t* sensorPacket = (const heltec_sensor_packet_t*)packet;
+    case SensorSentinel_MSG_SENSOR: {
+      const SensorSentinel_sensor_packet_t* sensorPacket = (const SensorSentinel_sensor_packet_t*)packet;
       
       // Print header information
       Serial.println("Type: Sensor Data");
@@ -205,8 +205,8 @@ bool heltec_print_packet_info(const void* packet, bool showAll) {
       return true;
     }
     
-    case HELTEC_MSG_GNSS: {
-      const heltec_gnss_packet_t* gnssPacket = (const heltec_gnss_packet_t*)packet;
+    case SensorSentinel_MSG_GNSS: {
+      const SensorSentinel_gnss_packet_t* gnssPacket = (const SensorSentinel_gnss_packet_t*)packet;
       
       // Print header information
       Serial.println("Type: GNSS Location Data");
@@ -262,7 +262,7 @@ bool heltec_print_packet_info(const void* packet, bool showAll) {
  * @param outputSize Size of the output structure in bytes
  * @return Message type if successful, 0 if parsing failed
  */
-uint8_t heltec_parse_packet(const uint8_t* data, size_t dataSize, void* outputPacket, size_t outputSize) {
+uint8_t SensorSentinel_parse_packet(const uint8_t* data, size_t dataSize, void* outputPacket, size_t outputSize) {
   // Check output parameter
   if (!outputPacket) {
     Serial.println("ERROR: Null output packet pointer");
@@ -277,7 +277,7 @@ uint8_t heltec_parse_packet(const uint8_t* data, size_t dataSize, void* outputPa
   
   // Get message type and expected size
   uint8_t messageType = data[0];
-  size_t expectedSize = heltec_get_packet_size(messageType);
+  size_t expectedSize = SensorSentinel_get_packet_size(messageType);
   
   // Check if the message type is valid before proceeding
   if (expectedSize == 0) {
@@ -293,7 +293,7 @@ uint8_t heltec_parse_packet(const uint8_t* data, size_t dataSize, void* outputPa
   }
   
   // Now use validate for comprehensive packet validation
-  if (!heltec_validate_packet(data, dataSize, true)) {
+  if (!SensorSentinel_validate_packet(data, dataSize, true)) {
     return 0; // Validation failed
   }
   
@@ -301,13 +301,13 @@ uint8_t heltec_parse_packet(const uint8_t* data, size_t dataSize, void* outputPa
   memcpy(outputPacket, data, expectedSize);
   
   // Log success based on message type
-  if (messageType == HELTEC_MSG_SENSOR) {
-    heltec_sensor_packet_t* sensorPacket = (heltec_sensor_packet_t*)outputPacket;
+  if (messageType == SensorSentinel_MSG_SENSOR) {
+    SensorSentinel_sensor_packet_t* sensorPacket = (SensorSentinel_sensor_packet_t*)outputPacket;
     Serial.printf("INFO: Successfully parsed SENSOR packet from node 0x%08X (msg #%u)\n", 
                  sensorPacket->nodeId, sensorPacket->messageCounter);
   }
-  else if (messageType == HELTEC_MSG_GNSS) {
-    heltec_gnss_packet_t* gnssPacket = (heltec_gnss_packet_t*)outputPacket;
+  else if (messageType == SensorSentinel_MSG_GNSS) {
+    SensorSentinel_gnss_packet_t* gnssPacket = (SensorSentinel_gnss_packet_t*)outputPacket;
     Serial.printf("INFO: Successfully parsed GNSS packet from node 0x%08X (msg #%u)\n", 
                  gnssPacket->nodeId, gnssPacket->messageCounter);
     Serial.printf("      Location: %.6f, %.6f\n", gnssPacket->latitude, gnssPacket->longitude);
@@ -327,7 +327,7 @@ uint8_t heltec_parse_packet(const uint8_t* data, size_t dataSize, void* outputPa
  * @param verbose Whether to print detailed error messages to Serial
  * @return true if the packet is valid, false otherwise
  */
-bool heltec_validate_packet(const void* data, size_t dataSize, bool verbose) {
+bool SensorSentinel_validate_packet(const void* data, size_t dataSize, bool verbose) {
   if (!data) {
     if (verbose) Serial.println("ERROR: Null packet pointer");
     return false;
@@ -343,7 +343,7 @@ bool heltec_validate_packet(const void* data, size_t dataSize, bool verbose) {
   uint8_t messageType = *((const uint8_t*)data);
   
   // Get the expected size for this message type
-  size_t expectedSize = heltec_get_packet_size(messageType);
+  size_t expectedSize = SensorSentinel_get_packet_size(messageType);
   
   // Check if it's a known message type
   if (expectedSize == 0) {
@@ -360,11 +360,11 @@ bool heltec_validate_packet(const void* data, size_t dataSize, bool verbose) {
   
   // Validate based on message type
   switch (messageType) {
-    case HELTEC_MSG_SENSOR: {
-      const heltec_sensor_packet_t* packet = (const heltec_sensor_packet_t*)data;
+    case SensorSentinel_MSG_SENSOR: {
+      const SensorSentinel_sensor_packet_t* packet = (const SensorSentinel_sensor_packet_t*)data;
       
       // Validate message type (should match what we extracted)
-      if (packet->messageType != HELTEC_MSG_SENSOR) {
+      if (packet->messageType != SensorSentinel_MSG_SENSOR) {
         if (verbose) Serial.println("ERROR: Message type field corrupted");
         return false;
       }
@@ -400,11 +400,11 @@ bool heltec_validate_packet(const void* data, size_t dataSize, bool verbose) {
       return true;
     }
     
-    case HELTEC_MSG_GNSS: {
-      const heltec_gnss_packet_t* packet = (const heltec_gnss_packet_t*)data;
+    case SensorSentinel_MSG_GNSS: {
+      const SensorSentinel_gnss_packet_t* packet = (const SensorSentinel_gnss_packet_t*)data;
       
       // Validate message type
-      if (packet->messageType != HELTEC_MSG_GNSS) {
+      if (packet->messageType != SensorSentinel_MSG_GNSS) {
         if (verbose) Serial.println("ERROR: Message type field corrupted");
         return false;
       }
@@ -468,7 +468,7 @@ bool heltec_validate_packet(const void* data, size_t dataSize, bool verbose) {
   }
 }
 
-bool heltec_copy_packet(void* dest, size_t destSize, const void* src, bool verbose = false) {
+bool SensorSentinel_copy_packet(void* dest, size_t destSize, const void* src, bool verbose = false) {
   if (!dest || !src) {
     if (verbose) Serial.println("ERROR: Null pointer in copy operation");
     return false;
@@ -478,7 +478,7 @@ bool heltec_copy_packet(void* dest, size_t destSize, const void* src, bool verbo
   uint8_t messageType = *((const uint8_t*)src);
   
   // Get the appropriate size based on message type
-  size_t copySize = heltec_get_packet_size(messageType);
+  size_t copySize = SensorSentinel_get_packet_size(messageType);
   
   if (copySize == 0) {
     if (verbose) Serial.printf("ERROR: Unknown packet type 0x%02X\n", messageType);
@@ -513,14 +513,14 @@ bool heltec_copy_packet(void* dest, size_t destSize, const void* src, bool verbo
  * @param errorCode Optional pointer to store error code
  * @return true if conversion succeeded, false if failed
  */
-bool heltec_packet_to_json_doc(const void* packet, JsonDocument& doc, 
-                              heltec_json_error_t* errorCode) {
+bool SensorSentinel_packet_to_json_doc(const void* packet, JsonDocument& doc, 
+                              SensorSentinel_json_error_t* errorCode) {
   // Initialize error code to success
-  if (errorCode) *errorCode = HELTEC_JSON_SUCCESS;
+  if (errorCode) *errorCode = SensorSentinel_JSON_SUCCESS;
   
   // Validate input parameters
   if (!packet) {
-    if (errorCode) *errorCode = HELTEC_JSON_ERROR_NULL_PARAMS;
+    if (errorCode) *errorCode = SensorSentinel_JSON_ERROR_NULL_PARAMS;
     return false;
   }
   
@@ -532,19 +532,19 @@ bool heltec_packet_to_json_doc(const void* packet, JsonDocument& doc,
     doc.clear();
   } catch (...) {
     // Handle exceptions from ArduinoJson operations
-    if (errorCode) *errorCode = HELTEC_JSON_ERROR_SERIALIZATION;
+    if (errorCode) *errorCode = SensorSentinel_JSON_ERROR_SERIALIZATION;
     return false;
   }
   
   // Convert different packet types to JSON
   try {
     switch (messageType) {
-      case HELTEC_MSG_SENSOR: {
-        const heltec_sensor_packet_t* sensorPacket = (const heltec_sensor_packet_t*)packet;
+      case SensorSentinel_MSG_SENSOR: {
+        const SensorSentinel_sensor_packet_t* sensorPacket = (const SensorSentinel_sensor_packet_t*)packet;
         
         // Validate essential data
         if (sensorPacket->nodeId == 0) {
-          if (errorCode) *errorCode = HELTEC_JSON_ERROR_INVALID_DATA;
+          if (errorCode) *errorCode = SensorSentinel_JSON_ERROR_INVALID_DATA;
           return false;
         }
         
@@ -565,14 +565,14 @@ bool heltec_packet_to_json_doc(const void* packet, JsonDocument& doc,
         break;
       }
       
-      case HELTEC_MSG_GNSS: {
-        const heltec_gnss_packet_t* gnssPacket = (const heltec_gnss_packet_t*)packet;
+      case SensorSentinel_MSG_GNSS: {
+        const SensorSentinel_gnss_packet_t* gnssPacket = (const SensorSentinel_gnss_packet_t*)packet;
         
         // Validate essential data
         if (gnssPacket->nodeId == 0 ||
             gnssPacket->latitude < -90.0 || gnssPacket->latitude > 90.0 ||
             gnssPacket->longitude < -180.0 || gnssPacket->longitude > 180.0) {
-          if (errorCode) *errorCode = HELTEC_JSON_ERROR_INVALID_DATA;
+          if (errorCode) *errorCode = SensorSentinel_JSON_ERROR_INVALID_DATA;
           return false;
         }
         
@@ -595,12 +595,12 @@ bool heltec_packet_to_json_doc(const void* packet, JsonDocument& doc,
       
       default:
         // Unknown packet type
-        if (errorCode) *errorCode = HELTEC_JSON_ERROR_UNKNOWN_TYPE;
+        if (errorCode) *errorCode = SensorSentinel_JSON_ERROR_UNKNOWN_TYPE;
         return false;
     }
   } catch (...) {
     // Handle any JSON document manipulation errors
-    if (errorCode) *errorCode = HELTEC_JSON_ERROR_SERIALIZATION;
+    if (errorCode) *errorCode = SensorSentinel_JSON_ERROR_SERIALIZATION;
     return false;
   }
   
@@ -611,7 +611,7 @@ bool heltec_packet_to_json_doc(const void* packet, JsonDocument& doc,
  * @brief Convert a packet to JSON string format
  * 
  * Takes a packet of any supported type and converts it to a JSON string.
- * This is a wrapper around heltec_packet_to_json_doc that handles serialization.
+ * This is a wrapper around SensorSentinel_packet_to_json_doc that handles serialization.
  * 
  * @param packet Pointer to the packet to convert
  * @param buffer Output buffer to store the JSON string
@@ -620,15 +620,15 @@ bool heltec_packet_to_json_doc(const void* packet, JsonDocument& doc,
  * @param prettyPrint Whether to format the JSON with indentation (default: false)
  * @return true if conversion succeeded, false if failed
  */
-bool heltec_packet_to_json(const void* packet, char* buffer, size_t bufferSize, 
-                          heltec_json_error_t* errorCode, 
+bool SensorSentinel_packet_to_json(const void* packet, char* buffer, size_t bufferSize, 
+                          SensorSentinel_json_error_t* errorCode, 
                           bool prettyPrint) {
   // Initialize error code to success
-  if (errorCode) *errorCode = HELTEC_JSON_SUCCESS;
+  if (errorCode) *errorCode = SensorSentinel_JSON_SUCCESS;
   
   // Validate input parameters
   if (!packet || !buffer || bufferSize == 0) {
-    if (errorCode) *errorCode = HELTEC_JSON_ERROR_NULL_PARAMS;
+    if (errorCode) *errorCode = SensorSentinel_JSON_ERROR_NULL_PARAMS;
     
     // If buffer is valid, try to write an error message
     if (buffer && bufferSize > 0) {
@@ -652,8 +652,8 @@ bool heltec_packet_to_json(const void* packet, char* buffer, size_t bufferSize,
   JsonDocument doc;  // Adjust size based on your needs
   
   // Convert packet to JSON document
-  heltec_json_error_t conversionError = HELTEC_JSON_SUCCESS;
-  if (!heltec_packet_to_json_doc(packet, doc, &conversionError)) {
+  SensorSentinel_json_error_t conversionError = SensorSentinel_JSON_SUCCESS;
+  if (!SensorSentinel_packet_to_json_doc(packet, doc, &conversionError)) {
     // Propagate error code if caller requested it
     if (errorCode) *errorCode = conversionError;
     
@@ -662,16 +662,16 @@ bool heltec_packet_to_json(const void* packet, char* buffer, size_t bufferSize,
     char details[30] = {0};  // For additional error details
     
     switch (conversionError) {
-      case HELTEC_JSON_ERROR_NULL_PARAMS:
+      case SensorSentinel_JSON_ERROR_NULL_PARAMS:
         errorMsg = "Invalid parameters";
         break;
-      case HELTEC_JSON_ERROR_SMALL_BUFFER:
+      case SensorSentinel_JSON_ERROR_SMALL_BUFFER:
         errorMsg = "JSON document capacity too small";
         break;
-      case HELTEC_JSON_ERROR_INVALID_DATA:
+      case SensorSentinel_JSON_ERROR_INVALID_DATA:
         errorMsg = "Invalid packet data";
         break;
-      case HELTEC_JSON_ERROR_UNKNOWN_TYPE: {
+      case SensorSentinel_JSON_ERROR_UNKNOWN_TYPE: {
         errorMsg = "Unknown packet type";
         if (packet) {
           uint8_t messageType = *((const uint8_t*)packet);
@@ -679,7 +679,7 @@ bool heltec_packet_to_json(const void* packet, char* buffer, size_t bufferSize,
         }
         break;
       }
-      case HELTEC_JSON_ERROR_SERIALIZATION:
+      case SensorSentinel_JSON_ERROR_SERIALIZATION:
         errorMsg = "JSON serialization error";
         break;
       default:
@@ -702,13 +702,13 @@ bool heltec_packet_to_json(const void* packet, char* buffer, size_t bufferSize,
   try {
     requiredSize = prettyPrint ? measureJsonPretty(doc) : measureJson(doc);
   } catch (...) {
-    if (errorCode) *errorCode = HELTEC_JSON_ERROR_SERIALIZATION;
+    if (errorCode) *errorCode = SensorSentinel_JSON_ERROR_SERIALIZATION;
     snprintf(buffer, bufferSize, "{\"error\":\"Failed to measure JSON size\"}");
     return false;
   }
   
   if (requiredSize >= bufferSize) {
-    if (errorCode) *errorCode = HELTEC_JSON_ERROR_SMALL_BUFFER;
+    if (errorCode) *errorCode = SensorSentinel_JSON_ERROR_SMALL_BUFFER;
     // Provide detailed error with size information, but make sure it fits
     snprintf(buffer, bufferSize, "{\"error\":\"Buffer too small\",\"required\":%u}", 
              (unsigned int)requiredSize);
@@ -725,14 +725,14 @@ bool heltec_packet_to_json(const void* packet, char* buffer, size_t bufferSize,
     }
   } catch (...) {
     // Handle any unexpected exceptions from ArduinoJson
-    if (errorCode) *errorCode = HELTEC_JSON_ERROR_SERIALIZATION;
+    if (errorCode) *errorCode = SensorSentinel_JSON_ERROR_SERIALIZATION;
     snprintf(buffer, bufferSize, "{\"error\":\"JSON serialization failed\"}");
     return false;
   }
   
   // Double-check the serialization result
   if (bytesWritten == 0 || bytesWritten >= bufferSize) {
-    if (errorCode) *errorCode = HELTEC_JSON_ERROR_SERIALIZATION;
+    if (errorCode) *errorCode = SensorSentinel_JSON_ERROR_SERIALIZATION;
     snprintf(buffer, bufferSize, "{\"error\":\"JSON serialization failed\"}");
     return false;
   }
@@ -743,9 +743,9 @@ bool heltec_packet_to_json(const void* packet, char* buffer, size_t bufferSize,
 /**
  * @brief Print a packet as JSON to Serial
  */
-bool heltec_print_packet_json(const void* packet, bool prettyPrint) {
+bool SensorSentinel_print_packet_json(const void* packet, bool prettyPrint) {
   if (!packet) {
-    Serial.println("ERROR: Null packet pointer in heltec_print_packet_json");
+    Serial.println("ERROR: Null packet pointer in SensorSentinel_print_packet_json");
     return false;
   }
   
@@ -753,7 +753,7 @@ bool heltec_print_packet_json(const void* packet, bool prettyPrint) {
   char jsonBuffer[512];  // Adjust size as needed
   
   // Convert the packet to JSON
-  if (heltec_packet_to_json(packet, jsonBuffer, sizeof(jsonBuffer), nullptr, prettyPrint)) {
+  if (SensorSentinel_packet_to_json(packet, jsonBuffer, sizeof(jsonBuffer), nullptr, prettyPrint)) {
     // Print a header
     Serial.println("\nJSON:");
     
