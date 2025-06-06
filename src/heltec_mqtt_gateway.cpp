@@ -253,7 +253,7 @@ boolean heltec_mqtt_connect() {
     
     // Update display with error
     heltec_clear_display();
-    both.println("MQTT Connection Failed");
+    both.println("MQTT Connection Fail");
     both.printf("Error: %d\n", mqttState);
     both.printf("Retry in %d sec\n", mqttConnectionInterval/1000);
     heltec_display_update();
@@ -329,7 +329,7 @@ boolean heltec_mqtt_maintain() {
       if (heltec_mqtt_connect()) {
         Serial.println("MQTT reconnected successfully");
       } else {
-        Serial.printf("MQTT reconnection failed, will retry in %u seconds (state=%d)\n", 
+        Serial.printf("MQTT reconnection fail, will retry in %u seconds (state=%d)\n", 
                      mqttConnectionInterval/1000, mqttClient.state());
       }
     }

@@ -90,7 +90,7 @@ void sendSensorPacket() {
 
   // Show basic info on display
   heltec_clear_display();
-  both.println("\nSending Sensor Packet");
+  both.println("\nSending Packet: Sensor");
   both.printf("Packet #%u\n", packet.messageCounter);
   both.printf("Battery: %u%% (%.2fV)\n", 
              packet.batteryLevel, 
@@ -133,7 +133,7 @@ void sendGnssPacket() {
   
   // Show basic info on display
   heltec_clear_display();
-  both.println("\nSending GNSS Packet");
+  both.println("\nSending Packet: GNSS");
   both.printf("Packet #%u\n", packet.messageCounter);
   both.printf("Battery: %u%% (%.2fV)\n", 
              packet.batteryLevel, 

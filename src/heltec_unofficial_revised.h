@@ -11,8 +11,8 @@
  * - Wireless Stick Lite  
  * - Wireless Tracker V1.1 (added May 2025 by @nolfonzo)  
  *  
- * @author Original: @ropg  
- * @author Additions: @nolfonzo (May 2025)  
+ * @author Original: @ropg https://github.com/ropg/heltec_esp32_lora_v3 
+ * @author Additions: @nolfonzo (May 2025)  Added support for Tracker and refactored
  */  
 
 #ifndef heltec_unofficial_revised_H
