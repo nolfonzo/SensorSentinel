@@ -1,6 +1,6 @@
 [
     {
-        "id": "fd0f003631027bb5",
+        "id": "62f31c6b53afb626",
         "type": "tab",
         "label": "Flow 1",
         "disabled": false,
@@ -8,248 +8,149 @@
         "env": []
     },
     {
-        "id": "0a4345281a2bf08f",
-        "type": "mqtt-broker",
-        "name": "",
-        "broker": "localhost",
-        "port": 1883,
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "protocolVersion": 4,
-        "keepalive": 60,
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthRetain": "false",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closeQos": "0",
-        "closeRetain": "false",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willRetain": "false",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
+        "id": "ac73cfbba5e1dcae",
+        "type": "ui-base",
+        "name": "My Dashboard",
+        "path": "/dashboard",
+        "appIcon": "",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-notification",
+            "ui-control"
+        ],
+        "showPathInSidebar": false,
+        "headerContent": "page",
+        "navigationStyle": "default",
+        "titleBarStyle": "default",
+        "showReconnectNotification": true,
+        "notificationDisplayTime": 1,
+        "showDisconnectNotification": true,
+        "allowInstall": true
     },
     {
-        "id": "a2f823c171a5f5ad",
-        "type": "ui_tab",
-        "name": "Home",
-        "icon": "dashboard",
-        "disabled": false,
-        "hidden": false
-    },
-    {
-        "id": "fcd8d06e4bc42d39",
-        "type": "ui_base",
-        "theme": {
-            "name": "theme-light",
-            "lightTheme": {
-                "default": "#0094CE",
-                "baseColor": "#0094CE",
-                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
-                "edited": false
-            },
-            "darkTheme": {
-                "default": "#097479",
-                "baseColor": "#097479",
-                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
-                "edited": false
-            },
-            "customTheme": {
-                "name": "Untitled Theme 1",
-                "default": "#4B7930",
-                "baseColor": "#4B7930",
-                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
-            },
-            "themeState": {
-                "base-color": {
-                    "default": "#0094CE",
-                    "value": "#0094CE",
-                    "edited": false
-                },
-                "page-titlebar-backgroundColor": {
-                    "value": "#0094CE",
-                    "edited": false
-                },
-                "page-backgroundColor": {
-                    "value": "#fafafa",
-                    "edited": false
-                },
-                "page-sidebar-backgroundColor": {
-                    "value": "#ffffff",
-                    "edited": false
-                },
-                "group-textColor": {
-                    "value": "#1bbfff",
-                    "edited": false
-                },
-                "group-borderColor": {
-                    "value": "#ffffff",
-                    "edited": false
-                },
-                "group-backgroundColor": {
-                    "value": "#ffffff",
-                    "edited": false
-                },
-                "widget-textColor": {
-                    "value": "#111111",
-                    "edited": false
-                },
-                "widget-backgroundColor": {
-                    "value": "#0094ce",
-                    "edited": false
-                },
-                "widget-borderColor": {
-                    "value": "#ffffff",
-                    "edited": false
-                },
-                "base-font": {
-                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
-                }
-            },
-            "angularTheme": {
-                "primary": "indigo",
-                "accents": "blue",
-                "warn": "red",
-                "background": "grey",
-                "palette": "light"
-            }
+        "id": "c05b66df7c049376",
+        "type": "ui-theme",
+        "name": "Default Theme",
+        "colors": {
+            "surface": "#ffffff",
+            "primary": "#0094CE",
+            "bgPage": "#eeeeee",
+            "groupBg": "#ffffff",
+            "groupOutline": "#cccccc"
         },
-        "site": {
-            "name": "Node-RED Dashboard",
-            "hideToolbar": "false",
-            "allowSwipe": "false",
-            "lockMenu": "false",
-            "allowTempTheme": "true",
-            "dateFormat": "DD/MM/YYYY",
-            "sizes": {
-                "sx": 48,
-                "sy": 48,
-                "gx": 6,
-                "gy": 6,
-                "cx": 6,
-                "cy": 6,
-                "px": 0,
-                "py": 0
-            }
+        "sizes": {
+            "density": "default",
+            "pagePadding": "12px",
+            "groupGap": "12px",
+            "groupBorderRadius": "4px",
+            "widgetGap": "12px"
         }
     },
     {
-        "id": "023a1f56cb511e0f",
-        "type": "ui_group",
-        "name": "Sensor Data",
-        "tab": "a2f823c171a5f5ad",
+        "id": "f519202eda84521a",
+        "type": "ui-page",
+        "name": "Page 1",
+        "ui": "ac73cfbba5e1dcae",
+        "path": "/page1",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "c05b66df7c049376",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": 0,
+                "cols": 3
+            },
+            {
+                "name": "Tablet",
+                "px": 576,
+                "cols": 6
+            },
+            {
+                "name": "Small Desktop",
+                "px": 768,
+                "cols": 9
+            },
+            {
+                "name": "Desktop",
+                "px": 1024,
+                "cols": 12
+            }
+        ],
         "order": 1,
-        "disp": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "883d8d3194f035d9",
+        "type": "ui-group",
+        "name": "Group 1",
+        "page": "f519202eda84521a",
         "width": 6,
-        "collapse": false,
-        "className": ""
+        "height": 1,
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": true,
+        "disabled": false,
+        "groupType": "default"
     },
     {
-        "id": "9ec34f3058df3190",
-        "type": "mqtt in",
-        "z": "fd0f003631027bb5",
+        "id": "cc5553a258a8558a",
+        "type": "inject",
+        "z": "62f31c6b53afb626",
         "name": "",
-        "topic": "#",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "0a4345281a2bf08f",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 390,
-        "y": 200,
+        "props": [
+            {
+                "p": "options",
+                "v": "[\"dddd 1\", \"Optiodddddn 2\", \"Option 3\"]",
+                "vt": "json"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "*/1 0 * * *",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 510,
+        "y": 180,
         "wires": [
             [
-                "dd462b9dac40a911",
-                "65811a3608bc6edc"
+                "12c6698942600f1c"
             ]
         ]
     },
     {
-        "id": "dd462b9dac40a911",
-        "type": "debug",
-        "z": "fd0f003631027bb5",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 640,
-        "y": 200,
-        "wires": []
-    },
-    {
-        "id": "65811a3608bc6edc",
-        "type": "function",
-        "z": "fd0f003631027bb5",
-        "name": "Node Mapper",
-        "func": "// Contact mapping function with pin configurations and analog thresholds\nconst contacts = {\n    2697689064: {\n        name: \"John's Boat\",\n        email: \"john@example.com\",\n        owner: \"John Smith\",\n        pins: {\n            0: { \n                type: \"bilge_pump\", \n                label: \"Bilge Pump\", \n                alertLevel: \"HIGH\",\n                triggerOn: \"HIGH\"\n            },\n            1: { \n                type: \"door_sensor\", \n                label: \"Cabin Door\", \n                alertLevel: \"LOW\",\n                triggerOn: \"LOW\"\n            }\n        },\n        analog: {\n            0: {\n                type: \"fuel_level\",\n                label: \"Fuel Tank\",\n                unit: \"L\",\n                lowThreshold: 50,     // Alert when below 50L\n                highThreshold: null,  // No high alert\n                alertLevel: \"MEDIUM\"\n            },\n            1: {\n                type: \"engine_temp\",\n                label: \"Engine Temperature\",\n                unit: \"°C\",\n                lowThreshold: null,   // No low alert\n                highThreshold: 85,    // Alert when above 85°C\n                alertLevel: \"HIGH\"\n            },\n            2: {\n                type: \"battery_voltage\",\n                label: \"House Battery\",\n                unit: \"V\",\n                lowThreshold: 11.8,   // Alert when below 11.8V\n                highThreshold: 14.5,  // Alert when above 14.5V (overcharge)\n                alertLevel: \"MEDIUM\"\n            },\n            3: {\n                type: \"oil_pressure\",\n                label: \"Oil Pressure\",\n                unit: \"PSI\",\n                lowThreshold: 10,     // Critical low oil pressure\n                highThreshold: null,\n                alertLevel: \"HIGH\"\n            }\n        }\n    },\n    1234567890: {\n        name: \"Mary's Yacht\", \n        email: \"mary@example.com\",\n        owner: \"Mary Johnson\",\n        pins: {\n            1: { \n                type: \"bilge_pump\", \n                label: \"Bilge Pump\", \n                alertLevel: \"HIGH\",\n                triggerOn: \"HIGH\"\n            }\n        },\n        analog: {\n            0: {\n                type: \"water_level\",\n                label: \"Fresh Water Tank\",\n                unit: \"%\",\n                lowThreshold: 20,     // Alert when below 20%\n                highThreshold: null,\n                alertLevel: \"LOW\"\n            },\n            1: {\n                type: \"cabin_temp\",\n                label: \"Cabin Temperature\",\n                unit: \"°C\",\n                lowThreshold: 5,      // Freeze warning\n                highThreshold: 35,    // Overheat warning\n                alertLevel: \"MEDIUM\"\n            }\n        }\n    }\n};\n\nconst nodeId = msg.payload.nodeId;\nconst contact = contacts[nodeId];\n\nif (contact) {\n    msg.contact = contact;\n    msg.payload.contact = contact;\n    return msg;\n} else {\n    msg.contact = {\n        name: \"Unknown Node\",\n        email: null,\n        owner: \"Unknown\",\n        pins: {},\n        analog: {}\n    };\n    return msg;\n}",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 400,
-        "y": 420,
-        "wires": [
-            [
-                "a5b9140bf299118e"
-            ]
-        ]
-    },
-    {
-        "id": "a5b9140bf299118e",
-        "type": "function",
-        "z": "fd0f003631027bb5",
-        "name": "Sensor Alerts",
-        "func": "// Combined digital and analog alert detection\nconst digitalValue = msg.payload.digital;\nconst analogValues = msg.payload.analog; // Array of analog readings\nconst nodeId = msg.payload.nodeId;\nconst contact = msg.contact;\nconst alerts = [];\n\nif (!contact) {\n    return [msg, null];\n}\n\n// Digital pin alerts (existing code)\nif (contact.pins) {\n    for (let pinNum = 0; pinNum < 8; pinNum++) {\n        const pinConfig = contact.pins[pinNum];\n        if (!pinConfig) continue;\n        \n        const pinState = (digitalValue & (1 << pinNum)) !== 0;\n        const shouldAlert = (pinConfig.triggerOn === \"HIGH\" && pinState) || \n                           (pinConfig.triggerOn === \"LOW\" && !pinState);\n        \n        if (shouldAlert) {\n            alerts.push(createDigitalAlert(pinConfig, pinNum, pinState, contact, msg.payload));\n        }\n    }\n}\n\n// Analog pin alerts (NEW)\nif (contact.analog && analogValues) {\n    for (let analogPin = 0; analogPin < analogValues.length; analogPin++) {\n        const analogConfig = contact.analog[analogPin];\n        if (!analogConfig) continue;\n        \n        const currentValue = analogValues[analogPin];\n        \n        // Check low threshold\n        if (analogConfig.lowThreshold !== null && currentValue < analogConfig.lowThreshold) {\n            alerts.push(createAnalogAlert(analogConfig, analogPin, currentValue, \"LOW\", contact, msg.payload));\n        }\n        \n        // Check high threshold\n        if (analogConfig.highThreshold !== null && currentValue > analogConfig.highThreshold) {\n            alerts.push(createAnalogAlert(analogConfig, analogPin, currentValue, \"HIGH\", contact, msg.payload));\n        }\n    }\n}\n\n// Helper functions\nfunction createDigitalAlert(pinConfig, pinNum, pinState, contact, payload) {\n    return {\n        payload: {\n            alert: true,\n            alertType: \"DIGITAL\",\n            type: pinConfig.type.toUpperCase() + \"_ALERT\",\n            severity: pinConfig.alertLevel,\n            nodeId: contact.nodeId || payload.nodeId,\n            contact: contact,\n            pin: pinNum,\n            pinLabel: pinConfig.label,\n            pinState: pinState ? \"HIGH\" : \"LOW\",\n            triggerCondition: pinConfig.triggerOn,\n            timestamp: payload.time,\n            message: `${getAlertIcon(pinConfig.alertLevel)} ${pinConfig.label}: ${contact.name} (Pin ${pinNum} is ${pinState ? \"HIGH\" : \"LOW\"})`,\n            digitalValue: payload.digital\n        },\n        topic: `alert/digital/${pinConfig.type}`\n    };\n}\n\nfunction createAnalogAlert(analogConfig, analogPin, currentValue, thresholdType, contact, payload) {\n    const threshold = thresholdType === \"LOW\" ? analogConfig.lowThreshold : analogConfig.highThreshold;\n    const condition = thresholdType === \"LOW\" ? \"below\" : \"above\";\n    \n    return {\n        payload: {\n            alert: true,\n            alertType: \"ANALOG\",\n            type: analogConfig.type.toUpperCase() + \"_ALERT\",\n            severity: analogConfig.alertLevel,\n            nodeId: contact.nodeId || payload.nodeId,\n            contact: contact,\n            analogPin: analogPin,\n            analogLabel: analogConfig.label,\n            currentValue: currentValue,\n            threshold: threshold,\n            thresholdType: thresholdType,\n            unit: analogConfig.unit,\n            timestamp: payload.time,\n            message: `${getAlertIcon(analogConfig.alertLevel)} ${analogConfig.label}: ${contact.name} (${currentValue}${analogConfig.unit} is ${condition} ${threshold}${analogConfig.unit})`,\n            analogValues: payload.analog\n        },\n        topic: `alert/analog/${analogConfig.type}`\n    };\n}\n\nfunction getAlertIcon(level) {\n    switch(level) {\n        case \"HIGH\": return \"🚨\";\n        case \"MEDIUM\": return \"⚠️\";\n        case \"LOW\": return \"ℹ️\";\n        default: return \"📍\";\n    }\n}\n\n// Set flags for specific alert types\nalerts.forEach(alert => {\n    if (alert.payload.type === \"BILGE_PUMP_ALERT\") {\n        msg.payload.bilgePumpAlert = true;\n    }\n    if (alert.payload.type === \"FUEL_LEVEL_ALERT\") {\n        msg.payload.fuelAlert = true;\n    }\n    if (alert.payload.type === \"ENGINE_TEMP_ALERT\") {\n        msg.payload.engineTempAlert = true;\n    }\n});\n\n// Return main message + all alerts\nreturn [msg].concat(alerts);",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 400,
-        "y": 560,
-        "wires": [
-            [
-                "a8ddfb78195a346a"
-            ]
-        ]
-    },
-    {
-        "id": "a8ddfb78195a346a",
-        "type": "ui_text",
-        "z": "fd0f003631027bb5",
-        "group": "023a1f56cb511e0f",
-        "order": 0,
+        "id": "12c6698942600f1c",
+        "type": "ui-dropdown",
+        "z": "62f31c6b53afb626",
+        "group": "883d8d3194f035d9",
+        "name": "",
+        "label": "Select Option:",
+        "tooltip": "",
+        "order": 1,
         "width": 0,
         "height": 0,
-        "name": "",
-        "label": "Last Reading",
-        "format": "Time: {{msg.payload.time}}",
-        "layout": "row-spread",
+        "passthru": false,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
         "className": "",
-        "style": false,
-        "font": "",
-        "fontSize": 16,
-        "color": "#000000",
-        "x": 350,
-        "y": 840,
-        "wires": []
+        "typeIsComboBox": true,
+        "msgTrigger": "onChange",
+        "x": 540,
+        "y": 320,
+        "wires": [
+            []
+        ]
     }
 ]

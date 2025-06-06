@@ -10,6 +10,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "node-red-dashboard": "^3.6.5"
+    "@flowfuse/node-red-dashboard": "^1.24.2"
   }
 }
