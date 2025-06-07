@@ -47,7 +47,17 @@
             }
         },
         "debug": {
-            "filter": "filterCurrent"
-        }
+            "filter": "filterAll"
+        },
+        "git": {
+            "user": {
+                "name": "nolfonzo",
+                "email": "nolfonzo@gmail.com"
+            },
+            "workflow": {
+                "mode": "manual"
+            }
+        },
+        "menu-menu-item-sidebar": false
     }
 }

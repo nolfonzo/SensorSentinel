@@ -77,7 +77,7 @@
                 "cols": 12
             }
         ],
-        "order": 1,
+        "order": 2,
         "className": "",
         "visible": "true",
         "disabled": "false"
@@ -87,25 +87,245 @@
         "type": "ui-group",
         "name": "Group 1",
         "page": "f519202eda84521a",
-        "width": 6,
+        "width": "12",
         "height": 1,
         "order": 1,
         "showTitle": true,
         "className": "",
-        "visible": true,
-        "disabled": false,
+        "visible": "true",
+        "disabled": "false",
         "groupType": "default"
     },
     {
-        "id": "cc5553a258a8558a",
+        "id": "315ea8347fb746b3",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "df031482b6ed6ab2",
+        "type": "ui-page",
+        "name": "SensorSentinel Admin",
+        "ui": "ac73cfbba5e1dcae",
+        "path": "/admin",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "c05b66df7c049376",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 1,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "105a8e7c53d8d74f",
+        "type": "ui-group",
+        "name": "SensorSentinel Admin",
+        "page": "df031482b6ed6ab2",
+        "width": "12",
+        "height": 1,
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "526ecc0b4996d3ac",
+        "type": "mqtt in",
+        "z": "62f31c6b53afb626",
+        "name": "LoRa messages",
+        "topic": "#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "315ea8347fb746b3",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 440,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a55a6868925ad162",
+        "type": "function",
+        "z": "62f31c6b53afb626",
+        "name": "Parse LoRa message",
+        "func": "// The MQTT payload is already an object, not a string\nnode.log(\"Received from node: \" + msg.payload.nodeId);\nnode.log(\"Full message: \" + JSON.stringify(msg.payload, null, 2));\n\n// Just pass it through for now\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 320,
+        "wires": [
+            [
+                "245051e60d123ed7"
+            ]
+        ]
+    },
+    {
+        "id": "245051e60d123ed7",
+        "type": "debug",
+        "z": "62f31c6b53afb626",
+        "name": "debug 2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "03b8ce6774a2abb5",
+        "type": "function",
+        "z": "62f31c6b53afb626",
+        "name": "Owner Manager",
+        "func": "const topic = msg.topic; // Retrieve the topic from the incoming message\nconst payload = msg.payload; // Retrieve the payload containing the necessary data\n\nswitch(topic) {\n    case \"get_owners\":\n        // Fetch the list of owners from the global context\n        const owners = global.get(\"owners\") || {};\n        msg.payload = owners; // Set the payload to owners\n        msg.topic = \"owners_data\"; // Change the topic for the response\n        node.log(\"Fetched owners: \" + JSON.stringify(owners)); // Log the owners\n        return msg; // Ensure to return the message\n\n    case \"add_owner\":\n        // Add a new owner\n        const allOwners = global.get(\"owners\") || {};\n        \n        // Generate a unique ID based on timestamp\n        const ownerId = \"owner_\" + Date.now(); \n\n        // Validate presence of required fields\n        if (!payload.name) {\n            node.log(\"Owner name is missing. Cannot add owner.\"); // Log missing name error\n            return {topic: \"owner_error\", payload: {error: \"Owner name is required.\"}}; // Return error feedback\n        }\n\n        allOwners[ownerId] = {\n            name: payload.name,\n            email: payload.email || \"\",\n            phone: payload.phone || \"\",\n            nodes: [], // Initialize associated nodes as an empty array\n            created: new Date().toISOString() // Set the creation timestamp\n        };\n\n        global.set(\"owners\", allOwners); // Save updated owners to global context\n        node.log(\"Added owner: \" + payload.name); // Log the newly added owner\n\n        msg.payload = allOwners; // Set the payload to the updated list of owners\n        msg.topic = \"owners_data\"; // Change the topic for the response\n        return msg; // Ensure to return the message\n\n    case \"update_owner\":\n        // Update an existing owner\n        const ownersToUpdate = global.get(\"owners\") || {};\n        if (ownersToUpdate[payload.id]) {\n            ownersToUpdate[payload.id] = {\n                ...ownersToUpdate[payload.id], // Retain existing properties\n                ...payload.data, // Update with new data\n                updated: new Date().toISOString() // Update the timestamp\n            };\n            global.set(\"owners\", ownersToUpdate); // Save the updated owner info\n            node.log(\"Updated owner: \" + JSON.stringify(ownersToUpdate[payload.id])); // Log the update\n            msg.payload = ownersToUpdate; // Set payload to updated owners\n            msg.topic = \"owners_data\"; // Change the topic for the response\n        } else {\n            node.log(\"Owner ID not found: \" + payload.id); // Log if the owner ID does not exist\n            return {topic: \"owner_error\", payload: {error: \"Owner ID not found.\"}}; // Return error feedback\n        }\n        return msg; // Return message for success\n\n    case \"delete_owner\":\n        // Delete an owner and their associated nodes\n        const ownersToDelete = global.get(\"owners\") || {};\n        const nodes = global.get(\"nodes\") || {}; // Retrieve existing nodes\n\n        if (ownersToDelete[payload]) {\n            // Get the IDs of nodes associated with this owner\n            const ownerNodes = ownersToDelete[payload].nodes || [];\n\n            // Remove any associated nodes from the nodes registry\n            ownerNodes.forEach(nodeId => {\n                delete nodes[nodeId]; // Remove the node from the global nodes object\n            });\n\n            // Update the global nodes list\n            global.set(\"nodes\", nodes);\n            \n            // Now delete the owner\n            delete ownersToDelete[payload]; \n            global.set(\"owners\", ownersToDelete); // Save updated owners\n            node.log(\"Deleted owner: \" + payload + \" and their nodes\"); // Log the deletion\n        } else {\n            node.log(\"Owner ID not found for deletion: \" + payload); // Log if the owner ID does not exist\n            return {topic: \"owner_error\", payload: {error: \"Owner ID not found for deletion.\"}}; // Return error feedback\n        }\n\n        msg.payload = ownersToDelete; // Set payload to the updated owner list\n        msg.topic = \"owners_data\"; // Change the topic for the response\n        return msg; // Return message for success\n\n    default:\n        node.log(\"Unrecognized topic: \" + topic); // Log if topic is unrecognized\n        return {topic: \"owner_error\", payload: {error: \"Unrecognized topic.\"}}; // Return error feedback\n}\n\n// Return the message to the caller\nreturn msg; // This is redundant since every case returns earlier, but kept for clarity.",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1400,
+        "y": 360,
+        "wires": [
+            [
+                "5bdd4df97097ccff",
+                "2bef7abf62977ab5"
+            ]
+        ]
+    },
+    {
+        "id": "5bdd4df97097ccff",
+        "type": "debug",
+        "z": "62f31c6b53afb626",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1560,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "7100665dc8d8ec55",
+        "type": "function",
+        "z": "62f31c6b53afb626",
+        "name": "Node Admin",
+        "func": "const topic = msg.topic; // Retrieve the topic from the incoming message\nconst payload = msg.payload; // Retrieve the payload containing the necessary data\nnode.log(\"Incoming topic: \" + topic);  // More clarity in logging\n\nswitch(topic) {\n    case \"get_nodes\":\n        // Retrieve all nodes from the global state\n        const nodesData = global.get(\"nodes\") || {};\n        msg.payload = nodesData; // Set the nodes data as payload\n        msg.topic = \"nodes_data\"; // Change the topic for the response\n        node.log(\"Fetched nodes: \" + JSON.stringify(nodesData)); // Log the fetched nodes\n        return msg; // Ensure to return the message\n\n    case \"add_node\":\n        node.log(\"Received message for add_node: \" + JSON.stringify(msg)); // Log the whole message\n        // Add a new node\n        const allNodes = global.get(\"nodes\") || {}; // Retrieve existing nodes\n\n        // Check for duplicate node IDs to maintain uniqueness\n        if (!payload.nodeId || !payload.name) {\n            node.log(\"Node ID or Name is missing\");  // Log an error if required fields are missing\n            return {topic: \"node_error\", payload: {error: \"Node ID and Name are required.\"}}; // Return error feedback\n        }\n\n        if (!allNodes[payload.nodeId]) {\n            allNodes[payload.nodeId] = {\n                name: payload.name,\n                ownerId: payload.ownerId,\n                binaryPins: payload.binaryPins || [],\n                analogPins: payload.analogPins || [],\n                lastSeen: null // Initialize last seen status\n            };\n\n            global.set(\"nodes\", allNodes); // Save updated nodes to global context\n            node.log(\"Added node: \" + payload.name); // Log the addition\n            node.log(\"Current Nodes after adding: \" + JSON.stringify(allNodes)); // Log all nodes\n            msg.topic = \"node_added\"; // Change the topic for success feedback\n            msg.payload = {nodeId: payload.nodeId, name: payload.name, message: \"Node added successfully.\"};\n        } else {\n            node.log(\"Node ID already exists: \" + payload.nodeId); // Log if the node ID is not unique\n            return {topic: \"node_error\", payload: {error: \"Node ID already exists.\"}}; // Return error feedback\n        }\n        break;\n\n    case \"update_node\":\n        // Update an existing node, including changing its owner\n        const nodes3 = global.get(\"nodes\") || {}; // Retrieve existing nodes\n        const owners4 = global.get(\"owners\") || {}; // Retrieve existing owners\n\n        const currentNodeId = payload.nodeId; // Node ID to update\n        const currentNode = nodes3[currentNodeId]; // Retrieve the current node\n\n        if (!currentNode) {\n            node.log(\"Node ID not found for update: \" + currentNodeId); // Log if the node ID does not exist\n            return {topic: \"node_error\", payload: {error: \"Node ID not found.\"}}; // Return error feedback\n        }\n\n        const oldOwnerId = currentNode.ownerId; // Store the current owner ID\n        const newOwnerId = payload.data.ownerId; // New owner ID from payload\n\n        // Log the current state before updating\n        node.log(\"Current Node before update: \" + JSON.stringify(currentNode)); \n        node.log(\"Old Owner ID: \" + oldOwnerId + \", New Owner ID: \" + newOwnerId);\n\n        // Update the node's owner ID\n        currentNode.ownerId = newOwnerId;\n\n        // Update owner tracking\n        if (owners4[oldOwnerId]) {\n            owners4[oldOwnerId].nodes = owners4[oldOwnerId].nodes.filter(id => id !== currentNodeId);\n            owners4[oldOwnerId].nodeCount = owners4[oldOwnerId].nodes.length; // Update count\n        }\n\n        if (owners4[newOwnerId]) {\n            owners4[newOwnerId].nodes = owners4[newOwnerId].nodes || [];\n            owners4[newOwnerId].nodes.push(currentNodeId);\n            owners4[newOwnerId].nodeCount = owners4[newOwnerId].nodes.length; // Update count\n        }\n\n        // Update the nodes and owners in global context\n        global.set(\"nodes\", nodes3);\n        global.set(\"owners\", owners4);\n        \n        // Log updated structures after the update\n        node.log(\"Updated nodes structure after update: \" + JSON.stringify(nodes3)); \n        node.log(\"Updated owners structure after update: \" + JSON.stringify(owners4));\n\n        node.log(\"Updated node owner: \" + currentNodeId + \" to new owner: \" + newOwnerId);\n\n        msg.payload = nodes3; // Return updated node list\n        msg.topic = \"nodes_data\"; // Change topic to indicate node data has changed\n        break;\n\n    default:\n        node.log(\"Unrecognized topic: \" + topic); // Log if the topic is unrecognized\n        return null; // Handle unrecognized topics\n}\n\n// Return the message to the caller\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1390,
+        "y": 660,
+        "wires": [
+            [
+                "2bef7abf62977ab5",
+                "c20f95526bc29aeb"
+            ]
+        ]
+    },
+    {
+        "id": "2bef7abf62977ab5",
+        "type": "ui-template",
+        "z": "62f31c6b53afb626",
+        "group": "105a8e7c53d8d74f",
+        "page": "",
+        "ui": "",
+        "name": "",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n        <div style=\"width: 100%;\">\n            <style>\n                /* Set general font size for all elements within the container */\n                .v-container {\n                    font-size: 0.75rem;\n                    /* General text size (smaller) */\n                }\n        \n                .v-card-title {\n                    font-size: 0.85rem;\n                    /* Smaller card titles */\n                }\n        \n                .v-btn {\n                    font-size: 0.7rem;\n                    /* Smaller buttons */\n                    padding: 4px 8px;\n                    /* Adjust button padding */\n                }\n        \n                .v-text-field input {\n                    font-size: 0.75rem;\n                    /* Smaller input fields */\n                    padding: 4px;\n                    /* Smaller padding */\n                }\n        \n                .v-data-table {\n                    font-size: 0.75rem;\n                    /* Smaller table text */\n                }\n        \n                /* Ensure the content fits well */\n                .nr-dashboard-cardpanel,\n                .nr-dashboard-template {\n                    width: 100% !important;\n                    /* Ensure full width in dashboard */\n                }\n            </style>\n        \n            <v-container fluid class=\"pa-6\" style=\"max-width: 100%; padding: 0;\">\n                <!-- Your existing content goes here -->\n            </v-container>\n        </div>\n    <div><v-container fluid class=\"pa-6\" style=\"max-width: 100%; padding: 0;\">            <!-- Main Tabs -->\n            <v-tabs v-model=\"activeSection\" class=\"mb-6\">\n                <v-tab value=\"owners\">\n                    <v-icon class=\"mr-2\">mdi-account-group</v-icon>\n                    Owner Management\n                </v-tab>\n                <v-tab value=\"nodes\">\n                    <v-icon class=\"mr-2\">mdi-router-network</v-icon>\n                    Node Management\n                </v-tab>\n            </v-tabs>\n\n            <v-window v-model=\"activeSection\">\n                <!-- Owner Management Tab -->\n                <v-window-item value=\"owners\">\n                    <div class=\"mb-4\">\n                        <h2 class=\"text-h4 mb-6 d-flex align-center\">\n                            <v-icon class=\"mr-2\" color=\"primary\">mdi-account-group</v-icon>\n                            Owner Management\n                        </h2>\n                        \n                        <!-- Add New Owner Card - Full Width -->\n                        <v-card class=\"mb-6\">\n                            <v-card-title>\n                                <v-icon class=\"mr-2\">mdi-account-plus</v-icon>\n                                Add New Owner\n                            </v-card-title>\n                            <v-card-text>\n                                <v-row>\n                                    <v-col cols=\"12\" md=\"4\" lg=\"3\">\n                                        <v-text-field \n                                            v-model=\"newOwner.name\" \n                                            label=\"Owner Name\"\n                                            variant=\"outlined\"\n                                            density=\"compact\"\n                                            :error=\"!newOwner.name.trim() && attempted\"\n                                            :error-messages=\"!newOwner.name.trim() && attempted ? 'Name is required' : ''\"\n                                        ></v-text-field>\n                                    </v-col>\n                                    <v-col cols=\"12\" md=\"4\" lg=\"3\">\n                                        <v-text-field \n                                            v-model=\"newOwner.email\" \n                                            label=\"Email\"\n                                            variant=\"outlined\"\n                                            density=\"compact\"\n                                            type=\"email\"\n                                        ></v-text-field>\n                                    </v-col>\n                                    <v-col cols=\"12\" md=\"4\" lg=\"3\">\n                                        <v-text-field \n                                            v-model=\"newOwner.phone\" \n                                            label=\"Phone\"\n                                            variant=\"outlined\"\n                                            density=\"compact\"\n                                        ></v-text-field>\n                                    </v-col>\n                                    <v-col cols=\"12\" lg=\"3\" class=\"d-flex align-center\">\n                                        <v-btn \n                                            @click=\"addOwner\" \n                                            color=\"primary\"\n                                            :disabled=\"!newOwner.name.trim()\"\n                                            prepend-icon=\"mdi-plus\"\n                                            size=\"large\"\n                                            block\n                                        >\n                                            Add Owner\n                                        </v-btn>\n                                    </v-col>\n                                </v-row>\n                            </v-card-text>\n                        </v-card>\n\n                        <!-- Owners List - Full Width Below -->\n                        <v-card>\n                            <v-card-title class=\"d-flex align-center\">\n                                <v-icon class=\"mr-2\">mdi-account-group</v-icon>\n                                Property Owners ({{ filteredOwnersList.length }} of {{ Object.keys(owners).length }})\n                                <v-spacer></v-spacer>\n                                <!-- Owner Search in Header -->\n                                <v-text-field\n                                    v-model=\"ownerSearchFilter\"\n                                    label=\"Search owners...\"\n                                    prepend-inner-icon=\"mdi-magnify\"\n                                    variant=\"outlined\"\n                                    density=\"compact\"\n                                    hide-details\n                                    clearable\n                                    style=\"max-width: 400px;\"\n                                    class=\"ml-4\"\n                                ></v-text-field>\n                            </v-card-title>\n                            \n                            <v-data-table\n                                :headers=\"ownerHeaders\"\n                                :items=\"filteredOwnersList\"\n                                class=\"elevation-0\"\n                                density=\"compact\"\n                                :items-per-page=\"20\"\n                            >\n                                <template v-slot:item.nodeCount=\"{ item }\">\n                                    <v-chip size=\"small\" :color=\"item.nodeCount > 0 ? 'success' : 'default'\">\n                                        {{ item.nodeCount }}\n                                    </v-chip>\n                                </template>\n                                \n                                <template v-slot:item.actions=\"{ item }\">\n                                    <v-btn \n                                        icon=\"mdi-pencil\" \n                                        size=\"small\" \n                                        variant=\"text\"\n                                        @click=\"editOwner(item)\"\n                                    ></v-btn>\n                                    <v-btn \n                                        icon=\"mdi-delete\" \n                                        size=\"small\" \n                                        variant=\"text\"\n                                        color=\"error\"\n                                        @click=\"deleteOwner(item.id)\"\n                                    ></v-btn>\n                                </template>\n                            </v-data-table>\n                        </v-card>\n                    </div>\n                </v-window-item>\n\n                <!-- Node Management Tab -->\n                <v-window-item value=\"nodes\">\n                    <div class=\"mb-4\">\n                        <h2 class=\"text-h4 mb-6 d-flex align-center\">\n                            <v-icon class=\"mr-2\" color=\"success\">mdi-router-network</v-icon>\n                            Node Management\n                        </h2>\n                        \n                        <!-- Add New Node Card -->\n                        <v-card class=\"mb-6\">\n                            <v-card-title>\n                                <v-icon class=\"mr-2\">mdi-chip</v-icon>\n                                Add New Node\n                            </v-card-title>\n                            <v-card-text>\n                                <!-- Basic Node Info -->\n                                <v-row class=\"mb-4\">\n                                    <v-col cols=\"12\" md=\"3\" lg=\"2\">\n                                        <v-text-field \n                                            v-model=\"newNode.nodeId\" \n                                            label=\"Node ID (Unique)\"\n                                            variant=\"outlined\"\n                                            density=\"compact\"\n                                            :error=\"!!errorMessage\"\n                                            :error-messages=\"errorMessage\"\n                                            @input=\"clearError\"\n                                        ></v-text-field>\n                                    </v-col>\n                                    <v-col cols=\"12\" md=\"3\" lg=\"3\">\n                                        <v-text-field \n                                            v-model=\"newNode.name\" \n                                            label=\"Node Name\"\n                                            variant=\"outlined\"\n                                            density=\"compact\"\n                                        ></v-text-field>\n                                    </v-col>\n                                    <v-col cols=\"12\" md=\"3\" lg=\"3\">\n                                        <v-autocomplete \n                                            v-model=\"newNode.ownerId\" \n                                            :items=\"ownerOptions\"\n                                            label=\"Owner\"\n                                            variant=\"outlined\"\n                                            density=\"compact\"\n                                            clearable\n                                            :filter-keys=\"['title']\"\n                                        ></v-autocomplete>\n                                    </v-col>\n                                    <v-col cols=\"12\" md=\"3\" lg=\"4\" class=\"d-flex align-center\">\n                                        <v-btn \n                                            @click=\"addNode\" \n                                            color=\"primary\"\n                                            :disabled=\"!canAddNode\"\n                                            prepend-icon=\"mdi-plus\"\n                                            size=\"large\"\n                                            block\n                                        >\n                                            Add Node\n                                        </v-btn>\n                                    </v-col>\n                                </v-row>\n                                \n                                <!-- Basic Pin Configuration -->\n                                <v-card variant=\"outlined\" class=\"mb-4\">\n                                    <v-card-title class=\"text-h6\">Basic Pin Labels</v-card-title>\n                                    <v-card-text>\n                                        <v-tabs v-model=\"activeTab\">\n                                            <v-tab value=\"binary\">Binary Pins (8)</v-tab>\n                                            <v-tab value=\"analog\">Analog Pins (4)</v-tab>\n                                        </v-tabs>\n                                        \n                                        <v-window v-model=\"activeTab\" class=\"mt-4\">\n                                            <v-window-item value=\"binary\">\n                                                <v-row>\n                                                    <v-col v-for=\"i in 8\" :key=\"'bin-' + i\" cols=\"12\" sm=\"6\" md=\"3\" lg=\"2\" xl=\"1-5\">\n                                                        <v-text-field \n                                                            v-model=\"newNode.binaryPins[i-1]\" \n                                                            :label=\"`Binary Pin ${i-1}`\"\n                                                            variant=\"outlined\"\n                                                            density=\"compact\"\n                                                            :placeholder=\"`Pin ${i-1} Label`\"\n                                                        ></v-text-field>\n                                                    </v-col>\n                                                </v-row>\n                                            </v-window-item>\n                                            \n                                            <v-window-item value=\"analog\">\n                                                <v-row>\n                                                    <v-col v-for=\"i in 4\" :key=\"'ana-' + i\" cols=\"12\" sm=\"6\" md=\"3\" lg=\"2\">\n                                                        <v-text-field \n                                                            v-model=\"newNode.analogPins[i-1]\" \n                                                            :label=\"`Analog Pin ${i-1}`\"\n                                                            variant=\"outlined\"\n                                                            density=\"compact\"\n                                                            :placeholder=\"`Pin A${i-1} Label`\"\n                                                        ></v-text-field>\n                                                    </v-col>\n                                                </v-row>\n                                            </v-window-item>\n                                        </v-window>\n                                    </v-card-text>\n                                </v-card>\n                            </v-card-text>\n                        </v-card>\n\n                        <!-- Node Filter Controls -->\n                        <v-card class=\"mb-6\">\n                            <v-card-title>Filter & Search Nodes</v-card-title>\n                            <v-card-text>\n                                <v-row>\n                                    <v-col cols=\"12\" md=\"6\" lg=\"4\">\n                                        <v-text-field\n                                            v-model=\"nodeSearchQuery\"\n                                            label=\"Search Nodes\"\n                                            prepend-inner-icon=\"mdi-magnify\"\n                                            variant=\"outlined\"\n                                            density=\"compact\"\n                                            clearable\n                                            hint=\"Search by Node ID, Name, or Owner\"\n                                        ></v-text-field>\n                                    </v-col>\n                                    <v-col cols=\"12\" md=\"6\" lg=\"4\">\n                                        <v-autocomplete\n                                            v-model=\"selectedOwnerFilter\"\n                                            :items=\"ownerFilterOptions\"\n                                            label=\"Filter by Owner\"\n                                            prepend-inner-icon=\"mdi-account-filter\"\n                                            variant=\"outlined\"\n                                            density=\"compact\"\n                                            clearable\n                                            :filter-keys=\"['title']\"\n                                        ></v-autocomplete>\n                                    </v-col>\n                                    <v-col cols=\"12\" lg=\"4\" class=\"d-flex align-center\">\n                                        <v-chip class=\"mr-2\" color=\"info\">\n                                            Total: {{ Object.keys(nodes).length }}\n                                        </v-chip>\n                                        <v-chip color=\"success\">\n                                            Filtered: {{ filteredNodesList.length }}\n                                        </v-chip>\n                                    </v-col>\n                                </v-row>\n                            </v-card-text>\n                        </v-card>\n\n                        <!-- Nodes Data Table -->\n                        <v-card>\n                            <v-card-title>\n                                <v-icon class=\"mr-2\">mdi-router-network</v-icon>\n                                Registered Nodes ({{ filteredNodesList.length }} of {{ Object.keys(nodes).length }})\n                            </v-card-title>\n                            \n                            <v-data-table\n                                :headers=\"nodeHeaders\"\n                                :items=\"filteredNodesList\"\n                                class=\"elevation-0\"\n                                density=\"compact\"\n                                :items-per-page=\"20\"\n                            >\n                                <template v-slot:item.owner=\"{ item }\">\n                                    <v-chip \n                                        size=\"small\" \n                                        color=\"primary\"\n                                        @click=\"showOwnerNodes(item.ownerId)\"\n                                        style=\"cursor: pointer;\"\n                                    >\n                                        {{ getOwnerName(item.ownerId) }}\n                                    </v-chip>\n                                </template>\n                                \n                                <template v-slot:item.pins=\"{ item }\">\n                                    <div>\n                                        <v-chip size=\"small\" color=\"success\" class=\"mr-1\">\n                                            B: {{ getBinaryPinCount(item) }}/8\n                                        </v-chip>\n                                        <v-chip size=\"small\" color=\"info\">\n                                            A: {{ getAnalogPinCount(item) }}/4\n                                        </v-chip>\n                                    </div>\n                                </template>\n                                \n                                <template v-slot:item.lastSeen=\"{ item }\">\n                                    <span :class=\"item.lastSeen ? 'text-success' : 'text-error'\">\n                                        {{ item.lastSeen ? formatDate(item.lastSeen) : 'Never' }}\n                                    </span>\n                                </template>\n                                \n                                <template v-slot:item.actions=\"{ item }\">\n                                    <v-btn \n                                        icon=\"mdi-eye\" \n                                        size=\"small\" \n                                        variant=\"text\"\n                                        @click=\"viewNode(item)\"\n                                    ></v-btn>\n                                    <v-btn \n                                        icon=\"mdi-pencil\" \n                                        size=\"small\" \n                                        variant=\"text\"\n                                        @click=\"editNode(item)\"\n                                    ></v-btn>\n                                    <v-btn \n                                        icon=\"mdi-delete\" \n                                        size=\"small\" \n                                        variant=\"text\"\n                                        color=\"error\"\n                                        @click=\"deleteNode(item.nodeId)\"\n                                    ></v-btn>\n                                </template>\n                            </v-data-table>\n                        </v-card>\n                    </div>\n                </v-window-item>\n            </v-window>\n        </v-container>\n\n        <!-- Edit Owner Dialog -->\n        <v-dialog v-model=\"editOwnerDialog\" max-width=\"600px\">\n            <v-card>\n                <v-card-title>Edit Owner</v-card-title>\n                <v-card-text>\n                    <v-text-field \n                        v-model=\"editingOwner.name\" \n                        label=\"Name\"\n                        variant=\"outlined\"\n                    ></v-text-field>\n                    <v-text-field \n                        v-model=\"editingOwner.email\" \n                        label=\"Email\"\n                        variant=\"outlined\"\n                    ></v-text-field>\n                    <v-text-field \n                        v-model=\"editingOwner.phone\" \n                        label=\"Phone\"\n                        variant=\"outlined\"\n                    ></v-text-field>\n                </v-card-text>\n                <v-card-actions>\n                    <v-spacer></v-spacer>\n                    <v-btn @click=\"editOwnerDialog = false\">Cancel</v-btn>\n                    <v-btn @click=\"saveOwner\" color=\"primary\">Save</v-btn>\n                </v-card-actions>\n            </v-card>\n        </v-dialog>\n\n        <!-- View Node Dialog -->\n        <v-dialog v-model=\"viewDialog\" max-width=\"1000px\">\n            <v-card v-if=\"selectedNode\">\n                <v-card-title>\n                    <v-icon class=\"mr-2\">mdi-eye</v-icon>\n                    Node Details - {{ selectedNode.nodeId }}\n                </v-card-title>\n                <v-card-text>\n                    <v-row>\n                        <v-col cols=\"12\" md=\"6\" lg=\"3\">\n                            <v-text-field \n                                :model-value=\"selectedNode.nodeId\" \n                                label=\"Node ID\"\n                                variant=\"outlined\"\n                                readonly\n                            ></v-text-field>\n                        </v-col>\n                        <v-col cols=\"12\" md=\"6\" lg=\"3\">\n                            <v-text-field \n                                :model-value=\"selectedNode.name\" \n                                label=\"Node Name\"\n                                variant=\"outlined\"\n                                readonly\n                            ></v-text-field>\n                        </v-col>\n                        <v-col cols=\"12\" md=\"6\" lg=\"3\">\n                            <v-text-field \n                                :model-value=\"getOwnerName(selectedNode.ownerId)\" \n                                label=\"Owner\"\n                                variant=\"outlined\"\n                                readonly\n                            ></v-text-field>\n                        </v-col>\n                        <v-col cols=\"12\" md=\"6\" lg=\"3\">\n                            <v-text-field \n                                :model-value=\"selectedNode.lastSeen ? formatDate(selectedNode.lastSeen) : 'Never'\" \n                                label=\"Last Seen\"\n                                variant=\"outlined\"\n                                readonly\n                            ></v-text-field>\n                        </v-col>\n                    </v-row>\n                    \n                    <v-card variant=\"outlined\" class=\"mt-4\">\n                        <v-card-title>Pin Configuration</v-card-title>\n                        <v-card-text>\n                            <v-tabs v-model=\"viewTab\">\n                                <v-tab value=\"binary\">Binary Pins</v-tab>\n                                <v-tab value=\"analog\">Analog Pins</v-tab>\n                            </v-tabs>\n                            \n                            <v-window v-model=\"viewTab\" class=\"mt-4\">\n                                <v-window-item value=\"binary\">\n                                    <v-row>\n                                        <v-col v-for=\"(pin, index) in selectedNode.binaryPins\" :key=\"'view-bin-' + index\" cols=\"12\" sm=\"6\" md=\"3\" lg=\"2\" xl=\"1-5\">\n                                            <v-text-field \n                                                :model-value=\"typeof pin === 'string' ? pin : (pin?.label || '')\" \n                                                :label=\"`Binary Pin ${index}`\"\n                                                variant=\"outlined\"\n                                                density=\"compact\"\n                                                readonly\n                                            ></v-text-field>\n                                        </v-col>\n                                    </v-row>\n                                </v-window-item>\n                                \n                                <v-window-item value=\"analog\">\n                                    <v-row>\n                                        <v-col v-for=\"(pin, index) in selectedNode.analogPins\" :key=\"'view-ana-' + index\" cols=\"12\" sm=\"6\" md=\"3\" lg=\"2\">\n                                            <v-text-field \n                                                :model-value=\"typeof pin === 'string' ? pin : (pin?.label || '')\" \n                                                :label=\"`Analog Pin ${index}`\"\n                                                variant=\"outlined\"\n                                                density=\"compact\"\n                                                readonly\n                                            ></v-text-field>\n                                        </v-col>\n                                    </v-row>\n                                </v-window-item>\n                            </v-window>\n                        </v-card-text>\n                    </v-card>\n                </v-card-text>\n                <v-card-actions>\n                    <v-spacer></v-spacer>\n                    <v-btn @click=\"viewDialog = false\">Close</v-btn>\n                    <v-btn @click=\"editNode(selectedNode)\" color=\"primary\">Edit</v-btn>\n                </v-card-actions>\n            </v-card>\n        </v-dialog>\n\n        <!-- Edit Node Dialog -->\n        <v-dialog v-model=\"editDialog\" max-width=\"1000px\">\n            <v-card v-if=\"editingNode\">\n                <v-card-title>\n                    <v-icon class=\"mr-2\">mdi-pencil</v-icon>\n                    Edit Node - {{ editingNode.nodeId }}\n                </v-card-title>\n                <v-card-text>\n                    <v-row>\n                        <v-col cols=\"12\" md=\"6\" lg=\"3\">\n                            <v-text-field \n                                v-model=\"editingNode.nodeId\" \n                                label=\"Node ID\"\n                                variant=\"outlined\"\n                                readonly\n                            ></v-text-field>\n                        </v-col>\n                        <v-col cols=\"12\" md=\"6\" lg=\"3\">\n                            <v-text-field \n                                v-model=\"editingNode.name\" \n                                label=\"Node Name\"\n                                variant=\"outlined\"\n                            ></v-text-field>\n                        </v-col>\n                        <v-col cols=\"12\" lg=\"6\">\n                            <v-autocomplete \n                                v-model=\"editingNode.ownerId\" \n                                :items=\"ownerOptions\"\n                                label=\"Owner\"\n                                variant=\"outlined\"\n                                clearable\n                                :filter-keys=\"['title']\"\n                            ></v-autocomplete>\n                        </v-col>\n                    </v-row>\n                    \n                    <v-card variant=\"outlined\" class=\"mt-4\">\n                        <v-card-title>Pin Configuration</v-card-title>\n                        <v-card-text>\n                            <v-tabs v-model=\"editTab\">\n                                <v-tab value=\"binary\">Binary Pins</v-tab>\n                                <v-tab value=\"analog\">Analog Pins</v-tab>\n                            </v-tabs>\n                            \n                            <v-window v-model=\"editTab\" class=\"mt-4\">\n                                <v-window-item value=\"binary\">\n                                    <v-row>\n                                        <v-col v-for=\"(pin, index) in editingNode.binaryPins\" :key=\"'edit-bin-' + index\" cols=\"12\" sm=\"6\" md=\"3\" lg=\"2\" xl=\"1-5\">\n                                            <v-text-field \n                                                v-model=\"editingNode.binaryPins[index]\" \n                                                :label=\"`Binary Pin ${index}`\"\n                                                variant=\"outlined\"\n                                                density=\"compact\"\n                                                :placeholder=\"`Pin ${index} Label`\"\n                                            ></v-text-field>\n                                        </v-col>\n                                    </v-row>\n                                </v-window-item>\n                                \n                                <v-window-item value=\"analog\">\n                                    <v-row>\n                                        <v-col v-for=\"(pin, index) in editingNode.analogPins\" :key=\"'edit-ana-' + index\" cols=\"12\" sm=\"6\" md=\"3\" lg=\"2\">\n                                            <v-text-field \n                                                v-model=\"editingNode.analogPins[index]\" \n                                                :label=\"`Analog Pin ${index}`\"\n                                                variant=\"outlined\"\n                                                density=\"compact\"\n                                                :placeholder=\"`Pin A${index} Label`\"\n                                            ></v-text-field>\n                                        </v-col>\n                                    </v-row>\n                                </v-window-item>\n                            </v-window>\n                        </v-card-text>\n                    </v-card>\n                </v-card-text>\n                <v-card-actions>\n                    <v-spacer></v-spacer>\n                    <v-btn @click=\"editDialog = false\">Cancel</v-btn>\n                    <v-btn @click=\"saveNode\" color=\"primary\">Save</v-btn>\n                </v-card-actions>\n            </v-card>\n        </v-dialog>\n\n        <!-- Owner Nodes Dialog -->\n        <v-dialog v-model=\"ownerNodesDialog\" max-width=\"1200px\">\n            <v-card v-if=\"selectedOwner\">\n                <v-card-title>\n                    <v-icon class=\"mr-2\">mdi-account-circle</v-icon>\n                    Nodes for {{ selectedOwner.name }}\n                </v-card-title>\n                <v-card-text>\n                    <v-data-table\n                        :headers=\"nodeHeaders.slice(0, -2)\"\n                        :items=\"ownerNodes\"\n                        class=\"elevation-0\"\n                        density=\"compact\"\n                        :items-per-page=\"15\"\n                    >\n                        <template v-slot:item.pins=\"{ item }\">\n                            <div>\n                                <v-chip size=\"small\" color=\"success\" class=\"mr-1\">\n                                    B: {{ getBinaryPinCount(item) }}/8\n                                </v-chip>\n                                <v-chip size=\"small\" color=\"info\">\n                                    A: {{ getAnalogPinCount(item) }}/4\n                                </v-chip>\n                            </div>\n                        </template>\n                        \n                        <template v-slot:item.lastSeen=\"{ item }\">\n                            <span :class=\"item.lastSeen ? 'text-success' : 'text-error'\">\n                                {{ item.lastSeen ? formatDate(item.lastSeen) : 'Never' }}\n                            </span>\n                        </template>\n                    </v-data-table>\n                </v-card-text>\n                <v-card-actions>\n                    <v-spacer></v-spacer>\n                    <v-btn @click=\"ownerNodesDialog = false\">Close</v-btn>\n                </v-card-actions>\n            </v-card>\n        </v-dialog>\n    </div>\n</template>\n\n<script>\nexport default {\n    data() {\n        return {\n            activeSection: 'owners', // Default to owners tab\n            \n            // Owner data\n            owners: {},\n            attempted: false,\n            ownerSearchFilter: '',\n            newOwner: {\n                name: '',\n                email: '',\n                phone: ''\n            },\n            editOwnerDialog: false,\n            editingOwner: {},\n            ownerHeaders: [\n                { title: 'Name', key: 'name' },\n                { title: 'Email', key: 'email' },\n                { title: 'Phone', key: 'phone' },\n                { title: 'Nodes', key: 'nodeCount' },\n                { title: 'Actions', key: 'actions', sortable: false }\n            ],\n            \n            // Node data\n            nodes: {},\n            errorMessage: '',\n            nodeSearchQuery: '',\n            selectedOwnerFilter: null,\n            activeTab: 'binary',\n            viewTab: 'binary',\n            editTab: 'binary',\n            viewDialog: false,\n            editDialog: false,\n            ownerNodesDialog: false,\n            selectedNode: null,\n            editingNode: null,\n            selectedOwner: null,\n            newNode: {\n                nodeId: '',\n                name: '',\n                ownerId: '',\n                binaryPins: Array(8).fill(''),\n                analogPins: Array(4).fill('')\n            },\n            nodeHeaders: [\n                { title: 'Node ID', key: 'nodeId' },\n                { title: 'Name', key: 'name' },\n                { title: 'Owner', key: 'owner' },\n                { title: 'Pins', key: 'pins', width: '140px' },\n                { title: 'Last Seen', key: 'lastSeen' },\n                { title: 'Actions', key: 'actions', sortable: false }\n            ]\n        }\n    },\n    \n    computed: {\n        // Owner computeds\n        ownersList() {\n            return Object.entries(this.owners).map(([id, owner]) => ({\n                id,\n                ...owner,\n                nodeCount: owner.nodes ? owner.nodes.length : 0\n            }));\n        },\n        \n        filteredOwnersList() {\n            if (!this.ownerSearchFilter) return this.ownersList;\n            \n            const filter = this.ownerSearchFilter.toLowerCase();\n            return this.ownersList.filter(owner => \n                owner.name.toLowerCase().includes(filter) ||\n                (owner.email && owner.email.toLowerCase().includes(filter)) ||\n                (owner.phone && owner.phone.includes(filter))\n            );\n        },\n        \n        // Node computeds\n        ownerOptions() {\n            return Object.entries(this.owners).map(([id, owner]) => ({\n                title: owner.name,\n                value: id\n            }));\n        },\n        \n        ownerFilterOptions() {\n            return [\n                { title: 'All Owners', value: null },\n                ...this.ownerOptions\n            ];\n        },\n        \n        nodesList() {\n            return Object.values(this.nodes);\n        },\n        \n        filteredNodesList() {\n            let filtered = this.nodesList;\n            \n            if (this.nodeSearchQuery && this.nodeSearchQuery.trim()) {\n                const query = this.nodeSearchQuery.trim().toLowerCase();\n                filtered = filtered.filter(node => {\n                    const nodeId = (node.nodeId || '').toLowerCase();\n                    const nodeName = (node.name || '').toLowerCase();\n                    const ownerName = this.getOwnerName(node.ownerId).toLowerCase();\n                    \n                    return nodeId.includes(query) || \n                           nodeName.includes(query) || \n                           ownerName.includes(query);\n                });\n            }\n            \n            if (this.selectedOwnerFilter) {\n                filtered = filtered.filter(node => node.ownerId === this.selectedOwnerFilter);\n            }\n            \n            return filtered;\n        },\n        \n        ownerNodes() {\n            if (!this.selectedOwner) return [];\n            return this.nodesList.filter(node => node.ownerId === this.selectedOwner.id);\n        },\n        \n        canAddNode() {\n            return this.newNode.nodeId && this.newNode.nodeId.trim() && this.newNode.ownerId;\n        }\n    },\n    \n    methods: {\n        // Owner methods\naddOwner() {\n    this.attempted = true;\n    \n    if (!this.newOwner.name.trim()) {\n        this.send({ // Emit the error topic if name is empty\n            topic: \"owner_error\",\n            payload: { error: \"Owner name is required.\" }\n        });\n        return; // Don't proceed if name is missing\n    }\n\n    this.send({\n        topic: \"add_owner\",\n        payload: {\n            name: this.newOwner.name.trim(),\n            email: this.newOwner.email.trim(),\n            phone: this.newOwner.phone.trim()\n        }\n    });\n\n    // Reset the new owner data\n    this.newOwner = { name: '', email: '', phone: '' };\n    this.attempted = false;\n}\n        \n        editOwner(owner) {\n            this.editingOwner = { ...owner };\n            this.editOwnerDialog = true;\n        },\n        \n        saveOwner() {\n            this.send({\n                topic: \"update_owner\",\n                payload: {\n                    id: this.editingOwner.id,\n                    data: {\n                        name: this.editingOwner.name,\n                        email: this.editingOwner.email,\n                        phone: this.editingOwner.phone,\n                        nodes: this.owners[this.editingOwner.id].nodes || []\n                    }\n                }\n            });\n            this.editOwnerDialog = false;\n        },\n        \n        deleteOwner(ownerId) {\n            const owner = this.owners[ownerId];\n            const nodeCount = owner.nodes ? owner.nodes.length : 0;\n            \n            const message = nodeCount > 0 \n                ? `Owner \"${owner.name}\" has ${nodeCount} nodes. Delete anyway?`\n                : `Delete owner \"${owner.name}\"?`;\n                \n            if (confirm(message)) {\n                this.send({\n                    topic: \"delete_owner\", \n                    payload: ownerId\n                });\n            }\n        },\n        \n        // Node methods\n        addNode() {\n            if (!this.canAddNode) return;\n            \n            this.errorMessage = '';\n            \n            this.send({\n                topic: \"add_node\",\n                payload: {\n                    nodeId: this.newNode.nodeId.trim(),\n                    name: this.newNode.name.trim() || this.newNode.nodeId.trim(),\n                    ownerId: this.newNode.ownerId,\n                    binaryPins: this.newNode.binaryPins,\n                    analogPins: this.newNode.analogPins\n                }\n            });\n            \n            this.newNode = {\n                nodeId: '',\n                name: '',\n                ownerId: '',\n                binaryPins: Array(8).fill(''),\n                analogPins: Array(4).fill('')\n            };\n        },\n        \n        viewNode(node) {\n            this.selectedNode = node;\n            this.viewDialog = true;\n            this.viewTab = 'binary';\n        },\n        \n        editNode(node) {\n            this.editingNode = {\n                ...node,\n                binaryPins: [...(node.binaryPins || Array(8).fill(''))],\n                analogPins: [...(node.analogPins || Array(4).fill(''))]\n            };\n            \n            // Ensure we have the right array lengths\n            while (this.editingNode.binaryPins.length < 8) {\n                this.editingNode.binaryPins.push('');\n            }\n            while (this.editingNode.analogPins.length < 4) {\n                this.editingNode.analogPins.push('');\n            }\n            \n            // Convert any object pins to strings\n            this.editingNode.binaryPins = this.editingNode.binaryPins.map(pin => \n                typeof pin === 'string' ? pin : (pin?.label || '')\n            );\n            this.editingNode.analogPins = this.editingNode.analogPins.map(pin => \n                typeof pin === 'string' ? pin : (pin?.label || '')\n            );\n            \n            this.editDialog = true;\n            this.editTab = 'binary';\n            this.viewDialog = false;\n        },\n        \n        saveNode() {\n            this.send({\n                topic: \"update_node\",\n                payload: {\n                    nodeId: this.editingNode.nodeId,\n                    data: {\n                        name: this.editingNode.name,\n                        ownerId: this.editingNode.ownerId,\n                        binaryPins: this.editingNode.binaryPins,\n                        analogPins: this.editingNode.analogPins,\n                        lastSeen: this.editingNode.lastSeen\n                    }\n                }\n            });\n            this.editDialog = false;\n        },\n        \n        deleteNode(nodeId) {\n            if (confirm(`Delete node \"${nodeId}\"?`)) {\n                this.send({\n                    topic: \"delete_node\", \n                    payload: nodeId\n                });\n            }\n        },\n        \n        showOwnerNodes(ownerId) {\n            this.selectedOwner = { \n                id: ownerId, \n                ...this.owners[ownerId] \n            };\n            this.ownerNodesDialog = true;\n        },\n        \n        // Utility methods\n        getOwnerName(ownerId) {\n            return this.owners[ownerId] ? this.owners[ownerId].name : 'Unknown';\n        },\n        \n        formatDate(dateStr) {\n            return new Date(dateStr).toLocaleString();\n        },\n        \n        clearError() {\n            this.errorMessage = '';\n        },\n        \n        getBinaryPinCount(item) {\n            if (!item.binaryPins) return 0;\n            return item.binaryPins.filter(pin => {\n                if (typeof pin === 'string') return pin && pin.trim();\n                return pin?.label && pin.label.trim();\n            }).length;\n        },\n        \n        getAnalogPinCount(item) {\n            if (!item.analogPins) return 0;\n            return item.analogPins.filter(pin => {\n                if (typeof pin === 'string') return pin && pin.trim();\n                return pin?.label && pin.label.trim();\n            }).length;\n        }\n    },\n    \n    mounted() {\n        this.send({topic: \"get_owners\"});\n        this.send({topic: \"get_nodes\"});\n    },\n    \n    watch: {\n        msg: {\n            handler(newMsg) {\n                if (newMsg && newMsg.topic === \"owners_data\") {\n                    this.owners = newMsg.payload || {};\n                } else if (newMsg && newMsg.topic === \"nodes_data\") {\n                    this.nodes = newMsg.payload.nodes || {};\n                    this.owners = { ...this.owners, ...(newMsg.payload.owners || {}) };\n                } else if (newMsg && newMsg.topic === \"node_error\") {\n                    this.errorMessage = newMsg.payload.error;\n                } else if (newMsg && newMsg.topic === \"node_added\") {\n                    this.nodes = { ...this.nodes, [newMsg.payload.nodeId]: newMsg.payload };\n                    this.errorMessage = '';\n                } else if (newMsg && newMsg.topic === \"node_updated\") {\n                    this.nodes = { ...this.nodes, [newMsg.payload.nodeId]: newMsg.payload };\n                } else if (newMsg && newMsg.topic === \"node_deleted\") {\n                    const updatedNodes = { ...this.nodes };\n                    delete updatedNodes[newMsg.payload];\n                    this.nodes = updatedNodes;\n                } else if (newMsg && newMsg.topic === \"owner_added\") {\n                    this.owners = { ...this.owners, [newMsg.payload.id]: newMsg.payload };\n                } else if (newMsg && newMsg.topic === \"owner_updated\") {\n                    this.owners = { ...this.owners, [newMsg.payload.id]: newMsg.payload };\n                } else if (newMsg && newMsg.topic === \"owner_deleted\") {\n                    const updatedOwners = { ...this.owners };\n                    delete updatedOwners[newMsg.payload];\n                    this.owners = updatedOwners;\n                }\n            },\n            deep: true\n        }\n    }\n}\n</script>",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1300,
+        "y": 240,
+        "wires": [
+            [
+                "03b8ce6774a2abb5",
+                "7100665dc8d8ec55"
+            ]
+        ]
+    },
+    {
+        "id": "1dd74ca63fa183e2",
         "type": "inject",
         "z": "62f31c6b53afb626",
         "name": "",
         "props": [
             {
-                "p": "options",
-                "v": "[\"Option 1\", \"Option 2\", \"Option 3\"]",
-                "vt": "json"
+                "p": "payload"
             },
             {
                 "p": "topic",
@@ -113,44 +333,34 @@
             }
         ],
         "repeat": "",
-        "crontab": "*/1 0 * * *",
-        "once": true,
+        "crontab": "",
+        "once": false,
         "onceDelay": 0.1,
-        "topic": "",
-        "x": 510,
-        "y": 180,
+        "topic": "add_node",
+        "payload": "{     \"topic\": \"add_node\",     \"payload\": {         \"nodeId\": \"557\",         \"name\": \"Node Name\",         \"ownerId\": \"ownerId\",         \"binaryPins\": [\"pin1\", \"pin2\"],         \"analogPins\": [\"pinA\", \"pinB\"]     } }",
+        "payloadType": "json",
+        "x": 1070,
+        "y": 440,
         "wires": [
             [
-                "12c6698942600f1c"
+                "7100665dc8d8ec55"
             ]
         ]
     },
     {
-        "id": "12c6698942600f1c",
-        "type": "ui-dropdown",
+        "id": "c20f95526bc29aeb",
+        "type": "debug",
         "z": "62f31c6b53afb626",
-        "group": "883d8d3194f035d9",
-        "name": "",
-        "label": "Select Option:",
-        "tooltip": "",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "multiple": false,
-        "chips": false,
-        "clearable": false,
-        "options": [],
-        "payload": "",
-        "topic": "topic",
-        "topicType": "msg",
-        "className": "",
-        "typeIsComboBox": true,
-        "msgTrigger": "onChange",
-        "x": 540,
-        "y": 320,
-        "wires": [
-            []
-        ]
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1680,
+        "y": 760,
+        "wires": []
     }
 ]
