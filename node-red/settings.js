@@ -329,6 +329,11 @@ module.exports = {
             metrics: false,
             /** Whether or not to include audit events in the log output */
             audit: false
+        },
+            file: {
+            level: "debug",  // Change to "info" or "error" for less verbosity, if preferred
+            path: "nodered.log", // Specify your absolute log file path
+            audit: false
         }
     },
 

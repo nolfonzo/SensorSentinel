@@ -1,0 +1,132 @@
+8 Jun 15:31:58 - [info] 
+
+Welcome to Node-RED
+===================
+
+8 Jun 15:31:58 - [info] Node-RED version: v4.0.9
+8 Jun 15:31:58 - [info] Node.js  version: v20.19.2
+8 Jun 15:31:58 - [info] Linux 6.12.25+rpt-rpi-v8 arm64 LE
+8 Jun 15:31:59 - [info] Loading palette nodes
+8 Jun 15:31:59 - [debug] Module: @flowfuse/node-red-dashboard 1.24.2 /home/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard
+8 Jun 15:32:00 - [info] Settings file  : /home/nolfonzo/code/SensorSentinel/node-red/settings.js
+8 Jun 15:32:00 - [info] Context store  : 'default' [module=memory]
+8 Jun 15:32:00 - [info] User directory : /home/nolfonzo/code/SensorSentinel/node-red
+8 Jun 15:32:00 - [warn] Projects disabled : editorTheme.projects.enabled=false
+8 Jun 15:32:00 - [info] Flows file     : /home/nolfonzo/code/SensorSentinel/node-red/flows.json
+8 Jun 15:32:00 - [info] Server now running at http://127.0.0.1:1880/
+8 Jun 15:32:00 - [debug] loaded flow revision: cea76b23245f1f17913088c2acefefbd20e9e07f083f9e072c28419b30214e71
+8 Jun 15:32:00 - [debug] red/runtime/nodes/credentials.load : no user key present
+8 Jun 15:32:00 - [debug] red/runtime/nodes/credentials.load : using default key
+8 Jun 15:32:00 - [debug] red/runtime/nodes/credentials.load : keyType=system
+8 Jun 15:32:00 - [warn] 
+
+---------------------------------------------------------------------
+Your flow credentials file is encrypted using a system-generated key.
+
+If the system-generated key is lost for any reason, your credentials
+file will not be recoverable, you will have to delete it and re-enter
+your credentials.
+
+You should set your own key using the 'credentialSecret' option in
+your settings file. Node-RED will then re-encrypt your credentials
+file using your chosen key the next time you deploy a change.
+---------------------------------------------------------------------
+
+8 Jun 15:32:00 - [info] Starting flows
+8 Jun 15:32:00 - [debug] red/nodes/flows.start : starting flow : global
+8 Jun 15:32:00 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+8 Jun 15:32:00 - [info] [ui-base:My Dashboard] Node-RED Dashboard 2.0 (v1.24.2) started at /dashboard
+8 Jun 15:32:00 - [info] [ui-base:My Dashboard] Created socket.io server bound to Node-RED port at path /dashboard/socket.io
+8 Jun 15:32:01 - [info] Started flows
+8 Jun 15:32:01 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+8 Jun 15:32:01 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"95784b0804f3a165"}
+8 Jun 15:32:01 - [info] [function:Owner Manager] Fetched owners: {}
+8 Jun 15:32:01 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"23efcdf10023f132"}
+8 Jun 15:32:01 - [info] [function:Node Admin] Fetched devices: {}
+8 Jun 15:32:38 - [info] [function:Owner Manager] Received message for topic: add_owner json: {"topic":"add_owner","payload":{"name":"testo","email":"","phone":""},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"0aa59c61a89eaa16"}
+8 Jun 15:32:38 - [info] [function:Owner Manager] Added owner: testo
+8 Jun 15:33:01 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"name":"testd","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"e7ca67f2cc020283"}
+8 Jun 15:33:01 - [info] [function:Node Admin] Added device: testd with ownerName: testo
+8 Jun 15:33:01 - [info] [function:Node Admin] Current Devices after adding: {"testd":{"deviceName":"testd","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}}
+8 Jun 15:33:01 - [info] [function:Owner Manager] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceId":"testd","name":"testd","ownerName":"testo","message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"e7ca67f2cc020283"}
+8 Jun 15:33:01 - [info] [function:Node Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceId":"testd","name":"testd","ownerName":"testo","message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"e7ca67f2cc020283"}
+8 Jun 15:39:23 - [debug] saved flow revision: c34fbde47e6d65024c223960c631be07cf141844e1314dcc19062fbebe7a71ad
+8 Jun 15:39:23 - [info] Stopping flows
+8 Jun 15:39:23 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+8 Jun 15:39:23 - [debug] red/nodes/flows.stop : stopping flow : global
+8 Jun 15:39:23 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+8 Jun 15:39:23 - [info] Stopped flows
+8 Jun 15:39:23 - [info] Updated flows
+8 Jun 15:39:23 - [info] Starting flows
+8 Jun 15:39:23 - [debug] red/nodes/flows.start : starting flow : global
+8 Jun 15:39:23 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+8 Jun 15:39:23 - [info] Started flows
+8 Jun 15:39:23 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+8 Jun 15:39:24 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"0c4e04442a76a0e6"}
+8 Jun 15:39:24 - [info] [function:Owner Manager] Fetched owners: {"testo":{"name":"testo","email":"","phone":"","devices":["testd"],"created":"2025-06-08T05:32:38.808Z"}}
+8 Jun 15:39:24 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"fe091e137b0c81c2"}
+8 Jun 15:39:24 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}}
+8 Jun 15:39:43 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"name":"est2","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"1fcf5f58ab19490b"}
+8 Jun 15:39:43 - [info] [function:Node Admin] Added device: est2 with ownerName: testo
+8 Jun 15:39:43 - [info] [function:Node Admin] Current Devices after adding: {"testd":{"deviceName":"testd","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"est2":{"deviceName":"est2","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}}
+8 Jun 15:39:43 - [info] [function:Node Admin] Current Owners after adding: {"testo":{"name":"testo","email":"","phone":"","devices":["testd","est2"],"created":"2025-06-08T05:32:38.808Z"}}
+8 Jun 15:39:43 - [info] [function:Owner Manager] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceId":"est2","name":"est2","ownerName":"testo","message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"1fcf5f58ab19490b"}
+8 Jun 15:39:43 - [info] [function:Node Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceId":"est2","name":"est2","ownerName":"testo","message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"1fcf5f58ab19490b"}
+8 Jun 15:49:32 - [debug] saved flow revision: f41d95704f3add40b43b8bbb2111b66378432c0da01c80fc765667783e5cb8fe
+8 Jun 15:49:32 - [info] Stopping flows
+8 Jun 15:49:32 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+8 Jun 15:49:32 - [debug] red/nodes/flows.stop : stopping flow : global
+8 Jun 15:49:33 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+8 Jun 15:49:33 - [info] Stopped flows
+8 Jun 15:49:33 - [info] Updated flows
+8 Jun 15:49:33 - [info] Starting flows
+8 Jun 15:49:33 - [debug] red/nodes/flows.start : starting flow : global
+8 Jun 15:49:33 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+8 Jun 15:49:33 - [info] Started flows
+8 Jun 15:49:33 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+8 Jun 15:49:33 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"228e12523bf85e81"}
+8 Jun 15:49:33 - [info] [function:Owner Manager] Fetched owners: {"testo":{"name":"testo","email":"","phone":"","devices":["testd","est2"],"created":"2025-06-08T05:32:38.808Z"}}
+8 Jun 15:49:33 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"5cfc2f625ad14971"}
+8 Jun 15:49:33 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"est2":{"deviceName":"est2","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}}
+8 Jun 16:00:28 - [debug] saved flow revision: 658830bc21e9850e3db0dc75c21f7da6440dc502f52a7e7ec3494b19b170bcbd
+8 Jun 16:00:28 - [info] Stopping flows
+8 Jun 16:00:28 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+8 Jun 16:00:28 - [debug] red/nodes/flows.stop : stopping flow : global
+8 Jun 16:00:28 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+8 Jun 16:00:28 - [info] Stopped flows
+8 Jun 16:00:28 - [info] Updated flows
+8 Jun 16:00:28 - [info] Starting flows
+8 Jun 16:00:28 - [debug] red/nodes/flows.start : starting flow : global
+8 Jun 16:00:28 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+8 Jun 16:00:28 - [info] Started flows
+8 Jun 16:00:28 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+8 Jun 16:00:28 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"4649734a07e15785"}
+8 Jun 16:00:28 - [info] [function:Owner Manager] Fetched owners: {"testo":{"name":"testo","email":"","phone":"","devices":["testd","est2"],"created":"2025-06-08T05:32:38.808Z"}}
+8 Jun 16:00:28 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"480cebbb416cd8ba"}
+8 Jun 16:00:28 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"est2":{"deviceName":"est2","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}}
+8 Jun 16:00:48 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"name":"ertertert","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"90c4188434f6e11b"}
+8 Jun 16:00:48 - [info] [function:Node Admin] Added device: ertertert with ownerName: testo
+8 Jun 16:00:48 - [info] [function:Node Admin] Current Devices after adding: {"testd":{"deviceName":"testd","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"est2":{"deviceName":"est2","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ertertert":{"deviceName":"ertertert","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}}
+8 Jun 16:00:48 - [info] [function:Node Admin] Current Owners after adding: {"testo":{"name":"testo","email":"","phone":"","devices":["testd","est2","ertertert"],"created":"2025-06-08T05:32:38.808Z"}}
+8 Jun 16:00:48 - [info] [function:Owner Manager] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceId":"ertertert","name":"ertertert","ownerName":"testo","message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"90c4188434f6e11b"}
+8 Jun 16:00:48 - [info] [function:Node Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceId":"ertertert","name":"ertertert","ownerName":"testo","message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"90c4188434f6e11b"}
+8 Jun 16:01:50 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"name":"device 1","ownerName":"testo","binaryPins":["bilge","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"9828e5dcb7914265"}
+8 Jun 16:01:50 - [info] [function:Node Admin] Added device: device 1 with ownerName: testo
+8 Jun 16:01:50 - [info] [function:Node Admin] Current Devices after adding: {"testd":{"deviceName":"testd","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"est2":{"deviceName":"est2","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ertertert":{"deviceName":"ertertert","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"device 1":{"deviceName":"device 1","ownerName":"testo","binaryPins":["bilge","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}}
+8 Jun 16:01:50 - [info] [function:Node Admin] Current Owners after adding: {"testo":{"name":"testo","email":"","phone":"","devices":["testd","est2","ertertert","device 1"],"created":"2025-06-08T05:32:38.808Z"}}
+8 Jun 16:01:50 - [info] [function:Owner Manager] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceId":"device 1","name":"device 1","ownerName":"testo","message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"9828e5dcb7914265"}
+8 Jun 16:01:50 - [info] [function:Node Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceId":"device 1","name":"device 1","ownerName":"testo","message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"9828e5dcb7914265"}
+8 Jun 16:03:01 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"name":"dfgdfg","binaryPins":["dfgdf","","dfgdfg","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"d3da4458b36043b8"}
+8 Jun 16:03:01 - [info] [function:Node Admin] Device Name or Owner Name is missing
+8 Jun 16:03:01 - [info] [function:Owner Manager] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device Name and Owner Name are required."},"_msgid":"d3da4458b36043b8"}
+8 Jun 16:03:01 - [info] [function:Node Admin] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device Name and Owner Name are required."},"_msgid":"d3da4458b36043b8"}
+8 Jun 16:03:18 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"name":"erterter","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"08fc7fd34fa59dc8"}
+8 Jun 16:03:18 - [info] [function:Node Admin] Added device: erterter with ownerName: testo
+8 Jun 16:03:18 - [info] [function:Node Admin] Current Devices after adding: {"testd":{"deviceName":"testd","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"est2":{"deviceName":"est2","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ertertert":{"deviceName":"ertertert","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"device 1":{"deviceName":"device 1","ownerName":"testo","binaryPins":["bilge","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"erterter":{"deviceName":"erterter","ownerName":"testo","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}}
+8 Jun 16:03:18 - [info] [function:Node Admin] Current Owners after adding: {"testo":{"name":"testo","email":"","phone":"","devices":["testd","est2","ertertert","device 1","erterter"],"created":"2025-06-08T05:32:38.808Z"}}
+8 Jun 16:03:18 - [info] [function:Owner Manager] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceId":"erterter","name":"erterter","ownerName":"testo","message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"08fc7fd34fa59dc8"}
+8 Jun 16:03:18 - [info] [function:Node Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceId":"erterter","name":"erterter","ownerName":"testo","message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"08fc7fd34fa59dc8"}
+8 Jun 16:03:25 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"name":"ertert","binaryPins":["erterte","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Vp6TOnXKRtYMw1f0AAAB","socketIp":"192.168.20.136"},"_msgid":"1b5e344cfd7d02b4"}
+8 Jun 16:03:25 - [info] [function:Node Admin] Device Name or Owner Name is missing
+8 Jun 16:03:25 - [info] [function:Owner Manager] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device Name and Owner Name are required."},"_msgid":"1b5e344cfd7d02b4"}
+8 Jun 16:03:25 - [info] [function:Node Admin] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device Name and Owner Name are required."},"_msgid":"1b5e344cfd7d02b4"}
