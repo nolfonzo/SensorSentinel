@@ -359,3 +359,104 @@ file using your chosen key the next time you deploy a change.
 8 Jun 21:51:16 - [info] [function:Node Admin] Removed device from old owner: new
 8 Jun 21:51:16 - [info] [function:Node Admin] Added device to new owner: new
 8 Jun 21:51:16 - [info] [function:Node Admin] Updated devices structure after update: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
+8 Jun 21:53:53 - [info] [ui-base:My Dashboard] Disconnected LEHgE_fHmLJyykMiAAAp due to ping timeout
+8 Jun 21:57:19 - [info] [ui-base:My Dashboard] Disconnected KkQbrl9H_ZgE4J8QAAAr due to ping timeout
+8 Jun 21:59:19 - [debug] saved flow revision: b315de76c04203d014b9b5931a1897bd31149e4a172696d123ba35547413cc57
+8 Jun 21:59:19 - [info] Stopping flows
+8 Jun 21:59:19 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+8 Jun 21:59:19 - [debug] red/nodes/flows.stop : stopping flow : global
+8 Jun 21:59:19 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+8 Jun 21:59:19 - [info] Stopped flows
+8 Jun 21:59:19 - [info] Updated flows
+8 Jun 21:59:19 - [info] Starting flows
+8 Jun 21:59:19 - [debug] red/nodes/flows.start : starting flow : global
+8 Jun 21:59:19 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+8 Jun 21:59:19 - [info] Started flows
+8 Jun 21:59:19 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+8 Jun 21:59:19 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"7e19e5df2274b749"}
+8 Jun 21:59:19 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
+8 Jun 21:59:19 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"7994e0bacaa797ad"}
+8 Jun 21:59:19 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
+8 Jun 22:02:01 - [debug] saved flow revision: 8ed8e8d553871f9df5032d723376da126d274db1c8b24ae07e875596331fe0bb
+8 Jun 22:02:01 - [info] Stopping flows
+8 Jun 22:02:01 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+8 Jun 22:02:01 - [debug] red/nodes/flows.stop : stopping flow : global
+8 Jun 22:02:01 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+8 Jun 22:02:01 - [info] Stopped flows
+8 Jun 22:02:01 - [info] Updated flows
+8 Jun 22:02:01 - [info] Starting flows
+8 Jun 22:02:01 - [debug] red/nodes/flows.start : starting flow : global
+8 Jun 22:02:01 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+8 Jun 22:02:01 - [info] Started flows
+8 Jun 22:02:01 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+8 Jun 22:02:01 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"4c67df29b07a7717"}
+8 Jun 22:02:01 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
+8 Jun 22:02:01 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"e7bc129241ae379d"}
+8 Jun 22:02:01 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
+8 Jun 22:03:03 - [info] [ui-base:My Dashboard] Disconnected v-LBD4v0m1mnmA8-AAAt due to ping timeout
+8 Jun 22:06:22 - [info] [ui-base:My Dashboard] Disconnected V9Iqby6OD1qe18S6AAAv due to ping timeout
+8 Jun 22:07:22 - [debug] saved flow revision: bbdc8115ff8b0cc9b0179ac469c7af96fa56a080943f2f40ad78be5267d149c1
+8 Jun 22:07:22 - [info] Stopping flows
+8 Jun 22:07:22 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+8 Jun 22:07:22 - [debug] red/nodes/flows.stop : stopping flow : global
+8 Jun 22:07:22 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+8 Jun 22:07:22 - [info] Stopped flows
+8 Jun 22:07:22 - [info] Updated flows
+8 Jun 22:07:22 - [info] Starting flows
+8 Jun 22:07:22 - [debug] red/nodes/flows.start : starting flow : global
+8 Jun 22:07:22 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+8 Jun 22:07:22 - [info] Started flows
+8 Jun 22:07:22 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+8 Jun 22:07:23 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"093760a2bb685461"}
+8 Jun 22:07:23 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
+8 Jun 22:07:23 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"919e6898d43ae9bb"}
+8 Jun 22:07:23 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
+8 Jun 22:14:05 - [debug] saved flow revision: 9fd3a4184a4d50eecfbc72b2bf8fe1d82ea8d62918e9d1000396e57908e76386
+8 Jun 22:14:05 - [info] Stopping flows
+8 Jun 22:14:05 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+8 Jun 22:14:05 - [debug] red/nodes/flows.stop : stopping flow : global
+8 Jun 22:14:05 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+8 Jun 22:14:05 - [info] Stopped flows
+8 Jun 22:14:05 - [info] Updated flows
+8 Jun 22:14:05 - [info] Starting flows
+8 Jun 22:14:05 - [debug] red/nodes/flows.start : starting flow : global
+8 Jun 22:14:05 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+8 Jun 22:14:05 - [info] Started flows
+8 Jun 22:14:05 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+8 Jun 22:14:05 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"4b08c3febecb4987"}
+8 Jun 22:14:05 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
+8 Jun 22:14:05 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"165863df1f8050e0"}
+8 Jun 22:14:05 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
+8 Jun 22:18:27 - [debug] saved flow revision: 84e63f1dfe64dfe04011f81d254886d8925ac3703a4de90abf8a8ed3701a70c2
+8 Jun 22:18:27 - [info] Stopping flows
+8 Jun 22:18:27 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+8 Jun 22:18:27 - [debug] red/nodes/flows.stop : stopping flow : global
+8 Jun 22:18:27 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+8 Jun 22:18:27 - [info] Stopped flows
+8 Jun 22:18:27 - [info] Updated flows
+8 Jun 22:18:27 - [info] Starting flows
+8 Jun 22:18:27 - [debug] red/nodes/flows.start : starting flow : global
+8 Jun 22:18:27 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+8 Jun 22:18:27 - [info] Started flows
+8 Jun 22:18:27 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+8 Jun 22:18:27 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"6395988180852fd7"}
+8 Jun 22:18:27 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
+8 Jun 22:18:27 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"f3430e3c720fc893"}
+8 Jun 22:18:27 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
+8 Jun 22:21:08 - [info] [ui-base:My Dashboard] Disconnected y64HMSjDBKmzjnfHAAAx due to ping timeout
+8 Jun 22:21:52 - [debug] saved flow revision: 50f9911c4e5caa6a96fb22e6a03289cd8f30b57560ad347e8336caa85249b360
+8 Jun 22:21:52 - [info] Stopping flows
+8 Jun 22:21:52 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+8 Jun 22:21:52 - [debug] red/nodes/flows.stop : stopping flow : global
+8 Jun 22:21:52 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+8 Jun 22:21:52 - [info] Stopped flows
+8 Jun 22:21:52 - [info] Updated flows
+8 Jun 22:21:52 - [info] Starting flows
+8 Jun 22:21:52 - [debug] red/nodes/flows.start : starting flow : global
+8 Jun 22:21:52 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+8 Jun 22:21:52 - [info] Started flows
+8 Jun 22:21:52 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+8 Jun 22:21:53 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"3fbb8f2e2fc6cfb3"}
+8 Jun 22:21:53 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
+8 Jun 22:21:53 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"72817c96a6c35919"}
+8 Jun 22:21:53 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
