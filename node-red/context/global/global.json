@@ -154,5 +154,28 @@
             ],
             "lastSeen": null
         }
+    },
+    "alerts": {
+        "1749452770794": {
+            "alertId": "1749452770794",
+            "alertMessage": "Motion detected",
+            "ownerName": "Alice",
+            "deviceName": "Sensor C",
+            "timestamp": "2025-06-09T12:05:00.000Z"
+        },
+        "1749453012880": {
+            "alertId": "1749453012880",
+            "alertMessage": "Motion detected",
+            "ownerName": "Alice",
+            "deviceName": "Sensor C",
+            "timestamp": "2025-06-09T12:05:00.000Z"
+        },
+        "1749453096767": {
+            "alertId": "1749453096767",
+            "alertMessage": "Motion detected",
+            "ownerName": "Alice",
+            "deviceName": "Sensor C",
+            "timestamp": "2025-06-09T12:05:00.000Z"
+        }
     }
 }

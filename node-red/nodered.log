@@ -388,3 +388,194 @@ file using your chosen key the next time you deploy a change.
 9 Jun 16:44:59 - [info] [function:Owner Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"2697689064","ownerName":"Stu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"fa5fb0bb31b5afbd"}
 9 Jun 16:44:59 - [info] [function:Device Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"2697689064","ownerName":"Stu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"fa5fb0bb31b5afbd"}
 9 Jun 16:45:29 - [debug] Flushing localfilesystem context scope global
+9 Jun 16:52:16 - [debug] saved flow revision: f31047fec95e502fde292ad07e6bbd20c3f6e87f1388e74268f7d7fb5c3420d1
+9 Jun 16:52:16 - [info] Stopping flows
+9 Jun 16:52:16 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 16:52:16 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 16:52:16 - [debug] red/nodes/flows.stop : stopping flow : e8a3445017fb5db9
+9 Jun 16:52:16 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 16:52:16 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 16:52:16 - [info] Stopped flows
+9 Jun 16:52:16 - [info] Updated flows
+9 Jun 16:52:16 - [info] Starting flows
+9 Jun 16:52:16 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 16:52:16 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 16:52:16 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 16:52:16 - [debug] red/nodes/flows.start : starting flow : e8a3445017fb5db9
+9 Jun 16:52:16 - [info] Started flows
+9 Jun 16:52:16 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 16:52:44 - [debug] saved flow revision: 0f78f3193c79b7c775a04d3fead5d085ec5116c745d2fb0485dbd6fc0fb4e3e8
+9 Jun 16:52:44 - [info] Stopping flows
+9 Jun 16:52:44 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 16:52:44 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 16:52:44 - [debug] red/nodes/flows.stop : stopping flow : e8a3445017fb5db9
+9 Jun 16:52:44 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 16:52:44 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 16:52:44 - [info] Stopped flows
+9 Jun 16:52:44 - [info] Updated flows
+9 Jun 16:52:44 - [info] Starting flows
+9 Jun 16:52:44 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 16:52:44 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 16:52:44 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 16:52:44 - [debug] red/nodes/flows.start : starting flow : e8a3445017fb5db9
+9 Jun 16:52:44 - [info] Started flows
+9 Jun 16:52:44 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 16:52:44 - [info] [function:function 1] Received message for topic: get_alerts json: {"topic":"get_alerts","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"e5bf1685a1e6a22c"}
+9 Jun 16:52:44 - [info] [function:function 1] Fetched alerts: []
+9 Jun 16:52:44 - [info] [function:function 1] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"79f8272554c44222"}
+9 Jun 16:52:44 - [warn] [function:function 1] Unrecognized topic: get_owners
+9 Jun 16:52:44 - [warn] [function:function 1] Unrecognized topic: get_devices
+9 Jun 16:52:44 - [info] [function:function 1] Received message for topic: alerts_data json: {"topic":"alerts_data","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"e5bf1685a1e6a22c","payload":[]}
+9 Jun 16:52:44 - [warn] [function:function 1] Unrecognized topic: alerts_data
+9 Jun 16:52:57 - [info] [function:function 1] Received message for topic: alerts_data json: {"_msgid":"8d05bbed810e36a2","payload":[{"ownerName":"Alice","deviceName":"Sensor C","pinLabel":"Motion","alertMessage":"Motion detected","timestamp":"2025-06-09T12:05:00Z"},{"ownerName":"Bob","deviceName":"Sensor AA","pinLabel":"Temperature","alertMessage":"Triggered HIGH","timestamp":"2025-06-09T12:15:00Z"},{"ownerName":"Bob","deviceName":"Sensor BB","pinLabel":"Humidity","alertMessage":"Triggered LOW","timestamp":"2025-06-09T12:20:00Z"},{"ownerName":"Charlie","deviceName":"Sensor D","pinLabel":"Light Level","alertMessage":"Light level too high","timestamp":"2025-06-09T12:25:00Z"}],"topic":"alerts_data"}
+9 Jun 16:52:57 - [warn] [function:function 1] Unrecognized topic: alerts_data
+9 Jun 16:53:11 - [info] [function:function 1] Received message for topic: clear_alert json: {"topic":"clear_alert","payload":{},"_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"b87a7546a855ebc5"}
+9 Jun 16:53:11 - [info] [function:function 1] Alert ID is missing. Cannot clear alert.
+9 Jun 16:53:11 - [info] [function:function 1] Received message for topic: alert_error json: {"topic":"alert_error","payload":{"error":"Alert ID is required."},"_msgid":"b87a7546a855ebc5"}
+9 Jun 16:53:11 - [warn] [function:function 1] Unrecognized topic: alert_error
+9 Jun 16:59:02 - [debug] saved flow revision: 7e0db64ebdea1669162000e0df50f0217993ef5c89682e0c38a345fda04b76f9
+9 Jun 16:59:02 - [info] Stopping flows
+9 Jun 16:59:02 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 16:59:02 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 16:59:02 - [debug] red/nodes/flows.stop : stopping flow : e8a3445017fb5db9
+9 Jun 16:59:02 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 16:59:02 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 16:59:02 - [info] Stopped flows
+9 Jun 16:59:02 - [info] Updated flows
+9 Jun 16:59:02 - [info] Starting flows
+9 Jun 16:59:02 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 16:59:02 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 16:59:02 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 16:59:02 - [debug] red/nodes/flows.start : starting flow : e8a3445017fb5db9
+9 Jun 16:59:02 - [info] Started flows
+9 Jun 16:59:02 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 16:59:02 - [info] [function:function 1] Received message for topic: get_alerts json: {"topic":"get_alerts","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"aa23abc4e43e0463"}
+9 Jun 16:59:02 - [info] [function:function 1] Fetched alerts: []
+9 Jun 16:59:02 - [info] [function:function 1] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"5977ace67738a777"}
+9 Jun 16:59:02 - [warn] [function:function 1] Unrecognized topic: get_owners
+9 Jun 16:59:02 - [warn] [function:function 1] Unrecognized topic: get_devices
+9 Jun 16:59:02 - [info] [function:function 1] Received message for topic: alerts_data json: {"topic":"alerts_data","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"aa23abc4e43e0463","payload":[]}
+9 Jun 16:59:02 - [warn] [function:function 1] Unrecognized topic: alerts_data
+9 Jun 17:02:30 - [info] [function:function 1] Received message for topic: alerts_data json: {"_msgid":"3653447b0ef358e4","payload":{"topic":"add_alert","ownerName":"Alice","deviceName":"Sensor C","alertMessage":"Motion detected","timestamp":"2025-06-09T12:05:00Z"},"topic":"alerts_data"}
+9 Jun 17:02:30 - [warn] [function:function 1] Unrecognized topic: alerts_data
+9 Jun 17:02:37 - [info] [function:function 1] Received message for topic: alerts_data json: {"_msgid":"0db9fb43fd7ceecc","payload":{"topic":"add_alert","ownerName":"Alice","deviceName":"Sensor C","alertMessage":"Motion detected","timestamp":"2025-06-09T12:05:00Z"},"topic":"alerts_data"}
+9 Jun 17:02:37 - [warn] [function:function 1] Unrecognized topic: alerts_data
+9 Jun 17:03:20 - [info] [function:function 1] Received message for topic: alerts_data json: {"_msgid":"75e428a63ed77614","payload":{"topic":"add_alert","ownerName":"Alice","deviceName":"Sensor C","alertMessage":"Motion detected","timestamp":"2025-06-09T12:05:00Z"},"topic":"alerts_data"}
+9 Jun 17:03:20 - [warn] [function:function 1] Unrecognized topic: alerts_data
+9 Jun 17:06:06 - [debug] saved flow revision: e3d3067dee90bf777e5f56bc958f18b6f123c24c03ba53e478bfce22bb6e72f2
+9 Jun 17:06:06 - [info] Stopping flows
+9 Jun 17:06:06 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 17:06:06 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 17:06:06 - [debug] red/nodes/flows.stop : stopping flow : e8a3445017fb5db9
+9 Jun 17:06:06 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 17:06:07 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 17:06:07 - [info] Stopped flows
+9 Jun 17:06:07 - [info] Updated flows
+9 Jun 17:06:07 - [info] Starting flows
+9 Jun 17:06:07 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 17:06:07 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 17:06:07 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 17:06:07 - [debug] red/nodes/flows.start : starting flow : e8a3445017fb5db9
+9 Jun 17:06:07 - [info] Started flows
+9 Jun 17:06:07 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 17:06:07 - [info] [function:function 1] Received message for topic: get_alerts json: {"topic":"get_alerts","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"4a81c37c0b034113"}
+9 Jun 17:06:07 - [info] [function:function 1] Fetched alerts: []
+9 Jun 17:06:07 - [info] [function:function 1] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"67bc96143663e584"}
+9 Jun 17:06:07 - [warn] [function:function 1] Unrecognized topic: get_owners
+9 Jun 17:06:07 - [warn] [function:function 1] Unrecognized topic: get_devices
+9 Jun 17:06:07 - [info] [function:function 1] Received message for topic: alerts_data json: {"topic":"alerts_data","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"4a81c37c0b034113","payload":[]}
+9 Jun 17:06:07 - [warn] [function:function 1] Unrecognized topic: alerts_data
+9 Jun 17:06:10 - [info] [function:function 1] Received message for topic: add_alert json: {"_msgid":"fd4e017685d5e27f","payload":{"ownerName":"Alice","deviceName":"Sensor C","alertMessage":"Motion detected","timestamp":"2025-06-09T12:05:00Z"},"topic":"add_alert"}
+9 Jun 17:06:10 - [info] [function:function 1] Incoming payload for add_alert: {"ownerName":"Alice","deviceName":"Sensor C","alertMessage":"Motion detected","timestamp":"2025-06-09T12:05:00Z"}
+9 Jun 17:06:10 - [info] [function:function 1] Added alert: {"alertId":"1749452770794","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"}
+9 Jun 17:06:10 - [info] [function:function 1] Received message for topic: alerts_data json: {"_msgid":"fd4e017685d5e27f","payload":[{"alertId":"1749452770794","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"}],"topic":"alerts_data"}
+9 Jun 17:06:10 - [warn] [function:function 1] Unrecognized topic: alerts_data
+9 Jun 17:06:26 - [info] [function:function 1] Received message for topic: add_alert json: {"_msgid":"9c453af9f39d88ae","payload":{"ownerName":"Alice","deviceName":"Sensor C","alertMessage":"Motion detected","timestamp":"2025-06-09T12:05:00Z"},"topic":"add_alert"}
+9 Jun 17:06:26 - [info] [function:function 1] Incoming payload for add_alert: {"ownerName":"Alice","deviceName":"Sensor C","alertMessage":"Motion detected","timestamp":"2025-06-09T12:05:00Z"}
+9 Jun 17:06:26 - [info] [function:function 1] Added alert: {"alertId":"1749452786209","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"}
+9 Jun 17:06:26 - [info] [function:function 1] Received message for topic: alerts_data json: {"_msgid":"9c453af9f39d88ae","payload":[{"alertId":"1749452770794","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"},{"alertId":"1749452786209","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"}],"topic":"alerts_data"}
+9 Jun 17:06:26 - [warn] [function:function 1] Unrecognized topic: alerts_data
+9 Jun 17:06:39 - [info] [function:function 1] Received message for topic: clear_alert json: {"topic":"clear_alert","payload":{"alertId":"1749452786209"},"_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"8b8dd62d29d84b17"}
+9 Jun 17:06:39 - [info] [function:function 1] Cleared alert: 1749452786209
+9 Jun 17:06:39 - [info] [function:function 1] Received message for topic: alerts_data json: {"topic":"alerts_data","payload":[{"alertId":"1749452770794","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"}],"_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"8b8dd62d29d84b17"}
+9 Jun 17:06:39 - [warn] [function:function 1] Unrecognized topic: alerts_data
+9 Jun 17:06:40 - [debug] Flushing localfilesystem context scope global
+9 Jun 17:06:57 - [debug] saved flow revision: d07c3c8c56a43fdc10ece473dcb40d445000d00b3c25a83e01d47557fd903a61
+9 Jun 17:06:57 - [info] Stopping flows
+9 Jun 17:06:57 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 17:06:57 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 17:06:57 - [debug] red/nodes/flows.stop : stopping flow : e8a3445017fb5db9
+9 Jun 17:06:57 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 17:06:57 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 17:06:57 - [info] Stopped flows
+9 Jun 17:06:57 - [info] Updated flows
+9 Jun 17:06:57 - [info] Starting flows
+9 Jun 17:06:57 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 17:06:57 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 17:06:57 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 17:06:57 - [debug] red/nodes/flows.start : starting flow : e8a3445017fb5db9
+9 Jun 17:06:58 - [info] Started flows
+9 Jun 17:06:58 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 17:06:58 - [info] [function:function 1] Received message for topic: get_alerts json: {"topic":"get_alerts","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"ae4b9c6c9b17232f"}
+9 Jun 17:06:58 - [info] [function:function 1] Fetched alerts: [{"alertId":"1749452770794","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"}]
+9 Jun 17:06:58 - [info] [function:function 1] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"7f47d82ac7b8e953"}
+9 Jun 17:06:58 - [warn] [function:function 1] Unrecognized topic: get_owners
+9 Jun 17:06:58 - [warn] [function:function 1] Unrecognized topic: get_devices
+9 Jun 17:06:58 - [info] [function:function 1] Received message for topic: alerts_data json: {"topic":"alerts_data","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"ae4b9c6c9b17232f","payload":[{"alertId":"1749452770794","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"}]}
+9 Jun 17:06:58 - [warn] [function:function 1] Unrecognized topic: alerts_data
+9 Jun 17:07:40 - [info] [function:Owner Admin] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"543d26a90b60cad3"}
+9 Jun 17:07:41 - [info] [function:Owner Admin] Fetched owners: {"Stu":{"name":"Stu","email":"teste","phone":"werwerwer","devices":["test2","new device","test device","t2","2697689064"],"created":"2025-06-09T05:27:55.712Z","updated":"2025-06-09T05:28:09.756Z"}}
+9 Jun 17:07:41 - [info] [function:Device Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"9c6f51748be60f7e"}
+9 Jun 17:07:41 - [info] [function:Device Admin] Fetched devices: {"2697689064":{"deviceName":"2697689064","ownerName":"Stu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null},"test device":{"deviceName":"test device","ownerName":"Stu","binaryPins":[{"label":"bilge 0","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null}}
+9 Jun 17:09:00 - [info] [function:function 1] Received message for topic: get_alerts json: {"topic":"get_alerts","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"95be105f464a154e"}
+9 Jun 17:09:00 - [info] [function:function 1] Fetched alerts: [{"alertId":"1749452770794","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"}]
+9 Jun 17:09:00 - [info] [function:function 1] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"290a5e9d0b1f1195"}
+9 Jun 17:09:00 - [warn] [function:function 1] Unrecognized topic: get_owners
+9 Jun 17:09:00 - [warn] [function:function 1] Unrecognized topic: get_devices
+9 Jun 17:09:00 - [info] [function:function 1] Received message for topic: alerts_data json: {"topic":"alerts_data","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"95be105f464a154e","payload":[{"alertId":"1749452770794","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"}]}
+9 Jun 17:09:00 - [warn] [function:function 1] Unrecognized topic: alerts_data
+9 Jun 17:10:12 - [info] [function:function 1] Received message for topic: add_alert json: {"_msgid":"b1bf6c6ce5efa981","payload":{"ownerName":"Alice","deviceName":"Sensor C","alertMessage":"Motion detected","timestamp":"2025-06-09T12:05:00Z"},"topic":"add_alert"}
+9 Jun 17:10:12 - [info] [function:function 1] Incoming payload for add_alert: {"ownerName":"Alice","deviceName":"Sensor C","alertMessage":"Motion detected","timestamp":"2025-06-09T12:05:00Z"}
+9 Jun 17:10:12 - [info] [function:function 1] Added alert: {"alertId":"1749453012880","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"}
+9 Jun 17:10:12 - [info] [function:function 1] Received message for topic: alerts_data json: {"_msgid":"b1bf6c6ce5efa981","payload":[{"alertId":"1749452770794","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"},{"alertId":"1749453012880","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"}],"topic":"alerts_data"}
+9 Jun 17:10:12 - [warn] [function:function 1] Unrecognized topic: alerts_data
+9 Jun 17:10:42 - [debug] Flushing localfilesystem context scope global
+9 Jun 17:11:36 - [info] [function:function 1] Received message for topic: add_alert json: {"_msgid":"3c56949f045ac88d","payload":{"ownerName":"Alice","deviceName":"Sensor C","alertMessage":"Motion detected","timestamp":"2025-06-09T12:05:00Z"},"topic":"add_alert"}
+9 Jun 17:11:36 - [info] [function:function 1] Incoming payload for add_alert: {"ownerName":"Alice","deviceName":"Sensor C","alertMessage":"Motion detected","timestamp":"2025-06-09T12:05:00Z"}
+9 Jun 17:11:36 - [info] [function:function 1] Added alert: {"alertId":"1749453096767","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"}
+9 Jun 17:11:36 - [info] [function:function 1] Received message for topic: alerts_data json: {"_msgid":"3c56949f045ac88d","payload":[{"alertId":"1749452770794","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"},{"alertId":"1749453012880","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"},{"alertId":"1749453096767","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"}],"topic":"alerts_data"}
+9 Jun 17:11:36 - [warn] [function:function 1] Unrecognized topic: alerts_data
+9 Jun 17:12:06 - [debug] Flushing localfilesystem context scope global
+9 Jun 17:12:20 - [info] [function:Owner Admin] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"6a7c176022814598"}
+9 Jun 17:12:20 - [info] [function:Owner Admin] Fetched owners: {"Stu":{"name":"Stu","email":"teste","phone":"werwerwer","devices":["test2","new device","test device","t2","2697689064"],"created":"2025-06-09T05:27:55.712Z","updated":"2025-06-09T05:28:09.756Z"}}
+9 Jun 17:12:20 - [info] [function:Device Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"d22aa66ce2ccf646"}
+9 Jun 17:12:20 - [info] [function:Device Admin] Fetched devices: {"2697689064":{"deviceName":"2697689064","ownerName":"Stu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null},"test device":{"deviceName":"test device","ownerName":"Stu","binaryPins":[{"label":"bilge 0","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null}}
+9 Jun 17:16:39 - [debug] saved flow revision: 90b4b26dea979cb84bae4a416a3b1f02e4869bf9630ef38e4fe416e3189a68cd
+9 Jun 17:16:39 - [info] Stopping flows
+9 Jun 17:16:39 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 17:16:39 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 17:16:39 - [debug] red/nodes/flows.stop : stopping flow : e8a3445017fb5db9
+9 Jun 17:16:39 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 17:16:39 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 17:16:39 - [info] Stopped flows
+9 Jun 17:16:39 - [info] Updated flows
+9 Jun 17:16:39 - [info] Starting flows
+9 Jun 17:16:39 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 17:16:39 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 17:16:39 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 17:16:39 - [debug] red/nodes/flows.start : starting flow : e8a3445017fb5db9
+9 Jun 17:16:39 - [info] Started flows
+9 Jun 17:16:39 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 17:16:40 - [info] [function:Owner Admin] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"2129a4197b100eb6"}
+9 Jun 17:16:40 - [info] [function:Owner Admin] Fetched owners: {"Stu":{"name":"Stu","email":"teste","phone":"werwerwer","devices":["test2","new device","test device","t2","2697689064"],"created":"2025-06-09T05:27:55.712Z","updated":"2025-06-09T05:28:09.756Z"}}
+9 Jun 17:16:40 - [info] [function:Device Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"ca746e2b3d28ec95"}
+9 Jun 17:16:40 - [info] [function:Device Admin] Fetched devices: {"2697689064":{"deviceName":"2697689064","ownerName":"Stu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null},"test device":{"deviceName":"test device","ownerName":"Stu","binaryPins":[{"label":"bilge 0","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null}}
+9 Jun 17:16:53 - [info] [function:Alert Admin] Received message for topic: get_alerts json: {"topic":"get_alerts","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"7ecda159ea0b3ea5"}
+9 Jun 17:16:53 - [info] [function:Alert Admin] Fetched alerts: [{"alertId":"1749452770794","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"},{"alertId":"1749453012880","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"},{"alertId":"1749453096767","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"}]
+9 Jun 17:16:53 - [info] [function:Alert Admin] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"63c75a80c8d05fe7"}
+9 Jun 17:16:53 - [warn] [function:Alert Admin] Unrecognized topic: get_owners
+9 Jun 17:16:53 - [warn] [function:Alert Admin] Unrecognized topic: get_devices
+9 Jun 17:16:53 - [info] [function:Alert Admin] Received message for topic: alerts_data json: {"topic":"alerts_data","_dashboard":{"sourceId":"3e028f50bd6ceb32","templateId":"3e028f50bd6ceb32"},"_client":{"socketId":"orNQAeG3jM0ovt36AAAL","socketIp":"192.168.20.136"},"_msgid":"7ecda159ea0b3ea5","payload":[{"alertId":"1749452770794","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"},{"alertId":"1749453012880","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"},{"alertId":"1749453096767","alertMessage":"Motion detected","ownerName":"Alice","deviceName":"Sensor C","timestamp":"2025-06-09T12:05:00.000Z"}]}
+9 Jun 17:16:53 - [warn] [function:Alert Admin] Unrecognized topic: alerts_data
+9 Jun 17:16:58 - [info] [function:Alert Admin] Received message for topic: undefined json: {"_msgid":"a86fb7c9d8b37993","payload":[]}
+9 Jun 17:16:58 - [warn] [function:Alert Admin] Unrecognized topic: undefined
