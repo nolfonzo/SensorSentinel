@@ -1,24 +1,24 @@
-9 Jun 14:04:52 - [info] 
+9 Jun 15:07:17 - [info] 
 
 Welcome to Node-RED
 ===================
 
-9 Jun 14:04:52 - [info] Node-RED version: v4.0.9
-9 Jun 14:04:52 - [info] Node.js  version: v20.19.2
-9 Jun 14:04:52 - [info] Linux 6.12.25+rpt-rpi-v8 arm64 LE
-9 Jun 14:04:53 - [info] Loading palette nodes
-9 Jun 14:04:53 - [debug] Module: @flowfuse/node-red-dashboard 1.24.2 /home/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard
-9 Jun 14:04:55 - [info] Settings file  : /home/nolfonzo/code/SensorSentinel/node-red/settings.js
-9 Jun 14:04:55 - [info] Context store  : 'default' [module=localfilesystem]
-9 Jun 14:04:55 - [info] User directory : /home/nolfonzo/code/SensorSentinel/node-red
-9 Jun 14:04:55 - [warn] Projects disabled : editorTheme.projects.enabled=false
-9 Jun 14:04:55 - [info] Flows file     : /home/nolfonzo/code/SensorSentinel/node-red/flows.json
-9 Jun 14:04:55 - [info] Server now running at http://127.0.0.1:1880/
-9 Jun 14:04:55 - [debug] loaded flow revision: 302f8c0fe3e7bc2ea5819a48b9ef5697f36622095a75a4f8293dcb7d807be2b5
-9 Jun 14:04:55 - [debug] red/runtime/nodes/credentials.load : no user key present
-9 Jun 14:04:55 - [debug] red/runtime/nodes/credentials.load : using default key
-9 Jun 14:04:55 - [debug] red/runtime/nodes/credentials.load : keyType=system
-9 Jun 14:04:55 - [warn] 
+9 Jun 15:07:17 - [info] Node-RED version: v4.0.9
+9 Jun 15:07:17 - [info] Node.js  version: v20.19.2
+9 Jun 15:07:17 - [info] Linux 6.12.25+rpt-rpi-v8 arm64 LE
+9 Jun 15:07:17 - [info] Loading palette nodes
+9 Jun 15:07:17 - [debug] Module: @flowfuse/node-red-dashboard 1.24.2 /home/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard
+9 Jun 15:07:19 - [info] Settings file  : /home/nolfonzo/code/SensorSentinel/node-red/settings.js
+9 Jun 15:07:19 - [info] Context store  : 'default' [module=localfilesystem]
+9 Jun 15:07:19 - [info] User directory : /home/nolfonzo/code/SensorSentinel/node-red
+9 Jun 15:07:19 - [warn] Projects disabled : editorTheme.projects.enabled=false
+9 Jun 15:07:19 - [info] Flows file     : /home/nolfonzo/code/SensorSentinel/node-red/flows.json
+9 Jun 15:07:19 - [info] Server now running at http://127.0.0.1:1880/
+9 Jun 15:07:19 - [debug] loaded flow revision: cf0f36af68d39544d69856c26b0f27053bbbe0ea2fa41fc9e64525efd4ca636a
+9 Jun 15:07:19 - [debug] red/runtime/nodes/credentials.load : no user key present
+9 Jun 15:07:19 - [debug] red/runtime/nodes/credentials.load : using default key
+9 Jun 15:07:19 - [debug] red/runtime/nodes/credentials.load : keyType=system
+9 Jun 15:07:19 - [warn] 
 
 ---------------------------------------------------------------------
 Your flow credentials file is encrypted using a system-generated key.
@@ -32,101 +32,25 @@ your settings file. Node-RED will then re-encrypt your credentials
 file using your chosen key the next time you deploy a change.
 ---------------------------------------------------------------------
 
-9 Jun 14:04:55 - [info] Starting flows
-9 Jun 14:04:55 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 14:04:55 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 14:04:55 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 14:04:55 - [info] [ui-base:My Dashboard] Node-RED Dashboard 2.0 (v1.24.2) started at /dashboard
-9 Jun 14:04:55 - [info] [ui-base:My Dashboard] Created socket.io server bound to Node-RED port at path /dashboard/socket.io
-9 Jun 14:04:55 - [info] Started flows
-9 Jun 14:04:55 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 14:05:17 - [info] [ui-base:My Dashboard] Disconnected pZFGLS2wCaFnq4DVAAAB due to transport close
-9 Jun 14:05:22 - [info] [function:Owner Admin] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"wPNQZND_SrKpZNRGAAAD","socketIp":"192.168.20.136"},"_msgid":"81e2ba195f6c8d58"}
-9 Jun 14:05:22 - [info] [function:Owner Admin] Fetched owners: {"Dangar Stu":{"name":"Dangar Stu","email":"","phone":"","devices":["Renko","2697689064"],"created":"2025-06-09T03:02:28.822Z"},"Carl":{"name":"Carl","email":"345345345","phone":"","devices":[],"created":"2025-06-09T03:07:30.549Z","updated":"2025-06-09T03:08:34.054Z"}}
-9 Jun 14:05:22 - [info] [function:Device Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"wPNQZND_SrKpZNRGAAAD","socketIp":"192.168.20.136"},"_msgid":"57ca28db3c39e422"}
-9 Jun 14:05:22 - [info] [function:Device Admin] Fetched devices: {"2697689064":{"deviceName":"2697689064","ownerName":"Dangar Stu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null},"Renko":{"deviceName":"Renko","ownerName":"Dangar Stu","binaryPins":[{"label":"Bilge2","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null}}
-9 Jun 14:05:26 - [info] [ui-base:My Dashboard] Disconnected wPNQZND_SrKpZNRGAAAD due to transport close
-9 Jun 14:05:27 - [info] [function:Owner Admin] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"15b81ceb2f489e3e"}
-9 Jun 14:05:27 - [info] [function:Owner Admin] Fetched owners: {"Dangar Stu":{"name":"Dangar Stu","email":"","phone":"","devices":["Renko","2697689064"],"created":"2025-06-09T03:02:28.822Z"},"Carl":{"name":"Carl","email":"345345345","phone":"","devices":[],"created":"2025-06-09T03:07:30.549Z","updated":"2025-06-09T03:08:34.054Z"}}
-9 Jun 14:05:27 - [info] [function:Device Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"bc3a4838bbe2c9fd"}
-9 Jun 14:05:27 - [info] [function:Device Admin] Fetched devices: {"2697689064":{"deviceName":"2697689064","ownerName":"Dangar Stu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null},"Renko":{"deviceName":"Renko","ownerName":"Dangar Stu","binaryPins":[{"label":"Bilge2","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null}}
-9 Jun 14:07:32 - [debug] saved flow revision: db1ded8e7f3ae6aa5a5cedf3959b9b9783b68d5ca7d15a75b2ce7453fb514dae
-9 Jun 14:07:32 - [info] Stopping flows
-9 Jun 14:07:32 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 14:07:32 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 14:07:32 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 14:07:32 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 14:07:32 - [info] Stopped flows
-9 Jun 14:07:32 - [info] Updated flows
-9 Jun 14:07:32 - [info] Starting flows
-9 Jun 14:07:32 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 14:07:32 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 14:07:32 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 14:07:32 - [info] Started flows
-9 Jun 14:07:32 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 14:07:32 - [info] [function:Owner Admin] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"b38b07dfe3e294b1"}
-9 Jun 14:07:32 - [info] [function:Owner Admin] Fetched owners: {"Dangar Stu":{"name":"Dangar Stu","email":"","phone":"","devices":["Renko","2697689064"],"created":"2025-06-09T03:02:28.822Z"},"Carl":{"name":"Carl","email":"345345345","phone":"","devices":[],"created":"2025-06-09T03:07:30.549Z","updated":"2025-06-09T03:08:34.054Z"}}
-9 Jun 14:07:32 - [info] [function:Device Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"60b43cb32bdad37e"}
-9 Jun 14:07:32 - [info] [function:Device Admin] Fetched devices: {"2697689064":{"deviceName":"2697689064","ownerName":"Dangar Stu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null},"Renko":{"deviceName":"Renko","ownerName":"Dangar Stu","binaryPins":[{"label":"Bilge2","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null}}
-9 Jun 14:07:43 - [info] [function:Owner Admin] Received message for topic: delete_owner json: {"topic":"delete_owner","payload":{"name":"Dangar Stu"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"3e94cc89cd1b6714"}
-9 Jun 14:07:43 - [info] [function:Owner Admin] Trying to delete owner: Dangar Stu
-9 Jun 14:07:43 - [info] [function:Owner Admin] Current owners: {"Dangar Stu":{"name":"Dangar Stu","email":"","phone":"","devices":["Renko","2697689064"],"created":"2025-06-09T03:02:28.822Z"},"Carl":{"name":"Carl","email":"345345345","phone":"","devices":[],"created":"2025-06-09T03:07:30.549Z","updated":"2025-06-09T03:08:34.054Z"}}
-9 Jun 14:07:43 - [info] [function:Owner Admin] Deleted owner: Dangar Stu and their devices
-9 Jun 14:07:46 - [info] [function:Owner Admin] Received message for topic: delete_owner json: {"topic":"delete_owner","payload":{"name":"Carl"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"7e37ba01f6298ada"}
-9 Jun 14:07:46 - [info] [function:Owner Admin] Trying to delete owner: Carl
-9 Jun 14:07:46 - [info] [function:Owner Admin] Current owners: {"Carl":{"name":"Carl","email":"345345345","phone":"","devices":[],"created":"2025-06-09T03:07:30.549Z","updated":"2025-06-09T03:08:34.054Z"}}
-9 Jun 14:07:46 - [info] [function:Owner Admin] Deleted owner: Carl and their devices
-9 Jun 14:07:53 - [info] [function:Owner Admin] Received message for topic: add_owner json: {"topic":"add_owner","payload":{"name":"DangarStu","email":"","phone":""},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"23d59fe68872f99f"}
-9 Jun 14:07:53 - [info] [function:Owner Admin] Added owner: DangarStu
-9 Jun 14:08:05 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:08:13 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:08:13 - [debug] Flushing localfilesystem context scope global
-9 Jun 14:08:19 - [info] [function:Device Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"deviceName":"Renko","ownerName":"DangarStu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"bbc6684b1802bd74"}
-9 Jun 14:08:19 - [info] [function:Device Admin] Incoming payload: {"deviceName":"Renko","ownerName":"DangarStu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}]}
-9 Jun 14:08:19 - [info] [function:Device Admin] Incoming binaryPins: [{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}]
-9 Jun 14:08:19 - [info] [function:Device Admin] Incoming analogPins: [{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}]
-9 Jun 14:08:19 - [info] [function:Device Admin] Added device: {"deviceName":"Renko","ownerName":"DangarStu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null}
-9 Jun 14:08:19 - [info] [function:Owner Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"Renko","ownerName":"DangarStu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"bbc6684b1802bd74"}
-9 Jun 14:08:19 - [info] [function:Device Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"Renko","ownerName":"DangarStu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"bbc6684b1802bd74"}
-9 Jun 14:08:35 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:08:49 - [debug] Flushing localfilesystem context scope global
-9 Jun 14:09:06 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:09:21 - [info] [function:Owner Admin] Received message for topic: delete_device json: {"topic":"delete_device","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"baa21306e1741ac4"}
-9 Jun 14:09:21 - [info] [function:Device Admin] Received message for topic: delete_device json: {"topic":"delete_device","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"baa21306e1741ac4"}
-9 Jun 14:09:36 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:09:43 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:10:06 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:10:37 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:11:07 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:11:14 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:11:38 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:12:08 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:12:38 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:12:44 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:13:09 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:13:39 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:14:10 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:14:14 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:14:17 - [debug] saved flow revision: d58e2c76e5625c6939a762d5c3ba5546578289ad97cf4c44bb3c80cc35ae7d3e
-9 Jun 14:14:17 - [info] Stopping flows
-9 Jun 14:14:17 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 14:14:17 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 14:14:17 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 14:14:17 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 14:14:17 - [info] Stopped flows
-9 Jun 14:14:17 - [info] Updated flows
-9 Jun 14:14:17 - [info] Starting flows
-9 Jun 14:14:17 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 14:14:17 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 14:14:17 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 14:14:17 - [info] Started flows
-9 Jun 14:14:17 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 14:14:17 - [info] [function:Owner Admin] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"481ed5909b741e32"}
-9 Jun 14:14:17 - [info] [function:Owner Admin] Fetched owners: {"DangarStu":{"name":"DangarStu","email":"","phone":"","devices":["Renko"],"created":"2025-06-09T04:07:53.418Z"}}
-9 Jun 14:14:17 - [info] [function:Device Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"da78bedf3ff4db14"}
-9 Jun 14:14:17 - [info] [function:Device Admin] Fetched devices: {"Renko":{"deviceName":"Renko","ownerName":"DangarStu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null}}
-9 Jun 14:14:40 - [info] [function:Owner Admin] Received message for topic: delete_device json: {"topic":"delete_device","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"426e36f257b18896"}
-9 Jun 14:14:40 - [info] [function:Device Admin] Received message for topic: delete_device json: {"topic":"delete_device","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"426e36f257b18896"}
-9 Jun 14:14:40 - [error] [function:Device Admin] TypeError: Cannot read properties of undefined (reading 'deviceName')
-9 Jun 14:14:40 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 14:15:10 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 15:07:19 - [info] Starting flows
+9 Jun 15:07:19 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 15:07:19 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 15:07:19 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 15:07:19 - [info] [ui-base:My Dashboard] Node-RED Dashboard 2.0 (v1.24.2) started at /dashboard
+9 Jun 15:07:19 - [info] [ui-base:My Dashboard] Created socket.io server bound to Node-RED port at path /dashboard/socket.io
+9 Jun 15:07:19 - [info] Started flows
+9 Jun 15:07:19 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 15:07:30 - [info] [function:Owner Admin] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tpYE8P6IhTDT9ES9AAAD","socketIp":"192.168.20.136"},"_msgid":"58cba4bde257feea"}
+9 Jun 15:07:30 - [info] [function:Owner Admin] Fetched owners: {"Stu":{"name":"Stu","email":"ttttt","phone":"","devices":["testd","Renko"],"created":"2025-06-09T04:30:16.642Z","updated":"2025-06-09T04:30:23.608Z"}}
+9 Jun 15:07:30 - [info] [function:Device Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tpYE8P6IhTDT9ES9AAAD","socketIp":"192.168.20.136"},"_msgid":"9edfbd91bf237211"}
+9 Jun 15:07:30 - [info] [function:Device Admin] Fetched devices: {"Renko":{"deviceName":"Renko","ownerName":"Stu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null}}
+9 Jun 15:07:45 - [info] [function:Owner Admin] Received message for topic: delete_owner json: {"topic":"delete_owner","payload":{"name":"Stu"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tpYE8P6IhTDT9ES9AAAD","socketIp":"192.168.20.136"},"_msgid":"a2cc51acb16b2fa2"}
+9 Jun 15:07:45 - [info] [function:Owner Admin] Trying to delete owner: Stu
+9 Jun 15:07:45 - [info] [function:Owner Admin] Current owners: {"Stu":{"name":"Stu","email":"ttttt","phone":"","devices":["testd","Renko"],"created":"2025-06-09T04:30:16.642Z","updated":"2025-06-09T04:30:23.608Z"}}
+9 Jun 15:07:45 - [info] [function:Owner Admin] Deleted owner: Stu and their devices
+9 Jun 15:07:54 - [info] [function:Owner Admin] Received message for topic: delete_device json: {"topic":"delete_device","payload":{"deviceName":"Renko"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tpYE8P6IhTDT9ES9AAAD","socketIp":"192.168.20.136"},"_msgid":"83b5de1d1eb53559"}
+9 Jun 15:07:54 - [info] [function:Device Admin] Received message for topic: delete_device json: {"topic":"delete_device","payload":{"deviceName":"Renko"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tpYE8P6IhTDT9ES9AAAD","socketIp":"192.168.20.136"},"_msgid":"83b5de1d1eb53559"}
+9 Jun 15:07:54 - [info] [function:Device Admin] Device name not found for deletion: Renko
+9 Jun 15:07:54 - [info] [function:Owner Admin] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device name not found."},"_msgid":"83b5de1d1eb53559"}
+9 Jun 15:07:54 - [info] [function:Device Admin] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device name not found."},"_msgid":"83b5de1d1eb53559"}
+9 Jun 15:08:15 - [debug] Flushing localfilesystem context scope global
