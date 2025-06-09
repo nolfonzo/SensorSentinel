@@ -5,62 +5,50 @@
             "email": "teste",
             "phone": "werwerwer",
             "devices": [
+                "test2",
                 "new device",
-                "test2"
+                "test device",
+                "t2",
+                "2697689064"
             ],
             "created": "2025-06-09T05:27:55.712Z",
             "updated": "2025-06-09T05:28:09.756Z"
-        },
-        "Carl": {
-            "name": "Carl",
-            "email": "sdfsdfs",
-            "phone": "",
-            "devices": [],
-            "created": "2025-06-09T05:41:57.434Z"
         }
     },
     "devices": {
-        "new device": {
-            "deviceName": "new device",
+        "2697689064": {
+            "deviceName": "2697689064",
             "ownerName": "Stu",
             "binaryPins": [
                 {
-                    "label": "test",
                     "trigger": "High",
                     "alertLevel": "None"
                 },
                 {
-                    "label": "",
                     "trigger": "High",
                     "alertLevel": "None"
                 },
                 {
-                    "label": "",
                     "trigger": "High",
                     "alertLevel": "None"
                 },
                 {
-                    "label": "",
                     "trigger": "High",
                     "alertLevel": "None"
                 },
                 {
-                    "label": "",
                     "trigger": "High",
                     "alertLevel": "None"
                 },
                 {
-                    "label": "",
                     "trigger": "High",
                     "alertLevel": "None"
                 },
                 {
-                    "label": "",
                     "trigger": "High",
                     "alertLevel": "None"
                 },
                 {
-                    "label": "",
                     "trigger": "High",
                     "alertLevel": "None"
                 }
@@ -93,12 +81,12 @@
             ],
             "lastSeen": null
         },
-        "test2": {
-            "deviceName": "test2",
+        "test device": {
+            "deviceName": "test device",
             "ownerName": "Stu",
             "binaryPins": [
                 {
-                    "label": "test1",
+                    "label": "bilge 0",
                     "trigger": "High",
                     "alertLevel": "None"
                 },
