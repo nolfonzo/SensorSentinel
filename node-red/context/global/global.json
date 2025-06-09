@@ -21,34 +21,42 @@
             "ownerName": "Stu",
             "binaryPins": [
                 {
+                    "label": "Bilge",
                     "trigger": "High",
                     "alertLevel": "None"
                 },
                 {
+                    "label": "Bilge2",
+                    "trigger": "Low",
+                    "alertLevel": "None"
+                },
+                {
+                    "label": "",
                     "trigger": "High",
                     "alertLevel": "None"
                 },
                 {
+                    "label": "",
                     "trigger": "High",
                     "alertLevel": "None"
                 },
                 {
+                    "label": "",
                     "trigger": "High",
                     "alertLevel": "None"
                 },
                 {
+                    "label": "",
                     "trigger": "High",
                     "alertLevel": "None"
                 },
                 {
+                    "label": "",
                     "trigger": "High",
                     "alertLevel": "None"
                 },
                 {
-                    "trigger": "High",
-                    "alertLevel": "None"
-                },
-                {
+                    "label": "",
                     "trigger": "High",
                     "alertLevel": "None"
                 }
@@ -156,26 +164,85 @@
         }
     },
     "alerts": {
-        "1749452770794": {
-            "alertId": "1749452770794",
-            "alertMessage": "Motion detected",
-            "ownerName": "Alice",
-            "deviceName": "Sensor C",
-            "timestamp": "2025-06-09T12:05:00.000Z"
+        "1749463594190": {
+            "alertId": "1749463594190",
+            "alertMessage": "Triggered HIGH",
+            "ownerName": "Stu",
+            "deviceName": "2697689064",
+            "pinLabel": "Bilge",
+            "timestamp": "2025-06-09T17:16:02+1000"
         },
-        "1749453012880": {
-            "alertId": "1749453012880",
-            "alertMessage": "Motion detected",
-            "ownerName": "Alice",
-            "deviceName": "Sensor C",
-            "timestamp": "2025-06-09T12:05:00.000Z"
+        "1749463883266": {
+            "alertId": "1749463883266",
+            "alertMessage": "Triggered HIGH",
+            "ownerName": "Stu",
+            "deviceName": "2697689064",
+            "pinLabel": "Bilge",
+            "timestamp": "2025-06-09T17:16:02+1000"
         },
-        "1749453096767": {
-            "alertId": "1749453096767",
-            "alertMessage": "Motion detected",
-            "ownerName": "Alice",
-            "deviceName": "Sensor C",
-            "timestamp": "2025-06-09T12:05:00.000Z"
+        "1749463907710": {
+            "alertId": "1749463907710",
+            "alertMessage": "Triggered HIGH",
+            "ownerName": "Stu",
+            "deviceName": "2697689064",
+            "pinLabel": "Bilge",
+            "timestamp": "2025-06-09T17:16:02+1000"
+        },
+        "1749463971332": {
+            "alertId": "1749463971332",
+            "alertMessage": "Triggered LOW",
+            "ownerName": "Stu",
+            "deviceName": "2697689064",
+            "pinLabel": "Bilge2",
+            "timestamp": "2025-06-09T20:12:51+1000"
+        },
+        "1749463972769": {
+            "alertId": "1749463972769",
+            "alertMessage": "Triggered HIGH",
+            "ownerName": "Stu",
+            "deviceName": "2697689064",
+            "pinLabel": "Bilge",
+            "timestamp": "2025-06-09T17:16:02+1000"
+        },
+        "1749464032154": {
+            "alertId": "1749464032154",
+            "alertMessage": "Triggered LOW",
+            "ownerName": "Stu",
+            "deviceName": "2697689064",
+            "pinLabel": "Bilge2",
+            "timestamp": "2025-06-09T20:13:52+1000"
+        },
+        "1749464062542": {
+            "alertId": "1749464062542",
+            "alertMessage": "Triggered HIGH",
+            "ownerName": "Stu",
+            "deviceName": "2697689064",
+            "pinLabel": "Bilge",
+            "timestamp": "2025-06-09T20:14:22+1000"
+        },
+        "1749464092947": {
+            "alertId": "1749464092947",
+            "alertMessage": "Triggered LOW",
+            "ownerName": "Stu",
+            "deviceName": "2697689064",
+            "pinLabel": "Bilge2",
+            "timestamp": "2025-06-09T20:14:52+1000"
+        },
+        "1749464123340": {
+            "alertId": "1749464123340",
+            "alertMessage": "Triggered LOW",
+            "ownerName": "Stu",
+            "deviceName": "2697689064",
+            "pinLabel": "Bilge2",
+            "timestamp": "2025-06-09T20:15:23+1000"
+        },
+        "1749464153732": {
+            "alertId": "1749464153732",
+            "alertMessage": "Triggered LOW",
+            "ownerName": "Stu",
+            "deviceName": "2697689064",
+            "pinLabel": "Bilge2",
+            "timestamp": "2025-06-09T20:15:53+1000"
         }
     }
 }
