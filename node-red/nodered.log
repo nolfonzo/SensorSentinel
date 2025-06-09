@@ -1,24 +1,24 @@
-8 Jun 20:59:10 - [info] 
+9 Jun 10:23:53 - [info] 
 
 Welcome to Node-RED
 ===================
 
-8 Jun 20:59:10 - [info] Node-RED version: v4.0.9
-8 Jun 20:59:10 - [info] Node.js  version: v20.19.2
-8 Jun 20:59:10 - [info] Linux 6.12.25+rpt-rpi-v8 arm64 LE
-8 Jun 20:59:10 - [info] Loading palette nodes
-8 Jun 20:59:11 - [debug] Module: @flowfuse/node-red-dashboard 1.24.2 /home/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard
-8 Jun 20:59:12 - [info] Settings file  : /home/nolfonzo/code/SensorSentinel/node-red/settings.js
-8 Jun 20:59:12 - [info] Context store  : 'default' [module=memory]
-8 Jun 20:59:12 - [info] User directory : /home/nolfonzo/code/SensorSentinel/node-red
-8 Jun 20:59:12 - [warn] Projects disabled : editorTheme.projects.enabled=false
-8 Jun 20:59:12 - [info] Flows file     : /home/nolfonzo/code/SensorSentinel/node-red/flows.json
-8 Jun 20:59:12 - [info] Server now running at http://127.0.0.1:1880/
-8 Jun 20:59:12 - [debug] loaded flow revision: da8c891d1438c19a27a4ebb19cdec98f647b9ffd8ffb1093f9b45997962d824a
-8 Jun 20:59:12 - [debug] red/runtime/nodes/credentials.load : no user key present
-8 Jun 20:59:12 - [debug] red/runtime/nodes/credentials.load : using default key
-8 Jun 20:59:12 - [debug] red/runtime/nodes/credentials.load : keyType=system
-8 Jun 20:59:12 - [warn] 
+9 Jun 10:23:53 - [info] Node-RED version: v4.0.9
+9 Jun 10:23:53 - [info] Node.js  version: v20.19.2
+9 Jun 10:23:53 - [info] Linux 6.12.25+rpt-rpi-v8 arm64 LE
+9 Jun 10:23:54 - [info] Loading palette nodes
+9 Jun 10:23:54 - [debug] Module: @flowfuse/node-red-dashboard 1.24.2 /home/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard
+9 Jun 10:23:56 - [info] Settings file  : /home/nolfonzo/code/SensorSentinel/node-red/settings.js
+9 Jun 10:23:56 - [info] Context store  : 'default' [module=memory]
+9 Jun 10:23:56 - [info] User directory : /home/nolfonzo/code/SensorSentinel/node-red
+9 Jun 10:23:56 - [warn] Projects disabled : editorTheme.projects.enabled=false
+9 Jun 10:23:56 - [info] Flows file     : /home/nolfonzo/code/SensorSentinel/node-red/flows.json
+9 Jun 10:23:56 - [info] Server now running at http://127.0.0.1:1880/
+9 Jun 10:23:56 - [debug] loaded flow revision: c1f7b471c58c3a6f496c5ee94c12ea250c0ace27fea0a231b06b693466ecc125
+9 Jun 10:23:56 - [debug] red/runtime/nodes/credentials.load : no user key present
+9 Jun 10:23:56 - [debug] red/runtime/nodes/credentials.load : using default key
+9 Jun 10:23:56 - [debug] red/runtime/nodes/credentials.load : keyType=system
+9 Jun 10:23:56 - [warn] 
 
 ---------------------------------------------------------------------
 Your flow credentials file is encrypted using a system-generated key.
@@ -32,508 +32,1020 @@ your settings file. Node-RED will then re-encrypt your credentials
 file using your chosen key the next time you deploy a change.
 ---------------------------------------------------------------------
 
-8 Jun 20:59:12 - [info] Starting flows
-8 Jun 20:59:12 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 20:59:12 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 20:59:12 - [info] [ui-base:My Dashboard] Node-RED Dashboard 2.0 (v1.24.2) started at /dashboard
-8 Jun 20:59:12 - [info] [ui-base:My Dashboard] Created socket.io server bound to Node-RED port at path /dashboard/socket.io
-8 Jun 20:59:12 - [info] Started flows
-8 Jun 20:59:13 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 20:59:15 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"kg_Y35CLVV24wHrpAAAD","socketIp":"192.168.20.136"},"_msgid":"dc889a023b7de6a5"}
-8 Jun 20:59:15 - [info] [function:Owner Manager] Fetched owners: {}
-8 Jun 20:59:15 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"kg_Y35CLVV24wHrpAAAD","socketIp":"192.168.20.136"},"_msgid":"5ba2ffc34caf92a4"}
-8 Jun 20:59:15 - [info] [function:Node Admin] Fetched devices: {}
-8 Jun 20:59:27 - [info] [ui-base:My Dashboard] Disconnected kg_Y35CLVV24wHrpAAAD due to transport close
-8 Jun 20:59:28 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"yt8wpYUrQLTURo02AAAF","socketIp":"192.168.20.136"},"_msgid":"8ccd806d71bba59f"}
-8 Jun 20:59:28 - [info] [function:Owner Manager] Fetched owners: {}
-8 Jun 20:59:28 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"yt8wpYUrQLTURo02AAAF","socketIp":"192.168.20.136"},"_msgid":"f0a9494117666ab9"}
-8 Jun 20:59:28 - [info] [function:Node Admin] Fetched devices: {}
-8 Jun 20:59:38 - [info] [function:Owner Manager] Received message for topic: add_owner json: {"topic":"add_owner","payload":{"name":"testo1","email":"wer","phone":"wer"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"yt8wpYUrQLTURo02AAAF","socketIp":"192.168.20.136"},"_msgid":"cf44935dc1bbc836"}
-8 Jun 20:59:38 - [info] [function:Owner Manager] Added owner: testo1
-8 Jun 20:59:47 - [info] [function:Owner Manager] Received message for topic: update_owner json: {"topic":"update_owner","payload":{"name":"testo1","email":"wer","phone":"ppppp","devices":[]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"yt8wpYUrQLTURo02AAAF","socketIp":"192.168.20.136"},"_msgid":"3dd03e7ed1289979"}
-8 Jun 20:59:47 - [info] [function:Owner Manager] Updated owner: {"name":"testo1","email":"wer","phone":"wer","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T10:59:47.577Z"}
-8 Jun 20:59:54 - [info] [function:Owner Manager] Received message for topic: update_owner json: {"topic":"update_owner","payload":{"name":"testo1","email":"iiiiiiiii","phone":"wer","devices":[]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"yt8wpYUrQLTURo02AAAF","socketIp":"192.168.20.136"},"_msgid":"e92162352ef63bb3"}
-8 Jun 20:59:54 - [info] [function:Owner Manager] Updated owner: {"name":"testo1","email":"wer","phone":"wer","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T10:59:54.546Z"}
-8 Jun 21:00:09 - [info] [ui-base:My Dashboard] Disconnected yt8wpYUrQLTURo02AAAF due to transport close
-8 Jun 21:00:10 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"yfr-xD_ZcqBgNIS1AAAH","socketIp":"192.168.20.136"},"_msgid":"34303c120a03160d"}
-8 Jun 21:00:10 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"wer","phone":"wer","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T10:59:54.546Z"}}
-8 Jun 21:00:10 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"yfr-xD_ZcqBgNIS1AAAH","socketIp":"192.168.20.136"},"_msgid":"27a0a0b7a153826b"}
-8 Jun 21:00:10 - [info] [function:Node Admin] Fetched devices: {}
-8 Jun 21:00:13 - [info] [ui-base:My Dashboard] Disconnected yfr-xD_ZcqBgNIS1AAAH due to transport close
-8 Jun 21:00:14 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"b3wnxgxF-J09-mKLAAAJ","socketIp":"192.168.20.136"},"_msgid":"9dcaef06ef9b460a"}
-8 Jun 21:00:14 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"wer","phone":"wer","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T10:59:54.546Z"}}
-8 Jun 21:00:14 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"b3wnxgxF-J09-mKLAAAJ","socketIp":"192.168.20.136"},"_msgid":"14a583bfe64fcda7"}
-8 Jun 21:00:14 - [info] [function:Node Admin] Fetched devices: {}
-8 Jun 21:00:33 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"name":"testd","ownerName":"testo1","binaryPins":["qweqwe","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"b3wnxgxF-J09-mKLAAAJ","socketIp":"192.168.20.136"},"_msgid":"313c2de571b06d5b"}
-8 Jun 21:00:33 - [info] [function:Node Admin] Device Name or Owner Name is missing.
-8 Jun 21:00:33 - [info] [function:Owner Manager] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device Name and Owner Name are required."},"_msgid":"313c2de571b06d5b"}
-8 Jun 21:00:33 - [info] [function:Node Admin] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device Name and Owner Name are required."},"_msgid":"313c2de571b06d5b"}
-8 Jun 21:00:49 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"name":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"b3wnxgxF-J09-mKLAAAJ","socketIp":"192.168.20.136"},"_msgid":"9cdb7ab8a0041d64"}
-8 Jun 21:00:49 - [info] [function:Node Admin] Device Name or Owner Name is missing.
-8 Jun 21:00:49 - [info] [function:Owner Manager] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device Name and Owner Name are required."},"_msgid":"9cdb7ab8a0041d64"}
-8 Jun 21:00:49 - [info] [function:Node Admin] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device Name and Owner Name are required."},"_msgid":"9cdb7ab8a0041d64"}
-8 Jun 21:01:14 - [info] [ui-base:My Dashboard] Disconnected LcpOxwpLhJpeYZjQAAAB due to ping timeout
-8 Jun 21:01:19 - [info] [function:Owner Manager] Received message for topic: add_owner json: {"topic":"add_owner","payload":{"name":"asdasd","email":"asdasd","phone":"asdasd"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"b3wnxgxF-J09-mKLAAAJ","socketIp":"192.168.20.136"},"_msgid":"ffa22962b3d5d0b9"}
-8 Jun 21:01:19 - [info] [function:Owner Manager] Added owner: asdasd
-8 Jun 21:01:31 - [info] [function:Owner Manager] Received message for topic: update_owner json: {"topic":"update_owner","payload":{"name":"asdasd","email":"asdasd","phone":"asdasdrrrrrrrr","devices":[]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"b3wnxgxF-J09-mKLAAAJ","socketIp":"192.168.20.136"},"_msgid":"5fd1b3729350484b"}
-8 Jun 21:01:31 - [info] [function:Owner Manager] Updated owner: {"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:31.701Z"}
-8 Jun 21:01:35 - [info] [ui-base:My Dashboard] Disconnected b3wnxgxF-J09-mKLAAAJ due to transport close
-8 Jun 21:01:36 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Mj8DRcBEHX5EQ8OKAAAL","socketIp":"192.168.20.136"},"_msgid":"46a84f324345f217"}
-8 Jun 21:01:36 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"wer","phone":"wer","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T10:59:54.546Z"},"asdasd":{"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:31.701Z"}}
-8 Jun 21:01:36 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"Mj8DRcBEHX5EQ8OKAAAL","socketIp":"192.168.20.136"},"_msgid":"1974b70a26ab9dd3"}
-8 Jun 21:01:36 - [info] [function:Node Admin] Fetched devices: {}
-8 Jun 21:01:42 - [info] [ui-base:My Dashboard] Disconnected Mj8DRcBEHX5EQ8OKAAAL due to transport close
-8 Jun 21:01:42 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"lyIJgm6fVd__yxeRAAAN","socketIp":"192.168.20.136"},"_msgid":"2a3f0cfb9d09daa0"}
-8 Jun 21:01:42 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"wer","phone":"wer","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T10:59:54.546Z"},"asdasd":{"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:31.701Z"}}
-8 Jun 21:01:42 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"lyIJgm6fVd__yxeRAAAN","socketIp":"192.168.20.136"},"_msgid":"7afde152063e2598"}
-8 Jun 21:01:42 - [info] [function:Node Admin] Fetched devices: {}
-8 Jun 21:01:50 - [info] [function:Owner Manager] Received message for topic: update_owner json: {"topic":"update_owner","payload":{"name":"asdasd","email":"asdasd","phone":"asdasdwerwerwerwerwerwer","devices":[]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"lyIJgm6fVd__yxeRAAAN","socketIp":"192.168.20.136"},"_msgid":"ce5d1e8eceb8b8a7"}
-8 Jun 21:01:50 - [info] [function:Owner Manager] Updated owner: {"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:50.156Z"}
-8 Jun 21:01:54 - [info] [ui-base:My Dashboard] Disconnected lyIJgm6fVd__yxeRAAAN due to transport close
-8 Jun 21:01:55 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"5576c91bc97844a0"}
-8 Jun 21:01:55 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"wer","phone":"wer","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T10:59:54.546Z"},"asdasd":{"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:50.156Z"}}
-8 Jun 21:01:55 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"a829a95776c41aeb"}
-8 Jun 21:01:55 - [info] [function:Node Admin] Fetched devices: {}
-8 Jun 21:02:53 - [info] [ui-base:My Dashboard] Disconnected 1ZEYHM-18UbcTuP7AAAR due to ping timeout
-8 Jun 21:15:41 - [debug] saved flow revision: 476cc7db77a82061888f10bad7f267ee4bfaacaff30d51bbb1afdddcdac91486
-8 Jun 21:15:41 - [info] Stopping flows
-8 Jun 21:15:41 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 21:15:41 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 21:15:41 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 21:15:41 - [info] Stopped flows
-8 Jun 21:15:41 - [info] Updated flows
-8 Jun 21:15:41 - [info] Starting flows
-8 Jun 21:15:41 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 21:15:41 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 21:15:41 - [info] Started flows
-8 Jun 21:15:41 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 21:15:41 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"a4297925c08b85ad"}
-8 Jun 21:15:41 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"wer","phone":"wer","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T10:59:54.546Z"},"asdasd":{"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:50.156Z"}}
-8 Jun 21:15:41 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"c2e5aa2d0ae882e6"}
-8 Jun 21:15:41 - [info] [function:Node Admin] Fetched devices: {}
-8 Jun 21:15:55 - [info] [function:Owner Manager] Received message for topic: update_owner json: {"topic":"update_owner","payload":{"name":"testo1","email":"wernreeeeeeee","phone":"wer","devices":[]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"cc189e9510945dad"}
-8 Jun 21:15:55 - [info] [function:Owner Manager] Incoming payload for update: {"name":"testo1","email":"wernreeeeeeee","phone":"wer","devices":[]}
-8 Jun 21:15:55 - [info] [function:Owner Manager] Current owners before update: {"testo1":{"name":"testo1","email":"wer","phone":"wer","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T10:59:54.546Z"},"asdasd":{"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:50.156Z"}}
-8 Jun 21:15:55 - [info] [function:Owner Manager] Updated owner: {"name":"testo1","email":"wer","phone":"wer","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:15:55.990Z"}
-8 Jun 21:15:55 - [info] [function:Owner Manager] Received message for topic: owner_updated json: {"topic":"owner_updated","payload":{"name":"testo1","email":"wer","phone":"wer","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:15:55.990Z"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"cc189e9510945dad"}
-8 Jun 21:15:55 - [info] [function:Node Admin] Received message for topic: owner_updated json: {"topic":"owner_updated","payload":{"name":"testo1","email":"wer","phone":"wer","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:15:55.990Z"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"cc189e9510945dad"}
-8 Jun 21:16:43 - [info] [ui-base:My Dashboard] Disconnected rLl3xt4clYWe3SuXAAAT due to ping timeout
-8 Jun 21:20:27 - [debug] saved flow revision: 0c0447967068012af8d7651674d5d62c1da3e3001066d8b62e6d707099411055
-8 Jun 21:20:27 - [info] Stopping flows
-8 Jun 21:20:27 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 21:20:27 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 21:20:27 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 21:20:27 - [info] Stopped flows
-8 Jun 21:20:27 - [info] Updated flows
-8 Jun 21:20:27 - [info] Starting flows
-8 Jun 21:20:27 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 21:20:27 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 21:20:27 - [info] Started flows
-8 Jun 21:20:27 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 21:20:28 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"57bc11bd92490706"}
-8 Jun 21:20:28 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"wer","phone":"wer","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:15:55.990Z"},"asdasd":{"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:50.156Z"}}
-8 Jun 21:20:28 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"edd3cd6ad09aacbb"}
-8 Jun 21:20:28 - [info] [function:Node Admin] Fetched devices: {}
-8 Jun 21:20:44 - [info] [function:Owner Manager] Received message for topic: update_owner json: {"topic":"update_owner","payload":{"name":"testo1","email":"wer","phone":"12345","devices":[]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"ea0ab6cfb20e0cd1"}
-8 Jun 21:20:44 - [info] [function:Owner Manager] Incoming payload for update: {"name":"testo1","email":"wer","phone":"12345","devices":[]}
-8 Jun 21:20:44 - [info] [function:Owner Manager] Current owners before update: {"testo1":{"name":"testo1","email":"wer","phone":"wer","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:15:55.990Z"},"asdasd":{"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:50.156Z"}}
-8 Jun 21:20:44 - [info] [function:Owner Manager] Updated owner: {"name":"testo1","email":"wer","phone":"12345","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:44.607Z"}
-8 Jun 21:20:44 - [info] [function:Owner Manager] Received message for topic: owner_updated json: {"topic":"owner_updated","payload":{"name":"testo1","email":"wer","phone":"12345","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:44.607Z"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"ea0ab6cfb20e0cd1"}
-8 Jun 21:20:44 - [info] [function:Node Admin] Received message for topic: owner_updated json: {"topic":"owner_updated","payload":{"name":"testo1","email":"wer","phone":"12345","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:44.607Z"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"ea0ab6cfb20e0cd1"}
-8 Jun 21:20:52 - [info] [function:Owner Manager] Received message for topic: update_owner json: {"topic":"update_owner","payload":{"name":"testo1","email":"ttttttt","phone":"12345","devices":[]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"e73469e269fb2eae"}
-8 Jun 21:20:52 - [info] [function:Owner Manager] Incoming payload for update: {"name":"testo1","email":"ttttttt","phone":"12345","devices":[]}
-8 Jun 21:20:52 - [info] [function:Owner Manager] Current owners before update: {"testo1":{"name":"testo1","email":"wer","phone":"12345","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:44.607Z"},"asdasd":{"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:50.156Z"}}
-8 Jun 21:20:52 - [info] [function:Owner Manager] Updated owner: {"name":"testo1","email":"ttttttt","phone":"12345","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"}
-8 Jun 21:20:52 - [info] [function:Owner Manager] Received message for topic: owner_updated json: {"topic":"owner_updated","payload":{"name":"testo1","email":"ttttttt","phone":"12345","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"e73469e269fb2eae"}
-8 Jun 21:20:52 - [info] [function:Node Admin] Received message for topic: owner_updated json: {"topic":"owner_updated","payload":{"name":"testo1","email":"ttttttt","phone":"12345","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"e73469e269fb2eae"}
-8 Jun 21:21:03 - [info] [function:Owner Manager] Received message for topic: add_owner json: {"topic":"add_owner","payload":{"name":"qqqqq","email":"qqqqq","phone":"qqqqq"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"0c7ae0119a874660"}
-8 Jun 21:21:03 - [info] [function:Owner Manager] Added owner: qqqqq
-8 Jun 21:21:13 - [info] [function:Owner Manager] Received message for topic: update_owner json: {"topic":"update_owner","payload":{"name":"qqqqq","email":"qqqqq","phone":"ttttttt","devices":[]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"312629ce143033fd"}
-8 Jun 21:21:13 - [info] [function:Owner Manager] Incoming payload for update: {"name":"qqqqq","email":"qqqqq","phone":"ttttttt","devices":[]}
-8 Jun 21:21:13 - [info] [function:Owner Manager] Current owners before update: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"asdasd":{"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:50.156Z"},"qqqqq":{"name":"qqqqq","email":"qqqqq","phone":"qqqqq","devices":[],"created":"2025-06-08T11:21:03.352Z"}}
-8 Jun 21:21:13 - [info] [function:Owner Manager] Updated owner: {"name":"qqqqq","email":"qqqqq","phone":"ttttttt","devices":[],"created":"2025-06-08T11:21:03.352Z","updated":"2025-06-08T11:21:13.520Z"}
-8 Jun 21:21:13 - [info] [function:Owner Manager] Received message for topic: owner_updated json: {"topic":"owner_updated","payload":{"name":"qqqqq","email":"qqqqq","phone":"ttttttt","devices":[],"created":"2025-06-08T11:21:03.352Z","updated":"2025-06-08T11:21:13.520Z"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"312629ce143033fd"}
-8 Jun 21:21:13 - [info] [function:Node Admin] Received message for topic: owner_updated json: {"topic":"owner_updated","payload":{"name":"qqqqq","email":"qqqqq","phone":"ttttttt","devices":[],"created":"2025-06-08T11:21:03.352Z","updated":"2025-06-08T11:21:13.520Z"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"312629ce143033fd"}
-8 Jun 21:21:17 - [info] [function:Owner Manager] Received message for topic: delete_owner json: {"topic":"delete_owner","payload":"qqqqq","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"e597bf1b433741ec"}
-8 Jun 21:21:17 - [info] [function:Owner Manager] Owner name not found for deletion: undefined
-8 Jun 21:21:17 - [info] [function:Owner Manager] Received message for topic: owner_error json: {"topic":"owner_error","payload":{"error":"Owner name not found for deletion."},"_msgid":"e597bf1b433741ec"}
-8 Jun 21:21:17 - [info] [function:Node Admin] Received message for topic: owner_error json: {"topic":"owner_error","payload":{"error":"Owner name not found for deletion."},"_msgid":"e597bf1b433741ec"}
-8 Jun 21:25:31 - [debug] saved flow revision: c2f5e5ea737e7c271b254577e28a7e3a105338d9736b2722ce2f69121c0e03cc
-8 Jun 21:25:31 - [info] Stopping flows
-8 Jun 21:25:31 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 21:25:31 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 21:25:31 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 21:25:31 - [info] Stopped flows
-8 Jun 21:25:31 - [info] Updated flows
-8 Jun 21:25:31 - [info] Starting flows
-8 Jun 21:25:31 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 21:25:31 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 21:25:31 - [info] Started flows
-8 Jun 21:25:31 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 21:25:32 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"48b4ffd4e16bc44e"}
-8 Jun 21:25:32 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"asdasd":{"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:50.156Z"},"qqqqq":{"name":"qqqqq","email":"qqqqq","phone":"ttttttt","devices":[],"created":"2025-06-08T11:21:03.352Z","updated":"2025-06-08T11:21:13.520Z"}}
-8 Jun 21:25:32 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"4f1874506b33a2f7"}
-8 Jun 21:25:32 - [info] [function:Node Admin] Fetched devices: {}
-8 Jun 21:25:42 - [info] [function:Owner Manager] Received message for topic: delete_owner json: {"topic":"delete_owner","payload":"testo1","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"96d55652afe396ad"}
-8 Jun 21:25:42 - [info] [function:Owner Manager] Trying to delete owner: undefined
-8 Jun 21:25:42 - [info] [function:Owner Manager] Current owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"asdasd":{"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:50.156Z"},"qqqqq":{"name":"qqqqq","email":"qqqqq","phone":"ttttttt","devices":[],"created":"2025-06-08T11:21:03.352Z","updated":"2025-06-08T11:21:13.520Z"}}
-8 Jun 21:25:42 - [info] [function:Owner Manager] Owner name not found for deletion: undefined
-8 Jun 21:25:42 - [info] [function:Owner Manager] Received message for topic: owner_error json: {"topic":"owner_error","payload":{"error":"Owner name not found for deletion."},"_msgid":"96d55652afe396ad"}
-8 Jun 21:25:42 - [info] [function:Node Admin] Received message for topic: owner_error json: {"topic":"owner_error","payload":{"error":"Owner name not found for deletion."},"_msgid":"96d55652afe396ad"}
-8 Jun 21:28:33 - [info] [ui-base:My Dashboard] Disconnected mdIldPrefqH4yXrBAAAV due to ping timeout
-8 Jun 21:32:26 - [debug] saved flow revision: 7e970d09b83039ee610e35de62996ed8842837c00bffedab70b8000e3140a91a
-8 Jun 21:32:26 - [info] Stopping flows
-8 Jun 21:32:26 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 21:32:26 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 21:32:26 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 21:32:26 - [info] Stopped flows
-8 Jun 21:32:26 - [info] Updated flows
-8 Jun 21:32:26 - [info] Starting flows
-8 Jun 21:32:26 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 21:32:26 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 21:32:26 - [info] Started flows
-8 Jun 21:32:26 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 21:32:26 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"a54f8631753bad63"}
-8 Jun 21:32:26 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"asdasd":{"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:50.156Z"},"qqqqq":{"name":"qqqqq","email":"qqqqq","phone":"ttttttt","devices":[],"created":"2025-06-08T11:21:03.352Z","updated":"2025-06-08T11:21:13.520Z"}}
-8 Jun 21:32:26 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"b23df494b567d583"}
-8 Jun 21:32:26 - [info] [function:Node Admin] Fetched devices: {}
-8 Jun 21:32:34 - [info] [function:Owner Manager] Received message for topic: delete_owner json: {"topic":"delete_owner","payload":{"name":"qqqqq"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"b7f2efb3828afb32"}
-8 Jun 21:32:34 - [info] [function:Owner Manager] Trying to delete owner: qqqqq
-8 Jun 21:32:34 - [info] [function:Owner Manager] Current owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"asdasd":{"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:50.156Z"},"qqqqq":{"name":"qqqqq","email":"qqqqq","phone":"ttttttt","devices":[],"created":"2025-06-08T11:21:03.352Z","updated":"2025-06-08T11:21:13.520Z"}}
-8 Jun 21:32:34 - [info] [function:Owner Manager] Deleted owner: qqqqq and their devices
-8 Jun 21:32:49 - [info] [function:Owner Manager] Received message for topic: update_owner json: {"topic":"update_owner","payload":{"name":"asdasd","email":"asdasd","phone":"asdasdwerwerwerwerwerwe","devices":[]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"f49958c61392145b"}
-8 Jun 21:32:49 - [info] [function:Owner Manager] Incoming payload for update: {"name":"asdasd","email":"asdasd","phone":"asdasdwerwerwerwerwerwe","devices":[]}
-8 Jun 21:32:49 - [info] [function:Owner Manager] Current owners before update: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"asdasd":{"name":"asdasd","email":"asdasd","phone":"asdasd","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:01:50.156Z"}}
-8 Jun 21:32:49 - [info] [function:Owner Manager] Updated owner: {"name":"asdasd","email":"asdasd","phone":"asdasdwerwerwerwerwerwe","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:32:49.884Z"}
-8 Jun 21:32:49 - [info] [function:Owner Manager] Received message for topic: owner_updated json: {"topic":"owner_updated","payload":{"name":"asdasd","email":"asdasd","phone":"asdasdwerwerwerwerwerwe","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:32:49.884Z"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"f49958c61392145b"}
-8 Jun 21:32:49 - [info] [function:Node Admin] Received message for topic: owner_updated json: {"topic":"owner_updated","payload":{"name":"asdasd","email":"asdasd","phone":"asdasdwerwerwerwerwerwe","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:32:49.884Z"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"f49958c61392145b"}
-8 Jun 21:32:59 - [info] [function:Owner Manager] Received message for topic: delete_owner json: {"topic":"delete_owner","payload":{"name":"asdasd"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"04f3063c3e72ca2c"}
-8 Jun 21:32:59 - [info] [function:Owner Manager] Trying to delete owner: asdasd
-8 Jun 21:32:59 - [info] [function:Owner Manager] Current owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"asdasd":{"name":"asdasd","email":"asdasd","phone":"asdasdwerwerwerwerwerwe","devices":[],"created":"2025-06-08T11:01:19.598Z","updated":"2025-06-08T11:32:49.884Z"}}
-8 Jun 21:32:59 - [info] [function:Owner Manager] Deleted owner: asdasd and their devices
-8 Jun 21:33:08 - [info] [function:Owner Manager] Received message for topic: add_owner json: {"topic":"add_owner","payload":{"name":"new","email":"sdf","phone":""},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"11d6ac6a11f73bbb"}
-8 Jun 21:33:08 - [info] [function:Owner Manager] Added owner: new
-8 Jun 21:33:27 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"name":"new","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"3c0a83510b1ce5c7"}
-8 Jun 21:33:27 - [info] [function:Node Admin] Device Name or Owner Name is missing.
-8 Jun 21:33:27 - [info] [function:Owner Manager] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device Name and Owner Name are required."},"_msgid":"3c0a83510b1ce5c7"}
-8 Jun 21:33:27 - [info] [function:Node Admin] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device Name and Owner Name are required."},"_msgid":"3c0a83510b1ce5c7"}
-8 Jun 21:34:28 - [info] [ui-base:My Dashboard] Disconnected rQ3uwzRgTw-B_r0iAAAZ due to ping timeout
-8 Jun 21:36:58 - [debug] saved flow revision: adadcb2f1e483e540ed1a31df7798e977540eac5426b7628ecf40023b2645da7
-8 Jun 21:36:58 - [info] Stopping flows
-8 Jun 21:36:58 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 21:36:58 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 21:36:58 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 21:36:58 - [info] Stopped flows
-8 Jun 21:36:58 - [info] Updated flows
-8 Jun 21:36:58 - [info] Starting flows
-8 Jun 21:36:58 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 21:36:58 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 21:36:58 - [info] Started flows
-8 Jun 21:36:58 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 21:36:58 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"01ac2dc9a9d05157"}
-8 Jun 21:36:58 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":[],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":[],"created":"2025-06-08T11:33:08.615Z"}}
-8 Jun 21:36:58 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"338f714f44b045ac"}
-8 Jun 21:36:58 - [info] [function:Node Admin] Fetched devices: {}
-8 Jun 21:37:13 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"deviceName":"testd","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"2cab1f6299daad44"}
-8 Jun 21:37:13 - [info] [function:Node Admin] Incoming payload: {"deviceName":"testd","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""]}
-8 Jun 21:37:13 - [info] [function:Node Admin] Incoming binaryPins: ["","","","","","","",""]
-8 Jun 21:37:13 - [info] [function:Node Admin] Incoming analogPins: ["","","",""]
-8 Jun 21:37:13 - [info] [function:Node Admin] Added device: {"deviceName":"testd","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 21:37:13 - [info] [function:Owner Manager] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"testd","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"2cab1f6299daad44"}
-8 Jun 21:37:13 - [info] [function:Node Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"testd","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"2cab1f6299daad44"}
-8 Jun 21:37:35 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"00a45094e9967268"}
-8 Jun 21:37:35 - [info] [function:Node Admin] Incoming payload: {"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""]}
-8 Jun 21:37:35 - [info] [function:Node Admin] Incoming binaryPins: ["wrwerwer","","werwerwe","","","","",""]
-8 Jun 21:37:35 - [info] [function:Node Admin] Incoming analogPins: ["","","",""]
-8 Jun 21:37:35 - [info] [function:Node Admin] Added device: {"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 21:37:35 - [info] [function:Owner Manager] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"00a45094e9967268"}
-8 Jun 21:37:35 - [info] [function:Node Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"00a45094e9967268"}
-8 Jun 21:37:45 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"deviceName":"werwer","binaryPins":["","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"a9b08bea8e54d827"}
-8 Jun 21:37:45 - [info] [function:Node Admin] Device Name or Owner Name is missing.
-8 Jun 21:37:45 - [info] [function:Owner Manager] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device Name and Owner Name are required."},"_msgid":"a9b08bea8e54d827"}
-8 Jun 21:37:45 - [info] [function:Node Admin] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device Name and Owner Name are required."},"_msgid":"a9b08bea8e54d827"}
-8 Jun 21:37:51 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"9d4257cb8e334907"}
-8 Jun 21:37:51 - [info] [function:Node Admin] Incoming payload: {"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""]}
-8 Jun 21:37:51 - [info] [function:Node Admin] Incoming binaryPins: ["","","","","","","",""]
-8 Jun 21:37:51 - [info] [function:Node Admin] Incoming analogPins: ["","","",""]
-8 Jun 21:37:51 - [info] [function:Node Admin] Added device: {"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 21:37:51 - [info] [function:Owner Manager] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"9d4257cb8e334907"}
-8 Jun 21:37:51 - [info] [function:Node Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"tTtEI87an5R7u8ggAAAP","socketIp":"192.168.20.136"},"_msgid":"9d4257cb8e334907"}
-8 Jun 21:38:01 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"9V2Ar7a60tRf2JXuAAAd","socketIp":"192.168.20.136"},"_msgid":"f7adc0f06770c64b"}
-8 Jun 21:38:01 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["testd","werwer"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin"],"created":"2025-06-08T11:33:08.615Z"}}
-8 Jun 21:38:01 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"9V2Ar7a60tRf2JXuAAAd","socketIp":"192.168.20.136"},"_msgid":"944336235d9b3be4"}
-8 Jun 21:38:01 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 21:38:15 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"deviceName":"wer","binaryPins":["","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"9V2Ar7a60tRf2JXuAAAd","socketIp":"192.168.20.136"},"_msgid":"9040994036d630a8"}
-8 Jun 21:38:15 - [info] [function:Node Admin] Device Name or Owner Name is missing.
-8 Jun 21:38:15 - [info] [function:Owner Manager] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device Name and Owner Name are required."},"_msgid":"9040994036d630a8"}
-8 Jun 21:38:15 - [info] [function:Node Admin] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device Name and Owner Name are required."},"_msgid":"9040994036d630a8"}
-8 Jun 21:38:22 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"9V2Ar7a60tRf2JXuAAAd","socketIp":"192.168.20.136"},"_msgid":"1368e0d722190a6a"}
-8 Jun 21:38:22 - [info] [function:Node Admin] Incoming payload: {"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""]}
-8 Jun 21:38:22 - [info] [function:Node Admin] Incoming binaryPins: ["","","","","","","",""]
-8 Jun 21:38:22 - [info] [function:Node Admin] Incoming analogPins: ["","","",""]
-8 Jun 21:38:22 - [info] [function:Node Admin] Added device: {"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 21:38:22 - [info] [function:Owner Manager] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"9V2Ar7a60tRf2JXuAAAd","socketIp":"192.168.20.136"},"_msgid":"1368e0d722190a6a"}
-8 Jun 21:38:22 - [info] [function:Node Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"9V2Ar7a60tRf2JXuAAAd","socketIp":"192.168.20.136"},"_msgid":"1368e0d722190a6a"}
-8 Jun 21:38:38 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"9V2Ar7a60tRf2JXuAAAd","socketIp":"192.168.20.136"},"_msgid":"6fe103d5415c9ecc"}
-8 Jun 21:38:38 - [info] [function:Node Admin] Incoming payload: {"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""]}
-8 Jun 21:38:38 - [info] [function:Node Admin] Incoming binaryPins: ["","","","","","","",""]
-8 Jun 21:38:38 - [info] [function:Node Admin] Incoming analogPins: ["","","",""]
-8 Jun 21:38:38 - [info] [function:Node Admin] Device name already exists: werwerwerwer
-8 Jun 21:38:38 - [info] [function:Owner Manager] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device name already exists."},"_msgid":"6fe103d5415c9ecc"}
-8 Jun 21:38:38 - [info] [function:Node Admin] Received message for topic: device_error json: {"topic":"device_error","payload":{"error":"Device name already exists."},"_msgid":"6fe103d5415c9ecc"}
-8 Jun 21:38:50 - [info] [function:Node Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"9V2Ar7a60tRf2JXuAAAd","socketIp":"192.168.20.136"},"_msgid":"5745ca3f72b6b176"}
-8 Jun 21:38:50 - [info] [function:Node Admin] Incoming payload: {"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""]}
-8 Jun 21:38:50 - [info] [function:Node Admin] Incoming binaryPins: ["","","","","","","",""]
-8 Jun 21:38:50 - [info] [function:Node Admin] Incoming analogPins: ["","","",""]
-8 Jun 21:38:50 - [info] [function:Node Admin] Added device: {"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 21:38:50 - [info] [function:Owner Manager] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"9V2Ar7a60tRf2JXuAAAd","socketIp":"192.168.20.136"},"_msgid":"5745ca3f72b6b176"}
-8 Jun 21:38:50 - [info] [function:Node Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"9V2Ar7a60tRf2JXuAAAd","socketIp":"192.168.20.136"},"_msgid":"5745ca3f72b6b176"}
-8 Jun 21:39:18 - [info] [function:Node Admin] Received message for topic: update_device json: {"topic":"update_device","payload":{"deviceName":"testd","ownerName":"testo1","binaryPins":["erterterterter","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"9V2Ar7a60tRf2JXuAAAd","socketIp":"192.168.20.136"},"_msgid":"dd9f24ee28b3d04a"}
-8 Jun 21:39:18 - [info] [function:Node Admin] Current Device before update: {"deviceName":"testd","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 21:39:18 - [error] [function:Node Admin] TypeError: Cannot read properties of undefined (reading 'ownerName')
-8 Jun 21:39:33 - [info] [function:Node Admin] Received message for topic: update_device json: {"topic":"update_device","payload":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["ertertertertert","ertertertertert","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"9V2Ar7a60tRf2JXuAAAd","socketIp":"192.168.20.136"},"_msgid":"dcd6947f65df1c87"}
-8 Jun 21:39:33 - [info] [function:Node Admin] Current Device before update: {"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 21:39:33 - [error] [function:Node Admin] TypeError: Cannot read properties of undefined (reading 'ownerName')
-8 Jun 21:39:54 - [info] [function:Node Admin] Received message for topic: update_device json: {"topic":"update_device","payload":{"deviceName":"ttttttt22222222222222","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"9V2Ar7a60tRf2JXuAAAd","socketIp":"192.168.20.136"},"_msgid":"040c60b676bf8a7a"}
-8 Jun 21:39:54 - [info] [function:Node Admin] Current Device before update: {"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 21:39:54 - [error] [function:Node Admin] TypeError: Cannot read properties of undefined (reading 'ownerName')
-8 Jun 21:40:26 - [info] [function:Node Admin] Received message for topic: update_device json: {"topic":"update_device","payload":{"deviceName":"ttttttt22222222222222","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"9V2Ar7a60tRf2JXuAAAd","socketIp":"192.168.20.136"},"_msgid":"044225c51c445b37"}
-8 Jun 21:40:26 - [info] [function:Node Admin] Current Device before update: {"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 21:40:26 - [error] [function:Node Admin] TypeError: Cannot read properties of undefined (reading 'ownerName')
-8 Jun 21:40:34 - [info] [ui-base:My Dashboard] Disconnected 9V2Ar7a60tRf2JXuAAAd due to transport close
-8 Jun 21:40:35 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"JxnT2rVqvdHt-yFaAAAf","socketIp":"192.168.20.136"},"_msgid":"15fc765d9956aec0"}
-8 Jun 21:40:35 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["testd","werwer"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
-8 Jun 21:40:35 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"JxnT2rVqvdHt-yFaAAAf","socketIp":"192.168.20.136"},"_msgid":"6ac242edb8cb9fe0"}
-8 Jun 21:40:35 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 21:40:52 - [info] [function:Node Admin] Received message for topic: update_device json: {"topic":"update_device","payload":{"deviceName":"ttttttt22222222222222","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"JxnT2rVqvdHt-yFaAAAf","socketIp":"192.168.20.136"},"_msgid":"894b3b39a44b7c37"}
-8 Jun 21:40:52 - [info] [function:Node Admin] Current Device before update: {"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 21:40:52 - [error] [function:Node Admin] TypeError: Cannot read properties of undefined (reading 'ownerName')
-8 Jun 21:40:57 - [info] [ui-base:My Dashboard] Disconnected JxnT2rVqvdHt-yFaAAAf due to transport close
-8 Jun 21:40:58 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"bdd67c97044f3fb2"}
-8 Jun 21:40:58 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["testd","werwer"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
-8 Jun 21:40:58 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"25a97efd80a2982d"}
-8 Jun 21:40:58 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 21:41:56 - [info] [function:Node Admin] Received message for topic: update_device json: {"topic":"update_device","payload":{"deviceName":"ttttttt22222222222222","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"29efd9b8485e9673"}
-8 Jun 21:41:56 - [info] [function:Node Admin] Current Device before update: {"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 21:41:56 - [error] [function:Node Admin] TypeError: Cannot read properties of undefined (reading 'ownerName')
-8 Jun 21:43:00 - [info] [ui-base:My Dashboard] Disconnected yiU2vZWA67Pi05MTAAAj due to ping timeout
-8 Jun 21:45:23 - [info] [ui-base:My Dashboard] Disconnected UWdbDOlhi1w4y276AAAl due to ping timeout
-8 Jun 21:46:48 - [info] [ui-base:My Dashboard] Disconnected nOj0yyn57ztClTXLAAAn due to ping timeout
-8 Jun 21:50:26 - [debug] saved flow revision: b409fc0b7b4229e6f76cb789cbb381307d09fac5fda069125c33a7161d6bcd8e
-8 Jun 21:50:26 - [info] Stopping flows
-8 Jun 21:50:26 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 21:50:26 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 21:50:26 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 21:50:26 - [info] Stopped flows
-8 Jun 21:50:26 - [info] Updated flows
-8 Jun 21:50:26 - [info] Starting flows
-8 Jun 21:50:26 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 21:50:26 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 21:50:26 - [info] Started flows
-8 Jun 21:50:26 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 21:50:26 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"b0f4edd06023b3e8"}
-8 Jun 21:50:26 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["testd","werwer"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
-8 Jun 21:50:26 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"4c80f17ec488af54"}
-8 Jun 21:50:26 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 21:50:44 - [info] [function:Node Admin] Received message for topic: update_device json: {"topic":"update_device","payload":{"deviceName":"testd","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"c4fd3cb3bdbf8047"}
-8 Jun 21:50:44 - [info] [function:Node Admin] Current Device before update: {"deviceName":"testd","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 21:50:44 - [info] [function:Node Admin] Updated device owner from testo1 to new
-8 Jun 21:50:44 - [info] [function:Node Admin] Removed device from old owner: testo1
-8 Jun 21:50:44 - [info] [function:Node Admin] Added device to new owner: new
-8 Jun 21:50:44 - [info] [function:Node Admin] Updated devices structure after update: {"testd":{"deviceName":"testd","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 21:50:54 - [info] [function:Node Admin] Received message for topic: update_device json: {"topic":"update_device","payload":{"deviceName":"testd","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"9464b9bc86a7a9b7"}
-8 Jun 21:50:54 - [info] [function:Node Admin] Current Device before update: {"deviceName":"testd","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 21:50:54 - [info] [function:Node Admin] Updated device owner from new to testo1
-8 Jun 21:50:54 - [info] [function:Node Admin] Removed device from old owner: new
-8 Jun 21:50:54 - [info] [function:Node Admin] Added device to new owner: testo1
-8 Jun 21:50:54 - [info] [function:Node Admin] Updated devices structure after update: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 21:51:01 - [info] [function:Node Admin] Received message for topic: update_device json: {"topic":"update_device","payload":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"82f765fb304ba6fd"}
-8 Jun 21:51:01 - [info] [function:Node Admin] Current Device before update: {"deviceName":"testd","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 21:51:01 - [info] [function:Node Admin] Updated device owner from testo1 to testo1
-8 Jun 21:51:01 - [info] [function:Node Admin] Removed device from old owner: testo1
-8 Jun 21:51:01 - [info] [function:Node Admin] Added device to new owner: testo1
-8 Jun 21:51:01 - [info] [function:Node Admin] Updated devices structure after update: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 21:51:16 - [info] [function:Node Admin] Received message for topic: update_device json: {"topic":"update_device","payload":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"9a11d14b3eb91443"}
-8 Jun 21:51:16 - [info] [function:Node Admin] Current Device before update: {"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 21:51:16 - [info] [function:Node Admin] Updated device owner from new to new
-8 Jun 21:51:16 - [info] [function:Node Admin] Removed device from old owner: new
-8 Jun 21:51:16 - [info] [function:Node Admin] Added device to new owner: new
-8 Jun 21:51:16 - [info] [function:Node Admin] Updated devices structure after update: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 21:53:53 - [info] [ui-base:My Dashboard] Disconnected LEHgE_fHmLJyykMiAAAp due to ping timeout
-8 Jun 21:57:19 - [info] [ui-base:My Dashboard] Disconnected KkQbrl9H_ZgE4J8QAAAr due to ping timeout
-8 Jun 21:59:19 - [debug] saved flow revision: b315de76c04203d014b9b5931a1897bd31149e4a172696d123ba35547413cc57
-8 Jun 21:59:19 - [info] Stopping flows
-8 Jun 21:59:19 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 21:59:19 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 21:59:19 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 21:59:19 - [info] Stopped flows
-8 Jun 21:59:19 - [info] Updated flows
-8 Jun 21:59:19 - [info] Starting flows
-8 Jun 21:59:19 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 21:59:19 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 21:59:19 - [info] Started flows
-8 Jun 21:59:19 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 21:59:19 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"7e19e5df2274b749"}
-8 Jun 21:59:19 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
-8 Jun 21:59:19 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"7994e0bacaa797ad"}
-8 Jun 21:59:19 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 22:02:01 - [debug] saved flow revision: 8ed8e8d553871f9df5032d723376da126d274db1c8b24ae07e875596331fe0bb
-8 Jun 22:02:01 - [info] Stopping flows
-8 Jun 22:02:01 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 22:02:01 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 22:02:01 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 22:02:01 - [info] Stopped flows
-8 Jun 22:02:01 - [info] Updated flows
-8 Jun 22:02:01 - [info] Starting flows
-8 Jun 22:02:01 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 22:02:01 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 22:02:01 - [info] Started flows
-8 Jun 22:02:01 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 22:02:01 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"4c67df29b07a7717"}
-8 Jun 22:02:01 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
-8 Jun 22:02:01 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"e7bc129241ae379d"}
-8 Jun 22:02:01 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 22:03:03 - [info] [ui-base:My Dashboard] Disconnected v-LBD4v0m1mnmA8-AAAt due to ping timeout
-8 Jun 22:06:22 - [info] [ui-base:My Dashboard] Disconnected V9Iqby6OD1qe18S6AAAv due to ping timeout
-8 Jun 22:07:22 - [debug] saved flow revision: bbdc8115ff8b0cc9b0179ac469c7af96fa56a080943f2f40ad78be5267d149c1
-8 Jun 22:07:22 - [info] Stopping flows
-8 Jun 22:07:22 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 22:07:22 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 22:07:22 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 22:07:22 - [info] Stopped flows
-8 Jun 22:07:22 - [info] Updated flows
-8 Jun 22:07:22 - [info] Starting flows
-8 Jun 22:07:22 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 22:07:22 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 22:07:22 - [info] Started flows
-8 Jun 22:07:22 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 22:07:23 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"093760a2bb685461"}
-8 Jun 22:07:23 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
-8 Jun 22:07:23 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"919e6898d43ae9bb"}
-8 Jun 22:07:23 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 22:14:05 - [debug] saved flow revision: 9fd3a4184a4d50eecfbc72b2bf8fe1d82ea8d62918e9d1000396e57908e76386
-8 Jun 22:14:05 - [info] Stopping flows
-8 Jun 22:14:05 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 22:14:05 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 22:14:05 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 22:14:05 - [info] Stopped flows
-8 Jun 22:14:05 - [info] Updated flows
-8 Jun 22:14:05 - [info] Starting flows
-8 Jun 22:14:05 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 22:14:05 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 22:14:05 - [info] Started flows
-8 Jun 22:14:05 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 22:14:05 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"4b08c3febecb4987"}
-8 Jun 22:14:05 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
-8 Jun 22:14:05 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"165863df1f8050e0"}
-8 Jun 22:14:05 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 22:18:27 - [debug] saved flow revision: 84e63f1dfe64dfe04011f81d254886d8925ac3703a4de90abf8a8ed3701a70c2
-8 Jun 22:18:27 - [info] Stopping flows
-8 Jun 22:18:27 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 22:18:27 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 22:18:27 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 22:18:27 - [info] Stopped flows
-8 Jun 22:18:27 - [info] Updated flows
-8 Jun 22:18:27 - [info] Starting flows
-8 Jun 22:18:27 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 22:18:27 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 22:18:27 - [info] Started flows
-8 Jun 22:18:27 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 22:18:27 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"6395988180852fd7"}
-8 Jun 22:18:27 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
-8 Jun 22:18:27 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"f3430e3c720fc893"}
-8 Jun 22:18:27 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 22:21:08 - [info] [ui-base:My Dashboard] Disconnected y64HMSjDBKmzjnfHAAAx due to ping timeout
-8 Jun 22:21:52 - [debug] saved flow revision: 50f9911c4e5caa6a96fb22e6a03289cd8f30b57560ad347e8336caa85249b360
-8 Jun 22:21:52 - [info] Stopping flows
-8 Jun 22:21:52 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 22:21:52 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 22:21:52 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 22:21:52 - [info] Stopped flows
-8 Jun 22:21:52 - [info] Updated flows
-8 Jun 22:21:52 - [info] Starting flows
-8 Jun 22:21:52 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 22:21:52 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 22:21:52 - [info] Started flows
-8 Jun 22:21:52 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 22:21:53 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"3fbb8f2e2fc6cfb3"}
-8 Jun 22:21:53 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
-8 Jun 22:21:53 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"72817c96a6c35919"}
-8 Jun 22:21:53 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 22:26:28 - [info] [ui-base:My Dashboard] Disconnected lGo2jT4l7vWv4U5fAAAz due to ping timeout
-8 Jun 22:28:04 - [debug] saved flow revision: b68b5987575c070721db4fb19d3b388bfcce2754f8c3bed019cf8775fbbfd9c3
-8 Jun 22:28:04 - [info] Stopping flows
-8 Jun 22:28:04 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 22:28:04 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 22:28:04 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 22:28:04 - [info] Stopped flows
-8 Jun 22:28:04 - [info] Updated flows
-8 Jun 22:28:04 - [info] Starting flows
-8 Jun 22:28:04 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 22:28:04 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 22:28:04 - [info] Started flows
-8 Jun 22:28:04 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 22:28:05 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"307214e099c41bdf"}
-8 Jun 22:28:05 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
-8 Jun 22:28:05 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"2dd0f1552f68d9d6"}
-8 Jun 22:28:05 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 22:29:59 - [debug] saved flow revision: 500ec82e77cffcf0f2a1df41000ff7d07fee40b8c7cb385d0a94dfff54bedadd
-8 Jun 22:29:59 - [info] Stopping flows
-8 Jun 22:29:59 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 22:29:59 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 22:29:59 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 22:29:59 - [info] Stopped flows
-8 Jun 22:29:59 - [info] Updated flows
-8 Jun 22:29:59 - [info] Starting flows
-8 Jun 22:29:59 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 22:29:59 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 22:29:59 - [info] Started flows
-8 Jun 22:29:59 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 22:29:59 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"0577f81036bb3b16"}
-8 Jun 22:30:00 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
-8 Jun 22:30:00 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"5a73362ba0ffb435"}
-8 Jun 22:30:00 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 22:39:16 - [debug] saved flow revision: b1cc7cf27ccfd601684510fcc596138eecd3eda2b5d6555a5b22737626de03b8
-8 Jun 22:39:16 - [info] Stopping flows
-8 Jun 22:39:16 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 22:39:16 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 22:39:16 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 22:39:16 - [info] Stopped flows
-8 Jun 22:39:16 - [info] Updated flows
-8 Jun 22:39:16 - [info] Starting flows
-8 Jun 22:39:16 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 22:39:16 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 22:39:16 - [info] Started flows
-8 Jun 22:39:16 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 22:39:16 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"65592d01b1784e4e"}
-8 Jun 22:39:16 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
-8 Jun 22:39:16 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"7062aa6d286faed6"}
-8 Jun 22:39:16 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 22:39:36 - [info] [function:Node Admin] Received message for topic: update_device json: {"topic":"update_device","payload":{"deviceName":"testd","ownerName":"testo1","binaryPins":[{"label":"wefwefwef","trigger":"Low","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"37fc4021a9e101b1"}
-8 Jun 22:39:36 - [info] [function:Node Admin] Current Device before update: {"deviceName":"testd","ownerName":"testo1","binaryPins":["werwerwerwerwerwerwerwer","","","","","","",""],"analogPins":["","","",""],"lastSeen":null}
-8 Jun 22:39:36 - [info] [function:Node Admin] Updated device owner from testo1 to testo1
-8 Jun 22:39:36 - [info] [function:Node Admin] Removed device from old owner: testo1
-8 Jun 22:39:36 - [info] [function:Node Admin] Added device to new owner: testo1
-8 Jun 22:39:36 - [info] [function:Node Admin] Updated devices structure after update: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":[{"label":"wefwefwef","trigger":"Low","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 22:44:44 - [debug] saved flow revision: 638d98d36064c9d3149fa50542ea22fe2dab25541d5a872195f61d38aa657e7c
-8 Jun 22:44:44 - [info] Stopping flows
-8 Jun 22:44:44 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-8 Jun 22:44:44 - [debug] red/nodes/flows.stop : stopping flow : global
-8 Jun 22:44:44 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-8 Jun 22:44:44 - [info] Stopped flows
-8 Jun 22:44:44 - [info] Updated flows
-8 Jun 22:44:44 - [info] Starting flows
-8 Jun 22:44:44 - [debug] red/nodes/flows.start : starting flow : global
-8 Jun 22:44:44 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-8 Jun 22:44:44 - [info] Started flows
-8 Jun 22:44:44 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-8 Jun 22:44:44 - [info] [function:Owner Manager] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"c5e4135ed78c92d5"}
-8 Jun 22:44:44 - [info] [function:Owner Manager] Fetched owners: {"testo1":{"name":"testo1","email":"ttttttt","phone":"12345","devices":["werwer","testd"],"created":"2025-06-08T10:59:38.661Z","updated":"2025-06-08T11:20:52.339Z"},"new":{"name":"new","email":"sdf","phone":"","devices":["test pin","werwerwerwer","ttttttt22222222222222"],"created":"2025-06-08T11:33:08.615Z"}}
-8 Jun 22:44:44 - [info] [function:Node Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"4acedd7d5e9aec48"}
-8 Jun 22:44:44 - [info] [function:Node Admin] Fetched devices: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":[{"label":"wefwefwef","trigger":"Low","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
-8 Jun 22:45:06 - [info] [function:Node Admin] Received message for topic: update_device json: {"topic":"update_device","payload":{"deviceName":"testd","ownerName":"testo1","binaryPins":[{"label":"wefwefwef","trigger":"Change","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"hUH-BRfkYoryo2SdAAAh","socketIp":"192.168.20.136"},"_msgid":"9662ba5eba939433"}
-8 Jun 22:45:06 - [info] [function:Node Admin] Current Device before update: {"deviceName":"testd","ownerName":"testo1","binaryPins":[{"label":"wefwefwef","trigger":"Low","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null}
-8 Jun 22:45:06 - [info] [function:Node Admin] Updated device owner from testo1 to testo1
-8 Jun 22:45:06 - [info] [function:Node Admin] Removed device from old owner: testo1
-8 Jun 22:45:06 - [info] [function:Node Admin] Added device to new owner: testo1
-8 Jun 22:45:06 - [info] [function:Node Admin] Updated devices structure after update: {"testd":{"deviceName":"testd","ownerName":"testo1","binaryPins":[{"label":"wefwefwef","trigger":"Change","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null},"test pin":{"deviceName":"test pin","ownerName":"new","binaryPins":["wrwerwer","","werwerwe","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwer":{"deviceName":"werwer","ownerName":"testo1","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"werwerwerwer":{"deviceName":"werwerwerwer","ownerName":"new","binaryPins":["","","","","","","",""],"analogPins":["","","",""],"lastSeen":null},"ttttttt22222222222222":{"deviceName":"ttttttt22222222222222","ownerName":"new","binaryPins":["","","","","","","dssdfsdfsdfsdfsdfsdf",""],"analogPins":["","","",""],"lastSeen":null}}
+9 Jun 10:23:56 - [info] Starting flows
+9 Jun 10:23:56 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:23:56 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:23:56 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:23:56 - [info] [ui-base:My Dashboard] Node-RED Dashboard 2.0 (v1.24.2) started at /dashboard
+9 Jun 10:23:56 - [info] [ui-base:My Dashboard] Created socket.io server bound to Node-RED port at path /dashboard/socket.io
+9 Jun 10:23:56 - [info] Started flows
+9 Jun 10:23:56 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:24:06 - [info] [function:Owner Admin] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"kYFk5Nh8aKShK-w1AAAB","socketIp":"192.168.20.136"},"_msgid":"71450e54d23da100"}
+9 Jun 10:24:06 - [info] [function:Owner Admin] Fetched owners: {}
+9 Jun 10:24:06 - [info] [function:Device Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"kYFk5Nh8aKShK-w1AAAB","socketIp":"192.168.20.136"},"_msgid":"edad201a3d87d568"}
+9 Jun 10:24:06 - [info] [function:Device Admin] Fetched devices: {}
+9 Jun 10:24:35 - [debug] saved flow revision: 92ef74f560f8627bb171fd9cb3ad85c3e4def5aec9786a08060abe2a6e63ea7d
+9 Jun 10:24:35 - [info] Stopping flows
+9 Jun 10:24:35 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:24:35 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:24:35 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:24:35 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:24:35 - [info] Stopped flows
+9 Jun 10:24:35 - [info] Updated flows
+9 Jun 10:24:35 - [info] Starting flows
+9 Jun 10:24:35 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:24:35 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:24:35 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:24:35 - [info] Started flows
+9 Jun 10:24:35 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:25:02 - [debug] saved flow revision: b206bb97a8ae4c228ef2db3ef3526aca105fc58baed37c1a1363250c3ded576d
+9 Jun 10:25:02 - [info] Stopping flows
+9 Jun 10:25:02 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:25:02 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:25:02 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:25:02 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:25:02 - [info] Stopped flows
+9 Jun 10:25:02 - [info] Updated flows
+9 Jun 10:25:02 - [info] Starting flows
+9 Jun 10:25:02 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:25:02 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:25:02 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:25:02 - [info] Started flows
+9 Jun 10:25:02 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:27:28 - [debug] saved flow revision: 964847131fa476b87f1179f2ab724257a7e24d6dab8026eb546a4f97a7f63a78
+9 Jun 10:27:28 - [info] Stopping flows
+9 Jun 10:27:28 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:27:28 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:27:28 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:27:28 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:27:28 - [info] Stopped flows
+9 Jun 10:27:28 - [info] Updated flows
+9 Jun 10:27:28 - [info] Starting flows
+9 Jun 10:27:28 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:27:28 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:27:28 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:27:28 - [info] Started flows
+9 Jun 10:27:28 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:27:35 - [info] [ui-base:My Dashboard] Disconnected J8cda29R9I4joPSoAAAF due to transport close
+9 Jun 10:39:42 - [debug] saved flow revision: d35b0b64e7171ef37e51d6479ee2f7967310fc76863f26a91de5fa8c9985f284
+9 Jun 10:39:42 - [info] Stopping flows
+9 Jun 10:39:42 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:39:42 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:39:42 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:39:42 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:39:42 - [info] Stopped flows
+9 Jun 10:39:42 - [info] Updated flows
+9 Jun 10:39:42 - [info] Starting flows
+9 Jun 10:39:42 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:39:42 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:39:42 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:39:42 - [info] Started flows
+9 Jun 10:39:42 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:39:52 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:40:13 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:40:22 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:40:53 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:41:23 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:41:44 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:41:53 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:42:08 - [debug] saved flow revision: 31623b2783f1ec4c09f4ff0d3477057f2f44ff3988355ddf34239e415be27477
+9 Jun 10:42:08 - [info] Stopping flows
+9 Jun 10:42:08 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:42:08 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:42:08 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:42:08 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:42:08 - [info] Stopped flows
+9 Jun 10:42:08 - [info] Updated flows
+9 Jun 10:42:08 - [info] Starting flows
+9 Jun 10:42:08 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:42:08 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:42:08 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:42:08 - [info] Started flows
+9 Jun 10:42:08 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:42:24 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:42:54 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:43:14 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:43:24 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:43:55 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:44:25 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:44:45 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:44:56 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:45:26 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:45:56 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:46:00 - [debug] saved flow revision: 7d3626b48be2fbfb2495bc15db5ced81009abf69fa0a7db9e21125e89206046b
+9 Jun 10:46:00 - [info] Stopping flows
+9 Jun 10:46:00 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:46:00 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:46:00 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:46:00 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:46:00 - [info] Stopped flows
+9 Jun 10:46:00 - [info] Updated flows
+9 Jun 10:46:00 - [info] Starting flows
+9 Jun 10:46:00 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:46:00 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:46:00 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:46:00 - [info] Started flows
+9 Jun 10:46:00 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:46:15 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:46:27 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:46:50 - [info] [ui-base:My Dashboard] Disconnected -hu2Qq_FGx07VR4JAAAJ due to ping timeout
+9 Jun 10:46:57 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:47:28 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:47:45 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:47:49 - [debug] saved flow revision: f1639eefa7d214b0c62f42de80b764c19cd462d32fc68a2765932aae429f1758
+9 Jun 10:47:49 - [info] Stopping flows
+9 Jun 10:47:49 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:47:49 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:47:49 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:47:49 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:47:49 - [info] Stopped flows
+9 Jun 10:47:49 - [info] Updated flows
+9 Jun 10:47:49 - [info] Starting flows
+9 Jun 10:47:49 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:47:49 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:47:49 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:47:49 - [info] Started flows
+9 Jun 10:47:49 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:47:58 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:48:28 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:48:52 - [info] [ui-base:My Dashboard] Disconnected GvgQeLgR00ZQC5hwAAAL due to ping timeout
+9 Jun 10:48:59 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:49:16 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:49:29 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:50:00 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:50:20 - [debug] saved flow revision: a2dc12879cf94388887d3076a4145a8788252b1a96030dc82d73fc0caf7e6c85
+9 Jun 10:50:20 - [info] Stopping flows
+9 Jun 10:50:20 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:50:20 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:50:20 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:50:20 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:50:20 - [info] Stopped flows
+9 Jun 10:50:20 - [info] Updated flows
+9 Jun 10:50:20 - [info] Starting flows
+9 Jun 10:50:20 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:50:20 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:50:20 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:50:20 - [info] Started flows
+9 Jun 10:50:20 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:50:30 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:50:46 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:50:54 - [debug] saved flow revision: cd9fb6dca577edd2179944dc118e8bd49a9d09cc98d50fdf7eb8558d8ac2c4f4
+9 Jun 10:50:54 - [info] Stopping flows
+9 Jun 10:50:54 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:50:54 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:50:54 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:50:54 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:50:54 - [info] Stopped flows
+9 Jun 10:50:54 - [info] Updated flows
+9 Jun 10:50:54 - [info] Starting flows
+9 Jun 10:50:54 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:50:54 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:50:54 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:50:54 - [info] Started flows
+9 Jun 10:50:54 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:51:00 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:51:31 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:52:01 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:52:09 - [info] [ui-base:My Dashboard] Disconnected q8WYgLmIVSiKuBqaAAAP due to transport close
+9 Jun 10:52:17 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:52:27 - [debug] saved flow revision: 95fabb908b25610e0b404086cc4e8e7d493cac35046ee8e5896710fca59d17da
+9 Jun 10:52:27 - [info] Stopping flows
+9 Jun 10:52:27 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:52:27 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:52:27 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:52:27 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:52:27 - [info] Stopped flows
+9 Jun 10:52:27 - [info] Updated flows
+9 Jun 10:52:27 - [info] Starting flows
+9 Jun 10:52:27 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:52:27 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:52:27 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:52:27 - [info] Started flows
+9 Jun 10:52:27 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:52:32 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:52:52 - [debug] saved flow revision: acc35ea05428bdc59be6d1c1029c6a3247fb4de60cd2e88ac6ae97f85c15282e
+9 Jun 10:52:52 - [info] Stopping flows
+9 Jun 10:52:52 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:52:52 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:52:52 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:52:52 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:52:52 - [info] Stopped flows
+9 Jun 10:52:52 - [info] Updated flows
+9 Jun 10:52:52 - [info] Starting flows
+9 Jun 10:52:52 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:52:52 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:52:52 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:52:52 - [info] Started flows
+9 Jun 10:52:52 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:53:02 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:53:32 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:53:47 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:54:00 - [debug] saved flow revision: 4722ca58c794d8002628cd5b339fd3cfd04bb904304267d5f8c6d40c6a531597
+9 Jun 10:54:00 - [info] Stopping flows
+9 Jun 10:54:00 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:54:00 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:54:00 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:54:00 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:54:00 - [info] Stopped flows
+9 Jun 10:54:00 - [info] Updated flows
+9 Jun 10:54:00 - [info] Starting flows
+9 Jun 10:54:00 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:54:00 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:54:00 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:54:00 - [info] Started flows
+9 Jun 10:54:00 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:54:03 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:54:33 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:55:04 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:55:16 - [debug] saved flow revision: 02152b7b4b2038e32d525599570b00ceb6b971bb8cce6d54a7eadb9758085b55
+9 Jun 10:55:16 - [info] Stopping flows
+9 Jun 10:55:16 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:55:16 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:55:16 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:55:16 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:55:16 - [info] Stopped flows
+9 Jun 10:55:16 - [info] Updated flows
+9 Jun 10:55:16 - [info] Starting flows
+9 Jun 10:55:16 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:55:16 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:55:16 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:55:16 - [info] Started flows
+9 Jun 10:55:16 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:55:18 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:55:34 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:56:03 - [debug] saved flow revision: 8620e4bbc5ec10db1da247f474f8ea86e20de828b824317746834af0fa02119a
+9 Jun 10:56:03 - [info] Stopping flows
+9 Jun 10:56:03 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:56:03 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:56:03 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:56:03 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:56:03 - [info] Stopped flows
+9 Jun 10:56:03 - [info] Updated flows
+9 Jun 10:56:03 - [info] Starting flows
+9 Jun 10:56:03 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:56:03 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:56:03 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:56:03 - [info] Started flows
+9 Jun 10:56:03 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:56:04 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:56:35 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:56:48 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:56:58 - [info] [ui-base:My Dashboard] Disconnected iZY5pE8sjd1e8on_AAAZ due to ping timeout
+9 Jun 10:57:05 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:57:36 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 10:57:42 - [debug] saved flow revision: d4093903496cf44c215ffb2f39b83d08fc9cf003e19bc7be168c424dbaf76c6d
+9 Jun 10:57:42 - [info] Stopping flows
+9 Jun 10:57:42 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:57:42 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:57:42 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:57:42 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:57:42 - [info] Stopped flows
+9 Jun 10:57:42 - [info] Updated flows
+9 Jun 10:57:42 - [info] Starting flows
+9 Jun 10:57:42 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:57:42 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:57:42 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:57:42 - [info] Started flows
+9 Jun 10:57:42 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:58:05 - [debug] saved flow revision: b8a0905a288f1ba8ac4a37eca22f8e51fb2b4ebac4e52c3ca598dd942b3ba917
+9 Jun 10:58:05 - [info] Stopping flows
+9 Jun 10:58:05 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 10:58:05 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 10:58:05 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 10:58:05 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 10:58:05 - [info] Stopped flows
+9 Jun 10:58:05 - [info] Updated flows
+9 Jun 10:58:05 - [info] Starting flows
+9 Jun 10:58:05 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 10:58:05 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 10:58:05 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 10:58:05 - [info] Started flows
+9 Jun 10:58:05 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 10:58:06 - [error] [function:Parse LoRa message] TypeError: Cannot read properties of undefined (reading 'toString')
+9 Jun 10:58:18 - [error] [function:Parse LoRa message] TypeError: Cannot read properties of undefined (reading 'toString')
+9 Jun 10:58:36 - [error] [function:Parse LoRa message] TypeError: Cannot read properties of undefined (reading 'toString')
+9 Jun 10:59:02 - [info] [ui-base:My Dashboard] Disconnected jXOvMN2j5ltlbdlGAAAd due to ping timeout
+9 Jun 10:59:07 - [error] [function:Parse LoRa message] TypeError: Cannot read properties of undefined (reading 'toString')
+9 Jun 10:59:37 - [error] [function:Parse LoRa message] TypeError: Cannot read properties of undefined (reading 'toString')
+9 Jun 10:59:49 - [error] [function:Parse LoRa message] TypeError: Cannot read properties of undefined (reading 'toString')
+9 Jun 11:00:01 - [debug] saved flow revision: 3614605bc1b2337b4ecc95a3db765a071c99303625b3588716e42741dc78e515
+9 Jun 11:00:01 - [info] Stopping flows
+9 Jun 11:00:01 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:00:01 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:00:01 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:00:01 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:00:01 - [info] Stopped flows
+9 Jun 11:00:01 - [info] Updated flows
+9 Jun 11:00:01 - [info] Starting flows
+9 Jun 11:00:01 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:00:01 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:00:01 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:00:01 - [info] Started flows
+9 Jun 11:00:01 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:00:08 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:00:25 - [debug] saved flow revision: 8620e4bbc5ec10db1da247f474f8ea86e20de828b824317746834af0fa02119a
+9 Jun 11:00:25 - [info] Stopping flows
+9 Jun 11:00:25 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:00:25 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:00:25 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:00:25 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:00:25 - [info] Stopped flows
+9 Jun 11:00:25 - [info] Updated flows
+9 Jun 11:00:25 - [info] Starting flows
+9 Jun 11:00:25 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:00:25 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:00:25 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:00:25 - [info] Started flows
+9 Jun 11:00:25 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:00:38 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:01:08 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:01:14 - [info] [ui-base:My Dashboard] Disconnected kjTgida4WuxAdvkaAAAh due to ping timeout
+9 Jun 11:01:16 - [debug] saved flow revision: 9ed5ddd5dc431778f2a13a9f8c132de8441572b9670f7818e08ec7ac61354e6c
+9 Jun 11:01:16 - [info] Stopping flows
+9 Jun 11:01:16 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:01:16 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:01:16 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:01:16 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:01:16 - [info] Stopped flows
+9 Jun 11:01:16 - [info] Updated flows
+9 Jun 11:01:16 - [info] Starting flows
+9 Jun 11:01:16 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:01:16 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:01:16 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:01:16 - [info] Started flows
+9 Jun 11:01:16 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:01:19 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:01:39 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:02:09 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:02:12 - [info] [ui-base:My Dashboard] Disconnected GjNqHfqt7uSH830AAAAj due to ping timeout
+9 Jun 11:02:40 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:02:50 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:03:10 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:03:27 - [debug] saved flow revision: a31b0511fe3211e92486bddda16ac2cdcc07c24093a881dfc5f26fcaf8c49100
+9 Jun 11:03:27 - [info] Stopping flows
+9 Jun 11:03:27 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:03:27 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:03:27 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:03:27 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:03:27 - [info] Stopped flows
+9 Jun 11:03:27 - [info] Updated flows
+9 Jun 11:03:27 - [info] Starting flows
+9 Jun 11:03:27 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:03:27 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:03:27 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:03:27 - [info] Started flows
+9 Jun 11:03:27 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:03:40 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:04:11 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:04:20 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:04:41 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:05:12 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:05:42 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:05:50 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:06:12 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:06:24 - [debug] saved flow revision: 996d9ecca9e33a75ecb874ce84a9d7fc9d5ddacd29285f8c9da9af56fd51f290
+9 Jun 11:06:24 - [info] Stopping flows
+9 Jun 11:06:24 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:06:24 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:06:24 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:06:25 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:06:25 - [info] Stopped flows
+9 Jun 11:06:25 - [info] Updated flows
+9 Jun 11:06:25 - [info] Starting flows
+9 Jun 11:06:25 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:06:25 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:06:25 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:06:25 - [info] Started flows
+9 Jun 11:06:25 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:06:43 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:06:52 - [debug] saved flow revision: 68eeeeb534a134c76aa17261f13c6f07e417633db29a26510932ad41122c5d95
+9 Jun 11:06:52 - [info] Stopping flows
+9 Jun 11:06:52 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:06:52 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:06:52 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:06:52 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:06:52 - [info] Stopped flows
+9 Jun 11:06:52 - [info] Updated flows
+9 Jun 11:06:52 - [info] Starting flows
+9 Jun 11:06:52 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:06:52 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:06:52 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:06:52 - [info] Started flows
+9 Jun 11:06:52 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:07:13 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:07:21 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:07:30 - [debug] saved flow revision: 5642152bcd980a199ac92c47b4c42e88ecb240eb5b612fb372184840c58f9262
+9 Jun 11:07:30 - [info] Stopping flows
+9 Jun 11:07:30 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:07:30 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:07:30 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:07:30 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:07:30 - [info] Stopped flows
+9 Jun 11:07:30 - [info] Updated flows
+9 Jun 11:07:30 - [info] Starting flows
+9 Jun 11:07:30 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:07:30 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:07:30 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:07:30 - [info] Started flows
+9 Jun 11:07:30 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:07:44 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:08:02 - [debug] saved flow revision: 68eeeeb534a134c76aa17261f13c6f07e417633db29a26510932ad41122c5d95
+9 Jun 11:08:02 - [info] Stopping flows
+9 Jun 11:08:02 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:08:02 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:08:02 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:08:02 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:08:02 - [info] Stopped flows
+9 Jun 11:08:02 - [info] Updated flows
+9 Jun 11:08:02 - [info] Starting flows
+9 Jun 11:08:02 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:08:02 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:08:02 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:08:02 - [info] Started flows
+9 Jun 11:08:02 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:08:14 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:08:44 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:08:50 - [info] [ui-base:My Dashboard] Disconnected gQfUKblX5T-qOhDLAAAt due to ping timeout
+9 Jun 11:08:51 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:09:15 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:09:44 - [info] [ui-base:My Dashboard] Disconnected 1w9ZI8-4dipjr1roAAAx due to transport error
+9 Jun 11:09:45 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:09:48 - [debug] saved flow revision: 5d09ade8f88b82af2b6fc5339ae7d3c2823a2d41d99f0ef80340953c4cb8d4f3
+9 Jun 11:09:48 - [info] Stopping flows
+9 Jun 11:09:48 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:09:48 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:09:48 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:09:48 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:09:48 - [info] Stopped flows
+9 Jun 11:09:48 - [info] Updated flows
+9 Jun 11:09:48 - [info] Starting flows
+9 Jun 11:09:48 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:09:48 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:09:48 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:09:48 - [info] Started flows
+9 Jun 11:09:48 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:10:16 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:10:22 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:10:46 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:11:16 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:11:40 - [debug] saved flow revision: 12688811c048cf721a9a0703de351fba2a7479a046e76e13cb0bda28bab41851
+9 Jun 11:11:40 - [info] Stopping flows
+9 Jun 11:11:40 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:11:40 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:11:40 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:11:40 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:11:40 - [info] Stopped flows
+9 Jun 11:11:40 - [info] Updated flows
+9 Jun 11:11:40 - [info] Starting flows
+9 Jun 11:11:40 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:11:40 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:11:40 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:11:40 - [info] Started flows
+9 Jun 11:11:40 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:11:47 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:11:52 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:12:17 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:12:30 - [info] [ui-base:My Dashboard] Disconnected G_9DdqH9MHg20cwhAAA3 due to ping timeout
+9 Jun 11:12:48 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:13:17 - [debug] saved flow revision: ba484d97b5a28c451bfc2436f85d3bc9d256c41fdaab3ed3ed75b2b21bb2d22b
+9 Jun 11:13:17 - [info] Stopping flows
+9 Jun 11:13:17 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:13:17 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:13:17 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:13:17 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:13:17 - [info] Stopped flows
+9 Jun 11:13:17 - [info] Updated flows
+9 Jun 11:13:17 - [info] Starting flows
+9 Jun 11:13:17 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:13:17 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:13:17 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:13:17 - [info] Started flows
+9 Jun 11:13:17 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:13:18 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:13:23 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:13:48 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:14:00 - [debug] saved flow revision: b60817c71712820fb13a08ba18501434bd9157df7823ee7d79fdd21f2ad58946
+9 Jun 11:14:00 - [info] Stopping flows
+9 Jun 11:14:00 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:14:00 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:14:00 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:14:00 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:14:00 - [info] Stopped flows
+9 Jun 11:14:00 - [info] Updated flows
+9 Jun 11:14:00 - [info] Starting flows
+9 Jun 11:14:00 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:14:00 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:14:00 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:14:00 - [info] Started flows
+9 Jun 11:14:00 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:14:19 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:14:23 - [debug] saved flow revision: e66075a867a9787302c9067e08e7c19e8071a7bd05d5af76482d72a7547ef875
+9 Jun 11:14:23 - [info] Stopping flows
+9 Jun 11:14:23 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:14:23 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:14:23 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:14:23 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:14:23 - [info] Stopped flows
+9 Jun 11:14:23 - [info] Updated flows
+9 Jun 11:14:23 - [info] Starting flows
+9 Jun 11:14:23 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:14:23 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:14:23 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:14:23 - [info] Started flows
+9 Jun 11:14:23 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:14:48 - [debug] saved flow revision: b60817c71712820fb13a08ba18501434bd9157df7823ee7d79fdd21f2ad58946
+9 Jun 11:14:48 - [info] Stopping flows
+9 Jun 11:14:48 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:14:48 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:14:48 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:14:48 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:14:48 - [info] Stopped flows
+9 Jun 11:14:48 - [info] Updated flows
+9 Jun 11:14:48 - [info] Starting flows
+9 Jun 11:14:48 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:14:48 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:14:48 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:14:48 - [info] Started flows
+9 Jun 11:14:48 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:14:49 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:14:53 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:15:20 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:15:50 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:15:57 - [debug] saved flow revision: 1a519caf694bfe569165e876ea68bb5bdb52341ff8258806f3fda36acf241f60
+9 Jun 11:15:57 - [info] Stopping flows
+9 Jun 11:15:57 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:15:57 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:15:57 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:15:57 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:15:57 - [info] Stopped flows
+9 Jun 11:15:57 - [info] Updated flows
+9 Jun 11:15:57 - [info] Starting flows
+9 Jun 11:15:57 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:15:57 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:15:57 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:15:57 - [info] Started flows
+9 Jun 11:15:57 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:16:20 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:16:23 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:16:39 - [debug] saved flow revision: 8ec4ecd16333d06147793629e5ce9ebf6c0c1dc005040636626759d23132d56a
+9 Jun 11:16:39 - [info] Stopping flows
+9 Jun 11:16:39 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:16:39 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:16:39 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:16:39 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:16:39 - [info] Stopped flows
+9 Jun 11:16:39 - [info] Updated flows
+9 Jun 11:16:39 - [info] Starting flows
+9 Jun 11:16:39 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:16:39 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:16:39 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:16:39 - [info] Started flows
+9 Jun 11:16:39 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:16:51 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:17:21 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:17:51 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:17:54 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:17:58 - [debug] saved flow revision: 1834a892660b10379f1e31c193561c1979f65bef1c570b243da224ea564d322d
+9 Jun 11:17:58 - [info] Stopping flows
+9 Jun 11:17:58 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:17:58 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:17:58 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:17:58 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:17:58 - [info] Stopped flows
+9 Jun 11:17:58 - [info] Updated flows
+9 Jun 11:17:58 - [info] Starting flows
+9 Jun 11:17:58 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:17:58 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:17:58 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:17:58 - [info] Started flows
+9 Jun 11:17:58 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:18:22 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:18:51 - [debug] saved flow revision: 507a08f9062069ff334fd002e75bcc28a3b293ce57c8b86d50598e7858006776
+9 Jun 11:18:51 - [info] Stopping flows
+9 Jun 11:18:51 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:18:51 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:18:51 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:18:51 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:18:51 - [info] Stopped flows
+9 Jun 11:18:51 - [info] Updated flows
+9 Jun 11:18:51 - [info] Starting flows
+9 Jun 11:18:51 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:18:51 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:18:51 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:18:51 - [info] Started flows
+9 Jun 11:18:51 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:18:52 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:19:23 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:19:24 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:19:52 - [debug] saved flow revision: e1e33eb87447d10d44271719f49a4212d97df22f35e0701a1e342f70631fb2f7
+9 Jun 11:19:52 - [info] Stopping flows
+9 Jun 11:19:52 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:19:52 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:19:52 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:19:52 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:19:52 - [info] Stopped flows
+9 Jun 11:19:52 - [info] Updated flows
+9 Jun 11:19:52 - [info] Starting flows
+9 Jun 11:19:52 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:19:52 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:19:52 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:19:52 - [info] Started flows
+9 Jun 11:19:52 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:19:53 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:20:23 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:20:54 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:20:55 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:21:05 - [info] [ui-base:My Dashboard] Disconnected m0zfOWrT6hiVMp48AAA7 due to transport close
+9 Jun 11:21:24 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:21:55 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:22:25 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:22:53 - [debug] saved flow revision: 90384a93d862e35ee51ca1248278aa9e0c3dea66c9c010e4ea9f74d1f00b035d
+9 Jun 11:22:53 - [info] Stopping flows
+9 Jun 11:22:53 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:22:53 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:22:53 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:22:53 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:22:53 - [info] Stopped flows
+9 Jun 11:22:53 - [info] Updated flows
+9 Jun 11:22:53 - [info] Starting flows
+9 Jun 11:22:53 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:22:53 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:22:53 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:22:53 - [info] Started flows
+9 Jun 11:22:53 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:22:55 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:23:26 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:23:48 - [debug] saved flow revision: d55ffa155dbfd1ffc570cfa5b50d88cc8248c984b7875a7c25dcd98107b6d939
+9 Jun 11:23:48 - [info] Stopping flows
+9 Jun 11:23:48 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:23:48 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:23:48 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:23:48 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:23:48 - [info] Stopped flows
+9 Jun 11:23:48 - [info] Updated flows
+9 Jun 11:23:48 - [info] Starting flows
+9 Jun 11:23:48 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:23:48 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:23:48 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:23:48 - [info] Started flows
+9 Jun 11:23:48 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:23:56 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:23:56 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:24:27 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:24:36 - [debug] saved flow revision: c642cdde323da0aa052884019793285459785a5ea05a7204350c6f09254c2411
+9 Jun 11:24:36 - [info] Stopping flows
+9 Jun 11:24:36 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:24:36 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:24:36 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:24:36 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:24:36 - [info] Stopped flows
+9 Jun 11:24:36 - [info] Updated flows
+9 Jun 11:24:36 - [info] Starting flows
+9 Jun 11:24:36 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:24:36 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:24:36 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:24:36 - [info] Started flows
+9 Jun 11:24:36 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:24:57 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:25:26 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:25:27 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:25:31 - [debug] saved flow revision: 31faf0ac920c6a824ab12f9d55a44811e0b376534126653d6165812bac1f96fc
+9 Jun 11:25:31 - [info] Stopping flows
+9 Jun 11:25:31 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:25:31 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:25:31 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:25:31 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:25:31 - [info] Stopped flows
+9 Jun 11:25:31 - [info] Updated flows
+9 Jun 11:25:31 - [info] Starting flows
+9 Jun 11:25:31 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:25:31 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:25:31 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:25:31 - [info] Started flows
+9 Jun 11:25:31 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:25:58 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:26:07 - [debug] saved flow revision: 7977a9dc446038c94fc8e4e6fd629410e08772cdcfefb9eac742cbfbfa03f5d6
+9 Jun 11:26:07 - [info] Stopping flows
+9 Jun 11:26:07 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:26:07 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:26:07 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:26:07 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:26:07 - [info] Stopped flows
+9 Jun 11:26:07 - [info] Updated flows
+9 Jun 11:26:07 - [info] Starting flows
+9 Jun 11:26:07 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:26:07 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:26:07 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:26:07 - [info] Started flows
+9 Jun 11:26:07 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:26:28 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:26:57 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:26:59 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:27:03 - [debug] saved flow revision: 8ef89f7812ffee222491405dd73dac2cf5295699a9c5286cb2b78f07a83fa9bb
+9 Jun 11:27:03 - [info] Stopping flows
+9 Jun 11:27:03 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:27:03 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:27:03 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:27:03 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:27:03 - [info] Stopped flows
+9 Jun 11:27:03 - [info] Updated flows
+9 Jun 11:27:03 - [info] Starting flows
+9 Jun 11:27:03 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:27:03 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:27:03 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:27:03 - [info] Started flows
+9 Jun 11:27:03 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:27:29 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:27:52 - [debug] saved flow revision: 983a18adda4e67284d2e015385a118e155de58f6519b89174e6d425f4774174a
+9 Jun 11:27:52 - [info] Stopping flows
+9 Jun 11:27:52 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:27:52 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:27:52 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:27:52 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:27:52 - [info] Stopped flows
+9 Jun 11:27:52 - [info] Updated flows
+9 Jun 11:27:52 - [info] Starting flows
+9 Jun 11:27:52 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:27:52 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:27:52 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:27:52 - [info] Started flows
+9 Jun 11:27:52 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:27:59 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:28:27 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:28:30 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:29:00 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:29:31 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:29:58 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:30:01 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:30:31 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:31:02 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:31:28 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:31:32 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:31:35 - [debug] saved flow revision: 10f187b0b8188a48d29bfd2bd0c97678f8663219fcba59d17a2a2f0294500e9f
+9 Jun 11:31:35 - [info] Stopping flows
+9 Jun 11:31:35 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:31:35 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:31:35 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:31:35 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:31:35 - [info] Stopped flows
+9 Jun 11:31:35 - [info] Updated flows
+9 Jun 11:31:35 - [info] Starting flows
+9 Jun 11:31:35 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:31:35 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:31:35 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:31:35 - [info] Started flows
+9 Jun 11:31:35 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:32:03 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:32:27 - [debug] saved flow revision: d0307155f57cda50d60b159de808e908cede5ad6515e4defb132e817abdc8724
+9 Jun 11:32:27 - [info] Stopping flows
+9 Jun 11:32:27 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:32:27 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:32:27 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:32:27 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:32:27 - [info] Stopped flows
+9 Jun 11:32:27 - [info] Updated flows
+9 Jun 11:32:27 - [info] Starting flows
+9 Jun 11:32:27 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:32:27 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:32:27 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:32:27 - [info] Started flows
+9 Jun 11:32:27 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:32:33 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:32:56 - [info] [ui-base:My Dashboard] Disconnected XTCR_M8HjVVDYpSXAABD due to transport error
+9 Jun 11:32:58 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:33:03 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:33:34 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:34:04 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:34:25 - [debug] saved flow revision: fdad63d0b21ce23ecabf0d398843e33f1e7f72579873c0de6eaf81e6dacbaa35
+9 Jun 11:34:25 - [info] Stopping flows
+9 Jun 11:34:25 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:34:25 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:34:25 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:34:25 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:34:25 - [info] Stopped flows
+9 Jun 11:34:25 - [info] Updated flows
+9 Jun 11:34:25 - [info] Starting flows
+9 Jun 11:34:25 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:34:25 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:34:25 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:34:25 - [info] Started flows
+9 Jun 11:34:25 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:34:29 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:34:35 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:34:40 - [info] [ui-base:My Dashboard] Disconnected vPAu_9MSzi8SMLkmAABF due to transport close
+9 Jun 11:34:43 - [info] [ui-base:My Dashboard] Disconnected NOLUyE_ZhLfxVPRqAABH due to transport close
+9 Jun 11:35:05 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:35:11 - [info] [ui-base:My Dashboard] Disconnected nNl_0c7Q2CmgQDI5AABJ due to transport close
+9 Jun 11:35:35 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:35:58 - [debug] saved flow revision: 82c6bb943fafa1de71343aafa8bc00a90e568b9c41bb056cfbe1719aa3b13430
+9 Jun 11:35:58 - [info] Stopping flows
+9 Jun 11:35:58 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:35:58 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:35:58 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:35:58 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:35:58 - [info] Stopped flows
+9 Jun 11:35:58 - [info] Updated flows
+9 Jun 11:35:58 - [info] Starting flows
+9 Jun 11:35:58 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:35:58 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:35:58 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:35:58 - [info] Started flows
+9 Jun 11:35:58 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:35:59 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:36:06 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:36:36 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:37:07 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:37:30 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:37:37 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:38:07 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:38:20 - [debug] saved flow revision: 7c2bb60706e25f62bea8eca77d638f83e03c888f0a831bd461aa659941fdb3f9
+9 Jun 11:38:20 - [info] Stopping flows
+9 Jun 11:38:20 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:38:20 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:38:20 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:38:20 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:38:20 - [info] Stopped flows
+9 Jun 11:38:20 - [info] Updated flows
+9 Jun 11:38:20 - [info] Starting flows
+9 Jun 11:38:20 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:38:20 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:38:20 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:38:20 - [info] Started flows
+9 Jun 11:38:20 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:38:38 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:39:00 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:39:08 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:39:11 - [debug] saved flow revision: 704b1111fd739c2c8e9e67a12bd37abc0492d9fe6b58ebb0f4f488c1b7d8fcde
+9 Jun 11:39:11 - [info] Stopping flows
+9 Jun 11:39:11 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:39:11 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:39:11 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:39:11 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:39:11 - [info] Stopped flows
+9 Jun 11:39:11 - [info] Updated flows
+9 Jun 11:39:11 - [info] Starting flows
+9 Jun 11:39:11 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:39:11 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:39:11 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:39:11 - [info] Started flows
+9 Jun 11:39:11 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:39:39 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:40:09 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:40:31 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:40:39 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:41:10 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:41:40 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:41:50 - [debug] saved flow revision: 87cf42e37084c21d9e7df88142e134c0d5af9733cb6a8acf6dcdc0f2f0ab9c43
+9 Jun 11:41:50 - [info] Stopping flows
+9 Jun 11:41:50 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:41:50 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:41:50 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:41:50 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:41:50 - [info] Stopped flows
+9 Jun 11:41:50 - [info] Updated flows
+9 Jun 11:41:50 - [info] Starting flows
+9 Jun 11:41:50 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:41:50 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:41:50 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:41:50 - [info] Started flows
+9 Jun 11:41:50 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:42:01 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:42:11 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:42:41 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:43:11 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:43:31 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:43:42 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:44:04 - [debug] saved flow revision: cb0333bf4ae9d0fceed4a06d5de0133cf3fe7557fbef2e92ddebd7e03b7415f5
+9 Jun 11:44:04 - [info] Stopping flows
+9 Jun 11:44:04 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:44:04 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:44:04 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:44:04 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:44:04 - [info] Stopped flows
+9 Jun 11:44:04 - [info] Updated flows
+9 Jun 11:44:04 - [info] Starting flows
+9 Jun 11:44:04 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:44:04 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:44:04 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:44:04 - [info] Started flows
+9 Jun 11:44:04 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:44:12 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:44:43 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:45:02 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:45:13 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:45:43 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:46:02 - [debug] saved flow revision: b626ff6e5472da742ce5b2db150bde65b3008b533e6430b4053ebe14d1d2e887
+9 Jun 11:46:02 - [info] Stopping flows
+9 Jun 11:46:02 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:46:02 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:46:02 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:46:02 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:46:02 - [info] Stopped flows
+9 Jun 11:46:02 - [info] Updated flows
+9 Jun 11:46:02 - [info] Starting flows
+9 Jun 11:46:02 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:46:02 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:46:02 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:46:02 - [info] Started flows
+9 Jun 11:46:02 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:46:14 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:46:32 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:46:44 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:47:15 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:47:37 - [debug] saved flow revision: 163a3a966b19aa3de8d920e378511d39bca847f62e49cf931de3871eefb91127
+9 Jun 11:47:37 - [info] Stopping flows
+9 Jun 11:47:37 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:47:37 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:47:37 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:47:37 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:47:37 - [info] Stopped flows
+9 Jun 11:47:37 - [info] Updated flows
+9 Jun 11:47:37 - [info] Starting flows
+9 Jun 11:47:37 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:47:37 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:47:37 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:47:38 - [info] Started flows
+9 Jun 11:47:38 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:47:45 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:48:03 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:48:15 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:48:46 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:49:16 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:49:33 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:49:47 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:49:55 - [debug] saved flow revision: f568abfff999e62ab45d350212cef76b76956921ce4418f22a5c634ccc84036d
+9 Jun 11:49:55 - [info] Stopping flows
+9 Jun 11:49:55 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:49:55 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:49:55 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:49:55 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:49:55 - [info] Stopped flows
+9 Jun 11:49:55 - [info] Updated flows
+9 Jun 11:49:55 - [info] Starting flows
+9 Jun 11:49:55 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:49:55 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:49:55 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:49:55 - [info] Started flows
+9 Jun 11:49:55 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:50:17 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:50:47 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:51:03 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:51:18 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:51:48 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:52:18 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:52:34 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:52:49 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:53:19 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:53:50 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:54:04 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:54:20 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:54:50 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:55:21 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:55:28 - [debug] saved flow revision: 64155efbc6a50dbe6105f886927ac2a9c000a0e03f54e786593cbbc3daf21cfd
+9 Jun 11:55:28 - [info] Stopping flows
+9 Jun 11:55:28 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 11:55:28 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 11:55:28 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 11:55:28 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 11:55:28 - [info] Stopped flows
+9 Jun 11:55:28 - [info] Updated flows
+9 Jun 11:55:28 - [info] Starting flows
+9 Jun 11:55:28 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 11:55:28 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 11:55:28 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 11:55:28 - [info] Started flows
+9 Jun 11:55:28 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 11:55:35 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:55:51 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:56:22 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:56:52 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:57:05 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:57:22 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:57:53 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:58:23 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:58:36 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:58:54 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:59:24 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 11:59:54 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 12:00:06 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 12:00:21 - [debug] saved flow revision: 302f8c0fe3e7bc2ea5819a48b9ef5697f36622095a75a4f8293dcb7d807be2b5
+9 Jun 12:00:21 - [info] Stopping flows
+9 Jun 12:00:21 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 12:00:21 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 12:00:21 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 12:00:21 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 12:00:21 - [info] Stopped flows
+9 Jun 12:00:21 - [info] Updated flows
+9 Jun 12:00:21 - [info] Starting flows
+9 Jun 12:00:21 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 12:00:21 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 12:00:21 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 12:00:21 - [info] Started flows
+9 Jun 12:00:21 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 12:00:25 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 12:00:55 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 12:01:26 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 12:01:36 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 12:01:56 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 12:02:26 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 12:02:57 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064

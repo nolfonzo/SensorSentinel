@@ -2,7 +2,15 @@
     {
         "id": "62f31c6b53afb626",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "Maintenance Flow",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "bfe4d76a50650ba0",
+        "type": "tab",
+        "label": "Alerts Flow",
         "disabled": false,
         "info": "",
         "env": []
@@ -47,56 +55,6 @@
         }
     },
     {
-        "id": "f519202eda84521a",
-        "type": "ui-page",
-        "name": "Page 1",
-        "ui": "ac73cfbba5e1dcae",
-        "path": "/page1",
-        "icon": "home",
-        "layout": "grid",
-        "theme": "c05b66df7c049376",
-        "breakpoints": [
-            {
-                "name": "Default",
-                "px": 0,
-                "cols": 3
-            },
-            {
-                "name": "Tablet",
-                "px": 576,
-                "cols": 6
-            },
-            {
-                "name": "Small Desktop",
-                "px": 768,
-                "cols": 9
-            },
-            {
-                "name": "Desktop",
-                "px": 1024,
-                "cols": 12
-            }
-        ],
-        "order": 2,
-        "className": "",
-        "visible": "true",
-        "disabled": "false"
-    },
-    {
-        "id": "883d8d3194f035d9",
-        "type": "ui-group",
-        "name": "Group 1",
-        "page": "f519202eda84521a",
-        "width": "12",
-        "height": 1,
-        "order": 1,
-        "showTitle": true,
-        "className": "",
-        "visible": "true",
-        "disabled": "false",
-        "groupType": "default"
-    },
-    {
         "id": "315ea8347fb746b3",
         "type": "mqtt-broker",
         "name": "",
@@ -130,9 +88,59 @@
     {
         "id": "df031482b6ed6ab2",
         "type": "ui-page",
-        "name": "SensorSentinel Admin",
+        "name": "Owner & Device Admin",
         "ui": "ac73cfbba5e1dcae",
         "path": "/admin",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "c05b66df7c049376",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 2,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "105a8e7c53d8d74f",
+        "type": "ui-group",
+        "name": "SensorSentinel Admin",
+        "page": "df031482b6ed6ab2",
+        "width": "12",
+        "height": 1,
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "95576809b9af886f",
+        "type": "ui-page",
+        "name": "Alerts",
+        "ui": "ac73cfbba5e1dcae",
+        "path": "/alerts",
         "icon": "home",
         "layout": "grid",
         "theme": "c05b66df7c049376",
@@ -164,11 +172,11 @@
         "disabled": "false"
     },
     {
-        "id": "105a8e7c53d8d74f",
+        "id": "5aa9d9b44198b615",
         "type": "ui-group",
-        "name": "SensorSentinel Admin",
-        "page": "df031482b6ed6ab2",
-        "width": "12",
+        "name": "SensorSentinel Alerts",
+        "page": "95576809b9af886f",
+        "width": 6,
         "height": 1,
         "order": 1,
         "showTitle": true,
@@ -178,65 +186,10 @@
         "groupType": "default"
     },
     {
-        "id": "526ecc0b4996d3ac",
-        "type": "mqtt in",
-        "z": "62f31c6b53afb626",
-        "name": "LoRa messages",
-        "topic": "#",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "315ea8347fb746b3",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 440,
-        "y": 160,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "a55a6868925ad162",
-        "type": "function",
-        "z": "62f31c6b53afb626",
-        "name": "Parse LoRa message",
-        "func": "// The MQTT payload is already an object, not a string\nnode.log(\"Received from node: \" + msg.payload.nodeId);\nnode.log(\"Full message: \" + JSON.stringify(msg.payload, null, 2));\n\n// Just pass it through for now\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 520,
-        "y": 320,
-        "wires": [
-            [
-                "245051e60d123ed7"
-            ]
-        ]
-    },
-    {
-        "id": "245051e60d123ed7",
-        "type": "debug",
-        "z": "62f31c6b53afb626",
-        "name": "debug 2",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 580,
-        "y": 560,
-        "wires": []
-    },
-    {
         "id": "03b8ce6774a2abb5",
         "type": "function",
         "z": "62f31c6b53afb626",
-        "name": "Owner Manager",
+        "name": "Owner Admin",
         "func": "const topic = msg.topic; // Retrieve the topic from the incoming message\nconst payload = msg.payload; // Retrieve the payload containing the necessary data\n\nconst noLogTopics = [\n    \"get_devices\",\n    \"add_device\",\n    \"update_device\",\n    \"devices_data\",\n    \"owners_data\"\n];\n\n// Log incoming messages unless they're in the no-log list\nif (!noLogTopics.includes(topic)) {\n    node.log(\"Received message for topic: \" + topic + \" json: \" + JSON.stringify(msg)); // Log the whole message\n}\n\nswitch (topic) {\n    case \"get_owners\":\n        // Fetch the list of owners from the global context\n        const owners = global.get(\"owners\") || {};\n        msg.payload = owners; // Set the payload to owners\n        msg.topic = \"owners_data\"; // Change the topic for the response\n        node.log(\"Fetched owners: \" + JSON.stringify(owners)); // Log the owners\n        return msg; // Ensure to return the message\n\n    case \"add_owner\":\n        // Add a new owner\n        const allOwners = global.get(\"owners\") || {};\n\n        // Ensure the owner name is provided and is unique\n        if (!payload.name) {\n            node.log(\"Owner name is missing. Cannot add owner.\"); // Log missing name error\n            return { topic: \"owner_error\", payload: { error: \"Owner name is required.\" } }; // Return error feedback\n        }\n\n        // Check for unique owner name\n        if (allOwners[payload.name]) {\n            node.log(\"Owner name already exists: \" + payload.name); // Log duplicate name error\n            return { topic: \"owner_error\", payload: { error: \"Owner name must be unique.\" } }; // Return error feedback\n        }\n\n        // Create new owner object with name and other details\n        allOwners[payload.name] = {\n            name: payload.name, // Include the name property\n            email: payload.email || \"\",\n            phone: payload.phone || \"\",\n            devices: [], // Initialize associated devices as an empty array\n            created: new Date().toISOString() // Set the creation timestamp\n        };\n\n        global.set(\"owners\", allOwners); // Save updated owners to global context\n        node.log(\"Added owner: \" + payload.name); // Log the newly added owner\n\n        msg.payload = allOwners; // Set the payload to the updated list of owners\n        msg.topic = \"owners_data\"; // Change the topic for the response\n        return msg; // Ensure to return the message\n\n    case \"update_owner\":\n        // Update an existing owner\n        const ownersToUpdate = global.get(\"owners\") || {};\n        node.log(\"Incoming payload for update: \" + JSON.stringify(payload)); // Log incoming payload\n        if (ownersToUpdate[payload.name]) {\n            node.log(\"Current owners before update: \" + JSON.stringify(ownersToUpdate)); // Log owners state\n\n            // Retain existing properties and update with new data\n            ownersToUpdate[payload.name] = {\n                ...ownersToUpdate[payload.name],\n                ...payload,  // Change from payload.data to payload to ensure all fields are merged correctly\n                updated: new Date().toISOString() // Update the timestamp\n            };\n            global.set(\"owners\", ownersToUpdate); // Save the updated owner info\n\n            node.log(\"Updated owner: \" + JSON.stringify(ownersToUpdate[payload.name])); // Log the update\n            msg.payload = ownersToUpdate[payload.name]; // Send just the updated owner info\n            msg.topic = \"owner_updated\"; // Change to specific topic for the update event\n        } else {\n            node.log(\"Owner name not found: \" + payload.name); // Log if the owner name does not exist\n            return { topic: \"owner_error\", payload: { error: \"Owner name not found.\" } }; // Return error feedback\n        }\n        return msg; // Return message for success\n\n    case \"delete_owner\":\n        // Delete an owner and their associated devices\n        const ownersToDelete = global.get(\"owners\") || {};\n        const devices = global.get(\"devices\") || {}; // Retrieve existing devices\n\n        node.log(\"Trying to delete owner: \" + payload.name); // Log the owner to delete\n        node.log(\"Current owners: \" + JSON.stringify(ownersToDelete)); // Log current owners for debugging\n\n        if (ownersToDelete[payload.name]) {\n            // Get the IDs of devices associated with this owner\n            const ownerDevices = ownersToDelete[payload.name].devices || [];\n\n            // Remove any associated devices from the devices registry\n            ownerDevices.forEach(deviceName => {\n                delete devices[deviceName]; // Remove the device from the global devices object\n            });\n\n            // Update the global devices list\n            global.set(\"devices\", devices);\n\n            // Now delete the owner\n            delete ownersToDelete[payload.name];\n            global.set(\"owners\", ownersToDelete); // Save updated owners\n            node.log(\"Deleted owner: \" + payload.name + \" and their devices\"); // Log the deletion\n        } else {\n            node.log(\"Owner name not found for deletion: \" + payload.name); // Log if the owner name does not exist\n            return { topic: \"owner_error\", payload: { error: \"Owner name not found for deletion.\" } }; // Return error feedback\n        }\n\n        msg.payload = ownersToDelete; // Set payload to the updated owner list\n        msg.topic = \"owners_data\"; // Change the topic for the response\n        return msg; // Return message for success\n\n    default:\n        // Log if the topic is unrecognized\n        return null;\n}\n\n// Return the message to the caller (redundant since every case returns earlier)\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -256,7 +209,7 @@
         "id": "7100665dc8d8ec55",
         "type": "function",
         "z": "62f31c6b53afb626",
-        "name": "Node Admin",
+        "name": "Device Admin",
         "func": "const topic = msg.topic; // Retrieve the topic from the incoming message\nconst payload = msg.payload; // Retrieve the payload containing the necessary data\n\nconst noLogTopics = [\n    \"get_owners\",\n    \"add_owner\",\n    \"update_owner\",\n    \"delete_owner\",\n    \"devices_data\", // Changed from nodes_data to devices_data\n    \"owners_data\"\n];\n\n// Log incoming messages unless they're in the no-log list\nif (!noLogTopics.includes(topic)) {\n    node.log(\"Received message for topic: \" + topic + \" json: \" + JSON.stringify(msg)); // Log the whole message\n}\n\nswitch (topic) {\n    case \"get_devices\": // Changed from get_nodes to get_devices\n        // Retrieve all devices from the global state\n        const devicesData = global.get(\"devices\") || {}; // Changed from nodesData to devicesData\n        msg.payload = devicesData; // Set the devices data as payload\n        msg.topic = \"devices_data\"; // Change the topic for the response\n        node.log(\"Fetched devices: \" + JSON.stringify(devicesData)); // Log the fetched devices\n        return msg; // Ensure to return the message\n\n    case \"add_device\": // Changed from add_node to add_device\n        // Add a new device\n        const allDevices = global.get(\"devices\") || {}; // Retrieve existing devices\n        const allOwners = global.get(\"owners\") || {}; // Retrieve existing owners\n\n        // Ensure required fields are present\n        if (!payload.deviceName || !payload.ownerName) { // Updated to check deviceName\n            node.log(\"Device Name or Owner Name is missing.\"); // Log an error if required fields are missing\n            return { topic: \"device_error\", payload: { error: \"Device Name and Owner Name are required.\" } }; // Return error feedback\n        }\n\n        // Log the incoming pins from payload\n        node.log(\"Incoming payload: \" + JSON.stringify(payload)); // Log the entire payload\n        node.log(\"Incoming binaryPins: \" + JSON.stringify(payload.binaryPins)); // Log binary pins\n        node.log(\"Incoming analogPins: \" + JSON.stringify(payload.analogPins)); // Log analog pins\n\n        // Ensure device name is unique \n        if (!allDevices[payload.deviceName]) { // Directly use payload.deviceName\n            allDevices[payload.deviceName] = {  // Key by deviceName\n                deviceName: payload.deviceName, // Add the device name to the object\n                ownerName: payload.ownerName, // Use ownerName instead of ownerId\n                binaryPins: payload.binaryPins || [],\n                analogPins: payload.analogPins || [],\n                lastSeen: null // Initialize last seen status\n            };\n\n            // Add device to the owner's device list\n            if (allOwners[payload.ownerName]) {\n                // Owner exists, check if the device is already in their list\n                if (!allOwners[payload.ownerName].devices.includes(payload.deviceName)) { // Check against deviceName\n                    allOwners[payload.ownerName].devices.push(payload.deviceName); // Add deviceName to owner's devices\n                } else {\n                    node.log(\"Device already exists in owner's device list: \" + payload.deviceName); // Log if device is a duplicate\n                    return { topic: \"device_error\", payload: { error: \"Device already exists for this owner.\" } }; // Return error feedback\n                }\n            } else {\n                // Error handling if the owner does not exist\n                node.log(\"Owner not found, cannot assign device: \" + payload.ownerName);\n                return { topic: \"device_error\", payload: { error: \"Owner not found.\" } }; // Return error feedback\n            }\n\n            // Set the devices and owners in the global context\n            global.set(\"devices\", allDevices); // Save updated devices to global context\n            global.set(\"owners\", allOwners); // Save the updated owners to global context\n\n            // Log the outbound device information to ensure they are set properly\n            node.log(\"Added device: \" + JSON.stringify(allDevices[payload.deviceName])); // Log the device that was added\n\n            msg.topic = \"device_added\"; // Change the topic for success feedback\n            msg.payload = { \n                deviceName: payload.deviceName, // Include the device name in the payload response\n                ownerName: payload.ownerName,\n                binaryPins: payload.binaryPins, // Include binary pins for the response\n                analogPins: payload.analogPins, // Include analog pins for the response\n                message: \"Device added successfully.\" \n            };\n        } else {\n            node.log(\"Device name already exists: \" + payload.deviceName); // Log if the device name is not unique\n            return { topic: \"device_error\", payload: { error: \"Device name already exists.\" } }; // Return error feedback\n        }\n        break;\n\n    case \"update_device\": // Changed from update_node to update_device\n        // Update an existing device using its name for identification\n        const devicesToUpdate = global.get(\"devices\") || {}; // Retrieve existing devices\n\n        const currentDeviceName = payload.deviceName; // Device name for identification\n        const currentDevice = devicesToUpdate[currentDeviceName]; // Retrieve the current device\n\n        if (!currentDevice) {\n            node.log(\"Device name not found for update: \" + currentDeviceName); // Log if the device name does not exist\n            return { topic: \"device_error\", payload: { error: \"Device name not found.\" } }; // Return error feedback\n        }\n\n        // Log the current state before updating\n        node.log(\"Current Device before update: \" + JSON.stringify(currentDevice));\n\n        // Update the device's owner name if it has changed\n        if (payload.ownerName) {\n            const oldOwnerName = currentDevice.ownerName; // Store the current owner name\n            currentDevice.ownerName = payload.ownerName; // Assign new owner name from payload\n\n            // Log the change\n            node.log(\"Updated device owner from \" + oldOwnerName + \" to \" + currentDevice.ownerName);\n            \n            // Remove device from old owner's device list if applicable\n            const owners = global.get(\"owners\") || {}; // Retrieve owner data\n            if (oldOwnerName && owners[oldOwnerName]) {\n                const oldOwnerDevices = owners[oldOwnerName].devices;\n                const index = oldOwnerDevices.indexOf(currentDeviceName);\n                if (index > -1) {\n                    oldOwnerDevices.splice(index, 1); // Remove device from old owner device list\n                    node.log(\"Removed device from old owner: \" + oldOwnerName);\n                }\n            }\n            \n            // Add device to the new owner's list\n            if (owners[currentDevice.ownerName]) {\n                if (!owners[currentDevice.ownerName].devices.includes(currentDeviceName)) {\n                    owners[currentDevice.ownerName].devices.push(currentDeviceName); // Add it\n                    node.log(\"Added device to new owner: \" + currentDevice.ownerName);\n                } else {\n                    node.log(\"Device already exists for new owner: \" + currentDevice.ownerName);\n                }\n            }\n        }\n\n        // Assign any other properties to update\n        if (payload.binaryPins) { // Properly check and assign binaryPins\n            currentDevice.binaryPins = payload.binaryPins;\n        }\n        if (payload.analogPins) { // Properly check and assign analogPins\n            currentDevice.analogPins = payload.analogPins;\n        }\n\n        // Update the devices in global context\n        global.set(\"devices\", devicesToUpdate);\n\n        // Log updated structures after the update\n        node.log(\"Updated devices structure after update: \" + JSON.stringify(devicesToUpdate));\n\n        msg.payload = devicesToUpdate; // Return updated device list\n        msg.topic = \"devices_data\"; // Change topic to indicate device data has changed\n        return msg; // Ensure to return the message\n\n    default:\n        // Log if the topic is unrecognized\n        return null;\n}\n\n// Return the message to the caller (redundant since every case returns earlier)\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -264,7 +217,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1390,
+        "x": 1400,
         "y": 660,
         "wires": [
             [
@@ -279,7 +232,7 @@
         "group": "105a8e7c53d8d74f",
         "page": "",
         "ui": "",
-        "name": "",
+        "name": "SensorSentinel Template",
         "order": 1,
         "width": 0,
         "height": 0,
@@ -290,7 +243,7 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 1300,
+        "x": 1350,
         "y": 240,
         "wires": [
             [
@@ -325,6 +278,117 @@
         "wires": [
             [
                 "7100665dc8d8ec55"
+            ]
+        ]
+    },
+    {
+        "id": "526ecc0b4996d3ac",
+        "type": "mqtt in",
+        "z": "bfe4d76a50650ba0",
+        "name": "LoRa messages",
+        "topic": "#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "315ea8347fb746b3",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 200,
+        "y": 160,
+        "wires": [
+            [
+                "a55a6868925ad162"
+            ]
+        ]
+    },
+    {
+        "id": "a55a6868925ad162",
+        "type": "function",
+        "z": "bfe4d76a50650ba0",
+        "name": "Parse LoRa message",
+        "func": "// Retrieve the devices from global context\nconst devices = global.get(\"devices\") || {};\nconst currentDeviceName = msg.payload.nodeId.toString();  // Use nodeId for identification\nconst currentDevice = devices[currentDeviceName];\n\nif (!currentDevice) {\n    node.warn(\"Device not found for nodeId: \" + msg.payload.nodeId);\n    return null;  // Stop processing if the device is not found\n}\n\n// Initialize alerts array\nmsg.payload = [];\n\n// Check binary pins using bitwise operations\nconst binaryPinStates = msg.payload.digital; // Assuming msg.payload.digital contains the binary pin byte\n\ncurrentDevice.binaryPins.forEach((pin, index) => {\n    // Get the state of the current binary pin using bitwise AND and shifting\n    const pinState = (binaryPinStates >> index) & 1;  // Get the value of the current bit\n\n    if (pin.trigger === 'High' && pinState === 1) {  // High trigger alert\n        msg.payload.push({\n            ownerName: currentDevice.ownerName, // Group by owner\n            deviceName: currentDevice.deviceName, // Group by node\n            pinLabel: pin.label,  // Pin label\n            alertMessage: `Triggered HIGH`,\n            timestamp: msg.payload.time_iso\n        });\n    } else if (pin.trigger === 'Low' && pinState === 0) {  // Low trigger alert\n        msg.payload.push({\n            ownerName: currentDevice.ownerName, // Group by owner\n            deviceName: currentDevice.deviceName, // Group by node\n            pinLabel: pin.label,  // Pin label\n            alertMessage: `Triggered LOW`,\n            timestamp: msg.payload.time_iso\n        });\n    }\n});\n\n// Check analog pins\ncurrentDevice.analogPins.forEach((pin, index) => {\n    // Assuming msg.payload.analog holds the pin values for the corresponding index\n    if (msg.payload.analogPins && msg.payload.analogPins[index] !== undefined) {\n        const analogValue = msg.payload.analogPins[index];\n        if (analogValue < pin.lowThreshold) {  // Low threshold alert\n            msg.payload.push({\n                ownerName: currentDevice.ownerName, // Group by owner\n                deviceName: currentDevice.deviceName, // Group by node\n                pinLabel: pin.label,  // Pin label\n                alertMessage: `is LOW: ${analogValue}`,\n                timestamp: msg.payload.time_iso\n            });\n        } else if (analogValue > pin.highThreshold) {  // High threshold alert\n            msg.payload.push({\n                ownerName: currentDevice.ownerName, // Group by owner\n                deviceName: currentDevice.deviceName, // Group by node\n                pinLabel: pin.label,  // Pin label\n                alertMessage: `is HIGH: ${analogValue}`,\n                timestamp: msg.payload.time_iso\n            });\n        }\n    }\n});\n\n// Return the structured alerts, grouping them\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 420,
+        "wires": [
+            [
+                "245051e60d123ed7",
+                "3e028f50bd6ceb32"
+            ]
+        ]
+    },
+    {
+        "id": "245051e60d123ed7",
+        "type": "debug",
+        "z": "bfe4d76a50650ba0",
+        "name": "debug 2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 380,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "3e028f50bd6ceb32",
+        "type": "ui-template",
+        "z": "bfe4d76a50650ba0",
+        "group": "5aa9d9b44198b615",
+        "page": "",
+        "ui": "",
+        "name": "",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n    <div style=\"width: 100%;\">\n        <style>\n            .v-container {\n                font-size: 0.75rem;\n            }\n            .v-card-title {\n                font-size: 0.85rem;\n            }\n            .v-btn {\n                font-size: 0.7rem;\n                padding: 4px 8px;\n            }\n            .v-text-field input {\n                font-size: 0.75rem;\n                padding: 4px;\n            }\n            .v-data-table {\n                font-size: 0.75rem;\n            }\n        </style>\n\n        <v-container fluid class=\"pa-6\" style=\"max-width: 100%; padding: 0;\">\n            <h2 class=\"text-h4 d-flex align-center mb-4\">\n                <v-icon class=\"mr-2\">mdi-alarm</v-icon>\n                Alerts Management\n            </h2>\n\n            <!-- Alert Filter -->\n            <v-card class=\"mb-6\">\n                <v-card-title>\n                    <v-icon class=\"mr-2\">mdi-magnify</v-icon>\n                    Filter Alerts\n                </v-card-title>\n                <v-card-text>\n                    <v-text-field v-model=\"alertSearchQuery\" label=\"Search alerts...\" \n                                  prepend-inner-icon=\"mdi-magnify\" density=\"compact\" clearable>\n                    </v-text-field>\n                </v-card-text>\n            </v-card>\n\n            <!-- Alerts List -->\n            <v-card>\n                <v-card-title>\n                    Current Alerts ({{ filteredAlertsList.length || 0 }} of {{ alerts.length || 0 }})\n                </v-card-title>\n                <v-data-table :headers=\"alertHeaders\" :items=\"filteredAlertsList\" class=\"elevation-0\" density=\"compact\">\n                    <template v-slot:item.owner=\"{ item }\"> \n                        <v-chip size=\"small\">{{ item.ownerName }}</v-chip>\n                    </template>\n\n                    <template v-slot:item.device=\"{ item }\"> \n                        <v-chip size=\"small\">{{ item.deviceName }}</v-chip>\n                    </template>\n\n                    <template v-slot:item.message=\"{ item }\">\n                        <span>{{ item.alertMessage }}</span>\n                    </template>\n\n                    <template v-slot:item.timestamp=\"{ item }\">\n                        <span>{{ formatDate(item.timestamp) }}</span>\n                    </template>\n\n                    <template v-slot:item.actions=\"{ item }\">  \n                        <v-btn icon=\"mdi-pencil\" size=\"small\" @click=\"editAlert(item)\"></v-btn>  \n                        <v-btn icon=\"mdi-delete\" size=\"small\" color=\"error\" @click=\"clear(item)\">Clear</v-btn>  \n                    </template>\n                </v-data-table>\n            </v-card>\n        </v-container>\n\n        <!-- Dialog for Editing Alerts -->\n        <v-dialog v-model=\"editAlertDialog\" max-width=\"400px\">\n            <v-card>\n                <v-card-title>Edit Alert</v-card-title>\n                <v-card-text>\n                    <v-text-field v-model=\"editingAlert.alertMessage\" label=\"Alert Message\"></v-text-field>\n                    <v-autocomplete v-model=\"editingAlert.ownerName\" :items=\"ownerOptions\" label=\"Owner\" \n                                    variant=\"outlined\" clearable density=\"compact\"></v-autocomplete>\n                    <v-autocomplete v-model=\"editingAlert.deviceName\" :items=\"deviceOptions\" label=\"Device\" \n                                    variant=\"outlined\" clearable density=\"compact\"></v-autocomplete>\n                </v-card-text>\n                <v-card-actions>\n                    <v-spacer></v-spacer>\n                    <v-btn @click=\"editAlertDialog = false\">Cancel</v-btn>\n                    <v-btn @click=\"saveAlert(editingAlert)\" color=\"primary\">Save</v-btn>\n                </v-card-actions>\n            </v-card>\n        </v-dialog>\n    </div>\n</template>\n\n<script>\nexport default {\n    data() {\n        return {\n            alertSearchQuery: '',  // String for filtering\n            alerts: [],            // Array for storing alerts\n            editingAlert: {},      // Object for currently edited alert\n            editAlertDialog: false, // Boolean for dialog visibility\n            ownerOptions: [],      // Array for owners\n            deviceOptions: []      // Array for devices\n        };\n    },\n    computed: {\n        filteredAlertsList() {\n            // Filters alerts based on the search query\n            if (!this.alertSearchQuery) return this.alerts; // Return all alerts if no query\n            const query = this.alertSearchQuery.toLowerCase();\n            return this.alerts.filter(alert => \n                alert.alertMessage.toLowerCase().includes(query) || \n                alert.ownerName.toLowerCase().includes(query) || \n                alert.deviceName.toLowerCase().includes(query)\n            );\n        },\n        alertHeaders() {\n            return [\n                { text: 'Owner', value: 'owner' },\n                { text: 'Device', value: 'device' },\n                { text: 'Alert Message', value: 'message' },\n                { text: 'Timestamp', value: 'timestamp' },\n                { text: 'Actions', value: 'actions', sortable: false }\n            ];\n        }\n    },\n    methods: {\n        formatDate(dateStr) {\n            const date = new Date(dateStr); // Convert ISO string to Date\n            return !isNaN(date.getTime()) ? date.toLocaleString() : 'Invalid Date';\n        },\n        editAlert(alert) {\n            this.editingAlert = { ...alert }; // Spread the alert object into editingAlert\n            this.editAlertDialog = true; // Open the dialog\n        },\n        clear(alert) {\n            if (confirm(`Clear alert \"${alert.alertMessage}\"?`)) {\n                this.send({\n                    topic: \"clear_alert\",\n                    payload: alert // Pass the entire alert object to clear\n                });\n\n                // Remove the alert from the local array if confirmed\n                this.alerts = this.alerts.filter(a => a !== alert);\n            }\n        },\n        saveAlert(updatedAlert) {\n            this.send({\n                topic: \"update_alert\",\n                payload: updatedAlert // Send the updated alert\n            });\n            this.editAlertDialog = false; // Close the dialog\n        }\n    },\n    mounted() {\n        this.send({ topic: \"get_alerts\" }); // Fetch alerts on mount\n        this.send({ topic: \"get_owners\" }); // Fetch owners for owner options\n        this.send({ topic: \"get_devices\" }); // Fetch devices for device options\n    },\n    watch: {\n        msg: {\n            handler(newMsg) {\n                if (newMsg.topic === \"alerts_data\" && Array.isArray(newMsg.payload)) {\n                    this.alerts = newMsg.payload; // Assign alerts payload\n                } else {\n                    console.warn(\"Unexpected payload received:\", newMsg.payload);\n                }\n            },\n            deep: true\n        }\n    }\n};\n</script>",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 880,
+        "y": 720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8cf7b8cedf39cb2c",
+        "type": "inject",
+        "z": "bfe4d76a50650ba0",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "alerts_data",
+        "payload": "[     {         \"ownerName\": \"Alice\",         \"deviceName\": \"Sensor C\",         \"pinLabel\": \"Motion\",         \"alertMessage\": \"Motion detected\",         \"timestamp\": \"2025-06-09T12:05:00Z\"     },     {         \"ownerName\": \"Bob\",         \"deviceName\": \"Sensor AA\",         \"pinLabel\": \"Temperature\",         \"alertMessage\": \"Triggered HIGH\",         \"timestamp\": \"2025-06-09T12:15:00Z\"     },     {         \"ownerName\": \"Bob\",         \"deviceName\": \"Sensor BB\",         \"pinLabel\": \"Humidity\",         \"alertMessage\": \"Triggered LOW\",         \"timestamp\": \"2025-06-09T12:20:00Z\"     },     {         \"ownerName\": \"Charlie\",         \"deviceName\": \"Sensor D\",         \"pinLabel\": \"Light Level\",         \"alertMessage\": \"Light level too high\",         \"timestamp\": \"2025-06-09T12:25:00Z\"     } ]",
+        "payloadType": "json",
+        "x": 490,
+        "y": 780,
+        "wires": [
+            [
+                "3e028f50bd6ceb32"
             ]
         ]
     }
