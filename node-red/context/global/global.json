@@ -1,0 +1,80 @@
+{
+    "owners": {
+        "DangarStu": {
+            "name": "DangarStu",
+            "email": "",
+            "phone": "",
+            "devices": [
+                "Renko"
+            ],
+            "created": "2025-06-09T04:07:53.418Z"
+        }
+    },
+    "devices": {
+        "Renko": {
+            "deviceName": "Renko",
+            "ownerName": "DangarStu",
+            "binaryPins": [
+                {
+                    "trigger": "High",
+                    "alertLevel": "None"
+                },
+                {
+                    "trigger": "High",
+                    "alertLevel": "None"
+                },
+                {
+                    "trigger": "High",
+                    "alertLevel": "None"
+                },
+                {
+                    "trigger": "High",
+                    "alertLevel": "None"
+                },
+                {
+                    "trigger": "High",
+                    "alertLevel": "None"
+                },
+                {
+                    "trigger": "High",
+                    "alertLevel": "None"
+                },
+                {
+                    "trigger": "High",
+                    "alertLevel": "None"
+                },
+                {
+                    "trigger": "High",
+                    "alertLevel": "None"
+                }
+            ],
+            "analogPins": [
+                {
+                    "value": "",
+                    "lowThreshold": 0,
+                    "highThreshold": 100,
+                    "alertLevel": "None"
+                },
+                {
+                    "value": "",
+                    "lowThreshold": 0,
+                    "highThreshold": 100,
+                    "alertLevel": "None"
+                },
+                {
+                    "value": "",
+                    "lowThreshold": 0,
+                    "highThreshold": 100,
+                    "alertLevel": "None"
+                },
+                {
+                    "value": "",
+                    "lowThreshold": 0,
+                    "highThreshold": 100,
+                    "alertLevel": "None"
+                }
+            ],
+            "lastSeen": null
+        }
+    }
+}

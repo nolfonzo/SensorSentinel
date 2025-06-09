@@ -1,24 +1,24 @@
-9 Jun 10:23:53 - [info] 
+9 Jun 14:04:52 - [info] 
 
 Welcome to Node-RED
 ===================
 
-9 Jun 10:23:53 - [info] Node-RED version: v4.0.9
-9 Jun 10:23:53 - [info] Node.js  version: v20.19.2
-9 Jun 10:23:53 - [info] Linux 6.12.25+rpt-rpi-v8 arm64 LE
-9 Jun 10:23:54 - [info] Loading palette nodes
-9 Jun 10:23:54 - [debug] Module: @flowfuse/node-red-dashboard 1.24.2 /home/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard
-9 Jun 10:23:56 - [info] Settings file  : /home/nolfonzo/code/SensorSentinel/node-red/settings.js
-9 Jun 10:23:56 - [info] Context store  : 'default' [module=memory]
-9 Jun 10:23:56 - [info] User directory : /home/nolfonzo/code/SensorSentinel/node-red
-9 Jun 10:23:56 - [warn] Projects disabled : editorTheme.projects.enabled=false
-9 Jun 10:23:56 - [info] Flows file     : /home/nolfonzo/code/SensorSentinel/node-red/flows.json
-9 Jun 10:23:56 - [info] Server now running at http://127.0.0.1:1880/
-9 Jun 10:23:56 - [debug] loaded flow revision: c1f7b471c58c3a6f496c5ee94c12ea250c0ace27fea0a231b06b693466ecc125
-9 Jun 10:23:56 - [debug] red/runtime/nodes/credentials.load : no user key present
-9 Jun 10:23:56 - [debug] red/runtime/nodes/credentials.load : using default key
-9 Jun 10:23:56 - [debug] red/runtime/nodes/credentials.load : keyType=system
-9 Jun 10:23:56 - [warn] 
+9 Jun 14:04:52 - [info] Node-RED version: v4.0.9
+9 Jun 14:04:52 - [info] Node.js  version: v20.19.2
+9 Jun 14:04:52 - [info] Linux 6.12.25+rpt-rpi-v8 arm64 LE
+9 Jun 14:04:53 - [info] Loading palette nodes
+9 Jun 14:04:53 - [debug] Module: @flowfuse/node-red-dashboard 1.24.2 /home/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard
+9 Jun 14:04:55 - [info] Settings file  : /home/nolfonzo/code/SensorSentinel/node-red/settings.js
+9 Jun 14:04:55 - [info] Context store  : 'default' [module=localfilesystem]
+9 Jun 14:04:55 - [info] User directory : /home/nolfonzo/code/SensorSentinel/node-red
+9 Jun 14:04:55 - [warn] Projects disabled : editorTheme.projects.enabled=false
+9 Jun 14:04:55 - [info] Flows file     : /home/nolfonzo/code/SensorSentinel/node-red/flows.json
+9 Jun 14:04:55 - [info] Server now running at http://127.0.0.1:1880/
+9 Jun 14:04:55 - [debug] loaded flow revision: 302f8c0fe3e7bc2ea5819a48b9ef5697f36622095a75a4f8293dcb7d807be2b5
+9 Jun 14:04:55 - [debug] red/runtime/nodes/credentials.load : no user key present
+9 Jun 14:04:55 - [debug] red/runtime/nodes/credentials.load : using default key
+9 Jun 14:04:55 - [debug] red/runtime/nodes/credentials.load : keyType=system
+9 Jun 14:04:55 - [warn] 
 
 ---------------------------------------------------------------------
 Your flow credentials file is encrypted using a system-generated key.
@@ -32,1020 +32,101 @@ your settings file. Node-RED will then re-encrypt your credentials
 file using your chosen key the next time you deploy a change.
 ---------------------------------------------------------------------
 
-9 Jun 10:23:56 - [info] Starting flows
-9 Jun 10:23:56 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:23:56 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:23:56 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:23:56 - [info] [ui-base:My Dashboard] Node-RED Dashboard 2.0 (v1.24.2) started at /dashboard
-9 Jun 10:23:56 - [info] [ui-base:My Dashboard] Created socket.io server bound to Node-RED port at path /dashboard/socket.io
-9 Jun 10:23:56 - [info] Started flows
-9 Jun 10:23:56 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:24:06 - [info] [function:Owner Admin] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"kYFk5Nh8aKShK-w1AAAB","socketIp":"192.168.20.136"},"_msgid":"71450e54d23da100"}
-9 Jun 10:24:06 - [info] [function:Owner Admin] Fetched owners: {}
-9 Jun 10:24:06 - [info] [function:Device Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"kYFk5Nh8aKShK-w1AAAB","socketIp":"192.168.20.136"},"_msgid":"edad201a3d87d568"}
-9 Jun 10:24:06 - [info] [function:Device Admin] Fetched devices: {}
-9 Jun 10:24:35 - [debug] saved flow revision: 92ef74f560f8627bb171fd9cb3ad85c3e4def5aec9786a08060abe2a6e63ea7d
-9 Jun 10:24:35 - [info] Stopping flows
-9 Jun 10:24:35 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:24:35 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:24:35 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:24:35 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:24:35 - [info] Stopped flows
-9 Jun 10:24:35 - [info] Updated flows
-9 Jun 10:24:35 - [info] Starting flows
-9 Jun 10:24:35 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:24:35 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:24:35 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:24:35 - [info] Started flows
-9 Jun 10:24:35 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:25:02 - [debug] saved flow revision: b206bb97a8ae4c228ef2db3ef3526aca105fc58baed37c1a1363250c3ded576d
-9 Jun 10:25:02 - [info] Stopping flows
-9 Jun 10:25:02 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:25:02 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:25:02 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:25:02 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:25:02 - [info] Stopped flows
-9 Jun 10:25:02 - [info] Updated flows
-9 Jun 10:25:02 - [info] Starting flows
-9 Jun 10:25:02 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:25:02 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:25:02 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:25:02 - [info] Started flows
-9 Jun 10:25:02 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:27:28 - [debug] saved flow revision: 964847131fa476b87f1179f2ab724257a7e24d6dab8026eb546a4f97a7f63a78
-9 Jun 10:27:28 - [info] Stopping flows
-9 Jun 10:27:28 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:27:28 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:27:28 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:27:28 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:27:28 - [info] Stopped flows
-9 Jun 10:27:28 - [info] Updated flows
-9 Jun 10:27:28 - [info] Starting flows
-9 Jun 10:27:28 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:27:28 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:27:28 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:27:28 - [info] Started flows
-9 Jun 10:27:28 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:27:35 - [info] [ui-base:My Dashboard] Disconnected J8cda29R9I4joPSoAAAF due to transport close
-9 Jun 10:39:42 - [debug] saved flow revision: d35b0b64e7171ef37e51d6479ee2f7967310fc76863f26a91de5fa8c9985f284
-9 Jun 10:39:42 - [info] Stopping flows
-9 Jun 10:39:42 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:39:42 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:39:42 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:39:42 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:39:42 - [info] Stopped flows
-9 Jun 10:39:42 - [info] Updated flows
-9 Jun 10:39:42 - [info] Starting flows
-9 Jun 10:39:42 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:39:42 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:39:42 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:39:42 - [info] Started flows
-9 Jun 10:39:42 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:39:52 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:40:13 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:40:22 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:40:53 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:41:23 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:41:44 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:41:53 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:42:08 - [debug] saved flow revision: 31623b2783f1ec4c09f4ff0d3477057f2f44ff3988355ddf34239e415be27477
-9 Jun 10:42:08 - [info] Stopping flows
-9 Jun 10:42:08 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:42:08 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:42:08 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:42:08 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:42:08 - [info] Stopped flows
-9 Jun 10:42:08 - [info] Updated flows
-9 Jun 10:42:08 - [info] Starting flows
-9 Jun 10:42:08 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:42:08 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:42:08 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:42:08 - [info] Started flows
-9 Jun 10:42:08 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:42:24 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:42:54 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:43:14 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:43:24 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:43:55 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:44:25 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:44:45 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:44:56 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:45:26 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:45:56 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:46:00 - [debug] saved flow revision: 7d3626b48be2fbfb2495bc15db5ced81009abf69fa0a7db9e21125e89206046b
-9 Jun 10:46:00 - [info] Stopping flows
-9 Jun 10:46:00 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:46:00 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:46:00 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:46:00 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:46:00 - [info] Stopped flows
-9 Jun 10:46:00 - [info] Updated flows
-9 Jun 10:46:00 - [info] Starting flows
-9 Jun 10:46:00 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:46:00 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:46:00 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:46:00 - [info] Started flows
-9 Jun 10:46:00 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:46:15 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:46:27 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:46:50 - [info] [ui-base:My Dashboard] Disconnected -hu2Qq_FGx07VR4JAAAJ due to ping timeout
-9 Jun 10:46:57 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:47:28 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:47:45 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:47:49 - [debug] saved flow revision: f1639eefa7d214b0c62f42de80b764c19cd462d32fc68a2765932aae429f1758
-9 Jun 10:47:49 - [info] Stopping flows
-9 Jun 10:47:49 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:47:49 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:47:49 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:47:49 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:47:49 - [info] Stopped flows
-9 Jun 10:47:49 - [info] Updated flows
-9 Jun 10:47:49 - [info] Starting flows
-9 Jun 10:47:49 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:47:49 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:47:49 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:47:49 - [info] Started flows
-9 Jun 10:47:49 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:47:58 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:48:28 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:48:52 - [info] [ui-base:My Dashboard] Disconnected GvgQeLgR00ZQC5hwAAAL due to ping timeout
-9 Jun 10:48:59 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:49:16 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:49:29 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:50:00 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:50:20 - [debug] saved flow revision: a2dc12879cf94388887d3076a4145a8788252b1a96030dc82d73fc0caf7e6c85
-9 Jun 10:50:20 - [info] Stopping flows
-9 Jun 10:50:20 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:50:20 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:50:20 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:50:20 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:50:20 - [info] Stopped flows
-9 Jun 10:50:20 - [info] Updated flows
-9 Jun 10:50:20 - [info] Starting flows
-9 Jun 10:50:20 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:50:20 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:50:20 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:50:20 - [info] Started flows
-9 Jun 10:50:20 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:50:30 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:50:46 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:50:54 - [debug] saved flow revision: cd9fb6dca577edd2179944dc118e8bd49a9d09cc98d50fdf7eb8558d8ac2c4f4
-9 Jun 10:50:54 - [info] Stopping flows
-9 Jun 10:50:54 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:50:54 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:50:54 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:50:54 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:50:54 - [info] Stopped flows
-9 Jun 10:50:54 - [info] Updated flows
-9 Jun 10:50:54 - [info] Starting flows
-9 Jun 10:50:54 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:50:54 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:50:54 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:50:54 - [info] Started flows
-9 Jun 10:50:54 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:51:00 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:51:31 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:52:01 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:52:09 - [info] [ui-base:My Dashboard] Disconnected q8WYgLmIVSiKuBqaAAAP due to transport close
-9 Jun 10:52:17 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:52:27 - [debug] saved flow revision: 95fabb908b25610e0b404086cc4e8e7d493cac35046ee8e5896710fca59d17da
-9 Jun 10:52:27 - [info] Stopping flows
-9 Jun 10:52:27 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:52:27 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:52:27 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:52:27 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:52:27 - [info] Stopped flows
-9 Jun 10:52:27 - [info] Updated flows
-9 Jun 10:52:27 - [info] Starting flows
-9 Jun 10:52:27 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:52:27 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:52:27 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:52:27 - [info] Started flows
-9 Jun 10:52:27 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:52:32 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:52:52 - [debug] saved flow revision: acc35ea05428bdc59be6d1c1029c6a3247fb4de60cd2e88ac6ae97f85c15282e
-9 Jun 10:52:52 - [info] Stopping flows
-9 Jun 10:52:52 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:52:52 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:52:52 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:52:52 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:52:52 - [info] Stopped flows
-9 Jun 10:52:52 - [info] Updated flows
-9 Jun 10:52:52 - [info] Starting flows
-9 Jun 10:52:52 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:52:52 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:52:52 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:52:52 - [info] Started flows
-9 Jun 10:52:52 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:53:02 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:53:32 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:53:47 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:54:00 - [debug] saved flow revision: 4722ca58c794d8002628cd5b339fd3cfd04bb904304267d5f8c6d40c6a531597
-9 Jun 10:54:00 - [info] Stopping flows
-9 Jun 10:54:00 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:54:00 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:54:00 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:54:00 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:54:00 - [info] Stopped flows
-9 Jun 10:54:00 - [info] Updated flows
-9 Jun 10:54:00 - [info] Starting flows
-9 Jun 10:54:00 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:54:00 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:54:00 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:54:00 - [info] Started flows
-9 Jun 10:54:00 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:54:03 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:54:33 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:55:04 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:55:16 - [debug] saved flow revision: 02152b7b4b2038e32d525599570b00ceb6b971bb8cce6d54a7eadb9758085b55
-9 Jun 10:55:16 - [info] Stopping flows
-9 Jun 10:55:16 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:55:16 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:55:16 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:55:16 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:55:16 - [info] Stopped flows
-9 Jun 10:55:16 - [info] Updated flows
-9 Jun 10:55:16 - [info] Starting flows
-9 Jun 10:55:16 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:55:16 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:55:16 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:55:16 - [info] Started flows
-9 Jun 10:55:16 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:55:18 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:55:34 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:56:03 - [debug] saved flow revision: 8620e4bbc5ec10db1da247f474f8ea86e20de828b824317746834af0fa02119a
-9 Jun 10:56:03 - [info] Stopping flows
-9 Jun 10:56:03 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:56:03 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:56:03 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:56:03 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:56:03 - [info] Stopped flows
-9 Jun 10:56:03 - [info] Updated flows
-9 Jun 10:56:03 - [info] Starting flows
-9 Jun 10:56:03 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:56:03 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:56:03 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:56:03 - [info] Started flows
-9 Jun 10:56:03 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:56:04 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:56:35 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:56:48 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:56:58 - [info] [ui-base:My Dashboard] Disconnected iZY5pE8sjd1e8on_AAAZ due to ping timeout
-9 Jun 10:57:05 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:57:36 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 10:57:42 - [debug] saved flow revision: d4093903496cf44c215ffb2f39b83d08fc9cf003e19bc7be168c424dbaf76c6d
-9 Jun 10:57:42 - [info] Stopping flows
-9 Jun 10:57:42 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:57:42 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:57:42 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:57:42 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:57:42 - [info] Stopped flows
-9 Jun 10:57:42 - [info] Updated flows
-9 Jun 10:57:42 - [info] Starting flows
-9 Jun 10:57:42 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:57:42 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:57:42 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:57:42 - [info] Started flows
-9 Jun 10:57:42 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:58:05 - [debug] saved flow revision: b8a0905a288f1ba8ac4a37eca22f8e51fb2b4ebac4e52c3ca598dd942b3ba917
-9 Jun 10:58:05 - [info] Stopping flows
-9 Jun 10:58:05 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 10:58:05 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 10:58:05 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 10:58:05 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 10:58:05 - [info] Stopped flows
-9 Jun 10:58:05 - [info] Updated flows
-9 Jun 10:58:05 - [info] Starting flows
-9 Jun 10:58:05 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 10:58:05 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 10:58:05 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 10:58:05 - [info] Started flows
-9 Jun 10:58:05 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 10:58:06 - [error] [function:Parse LoRa message] TypeError: Cannot read properties of undefined (reading 'toString')
-9 Jun 10:58:18 - [error] [function:Parse LoRa message] TypeError: Cannot read properties of undefined (reading 'toString')
-9 Jun 10:58:36 - [error] [function:Parse LoRa message] TypeError: Cannot read properties of undefined (reading 'toString')
-9 Jun 10:59:02 - [info] [ui-base:My Dashboard] Disconnected jXOvMN2j5ltlbdlGAAAd due to ping timeout
-9 Jun 10:59:07 - [error] [function:Parse LoRa message] TypeError: Cannot read properties of undefined (reading 'toString')
-9 Jun 10:59:37 - [error] [function:Parse LoRa message] TypeError: Cannot read properties of undefined (reading 'toString')
-9 Jun 10:59:49 - [error] [function:Parse LoRa message] TypeError: Cannot read properties of undefined (reading 'toString')
-9 Jun 11:00:01 - [debug] saved flow revision: 3614605bc1b2337b4ecc95a3db765a071c99303625b3588716e42741dc78e515
-9 Jun 11:00:01 - [info] Stopping flows
-9 Jun 11:00:01 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:00:01 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:00:01 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:00:01 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:00:01 - [info] Stopped flows
-9 Jun 11:00:01 - [info] Updated flows
-9 Jun 11:00:01 - [info] Starting flows
-9 Jun 11:00:01 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:00:01 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:00:01 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:00:01 - [info] Started flows
-9 Jun 11:00:01 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:00:08 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:00:25 - [debug] saved flow revision: 8620e4bbc5ec10db1da247f474f8ea86e20de828b824317746834af0fa02119a
-9 Jun 11:00:25 - [info] Stopping flows
-9 Jun 11:00:25 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:00:25 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:00:25 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:00:25 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:00:25 - [info] Stopped flows
-9 Jun 11:00:25 - [info] Updated flows
-9 Jun 11:00:25 - [info] Starting flows
-9 Jun 11:00:25 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:00:25 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:00:25 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:00:25 - [info] Started flows
-9 Jun 11:00:25 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:00:38 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:01:08 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:01:14 - [info] [ui-base:My Dashboard] Disconnected kjTgida4WuxAdvkaAAAh due to ping timeout
-9 Jun 11:01:16 - [debug] saved flow revision: 9ed5ddd5dc431778f2a13a9f8c132de8441572b9670f7818e08ec7ac61354e6c
-9 Jun 11:01:16 - [info] Stopping flows
-9 Jun 11:01:16 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:01:16 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:01:16 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:01:16 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:01:16 - [info] Stopped flows
-9 Jun 11:01:16 - [info] Updated flows
-9 Jun 11:01:16 - [info] Starting flows
-9 Jun 11:01:16 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:01:16 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:01:16 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:01:16 - [info] Started flows
-9 Jun 11:01:16 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:01:19 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:01:39 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:02:09 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:02:12 - [info] [ui-base:My Dashboard] Disconnected GjNqHfqt7uSH830AAAAj due to ping timeout
-9 Jun 11:02:40 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:02:50 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:03:10 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:03:27 - [debug] saved flow revision: a31b0511fe3211e92486bddda16ac2cdcc07c24093a881dfc5f26fcaf8c49100
-9 Jun 11:03:27 - [info] Stopping flows
-9 Jun 11:03:27 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:03:27 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:03:27 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:03:27 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:03:27 - [info] Stopped flows
-9 Jun 11:03:27 - [info] Updated flows
-9 Jun 11:03:27 - [info] Starting flows
-9 Jun 11:03:27 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:03:27 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:03:27 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:03:27 - [info] Started flows
-9 Jun 11:03:27 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:03:40 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:04:11 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:04:20 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:04:41 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:05:12 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:05:42 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:05:50 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:06:12 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:06:24 - [debug] saved flow revision: 996d9ecca9e33a75ecb874ce84a9d7fc9d5ddacd29285f8c9da9af56fd51f290
-9 Jun 11:06:24 - [info] Stopping flows
-9 Jun 11:06:24 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:06:24 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:06:24 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:06:25 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:06:25 - [info] Stopped flows
-9 Jun 11:06:25 - [info] Updated flows
-9 Jun 11:06:25 - [info] Starting flows
-9 Jun 11:06:25 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:06:25 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:06:25 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:06:25 - [info] Started flows
-9 Jun 11:06:25 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:06:43 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:06:52 - [debug] saved flow revision: 68eeeeb534a134c76aa17261f13c6f07e417633db29a26510932ad41122c5d95
-9 Jun 11:06:52 - [info] Stopping flows
-9 Jun 11:06:52 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:06:52 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:06:52 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:06:52 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:06:52 - [info] Stopped flows
-9 Jun 11:06:52 - [info] Updated flows
-9 Jun 11:06:52 - [info] Starting flows
-9 Jun 11:06:52 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:06:52 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:06:52 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:06:52 - [info] Started flows
-9 Jun 11:06:52 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:07:13 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:07:21 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:07:30 - [debug] saved flow revision: 5642152bcd980a199ac92c47b4c42e88ecb240eb5b612fb372184840c58f9262
-9 Jun 11:07:30 - [info] Stopping flows
-9 Jun 11:07:30 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:07:30 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:07:30 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:07:30 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:07:30 - [info] Stopped flows
-9 Jun 11:07:30 - [info] Updated flows
-9 Jun 11:07:30 - [info] Starting flows
-9 Jun 11:07:30 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:07:30 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:07:30 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:07:30 - [info] Started flows
-9 Jun 11:07:30 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:07:44 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:08:02 - [debug] saved flow revision: 68eeeeb534a134c76aa17261f13c6f07e417633db29a26510932ad41122c5d95
-9 Jun 11:08:02 - [info] Stopping flows
-9 Jun 11:08:02 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:08:02 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:08:02 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:08:02 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:08:02 - [info] Stopped flows
-9 Jun 11:08:02 - [info] Updated flows
-9 Jun 11:08:02 - [info] Starting flows
-9 Jun 11:08:02 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:08:02 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:08:02 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:08:02 - [info] Started flows
-9 Jun 11:08:02 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:08:14 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:08:44 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:08:50 - [info] [ui-base:My Dashboard] Disconnected gQfUKblX5T-qOhDLAAAt due to ping timeout
-9 Jun 11:08:51 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:09:15 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:09:44 - [info] [ui-base:My Dashboard] Disconnected 1w9ZI8-4dipjr1roAAAx due to transport error
-9 Jun 11:09:45 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:09:48 - [debug] saved flow revision: 5d09ade8f88b82af2b6fc5339ae7d3c2823a2d41d99f0ef80340953c4cb8d4f3
-9 Jun 11:09:48 - [info] Stopping flows
-9 Jun 11:09:48 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:09:48 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:09:48 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:09:48 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:09:48 - [info] Stopped flows
-9 Jun 11:09:48 - [info] Updated flows
-9 Jun 11:09:48 - [info] Starting flows
-9 Jun 11:09:48 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:09:48 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:09:48 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:09:48 - [info] Started flows
-9 Jun 11:09:48 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:10:16 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:10:22 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:10:46 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:11:16 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:11:40 - [debug] saved flow revision: 12688811c048cf721a9a0703de351fba2a7479a046e76e13cb0bda28bab41851
-9 Jun 11:11:40 - [info] Stopping flows
-9 Jun 11:11:40 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:11:40 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:11:40 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:11:40 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:11:40 - [info] Stopped flows
-9 Jun 11:11:40 - [info] Updated flows
-9 Jun 11:11:40 - [info] Starting flows
-9 Jun 11:11:40 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:11:40 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:11:40 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:11:40 - [info] Started flows
-9 Jun 11:11:40 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:11:47 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:11:52 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:12:17 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:12:30 - [info] [ui-base:My Dashboard] Disconnected G_9DdqH9MHg20cwhAAA3 due to ping timeout
-9 Jun 11:12:48 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:13:17 - [debug] saved flow revision: ba484d97b5a28c451bfc2436f85d3bc9d256c41fdaab3ed3ed75b2b21bb2d22b
-9 Jun 11:13:17 - [info] Stopping flows
-9 Jun 11:13:17 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:13:17 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:13:17 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:13:17 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:13:17 - [info] Stopped flows
-9 Jun 11:13:17 - [info] Updated flows
-9 Jun 11:13:17 - [info] Starting flows
-9 Jun 11:13:17 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:13:17 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:13:17 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:13:17 - [info] Started flows
-9 Jun 11:13:17 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:13:18 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:13:23 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:13:48 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:14:00 - [debug] saved flow revision: b60817c71712820fb13a08ba18501434bd9157df7823ee7d79fdd21f2ad58946
-9 Jun 11:14:00 - [info] Stopping flows
-9 Jun 11:14:00 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:14:00 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:14:00 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:14:00 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:14:00 - [info] Stopped flows
-9 Jun 11:14:00 - [info] Updated flows
-9 Jun 11:14:00 - [info] Starting flows
-9 Jun 11:14:00 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:14:00 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:14:00 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:14:00 - [info] Started flows
-9 Jun 11:14:00 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:14:19 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:14:23 - [debug] saved flow revision: e66075a867a9787302c9067e08e7c19e8071a7bd05d5af76482d72a7547ef875
-9 Jun 11:14:23 - [info] Stopping flows
-9 Jun 11:14:23 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:14:23 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:14:23 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:14:23 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:14:23 - [info] Stopped flows
-9 Jun 11:14:23 - [info] Updated flows
-9 Jun 11:14:23 - [info] Starting flows
-9 Jun 11:14:23 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:14:23 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:14:23 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:14:23 - [info] Started flows
-9 Jun 11:14:23 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:14:48 - [debug] saved flow revision: b60817c71712820fb13a08ba18501434bd9157df7823ee7d79fdd21f2ad58946
-9 Jun 11:14:48 - [info] Stopping flows
-9 Jun 11:14:48 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:14:48 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:14:48 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:14:48 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:14:48 - [info] Stopped flows
-9 Jun 11:14:48 - [info] Updated flows
-9 Jun 11:14:48 - [info] Starting flows
-9 Jun 11:14:48 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:14:48 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:14:48 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:14:48 - [info] Started flows
-9 Jun 11:14:48 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:14:49 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:14:53 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:15:20 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:15:50 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:15:57 - [debug] saved flow revision: 1a519caf694bfe569165e876ea68bb5bdb52341ff8258806f3fda36acf241f60
-9 Jun 11:15:57 - [info] Stopping flows
-9 Jun 11:15:57 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:15:57 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:15:57 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:15:57 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:15:57 - [info] Stopped flows
-9 Jun 11:15:57 - [info] Updated flows
-9 Jun 11:15:57 - [info] Starting flows
-9 Jun 11:15:57 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:15:57 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:15:57 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:15:57 - [info] Started flows
-9 Jun 11:15:57 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:16:20 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:16:23 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:16:39 - [debug] saved flow revision: 8ec4ecd16333d06147793629e5ce9ebf6c0c1dc005040636626759d23132d56a
-9 Jun 11:16:39 - [info] Stopping flows
-9 Jun 11:16:39 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:16:39 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:16:39 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:16:39 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:16:39 - [info] Stopped flows
-9 Jun 11:16:39 - [info] Updated flows
-9 Jun 11:16:39 - [info] Starting flows
-9 Jun 11:16:39 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:16:39 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:16:39 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:16:39 - [info] Started flows
-9 Jun 11:16:39 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:16:51 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:17:21 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:17:51 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:17:54 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:17:58 - [debug] saved flow revision: 1834a892660b10379f1e31c193561c1979f65bef1c570b243da224ea564d322d
-9 Jun 11:17:58 - [info] Stopping flows
-9 Jun 11:17:58 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:17:58 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:17:58 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:17:58 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:17:58 - [info] Stopped flows
-9 Jun 11:17:58 - [info] Updated flows
-9 Jun 11:17:58 - [info] Starting flows
-9 Jun 11:17:58 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:17:58 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:17:58 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:17:58 - [info] Started flows
-9 Jun 11:17:58 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:18:22 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:18:51 - [debug] saved flow revision: 507a08f9062069ff334fd002e75bcc28a3b293ce57c8b86d50598e7858006776
-9 Jun 11:18:51 - [info] Stopping flows
-9 Jun 11:18:51 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:18:51 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:18:51 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:18:51 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:18:51 - [info] Stopped flows
-9 Jun 11:18:51 - [info] Updated flows
-9 Jun 11:18:51 - [info] Starting flows
-9 Jun 11:18:51 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:18:51 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:18:51 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:18:51 - [info] Started flows
-9 Jun 11:18:51 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:18:52 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:19:23 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:19:24 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:19:52 - [debug] saved flow revision: e1e33eb87447d10d44271719f49a4212d97df22f35e0701a1e342f70631fb2f7
-9 Jun 11:19:52 - [info] Stopping flows
-9 Jun 11:19:52 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:19:52 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:19:52 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:19:52 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:19:52 - [info] Stopped flows
-9 Jun 11:19:52 - [info] Updated flows
-9 Jun 11:19:52 - [info] Starting flows
-9 Jun 11:19:52 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:19:52 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:19:52 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:19:52 - [info] Started flows
-9 Jun 11:19:52 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:19:53 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:20:23 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:20:54 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:20:55 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:21:05 - [info] [ui-base:My Dashboard] Disconnected m0zfOWrT6hiVMp48AAA7 due to transport close
-9 Jun 11:21:24 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:21:55 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:22:25 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:22:53 - [debug] saved flow revision: 90384a93d862e35ee51ca1248278aa9e0c3dea66c9c010e4ea9f74d1f00b035d
-9 Jun 11:22:53 - [info] Stopping flows
-9 Jun 11:22:53 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:22:53 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:22:53 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:22:53 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:22:53 - [info] Stopped flows
-9 Jun 11:22:53 - [info] Updated flows
-9 Jun 11:22:53 - [info] Starting flows
-9 Jun 11:22:53 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:22:53 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:22:53 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:22:53 - [info] Started flows
-9 Jun 11:22:53 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:22:55 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:23:26 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:23:48 - [debug] saved flow revision: d55ffa155dbfd1ffc570cfa5b50d88cc8248c984b7875a7c25dcd98107b6d939
-9 Jun 11:23:48 - [info] Stopping flows
-9 Jun 11:23:48 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:23:48 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:23:48 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:23:48 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:23:48 - [info] Stopped flows
-9 Jun 11:23:48 - [info] Updated flows
-9 Jun 11:23:48 - [info] Starting flows
-9 Jun 11:23:48 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:23:48 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:23:48 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:23:48 - [info] Started flows
-9 Jun 11:23:48 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:23:56 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:23:56 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:24:27 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:24:36 - [debug] saved flow revision: c642cdde323da0aa052884019793285459785a5ea05a7204350c6f09254c2411
-9 Jun 11:24:36 - [info] Stopping flows
-9 Jun 11:24:36 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:24:36 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:24:36 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:24:36 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:24:36 - [info] Stopped flows
-9 Jun 11:24:36 - [info] Updated flows
-9 Jun 11:24:36 - [info] Starting flows
-9 Jun 11:24:36 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:24:36 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:24:36 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:24:36 - [info] Started flows
-9 Jun 11:24:36 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:24:57 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:25:26 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:25:27 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:25:31 - [debug] saved flow revision: 31faf0ac920c6a824ab12f9d55a44811e0b376534126653d6165812bac1f96fc
-9 Jun 11:25:31 - [info] Stopping flows
-9 Jun 11:25:31 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:25:31 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:25:31 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:25:31 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:25:31 - [info] Stopped flows
-9 Jun 11:25:31 - [info] Updated flows
-9 Jun 11:25:31 - [info] Starting flows
-9 Jun 11:25:31 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:25:31 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:25:31 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:25:31 - [info] Started flows
-9 Jun 11:25:31 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:25:58 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:26:07 - [debug] saved flow revision: 7977a9dc446038c94fc8e4e6fd629410e08772cdcfefb9eac742cbfbfa03f5d6
-9 Jun 11:26:07 - [info] Stopping flows
-9 Jun 11:26:07 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:26:07 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:26:07 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:26:07 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:26:07 - [info] Stopped flows
-9 Jun 11:26:07 - [info] Updated flows
-9 Jun 11:26:07 - [info] Starting flows
-9 Jun 11:26:07 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:26:07 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:26:07 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:26:07 - [info] Started flows
-9 Jun 11:26:07 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:26:28 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:26:57 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:26:59 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:27:03 - [debug] saved flow revision: 8ef89f7812ffee222491405dd73dac2cf5295699a9c5286cb2b78f07a83fa9bb
-9 Jun 11:27:03 - [info] Stopping flows
-9 Jun 11:27:03 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:27:03 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:27:03 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:27:03 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:27:03 - [info] Stopped flows
-9 Jun 11:27:03 - [info] Updated flows
-9 Jun 11:27:03 - [info] Starting flows
-9 Jun 11:27:03 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:27:03 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:27:03 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:27:03 - [info] Started flows
-9 Jun 11:27:03 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:27:29 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:27:52 - [debug] saved flow revision: 983a18adda4e67284d2e015385a118e155de58f6519b89174e6d425f4774174a
-9 Jun 11:27:52 - [info] Stopping flows
-9 Jun 11:27:52 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:27:52 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:27:52 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:27:52 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:27:52 - [info] Stopped flows
-9 Jun 11:27:52 - [info] Updated flows
-9 Jun 11:27:52 - [info] Starting flows
-9 Jun 11:27:52 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:27:52 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:27:52 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:27:52 - [info] Started flows
-9 Jun 11:27:52 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:27:59 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:28:27 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:28:30 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:29:00 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:29:31 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:29:58 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:30:01 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:30:31 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:31:02 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:31:28 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:31:32 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:31:35 - [debug] saved flow revision: 10f187b0b8188a48d29bfd2bd0c97678f8663219fcba59d17a2a2f0294500e9f
-9 Jun 11:31:35 - [info] Stopping flows
-9 Jun 11:31:35 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:31:35 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:31:35 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:31:35 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:31:35 - [info] Stopped flows
-9 Jun 11:31:35 - [info] Updated flows
-9 Jun 11:31:35 - [info] Starting flows
-9 Jun 11:31:35 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:31:35 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:31:35 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:31:35 - [info] Started flows
-9 Jun 11:31:35 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:32:03 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:32:27 - [debug] saved flow revision: d0307155f57cda50d60b159de808e908cede5ad6515e4defb132e817abdc8724
-9 Jun 11:32:27 - [info] Stopping flows
-9 Jun 11:32:27 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:32:27 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:32:27 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:32:27 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:32:27 - [info] Stopped flows
-9 Jun 11:32:27 - [info] Updated flows
-9 Jun 11:32:27 - [info] Starting flows
-9 Jun 11:32:27 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:32:27 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:32:27 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:32:27 - [info] Started flows
-9 Jun 11:32:27 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:32:33 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:32:56 - [info] [ui-base:My Dashboard] Disconnected XTCR_M8HjVVDYpSXAABD due to transport error
-9 Jun 11:32:58 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:33:03 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:33:34 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:34:04 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:34:25 - [debug] saved flow revision: fdad63d0b21ce23ecabf0d398843e33f1e7f72579873c0de6eaf81e6dacbaa35
-9 Jun 11:34:25 - [info] Stopping flows
-9 Jun 11:34:25 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:34:25 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:34:25 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:34:25 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:34:25 - [info] Stopped flows
-9 Jun 11:34:25 - [info] Updated flows
-9 Jun 11:34:25 - [info] Starting flows
-9 Jun 11:34:25 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:34:25 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:34:25 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:34:25 - [info] Started flows
-9 Jun 11:34:25 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:34:29 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:34:35 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:34:40 - [info] [ui-base:My Dashboard] Disconnected vPAu_9MSzi8SMLkmAABF due to transport close
-9 Jun 11:34:43 - [info] [ui-base:My Dashboard] Disconnected NOLUyE_ZhLfxVPRqAABH due to transport close
-9 Jun 11:35:05 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:35:11 - [info] [ui-base:My Dashboard] Disconnected nNl_0c7Q2CmgQDI5AABJ due to transport close
-9 Jun 11:35:35 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:35:58 - [debug] saved flow revision: 82c6bb943fafa1de71343aafa8bc00a90e568b9c41bb056cfbe1719aa3b13430
-9 Jun 11:35:58 - [info] Stopping flows
-9 Jun 11:35:58 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:35:58 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:35:58 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:35:58 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:35:58 - [info] Stopped flows
-9 Jun 11:35:58 - [info] Updated flows
-9 Jun 11:35:58 - [info] Starting flows
-9 Jun 11:35:58 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:35:58 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:35:58 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:35:58 - [info] Started flows
-9 Jun 11:35:58 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:35:59 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:36:06 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:36:36 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:37:07 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:37:30 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:37:37 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:38:07 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:38:20 - [debug] saved flow revision: 7c2bb60706e25f62bea8eca77d638f83e03c888f0a831bd461aa659941fdb3f9
-9 Jun 11:38:20 - [info] Stopping flows
-9 Jun 11:38:20 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:38:20 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:38:20 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:38:20 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:38:20 - [info] Stopped flows
-9 Jun 11:38:20 - [info] Updated flows
-9 Jun 11:38:20 - [info] Starting flows
-9 Jun 11:38:20 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:38:20 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:38:20 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:38:20 - [info] Started flows
-9 Jun 11:38:20 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:38:38 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:39:00 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:39:08 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:39:11 - [debug] saved flow revision: 704b1111fd739c2c8e9e67a12bd37abc0492d9fe6b58ebb0f4f488c1b7d8fcde
-9 Jun 11:39:11 - [info] Stopping flows
-9 Jun 11:39:11 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:39:11 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:39:11 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:39:11 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:39:11 - [info] Stopped flows
-9 Jun 11:39:11 - [info] Updated flows
-9 Jun 11:39:11 - [info] Starting flows
-9 Jun 11:39:11 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:39:11 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:39:11 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:39:11 - [info] Started flows
-9 Jun 11:39:11 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:39:39 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:40:09 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:40:31 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:40:39 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:41:10 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:41:40 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:41:50 - [debug] saved flow revision: 87cf42e37084c21d9e7df88142e134c0d5af9733cb6a8acf6dcdc0f2f0ab9c43
-9 Jun 11:41:50 - [info] Stopping flows
-9 Jun 11:41:50 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:41:50 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:41:50 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:41:50 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:41:50 - [info] Stopped flows
-9 Jun 11:41:50 - [info] Updated flows
-9 Jun 11:41:50 - [info] Starting flows
-9 Jun 11:41:50 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:41:50 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:41:50 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:41:50 - [info] Started flows
-9 Jun 11:41:50 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:42:01 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:42:11 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:42:41 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:43:11 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:43:31 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:43:42 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:44:04 - [debug] saved flow revision: cb0333bf4ae9d0fceed4a06d5de0133cf3fe7557fbef2e92ddebd7e03b7415f5
-9 Jun 11:44:04 - [info] Stopping flows
-9 Jun 11:44:04 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:44:04 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:44:04 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:44:04 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:44:04 - [info] Stopped flows
-9 Jun 11:44:04 - [info] Updated flows
-9 Jun 11:44:04 - [info] Starting flows
-9 Jun 11:44:04 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:44:04 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:44:04 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:44:04 - [info] Started flows
-9 Jun 11:44:04 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:44:12 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:44:43 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:45:02 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:45:13 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:45:43 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:46:02 - [debug] saved flow revision: b626ff6e5472da742ce5b2db150bde65b3008b533e6430b4053ebe14d1d2e887
-9 Jun 11:46:02 - [info] Stopping flows
-9 Jun 11:46:02 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:46:02 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:46:02 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:46:02 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:46:02 - [info] Stopped flows
-9 Jun 11:46:02 - [info] Updated flows
-9 Jun 11:46:02 - [info] Starting flows
-9 Jun 11:46:02 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:46:02 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:46:02 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:46:02 - [info] Started flows
-9 Jun 11:46:02 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:46:14 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:46:32 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:46:44 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:47:15 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:47:37 - [debug] saved flow revision: 163a3a966b19aa3de8d920e378511d39bca847f62e49cf931de3871eefb91127
-9 Jun 11:47:37 - [info] Stopping flows
-9 Jun 11:47:37 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:47:37 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:47:37 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:47:37 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:47:37 - [info] Stopped flows
-9 Jun 11:47:37 - [info] Updated flows
-9 Jun 11:47:37 - [info] Starting flows
-9 Jun 11:47:37 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:47:37 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:47:37 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:47:38 - [info] Started flows
-9 Jun 11:47:38 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:47:45 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:48:03 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:48:15 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:48:46 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:49:16 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:49:33 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:49:47 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:49:55 - [debug] saved flow revision: f568abfff999e62ab45d350212cef76b76956921ce4418f22a5c634ccc84036d
-9 Jun 11:49:55 - [info] Stopping flows
-9 Jun 11:49:55 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:49:55 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:49:55 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:49:55 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:49:55 - [info] Stopped flows
-9 Jun 11:49:55 - [info] Updated flows
-9 Jun 11:49:55 - [info] Starting flows
-9 Jun 11:49:55 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:49:55 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:49:55 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:49:55 - [info] Started flows
-9 Jun 11:49:55 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:50:17 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:50:47 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:51:03 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:51:18 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:51:48 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:52:18 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:52:34 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:52:49 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:53:19 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:53:50 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:54:04 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:54:20 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:54:50 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:55:21 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:55:28 - [debug] saved flow revision: 64155efbc6a50dbe6105f886927ac2a9c000a0e03f54e786593cbbc3daf21cfd
-9 Jun 11:55:28 - [info] Stopping flows
-9 Jun 11:55:28 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 11:55:28 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 11:55:28 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 11:55:28 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 11:55:28 - [info] Stopped flows
-9 Jun 11:55:28 - [info] Updated flows
-9 Jun 11:55:28 - [info] Starting flows
-9 Jun 11:55:28 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 11:55:28 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 11:55:28 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 11:55:28 - [info] Started flows
-9 Jun 11:55:28 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 11:55:35 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:55:51 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:56:22 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:56:52 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:57:05 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:57:22 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:57:53 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:58:23 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:58:36 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:58:54 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:59:24 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 11:59:54 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 12:00:06 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 12:00:21 - [debug] saved flow revision: 302f8c0fe3e7bc2ea5819a48b9ef5697f36622095a75a4f8293dcb7d807be2b5
-9 Jun 12:00:21 - [info] Stopping flows
-9 Jun 12:00:21 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
-9 Jun 12:00:21 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
-9 Jun 12:00:21 - [debug] red/nodes/flows.stop : stopping flow : global
-9 Jun 12:00:21 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
-9 Jun 12:00:21 - [info] Stopped flows
-9 Jun 12:00:21 - [info] Updated flows
-9 Jun 12:00:21 - [info] Starting flows
-9 Jun 12:00:21 - [debug] red/nodes/flows.start : starting flow : global
-9 Jun 12:00:21 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
-9 Jun 12:00:21 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
-9 Jun 12:00:21 - [info] Started flows
-9 Jun 12:00:21 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
-9 Jun 12:00:25 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 12:00:55 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 12:01:26 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 12:01:36 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 12:01:56 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 12:02:26 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
-9 Jun 12:02:57 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:04:55 - [info] Starting flows
+9 Jun 14:04:55 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 14:04:55 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 14:04:55 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 14:04:55 - [info] [ui-base:My Dashboard] Node-RED Dashboard 2.0 (v1.24.2) started at /dashboard
+9 Jun 14:04:55 - [info] [ui-base:My Dashboard] Created socket.io server bound to Node-RED port at path /dashboard/socket.io
+9 Jun 14:04:55 - [info] Started flows
+9 Jun 14:04:55 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 14:05:17 - [info] [ui-base:My Dashboard] Disconnected pZFGLS2wCaFnq4DVAAAB due to transport close
+9 Jun 14:05:22 - [info] [function:Owner Admin] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"wPNQZND_SrKpZNRGAAAD","socketIp":"192.168.20.136"},"_msgid":"81e2ba195f6c8d58"}
+9 Jun 14:05:22 - [info] [function:Owner Admin] Fetched owners: {"Dangar Stu":{"name":"Dangar Stu","email":"","phone":"","devices":["Renko","2697689064"],"created":"2025-06-09T03:02:28.822Z"},"Carl":{"name":"Carl","email":"345345345","phone":"","devices":[],"created":"2025-06-09T03:07:30.549Z","updated":"2025-06-09T03:08:34.054Z"}}
+9 Jun 14:05:22 - [info] [function:Device Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"wPNQZND_SrKpZNRGAAAD","socketIp":"192.168.20.136"},"_msgid":"57ca28db3c39e422"}
+9 Jun 14:05:22 - [info] [function:Device Admin] Fetched devices: {"2697689064":{"deviceName":"2697689064","ownerName":"Dangar Stu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null},"Renko":{"deviceName":"Renko","ownerName":"Dangar Stu","binaryPins":[{"label":"Bilge2","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null}}
+9 Jun 14:05:26 - [info] [ui-base:My Dashboard] Disconnected wPNQZND_SrKpZNRGAAAD due to transport close
+9 Jun 14:05:27 - [info] [function:Owner Admin] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"15b81ceb2f489e3e"}
+9 Jun 14:05:27 - [info] [function:Owner Admin] Fetched owners: {"Dangar Stu":{"name":"Dangar Stu","email":"","phone":"","devices":["Renko","2697689064"],"created":"2025-06-09T03:02:28.822Z"},"Carl":{"name":"Carl","email":"345345345","phone":"","devices":[],"created":"2025-06-09T03:07:30.549Z","updated":"2025-06-09T03:08:34.054Z"}}
+9 Jun 14:05:27 - [info] [function:Device Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"bc3a4838bbe2c9fd"}
+9 Jun 14:05:27 - [info] [function:Device Admin] Fetched devices: {"2697689064":{"deviceName":"2697689064","ownerName":"Dangar Stu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null},"Renko":{"deviceName":"Renko","ownerName":"Dangar Stu","binaryPins":[{"label":"Bilge2","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null}}
+9 Jun 14:07:32 - [debug] saved flow revision: db1ded8e7f3ae6aa5a5cedf3959b9b9783b68d5ca7d15a75b2ce7453fb514dae
+9 Jun 14:07:32 - [info] Stopping flows
+9 Jun 14:07:32 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 14:07:32 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 14:07:32 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 14:07:32 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 14:07:32 - [info] Stopped flows
+9 Jun 14:07:32 - [info] Updated flows
+9 Jun 14:07:32 - [info] Starting flows
+9 Jun 14:07:32 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 14:07:32 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 14:07:32 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 14:07:32 - [info] Started flows
+9 Jun 14:07:32 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 14:07:32 - [info] [function:Owner Admin] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"b38b07dfe3e294b1"}
+9 Jun 14:07:32 - [info] [function:Owner Admin] Fetched owners: {"Dangar Stu":{"name":"Dangar Stu","email":"","phone":"","devices":["Renko","2697689064"],"created":"2025-06-09T03:02:28.822Z"},"Carl":{"name":"Carl","email":"345345345","phone":"","devices":[],"created":"2025-06-09T03:07:30.549Z","updated":"2025-06-09T03:08:34.054Z"}}
+9 Jun 14:07:32 - [info] [function:Device Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"60b43cb32bdad37e"}
+9 Jun 14:07:32 - [info] [function:Device Admin] Fetched devices: {"2697689064":{"deviceName":"2697689064","ownerName":"Dangar Stu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null},"Renko":{"deviceName":"Renko","ownerName":"Dangar Stu","binaryPins":[{"label":"Bilge2","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"},{"label":"","trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null}}
+9 Jun 14:07:43 - [info] [function:Owner Admin] Received message for topic: delete_owner json: {"topic":"delete_owner","payload":{"name":"Dangar Stu"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"3e94cc89cd1b6714"}
+9 Jun 14:07:43 - [info] [function:Owner Admin] Trying to delete owner: Dangar Stu
+9 Jun 14:07:43 - [info] [function:Owner Admin] Current owners: {"Dangar Stu":{"name":"Dangar Stu","email":"","phone":"","devices":["Renko","2697689064"],"created":"2025-06-09T03:02:28.822Z"},"Carl":{"name":"Carl","email":"345345345","phone":"","devices":[],"created":"2025-06-09T03:07:30.549Z","updated":"2025-06-09T03:08:34.054Z"}}
+9 Jun 14:07:43 - [info] [function:Owner Admin] Deleted owner: Dangar Stu and their devices
+9 Jun 14:07:46 - [info] [function:Owner Admin] Received message for topic: delete_owner json: {"topic":"delete_owner","payload":{"name":"Carl"},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"7e37ba01f6298ada"}
+9 Jun 14:07:46 - [info] [function:Owner Admin] Trying to delete owner: Carl
+9 Jun 14:07:46 - [info] [function:Owner Admin] Current owners: {"Carl":{"name":"Carl","email":"345345345","phone":"","devices":[],"created":"2025-06-09T03:07:30.549Z","updated":"2025-06-09T03:08:34.054Z"}}
+9 Jun 14:07:46 - [info] [function:Owner Admin] Deleted owner: Carl and their devices
+9 Jun 14:07:53 - [info] [function:Owner Admin] Received message for topic: add_owner json: {"topic":"add_owner","payload":{"name":"DangarStu","email":"","phone":""},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"23d59fe68872f99f"}
+9 Jun 14:07:53 - [info] [function:Owner Admin] Added owner: DangarStu
+9 Jun 14:08:05 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:08:13 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:08:13 - [debug] Flushing localfilesystem context scope global
+9 Jun 14:08:19 - [info] [function:Device Admin] Received message for topic: add_device json: {"topic":"add_device","payload":{"deviceName":"Renko","ownerName":"DangarStu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}]},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"bbc6684b1802bd74"}
+9 Jun 14:08:19 - [info] [function:Device Admin] Incoming payload: {"deviceName":"Renko","ownerName":"DangarStu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}]}
+9 Jun 14:08:19 - [info] [function:Device Admin] Incoming binaryPins: [{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}]
+9 Jun 14:08:19 - [info] [function:Device Admin] Incoming analogPins: [{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}]
+9 Jun 14:08:19 - [info] [function:Device Admin] Added device: {"deviceName":"Renko","ownerName":"DangarStu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null}
+9 Jun 14:08:19 - [info] [function:Owner Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"Renko","ownerName":"DangarStu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"bbc6684b1802bd74"}
+9 Jun 14:08:19 - [info] [function:Device Admin] Received message for topic: device_added json: {"topic":"device_added","payload":{"deviceName":"Renko","ownerName":"DangarStu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"message":"Device added successfully."},"_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"bbc6684b1802bd74"}
+9 Jun 14:08:35 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:08:49 - [debug] Flushing localfilesystem context scope global
+9 Jun 14:09:06 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:09:21 - [info] [function:Owner Admin] Received message for topic: delete_device json: {"topic":"delete_device","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"baa21306e1741ac4"}
+9 Jun 14:09:21 - [info] [function:Device Admin] Received message for topic: delete_device json: {"topic":"delete_device","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"baa21306e1741ac4"}
+9 Jun 14:09:36 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:09:43 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:10:06 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:10:37 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:11:07 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:11:14 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:11:38 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:12:08 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:12:38 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:12:44 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:13:09 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:13:39 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:14:10 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:14:14 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:14:17 - [debug] saved flow revision: d58e2c76e5625c6939a762d5c3ba5546578289ad97cf4c44bb3c80cc35ae7d3e
+9 Jun 14:14:17 - [info] Stopping flows
+9 Jun 14:14:17 - [debug] red/nodes/flows.stop : stopping flow : 62f31c6b53afb626
+9 Jun 14:14:17 - [debug] red/nodes/flows.stop : stopping flow : bfe4d76a50650ba0
+9 Jun 14:14:17 - [debug] red/nodes/flows.stop : stopping flow : global
+9 Jun 14:14:17 - [info] [mqtt-broker:315ea8347fb746b3] Disconnected from broker: mqtt://localhost:1883
+9 Jun 14:14:17 - [info] Stopped flows
+9 Jun 14:14:17 - [info] Updated flows
+9 Jun 14:14:17 - [info] Starting flows
+9 Jun 14:14:17 - [debug] red/nodes/flows.start : starting flow : global
+9 Jun 14:14:17 - [debug] red/nodes/flows.start : starting flow : 62f31c6b53afb626
+9 Jun 14:14:17 - [debug] red/nodes/flows.start : starting flow : bfe4d76a50650ba0
+9 Jun 14:14:17 - [info] Started flows
+9 Jun 14:14:17 - [info] [mqtt-broker:315ea8347fb746b3] Connected to broker: mqtt://localhost:1883
+9 Jun 14:14:17 - [info] [function:Owner Admin] Received message for topic: get_owners json: {"topic":"get_owners","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"481ed5909b741e32"}
+9 Jun 14:14:17 - [info] [function:Owner Admin] Fetched owners: {"DangarStu":{"name":"DangarStu","email":"","phone":"","devices":["Renko"],"created":"2025-06-09T04:07:53.418Z"}}
+9 Jun 14:14:17 - [info] [function:Device Admin] Received message for topic: get_devices json: {"topic":"get_devices","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"da78bedf3ff4db14"}
+9 Jun 14:14:17 - [info] [function:Device Admin] Fetched devices: {"Renko":{"deviceName":"Renko","ownerName":"DangarStu","binaryPins":[{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"},{"trigger":"High","alertLevel":"None"}],"analogPins":[{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"},{"value":"","lowThreshold":0,"highThreshold":100,"alertLevel":"None"}],"lastSeen":null}}
+9 Jun 14:14:40 - [info] [function:Owner Admin] Received message for topic: delete_device json: {"topic":"delete_device","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"426e36f257b18896"}
+9 Jun 14:14:40 - [info] [function:Device Admin] Received message for topic: delete_device json: {"topic":"delete_device","_dashboard":{"sourceId":"2bef7abf62977ab5","templateId":"2bef7abf62977ab5"},"_client":{"socketId":"dMlQBQEnAxtG2xiBAAAF","socketIp":"192.168.20.136"},"_msgid":"426e36f257b18896"}
+9 Jun 14:14:40 - [error] [function:Device Admin] TypeError: Cannot read properties of undefined (reading 'deviceName')
+9 Jun 14:14:40 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
+9 Jun 14:15:10 - [warn] [function:Parse LoRa message] Device not found for nodeId: 2697689064
