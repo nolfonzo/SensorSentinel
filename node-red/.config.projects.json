@@ -1,0 +1,8 @@
+{
+    "projects": {
+        "Sensor_Network": {
+            "credentialSecret": false
+        }
+    },
+    "activeProject": "Sensor_Network"
+}

@@ -324,10 +324,15 @@ module.exports = {
              * trace - record very detailed logging + debug + info + warn + error + fatal errors
              * off - turn off all logging (doesn't affect metrics or audit)
              */
-            level: "info",
+            level: "debug",
             /** Whether or not to include metric events in the log output */
             metrics: false,
             /** Whether or not to include audit events in the log output */
+            audit: false
+        },
+            file: {
+            level: "debug",  // Change to "info" or "error" for less verbosity, if preferred
+            path: "nodered.log", // Specify your absolute log file path
             audit: false
         }
     },
@@ -337,11 +342,11 @@ module.exports = {
      * provided here will enable file-based context that flushes to disk every 30 seconds.
      * Refer to the documentation for further options: https://nodered.org/docs/api/context/
      */
-    //contextStorage: {
-    //    default: {
-    //        module:"localfilesystem"
-    //    },
-    //},
+    contextStorage: {
+        default: {
+            module:"localfilesystem"
+        },
+    },
 
     /** `global.keys()` returns a list of all properties set in global context.
      * This allows them to be displayed in the Context Sidebar within the editor.
@@ -351,7 +356,7 @@ module.exports = {
      * By default, the property is set to false to avoid accidental exposure of
      * their values. Setting this to true will cause the keys to be listed.
      */
-    exportGlobalContextKeys: false,
+    exportGlobalContextKeys: true,
 
     /** Configure how the runtime will handle external npm modules.
      * This covers:

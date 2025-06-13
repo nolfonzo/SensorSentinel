@@ -1,0 +1,703 @@
+[
+    {
+        "id": "62f31c6b53afb626",
+        "type": "tab",
+        "label": "Maintenance Flow",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "bfe4d76a50650ba0",
+        "type": "tab",
+        "label": "Alerts Flow",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "e8a3445017fb5db9",
+        "type": "tab",
+        "label": "System",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ac73cfbba5e1dcae",
+        "type": "ui-base",
+        "name": "My Dashboard",
+        "path": "/dashboard",
+        "appIcon": "",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-notification",
+            "ui-control"
+        ],
+        "showPathInSidebar": false,
+        "headerContent": "page",
+        "navigationStyle": "default",
+        "titleBarStyle": "default",
+        "showReconnectNotification": true,
+        "notificationDisplayTime": 1,
+        "showDisconnectNotification": true,
+        "allowInstall": true
+    },
+    {
+        "id": "c05b66df7c049376",
+        "type": "ui-theme",
+        "name": "Default Theme",
+        "colors": {
+            "surface": "#ffffff",
+            "primary": "#0094CE",
+            "bgPage": "#eeeeee",
+            "groupBg": "#ffffff",
+            "groupOutline": "#cccccc"
+        },
+        "sizes": {
+            "density": "default",
+            "pagePadding": "12px",
+            "groupGap": "12px",
+            "groupBorderRadius": "4px",
+            "widgetGap": "12px"
+        }
+    },
+    {
+        "id": "315ea8347fb746b3",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "df031482b6ed6ab2",
+        "type": "ui-page",
+        "name": "Owner & Device Admin",
+        "ui": "ac73cfbba5e1dcae",
+        "path": "/admin",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "c05b66df7c049376",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 2,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "105a8e7c53d8d74f",
+        "type": "ui-group",
+        "name": "SensorSentinel Admin",
+        "page": "df031482b6ed6ab2",
+        "width": "12",
+        "height": 1,
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "95576809b9af886f",
+        "type": "ui-page",
+        "name": "Alerts",
+        "ui": "ac73cfbba5e1dcae",
+        "path": "/alerts",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "c05b66df7c049376",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 1,
+        "className": "",
+        "visible": true,
+        "disabled": false
+    },
+    {
+        "id": "5aa9d9b44198b615",
+        "type": "ui-group",
+        "name": "SensorSentinel Alerts",
+        "page": "95576809b9af886f",
+        "width": "12",
+        "height": 1,
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "b98756d1917e8914",
+        "type": "ui-page",
+        "name": "System",
+        "ui": "ac73cfbba5e1dcae",
+        "path": "/system",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "c05b66df7c049376",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 3,
+        "className": "",
+        "visible": true,
+        "disabled": false
+    },
+    {
+        "id": "2aac87beefa6189a",
+        "type": "ui-group",
+        "name": "System",
+        "page": "b98756d1917e8914",
+        "width": 6,
+        "height": 1,
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "03b8ce6774a2abb5",
+        "type": "function",
+        "z": "62f31c6b53afb626",
+        "name": "Owner Admin",
+        "func": "const topic = msg.topic; // Retrieve the topic from the incoming message\nconst payload = msg.payload; // Retrieve the payload containing the necessary data\n\nconst noLogTopics = [\n    \"get_devices\",\n    \"add_device\",\n    \"update_device\",\n    \"devices_data\",\n    \"owners_data\"\n];\n\n// Log incoming messages unless they're in the no-log list\nif (!noLogTopics.includes(topic)) {\n    node.log(\"Received message for topic: \" + topic + \" json: \" + JSON.stringify(msg)); // Log the whole message\n}\n\nswitch (topic) {\n    case \"get_owners\":\n        // Fetch the list of owners from the global context\n        const owners = global.get(\"owners\") || {};\n        msg.payload = owners; // Set the payload to owners\n        msg.topic = \"owners_data\"; // Change the topic for the response\n        node.log(\"Fetched owners: \" + JSON.stringify(owners)); // Log the owners\n        return msg; // Ensure to return the message\n\n    case \"add_owner\":\n        // Add a new owner\n        const allOwners = global.get(\"owners\") || {};\n\n        // Ensure the owner name is provided and is unique\n        if (!payload.name) {\n            node.log(\"Owner name is missing. Cannot add owner.\"); // Log missing name error\n            return { topic: \"owner_error\", payload: { error: \"Owner name is required.\" } }; // Return error feedback\n        }\n\n        // Check for unique owner name\n        if (allOwners[payload.name]) {\n            node.log(\"Owner name already exists: \" + payload.name); // Log duplicate name error\n            return { topic: \"owner_error\", payload: { error: \"Owner name must be unique.\" } }; // Return error feedback\n        }\n\n        // Create new owner object with name and other details\n        allOwners[payload.name] = {\n            name: payload.name, // Include the name property\n            email: payload.email || \"\",\n            phone: payload.phone || \"\",\n            devices: [], // Initialize associated devices as an empty array\n            created: new Date().toISOString() // Set the creation timestamp\n        };\n\n        global.set(\"owners\", allOwners); // Save updated owners to global context\n        node.log(\"Added owner : \" + payload.name); // Log the newly added owner'        \n        node.log(\"Global should be set to : \" + allOwners); // Log the newly added owner'\n        node.log(\"Global now has : \" + global.get(\"owners\")); // Log the newly added owner\n\n        msg.payload = allOwners; // Set the payload to the updated list of owners\n        msg.topic = \"owners_data\"; // Change the topic for the response\n        return msg; // Ensure to return the message\n\n    case \"update_owner\":\n        // Update an existing owner\n        const ownersToUpdate = global.get(\"owners\") || {};\n        node.log(\"Incoming payload for update: \" + JSON.stringify(payload)); // Log incoming payload\n        if (ownersToUpdate[payload.name]) {\n            node.log(\"Current owners before update: \" + JSON.stringify(ownersToUpdate)); // Log owners state\n\n            // Retain existing properties and update with new data\n            ownersToUpdate[payload.name] = {\n                ...ownersToUpdate[payload.name],\n                ...payload,  // Change from payload.data to payload to ensure all fields are merged correctly\n                updated: new Date().toISOString() // Update the timestamp\n            };\n            global.set(\"owners\", ownersToUpdate); // Save the updated owner info\n\n            node.log(\"Updated owner: \" + JSON.stringify(ownersToUpdate[payload.name])); // Log the update\n            msg.payload = ownersToUpdate[payload.name]; // Send just the updated owner info\n            msg.topic = \"owner_updated\"; // Change to specific topic for the update event\n        } else {\n            node.log(\"Owner name not found: \" + payload.name); // Log if the owner name does not exist\n            return { topic: \"owner_error\", payload: { error: \"Owner name not found.\" } }; // Return error feedback\n        }\n        return msg; // Return message for success\n\n    case \"delete_owner\":\n        // Delete an owner and their associated devices\n        const ownersToDelete = global.get(\"owners\") || {};\n        const devices = global.get(\"devices\") || {}; // Retrieve existing devices\n\n        node.log(\"Trying to delete owner: \" + payload.name); // Log the owner to delete\n        node.log(\"Current owners: \" + JSON.stringify(ownersToDelete)); // Log current owners for debugging\n\n        if (ownersToDelete[payload.name]) {\n            // Get the IDs of devices associated with this owner\n            const ownerDevices = ownersToDelete[payload.name].devices || [];\n\n            // Remove any associated devices from the devices registry\n            ownerDevices.forEach(deviceName => {\n                delete devices[deviceName]; // Remove the device from the global devices object\n            });\n\n            // Update the global devices list\n            global.set(\"devices\", devices);\n\n            // Now delete the owner\n            delete ownersToDelete[payload.name];\n            global.set(\"owners\", ownersToDelete); // Save updated owners\n            node.log(\"Deleted owner: \" + payload.name + \" and their devices\"); // Log the deletion\n        } else {\n            node.log(\"Owner name not found for deletion: \" + payload.name); // Log if the owner name does not exist\n            return { topic: \"owner_error\", payload: { error: \"Owner name not found for deletion.\" } }; // Return error feedback\n        }\n\n        msg.payload = ownersToDelete; // Set payload to the updated owner list\n        msg.topic = \"owners_data\"; // Change the topic for the response\n        return msg; // Return message for success\n\n    default:\n        // Log if the topic is unrecognized\n        return null;\n}\n\n// Return the message to the caller (redundant since every case returns earlier)\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1400,
+        "y": 360,
+        "wires": [
+            [
+                "2bef7abf62977ab5"
+            ]
+        ]
+    },
+    {
+        "id": "7100665dc8d8ec55",
+        "type": "function",
+        "z": "62f31c6b53afb626",
+        "name": "Device Admin",
+        "func": "const topic = msg.topic; // Retrieve the topic from the incoming message\nconst payload = msg.payload; // Retrieve the payload containing the necessary data\n\nconst noLogTopics = [\n    \"get_owners\",\n    \"add_owner\",\n    \"update_owner\",\n    \"delete_owner\",\n    \"devices_data\", // Changed from nodes_data to devices_data\n    \"owners_data\"\n];\n\n// Log incoming messages unless they're in the no-log list\nif (!noLogTopics.includes(topic)) {\n    node.log(\"Received message for topic: \" + topic + \" json: \" + JSON.stringify(msg)); // Log the whole message\n}\n\nswitch (topic) {\n    case \"get_devices\": // Changed from get_nodes to get_devices\n        // Retrieve all devices from the global state\n        const devicesData = global.get(\"devices\") || {}; // Changed from nodesData to devicesData\n        msg.payload = devicesData; // Set the devices data as payload\n        msg.topic = \"devices_data\"; // Change the topic for the response\n        node.log(\"Fetched devices: \" + JSON.stringify(devicesData)); // Log the fetched devices\n        return msg; // Ensure to return the message\n\ncase \"add_device\": // Changed from add_node to add_device\n    // Add a new device\n    const allDevices = global.get(\"devices\") || {}; // Retrieve existing devices\n    const allOwners = global.get(\"owners\") || {}; // Retrieve existing owners\n\n    // Ensure required fields are present\n    if (!payload.deviceName || !payload.ownerName) { // Updated to check deviceName\n        node.log(\"Device Name or Owner Name is missing.\"); // Log an error if required fields are missing\n        return { topic: \"device_error\", payload: { error: \"Device Name and Owner Name are required.\" } }; // Return error feedback\n    }\n\n    // Log the incoming pins from payload\n    node.log(\"Incoming payload: \" + JSON.stringify(payload)); // Log the entire payload\n    node.log(\"Incoming binaryPins: \" + JSON.stringify(payload.binaryPins)); // Log binary pins\n    node.log(\"Incoming analogPins: \" + JSON.stringify(payload.analogPins)); // Log analog pins\n\n    // Ensure device name is unique \n    if (!allDevices[payload.deviceName]) {\n        allDevices[payload.deviceName] = {  // Key by deviceName\n            deviceName: payload.deviceName, // Add the device name to the object\n            ownerName: payload.ownerName, // Use ownerName instead of ownerId\n            binaryPins: payload.binaryPins || [], // Initialize with existing pins or empty array\n            analogPins: payload.analogPins || [], // Initialize with existing pins or empty array\n            lastSeen: null // Initialize last seen status\n        };\n\n        // Add device to the owner's device list\n        if (allOwners[payload.ownerName]) {\n            // Owner exists, check if the device is already in their list\n            if (!allOwners[payload.ownerName].devices.includes(payload.deviceName)) { // Check against deviceName\n                allOwners[payload.ownerName].devices.push(payload.deviceName); // Add deviceName to owner's devices\n            } else {\n                node.log(\"Device already exists in owner's device list: \" + payload.deviceName); // Log if device is a duplicate\n                return { topic: \"device_error\", payload: { error: \"Device already exists for this owner.\" } }; // Return error feedback\n            }\n        } else {\n            // Error handling if the owner does not exist\n            node.log(\"Owner not found, cannot assign device: \" + payload.ownerName);\n            return { topic: \"device_error\", payload: { error: \"Owner not found.\" } }; // Return error feedback\n        }\n\n        // Set the devices and owners in the global context\n        global.set(\"devices\", allDevices); // Save updated devices to global context\n        global.set(\"owners\", allOwners); // Save the updated owners to global context\n\n        // Log the outbound device information to ensure they are set properly\n        node.log(\"Added device: \" + JSON.stringify(allDevices[payload.deviceName])); // Log the device that was added\n\n        // Prepare the success message for response\n        msg.topic = \"device_added\"; // Change the topic for success feedback\n        msg.payload = { \n            deviceName: payload.deviceName, // Include the device name in the payload response\n            ownerName: payload.ownerName,\n            binaryPins: payload.binaryPins, // Include binary pins for the response\n            analogPins: payload.analogPins, // Include analog pins for the response\n            message: \"Device added successfully.\" \n        };\n    } else {\n        // Log if the device name is not unique\n        node.log(\"Device name already exists: \" + payload.deviceName);\n        return { topic: \"device_error\", payload: { error: \"Device name already exists.\" } }; // Return error feedback\n    }\n    break;\n\n    case \"update_device\": // Changed from update_node to update_device\n        // Update an existing device using its name for identification\n        const devicesToUpdate = global.get(\"devices\") || {}; // Retrieve existing devices\n\n        const currentDeviceName = payload.deviceName; // Device name for identification\n        const currentDevice = devicesToUpdate[currentDeviceName]; // Retrieve the current device\n\n        if (!currentDevice) {\n            node.log(\"Device name not found for update: \" + currentDeviceName); // Log if the device name does not exist\n            return { topic: \"device_error\", payload: { error: \"Device name not found.\" } }; // Return error feedback\n        }\n\n        // Log the current state before updating\n        node.log(\"Current Device before update: \" + JSON.stringify(currentDevice));\n\n        // Update the device's owner name if it has changed\n        if (payload.ownerName) {\n            const oldOwnerName = currentDevice.ownerName; // Store the current owner name\n            currentDevice.ownerName = payload.ownerName; // Assign new owner name from payload\n\n            // Log the change\n            node.log(\"Updated device owner from \" + oldOwnerName + \" to \" + currentDevice.ownerName);\n            \n            // Remove device from old owner's device list if applicable\n            const owners = global.get(\"owners\") || {}; // Retrieve owner data\n            if (oldOwnerName && owners[oldOwnerName]) {\n                const oldOwnerDevices = owners[oldOwnerName].devices;\n                const index = oldOwnerDevices.indexOf(currentDeviceName);\n                if (index > -1) {\n                    oldOwnerDevices.splice(index, 1); // Remove device from old owner device list\n                    node.log(\"Removed device from old owner: \" + oldOwnerName);\n                }\n            }\n            \n            // Add device to the new owner's list\n            if (owners[currentDevice.ownerName]) {\n                if (!owners[currentDevice.ownerName].devices.includes(currentDeviceName)) {\n                    owners[currentDevice.ownerName].devices.push(currentDeviceName); // Add it\n                    node.log(\"Added device to new owner: \" + currentDevice.ownerName);\n                } else {\n                    node.log(\"Device already exists for new owner: \" + currentDevice.ownerName);\n                }\n            }\n        }\n\n        // Assign any other properties to update\n        if (payload.binaryPins) { // Properly check and assign binaryPins\n            currentDevice.binaryPins = payload.binaryPins;\n        }\n        if (payload.analogPins) { // Properly check and assign analogPins\n            currentDevice.analogPins = payload.analogPins;\n        }\n\n        // Update the devices in global context\n        global.set(\"devices\", devicesToUpdate);\n\n        // Log updated structures after the update\n        node.log(\"Updated devices structure after update: \" + JSON.stringify(devicesToUpdate));\n\n        msg.payload = devicesToUpdate; // Return updated device list\n        msg.topic = \"devices_data\"; // Change topic to indicate device data has changed\n        return msg; // Ensure to return the message\ncase \"delete_device\": // New case for deleting a device\n    const remainingDevices = global.get(\"devices\") || {}; // Retrieve existing devices\n\n    const deviceToDeleteName = payload.deviceName; // Get the device name to delete\n    const deviceToDelete = remainingDevices[deviceToDeleteName]; // Lookup the current device\n\n    if (!deviceToDelete) {\n        node.log(\"Device name not found for deletion: \" + deviceToDeleteName); // Log if the device name does not exist\n        return { topic: \"device_error\", payload: { error: \"Device name not found.\" } }; // Return error feedback\n    }\n\n    // Remove the device from the global context\n    delete remainingDevices[deviceToDeleteName]; // Delete the device from the object\n\n    // Update global context with remaining devices\n    global.set(\"devices\", remainingDevices); // Save the updated devices list to global context\n    \n    // Log the result of the deletion\n    node.log(\"Deleted device: \" + deviceToDeleteName); // Log successful deletion\n\n    msg.payload = { message: \"Device deleted successfully.\", deviceName: deviceToDeleteName }; // Set payload for confirmation\n    msg.topic = \"device_deleted\"; // Change topic for response feedback\n    return msg; // Ensure to return the message\n    default:\n        // Return if the topic is unrecognized\n        return null;\n}\n\n// Return the message to the caller (redundant since every case returns earlier)\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1400,
+        "y": 660,
+        "wires": [
+            [
+                "2bef7abf62977ab5"
+            ]
+        ]
+    },
+    {
+        "id": "2bef7abf62977ab5",
+        "type": "ui-template",
+        "z": "62f31c6b53afb626",
+        "group": "105a8e7c53d8d74f",
+        "page": "",
+        "ui": "",
+        "name": "Admin Template",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>  \n    <div style=\"width: 100%;\">  \n        <style>  \n            /* Set general font size for all elements within the container */  \n            .v-container {  \n                font-size: 0.75rem;  \n            }  \n            .v-card-title {  \n                font-size: 0.85rem;  \n            }  \n            .v-btn {  \n                font-size: 0.7rem;  \n                padding: 4px 8px;  \n            }  \n            .v-text-field input {  \n                font-size: 0.75rem;  \n                padding: 4px;  \n            }  \n            .v-data-table {  \n                font-size: 0.75rem;  \n            }  \n            .nr-dashboard-cardpanel, .nr-dashboard-template {  \n                width: 100% !important;  \n            }  \n        </style>  \n\n        <v-container fluid class=\"pa-6\" style=\"max-width: 100%; padding: 0;\">  \n            <!-- Main Tabs -->  \n            <v-tabs v-model=\"activeSection\" class=\"mb-6\">  \n                <v-tab value=\"owners\">  \n                    <v-icon class=\"mr-2\">mdi-account-group</v-icon>  \n                    Owner Management  \n                </v-tab>  \n                <v-tab value=\"devices\">  \n                    <v-icon class=\"mr-2\">mdi-router-network</v-icon>  \n                    Device Management  \n                </v-tab>  \n            </v-tabs>  \n\n            <v-window v-model=\"activeSection\">  \n                <!-- Owner Management Tab -->  \n                <v-window-item value=\"owners\">  \n                    <div class=\"mb-4\">  \n                        <h2 class=\"text-h4 mb-6 d-flex align-center\">  \n                            <v-icon class=\"mr-2\" color=\"primary\">mdi-account-group</v-icon>  \n                            Owner Management  \n                        </h2>  \n\n                        <!-- Add New Owner Card -->  \n                        <v-card class=\"mb-6\">  \n                            <v-card-title>  \n                                <v-icon class=\"mr-2\">mdi-account-plus</v-icon>  \n                                Add New Owner  \n                            </v-card-title>  \n                            <v-card-text>  \n                                <v-row>  \n                                    <v-col cols=\"12\" md=\"4\" lg=\"3\">  \n                                        <v-text-field v-model=\"newOwner.name\" label=\"Owner Name\" variant=\"outlined\"  \n                                            density=\"compact\" :error=\"!newOwner.name.trim() && attempted\"  \n                                            :error-messages=\"!newOwner.name.trim() && attempted ? 'Name is required' : ''\">  \n                                        </v-text-field>  \n                                    </v-col>  \n                                    <v-col cols=\"12\" md=\"4\" lg=\"3\">  \n                                        <v-text-field v-model=\"newOwner.email\" label=\"Email\" variant=\"outlined\"  \n                                            density=\"compact\" type=\"email\"></v-text-field>  \n                                    </v-col>  \n                                    <v-col cols=\"12\" md=\"4\" lg=\"3\">  \n                                        <v-text-field v-model=\"newOwner.phone\" label=\"Phone\" variant=\"outlined\"  \n                                            density=\"compact\"></v-text-field>  \n                                    </v-col>  \n                                    <v-col cols=\"12\" lg=\"3\" class=\"d-flex align-center\">  \n                                        <v-btn @click=\"addOwner\" color=\"primary\" :disabled=\"!newOwner.name.trim()\"  \n                                            prepend-icon=\"mdi-plus\" size=\"large\" block>  \n                                            Add Owner  \n                                        </v-btn>  \n                                    </v-col>  \n                                </v-row>  \n                            </v-card-text>  \n                        </v-card>  \n\n                        <!-- Owners List -->  \n                        <v-card>  \n                            <v-card-title class=\"d-flex align-center\">  \n                                <v-icon class=\"mr-2\">mdi-account-group</v-icon>  \n                                Property Owners ({{ filteredOwnersList.length }} of {{ Object.keys(owners).length }})  \n                                <v-spacer></v-spacer>  \n                                <v-text-field v-model=\"ownerSearchFilter\" label=\"Search owners...\"  \n                                    prepend-inner-icon=\"mdi-magnify\" variant=\"outlined\" density=\"compact\" hide-details  \n                                    clearable style=\"max-width: 400px;\" class=\"ml-4\"></v-text-field>  \n                            </v-card-title>  \n\n                            <v-data-table :headers=\"ownerHeaders\" :items=\"filteredOwnersList\" class=\"elevation-0\"  \n                                density=\"compact\" :items-per-page=\"20\">  \n                                <template v-slot:item.deviceCount=\"{ item }\">  \n                                    <v-chip size=\"small\" :color=\"item.deviceCount > 0 ? 'success' : 'default'\">  \n                                        {{ item.deviceCount }}  \n                                    </v-chip>  \n                                </template>  \n\n                                <template v-slot:item.actions=\"{ item }\">  \n                                    <v-btn icon=\"mdi-pencil\" size=\"small\" variant=\"text\" @click=\"editOwner(item)\">  \n                                    </v-btn>  \n                                    <v-btn icon=\"mdi-delete\" size=\"small\" variant=\"text\" color=\"error\"  \n                                        @click=\"deleteOwner(item.name)\"></v-btn>  \n                                </template>  \n                            </v-data-table>  \n                        </v-card>  \n                    </div>  \n                </v-window-item>  \n\n                <!-- Device Management Tab -->  \n                <v-window-item value=\"devices\">  \n                    <div class=\"mb-4\">  \n                        <h2 class=\"text-h4 mb-6 d-flex align-center\">  \n                            <v-icon class=\"mr-2\" color=\"success\">mdi-router-network</v-icon>  \n                            Device Management  \n                        </h2>  \n\n                        <!-- Add New Device Card -->  \n                        <v-card class=\"mb-6\">  \n                            <v-card-title>  \n                                <v-icon class=\"mr-2\">mdi-chip</v-icon>  \n                                Add New Device  \n                            </v-card-title>  \n                            <v-card-text>  \n                                <v-row class=\"mb-4\">  \n                                    <v-col cols=\"12\" md=\"3\" lg=\"2\">  \n                                        <v-text-field v-model=\"newDevice.deviceName\" label=\"Device Name\" variant=\"outlined\"  \n                                            density=\"compact\" :error=\"!!errorMessage\"  \n                                            :error-messages=\"errorMessage\" @input=\"clearError\"></v-text-field>  \n                                    </v-col>  \n                                    <v-col cols=\"12\" md=\"3\" lg=\"3\">  \n                                        <v-autocomplete v-model=\"newDevice.ownerName\" :items=\"ownerOptions\" label=\"Owner\"   \n                                            variant=\"outlined\" density=\"compact\" clearable :filter-keys=\"['title']\">  \n                                        </v-autocomplete>  \n                                    </v-col>  \n                                </v-row>  \n\n                                <!-- Basic Pin Configuration -->  \n                                <!--- <v-card variant=\"outlined\" class=\"mb-4\">  \n                                    <v-card-title class=\"text-h6\">Basic Pin Labels</v-card-title>  \n                                    <v-card-text>  \n                                        <v-tabs v-model=\"activeTab\">  \n                                            <v-tab value=\"binary\">Binary Pins (8)</v-tab>  \n                                            <v-tab value=\"analog\">Analog Pins (4)</v-tab>  \n                                        </v-tabs>  \n\n                                        <v-window v-model=\"activeTab\" class=\"mt-4\">  \n                                            <v-window-item value=\"binary\">  \n                                                <v-row>  \n                                                    <v-col v-for=\"i in 8\" :key=\"'bin-' + i\" cols=\"12\" sm=\"6\" md=\"3\"  \n                                                        lg=\"2\" xl=\"1-5\">  \n                                                        <v-text-field v-model=\"newDevice.binaryPins[i - 1]\"  \n                                                            :label=\"`Binary Pin ${i - 1}`\" variant=\"outlined\"  \n                                                            density=\"compact\" :placeholder=\"`Pin ${i - 1} Label`\">  \n                                                        </v-text-field>  \n                                                    </v-col>  \n                                                </v-row>  \n                                            </v-window-item>  \n\n                                            <v-window-item value=\"analog\">  \n                                                <v-row>  \n                                                    <v-col v-for=\"i in 4\" :key=\"'ana-' + i\" cols=\"12\" sm=\"6\" md=\"3\"  \n                                                        lg=\"2\">  \n                                                        <v-text-field v-model=\"newDevice.analogPins[i - 1]\"  \n                                                            :label=\"`Analog Pin ${i - 1}`\" variant=\"outlined\"  \n                                                            density=\"compact\" :placeholder=\"`Pin A${i - 1} Label`\">  \n                                                        </v-text-field>  \n                                                    </v-col>  \n                                                </v-row>  \n                                            </v-window-item>  \n                                        </v-window>  \n                                    </v-card-text>  \n                                </v-card> -->  \n                                \n                                <!-- Add Device Button Below Pin Labels -->  \n                                <v-row class=\"mb-4\">  \n                                    <v-col cols=\"12\" lg=\"4\" class=\"d-flex align-center\">  \n                                        <v-btn @click=\"addDevice\" color=\"primary\" :disabled=\"!canAddDevice\"  \n                                            prepend-icon=\"mdi-plus\" size=\"large\" block>  \n                                            Add Device  \n                                        </v-btn>  \n                                    </v-col>  \n                                </v-row>  \n                            </v-card-text>  \n                        </v-card>  \n\n                        <!-- Device Filter Controls -->  \n                        <v-card class=\"mb-6\">  \n                            <v-card-title>Filter & Search Devices</v-card-title>  \n                            <v-card-text>  \n                                <v-row>  \n                                    <v-col cols=\"12\" md=\"6\" lg=\"4\">  \n                                        <v-text-field v-model=\"deviceSearchQuery\" label=\"Search Devices\"  \n                                            prepend-inner-icon=\"mdi-magnify\" variant=\"outlined\" density=\"compact\"  \n                                            clearable hint=\"Search by Device Name or Owner\"></v-text-field>  \n                                    </v-col>  \n                                    <v-col cols=\"12\" md=\"6\" lg=\"4\">  \n                                        <v-autocomplete v-model=\"selectedOwnerFilter\" :items=\"ownerFilterOptions\"  \n                                            label=\"Filter by Owner\" prepend-inner-icon=\"mdi-account-filter\"  \n                                            variant=\"outlined\" density=\"compact\" clearable :filter-keys=\"['title']\">  \n                                        </v-autocomplete>  \n                                    </v-col>  \n                                    <v-col cols=\"12\" lg=\"4\" class=\"d-flex align-center\">  \n                                        <v-chip class=\"mr-2\" color=\"info\">  \n                                            Total: {{ Object.keys(devices).length }}  \n                                        </v-chip>  \n                                        <v-chip color=\"success\">  \n                                            Filtered: {{ filteredDevicesList.length }}  \n                                        </v-chip>  \n                                    </v-col>  \n                                </v-row>  \n                            </v-card-text>  \n                        </v-card>  \n\n                        <!-- Devices Data Table -->  \n                        <v-card>  \n                            <v-card-title>  \n                                <v-icon class=\"mr-2\">mdi-router-network</v-icon>  \n                                Registered Devices ({{ filteredDevicesList.length }} of {{ Object.keys(devices).length }})  \n                            </v-card-title>  \n\n                            <v-data-table :headers=\"deviceHeaders\" :items=\"filteredDevicesList\" class=\"elevation-0\"   \n                                density=\"compact\" :items-per-page=\"20\">  \n\n                                <!-- Display Device Name in the Devices Table -->  \n                                <template v-slot:item.deviceName=\"{ item }\">  \n                                    <v-chip size=\"small\" color=\"info\">{{ item.deviceName }}</v-chip> <!-- Display the device name -->  \n                                </template>  \n\n                                <!-- Display Owner in the Devices Table -->  \n                                <template v-slot:item.ownerName=\"{ item }\">  \n                                    <v-chip size=\"small\" color=\"primary\">{{ item.ownerName }}</v-chip> <!-- Display the ownerName -->  \n                                </template>  \n\n                                <template v-slot:item.pins=\"{ item }\">  \n                                    <div>  \n                                        <v-chip size=\"small\" color=\"success\" class=\"mr-1\">  \n                                            B: {{ getBinaryPinCount(item) }}/8  \n                                        </v-chip>  \n                                        <v-chip size=\"small\" color=\"info\">  \n                                            A: {{ getAnalogPinCount(item) }}/4  \n                                        </v-chip>  \n                                    </div>  \n                                </template>  \n\n                                <template v-slot:item.lastSeen=\"{ item }\">  \n                                    <span :class=\"item.lastSeen ? 'text-success' : 'text-error'\">  \n                                        {{ item.lastSeen ? formatDate(item.lastSeen) : 'Never' }}  \n                                    </span>  \n                                </template>  \n\n                                <template v-slot:item.actions=\"{ item }\">  \n                                    <v-btn icon=\"mdi-eye\" size=\"small\" variant=\"text\" @click=\"viewDevice(item)\"></v-btn>  \n                                    <v-btn icon=\"mdi-pencil\" size=\"small\" variant=\"text\" @click=\"editDevice(item)\"></v-btn>  \n                                    <v-btn icon=\"mdi-delete\" size=\"small\" variant=\"text\" color=\"error\"  \n                                        @click=\"deleteDevice(item.deviceName)\"></v-btn>  \n                                </template>  \n                            </v-data-table>  \n                        </v-card>  \n                    </div>  \n                </v-window-item>  \n            </v-window>  \n        </v-container>  \n\n        <!-- Dialogs below this line -->  \n        <!-- Edit Owner Dialog -->  \n        <v-dialog v-model=\"editOwnerDialog\" max-width=\"600px\">  \n            <v-card>  \n                <v-card-title>Edit Owner</v-card-title>  \n                <v-card-text>  \n                    <v-text-field v-model=\"editingOwner.name\" label=\"Name\" variant=\"outlined\"></v-text-field>  \n                    <v-text-field v-model=\"editingOwner.email\" label=\"Email\" variant=\"outlined\"></v-text-field>  \n                    <v-text-field v-model=\"editingOwner.phone\" label=\"Phone\" variant=\"outlined\"></v-text-field>  \n                </v-card-text>  \n                <v-card-actions>  \n                    <v-spacer></v-spacer>  \n                    <v-btn @click=\"editOwnerDialog = false\">Cancel</v-btn>  \n                    <v-btn @click=\"saveOwner\" color=\"primary\">Save</v-btn>  \n                </v-card-actions>  \n            </v-card>  \n        </v-dialog>  \n\n        <!-- View Device Dialog -->  \n        <v-dialog v-model=\"viewDialog\" max-width=\"1000px\">  \n            <v-card v-if=\"selectedDevice\">  \n                <v-card-title>  \n                    <v-icon class=\"mr-2\">mdi-eye</v-icon>  \n                    Device Details - {{ selectedDevice.deviceName }}  \n                </v-card-title>  \n                <v-card-text>  \n                    <v-row>  \n                        <v-col cols=\"12\" md=\"6\" lg=\"3\">  \n                            <v-text-field :model-value=\"selectedDevice.deviceName\" label=\"Device Name\" variant=\"outlined\" readonly></v-text-field>  \n                        </v-col>  \n                        <v-col cols=\"12\" md=\"6\" lg=\"3\">  \n                            <v-text-field :model-value=\"selectedDevice.ownerName\" label=\"Owner\" variant=\"outlined\" readonly></v-text-field>  \n                        </v-col>  \n                        <v-col cols=\"12\" md=\"6\" lg=\"3\">  \n                            <v-text-field :model-value=\"selectedDevice.lastSeen ? formatDate(selectedDevice.lastSeen) : 'Never'\" label=\"Last Seen\" variant=\"outlined\" readonly></v-text-field>  \n                        </v-col>  \n                    </v-row>  \n\n                    <v-card variant=\"outlined\" class=\"mt-4\">  \n                        <v-card-title>Pin Configuration</v-card-title>  \n                        <v-card-text>  \n                            <v-tabs v-model=\"viewTab\">  \n                                <v-tab value=\"binary\">Binary Pins</v-tab>  \n                                <v-tab value=\"analog\">Analog Pins</v-tab>  \n                            </v-tabs>  \n\n                            <v-window v-model=\"viewTab\" class=\"mt-4\">  \n                                <v-window-item value=\"binary\">  \n                                    <v-row>  \n                                        <v-col v-for=\"(pin, index) in selectedDevice.binaryPins\" :key=\"'view-bin-' + index\" cols=\"12\" sm=\"6\" md=\"3\" lg=\"2\" xl=\"1-5\">  \n                                            <v-text-field :model-value=\"pin\" :label=\"`Binary Pin ${index}`\" variant=\"outlined\" density=\"compact\" readonly></v-text-field>  \n                                        </v-col>  \n                                    </v-row>  \n                                </v-window-item>  \n\n                                <v-window-item value=\"analog\">  \n                                    <v-row>  \n                                        <v-col v-for=\"(pin, index) in selectedDevice.analogPins\" :key=\"'view-ana-' + index\" cols=\"12\" sm=\"6\" md=\"3\" lg=\"2\">  \n                                            <v-text-field :model-value=\"pin\" :label=\"`Analog Pin ${index}`\" variant=\"outlined\" density=\"compact\" readonly></v-text-field>  \n                                        </v-col>  \n                                    </v-row>  \n                                </v-window-item>  \n                            </v-window>  \n                        </v-card-text>  \n                    </v-card>  \n                </v-card-text>  \n                <v-card-actions>  \n                    <v-spacer></v-spacer>  \n                    <v-btn @click=\"viewDialog = false\">Close</v-btn>  \n                    <v-btn @click=\"editDevice(selectedDevice)\" color=\"primary\">Edit</v-btn>  \n                </v-card-actions>  \n            </v-card>  \n        </v-dialog>  \n\n\n<!-- Edit Device Dialog -->  \n<v-dialog v-model=\"editDialog\" max-width=\"1000px\">  \n    <v-card v-if=\"editingDevice\">  \n        <v-card-title>  \n            <v-icon class=\"mr-2\">mdi-pencil</v-icon>  \n            Edit Device - {{ editingDevice.deviceName }}  \n        </v-card-title>  \n        <v-card-text>  \n            <v-row>  \n                <v-col cols=\"12\" md=\"6\" lg=\"3\">  \n                    <v-text-field v-model=\"editingDevice.deviceName\" label=\"Device Name\" variant=\"outlined\">  \n                    </v-text-field>  \n                </v-col>  \n                <v-col cols=\"12\" lg=\"6\">  \n                    <v-autocomplete v-model=\"editingDevice.ownerName\" :items=\"ownerOptions\" label=\"Owner\"  \n                        variant=\"outlined\" clearable :filter-keys=\"['title']\">  \n                    </v-autocomplete>  \n                </v-col>  \n            </v-row>\n\n            <v-card variant=\"outlined\" class=\"mt-4\">  \n                <v-card-title>Pin Configuration</v-card-title>  \n                <v-card-text>  \n                    <v-tabs v-model=\"editTab\">  \n                        <v-tab value=\"binary\">Binary Pins</v-tab>  \n                        <v-tab value=\"analog\">Analog Pins</v-tab>  \n                    </v-tabs>  \n\n                    <v-window v-model=\"editTab\" class=\"mt-4\">  \n                        <v-window-item value=\"binary\">  \n                            <v-row>  \n                                <v-col v-for=\"(pin, index) in editingDevice.binaryPins\" :key=\"'edit-bin-' + index\"  \n                                    cols=\"12\" sm=\"6\" md=\"3\" lg=\"2\" xl=\"1-5\">  \n                                    <v-card class=\"pa-2 mb-2\" outlined> <!-- Box around each pin -->\n                                        <v-card-text>\n                                            <v-text-field v-model=\"editingDevice.binaryPins[index].label\"  \n                                                :label=\"`Binary Pin ${index}`\" variant=\"outlined\" density=\"compact\"  \n                                                :placeholder=\"`Pin ${index} Label`\"></v-text-field>  \n\n                                            <!-- Trigger Dropdown -->\n                                            <v-select v-model=\"editingDevice.binaryPins[index].trigger\" \n                                                      :items=\"['High', 'Low', 'Change']\" \n                                                      label=\"Trigger\"  \n                                                      variant=\"outlined\" \n                                                      density=\"compact\">\n                                            </v-select>  \n\n                                            <!-- Alert Level Dropdown -->\n                                            <v-select v-model=\"editingDevice.binaryPins[index].alertLevel\" \n                                                      :items=\"['None', 'Low', 'Medium', 'High']\" \n                                                      label=\"Alert Level\"  \n                                                      variant=\"outlined\" \n                                                      density=\"compact\">\n                                            </v-select>  \n                                        </v-card-text>\n                                    </v-card>\n                                </v-col>  \n                            </v-row>  \n                        </v-window-item>  \n\n                        <v-window-item value=\"analog\">  \n                            <v-row>  \n                                <v-col v-for=\"(pin, index) in editingDevice.analogPins\" :key=\"'edit-ana-' + index\"  \n                                    cols=\"12\" sm=\"6\" md=\"3\" lg=\"2\" xl=\"1-5\">  \n                                    <v-card class=\"pa-2 mb-2\" outlined> <!-- Box around each analog pin -->\n                                        <v-card-text>\n                                            <v-text-field v-model=\"editingDevice.analogPins[index].value\"  \n                                                :label=\"`Analog Pin ${index}`\" variant=\"outlined\" density=\"compact\"  \n                                                :placeholder=\"`Pin A${index} Label`\"></v-text-field>  \n\n                                            <!-- Low Threshold -->\n                                            <v-text-field v-model=\"editingDevice.analogPins[index].lowThreshold\"  \n                                                label=\"Low Threshold\" variant=\"outlined\" density=\"compact\"  \n                                                type=\"number\" placeholder=\"Low Threshold\"></v-text-field>\n\n                                            <!-- High Threshold -->\n                                            <v-text-field v-model=\"editingDevice.analogPins[index].highThreshold\"  \n                                                label=\"High Threshold\" variant=\"outlined\" density=\"compact\"  \n                                                type=\"number\" placeholder=\"High Threshold\"></v-text-field>  \n\n                                            <!-- Alert Level Dropdown -->\n                                            <v-select v-model=\"editingDevice.analogPins[index].alertLevel\" \n                                                      :items=\"['None', 'Low', 'Medium', 'High']\" \n                                                      label=\"Alert Level\"  \n                                                      variant=\"outlined\" \n                                                      density=\"compact\">\n                                            </v-select>  \n                                        </v-card-text>\n                                    </v-card>\n                                </v-col>  \n                            </v-row>  \n                        </v-window-item>  \n                    </v-window>  \n                </v-card-text>  \n            </v-card>  \n        </v-card-text>  \n\n        <v-card-actions>  \n            <v-spacer></v-spacer>  \n            <v-btn @click=\"editDialog = false\">Cancel</v-btn>  \n            <v-btn @click=\"saveDevice\" color=\"primary\">Save</v-btn>  \n        </v-card-actions>  \n    </v-card>  \n</v-dialog>\n\n\n\n\n        <!-- Owner Devices Dialog -->  \n        <v-dialog v-model=\"ownerDevicesDialog\" max-width=\"1200px\">  \n            <v-card v-if=\"selectedOwner\">  \n                <v-card-title>  \n                    <v-icon class=\"mr-2\">mdi-account-circle</v-icon>  \n                    Devices for {{ selectedOwner.name }} <!-- Change from Nodes to Devices -->  \n                </v-card-title>  \n                <v-card-text>  \n                    <v-data-table :headers=\"deviceHeaders.slice(0, -2)\" :items=\"ownerDevices\" class=\"elevation-0\"  \n                        density=\"compact\" :items-per-page=\"15\">  \n                        <template v-slot:item.pins=\"{ item }\">  \n                            <div>  \n                                <v-chip size=\"small\" color=\"success\" class=\"mr-1\">  \n                                    B: {{ getBinaryPinCount(item) }}/8  \n                                </v-chip>  \n                                <v-chip size=\"small\" color=\"info\">  \n                                    A: {{ getAnalogPinCount(item) }}/4  \n                                </v-chip>  \n                            </div>  \n                        </template>  \n\n                        <template v-slot:item.lastSeen=\"{ item }\">  \n                            <span :class=\"item.lastSeen ? 'text-success' : 'text-error'\">  \n                                {{ item.lastSeen ? formatDate(item.lastSeen) : 'Never' }}  \n                            </span>  \n                        </template>  \n                    </v-data-table>  \n                </v-card-text>  \n                <v-card-actions>  \n                    <v-spacer></v-spacer>  \n                    <v-btn @click=\"ownerDevicesDialog = false\">Close</v-btn>  \n                </v-card-actions>  \n            </v-card>  \n        </v-dialog>  \n    </div>  \n</template>\n\n\n\n\n<script>\nexport default {\n    data() {\n        console.log(\"**** STARTING\");\n        return {\n            activeSection: 'owners', // Default to owners tab\n            \n            // Owner data\n            owners: {},\n            attempted: false,\n            ownerSearchFilter: '',\n            newOwner: {\n                name: '',  // Unique identifier and display name\n                email: '',\n                phone: ''\n            },\n            editOwnerDialog: false,\n            editingOwner: {},\n            ownerHeaders: [\n                { title: 'Name', key: 'name' },  // Unique name for owners\n                { title: 'Email', key: 'email' },\n                { title: 'Phone', key: 'phone' },\n                { title: 'Devices', key: 'deviceCount' }, // Change to Devices\n                { title: 'Actions', key: 'actions', sortable: false }\n            ],\n            \n            // Device data\n            devices: {},  // Data structure for devices\n            errorMessage: '',\n            deviceSearchQuery: '',  // Search query for devices\n            selectedOwnerFilter: null,\n            activeTab: 'binary',\n            viewTab: 'binary',\n            editTab: 'binary',\n            viewDialog: false,\n            editDialog: false,\n            ownerDevicesDialog: false,  // Dialog to show devices owned by the selected owner\n            selectedDevice: null,  // Device selected for viewing\n            editingDevice: null,    // Device selected for editing\n            selectedOwner: null,\n            newDevice: {  // New device input fields\n                deviceName: '',  // Unique name for the device\n                binaryPins: Array(8).fill(''),\n                analogPins: Array(4).fill('')\n            },\n            deviceHeaders: [  // Table headers for devices\n                { title: 'Name', key: 'deviceName' },  // Unique name for devices\n                { title: 'Owner', key: 'ownerName' },  // Unique name for devices\n                { title: 'Pins', key: 'pins', width: '140px' },\n                { title: 'Last Seen', key: 'lastSeen' },\n                { title: 'Actions', key: 'actions', sortable: false }\n            ]\n        }\n    },\n    \n    computed: {\n        // Owner computeds\n        ownersList() {\n            return Object.entries(this.owners).map(([name, owner]) => ({\n                name,  // Use name as key and display name\n                ...owner,\n                deviceCount: owner.devices ? owner.devices.length : 0  // Count devices owned\n            }));\n        },\n        \n        filteredOwnersList() {\n            if (!this.ownerSearchFilter) return this.ownersList;\n            \n            const filter = this.ownerSearchFilter.toLowerCase();\n            return this.ownersList.filter(owner => \n                owner.name.toLowerCase().includes(filter) ||\n                (owner.email && owner.email.toLowerCase().includes(filter)) ||\n                (owner.phone && owner.phone.includes(filter))\n            );\n        },\n        \n        // Device computeds\n        ownerOptions() {\n                console.log(\"********* owners data: \" + JSON.stringify(this.owners, null, 2)); \n\n            // Map over the owners to create dropdown options\n            const options = Object.entries(this.owners).map(([ownerKey, owner]) => ({\n                title: owner.name,   // Use the name property for display\n                value: ownerKey      // Use the unique key as the identifier\n            }));\n\n            console.log(\"********* Owner options: \", options); \n            return options;\n        },\n        \n        ownerFilterOptions() {\n            return [\n                { title: 'All Owners', value: null },\n                ...this.ownerOptions\n            ];\n        },\n        \n        devicesList() {  // Returns list of devices\n            return Object.values(this.devices);\n        },\n        \n        filteredDevicesList() {  // Filters the device list based on search query\n            let filtered = this.devicesList;\n            \n            if (this.deviceSearchQuery && this.deviceSearchQuery.trim()) {  // Check for search input\n                const query = this.deviceSearchQuery.trim().toLowerCase();\n                filtered = filtered.filter(device => {  // Filter devices by name\n                    const deviceName = (device.deviceName || '').toLowerCase();  // Use name for filtering\n                    \n                    return deviceName.includes(query);  // Simple name-based filtering\n                });\n            }\n            \n            if (this.selectedOwnerFilter) {\n                filtered = filtered.filter(device => device.ownerName === this.selectedOwnerFilter);\n            }\n            \n            return filtered;\n        },\n        \n        ownerDevices() {  // Returns devices owned by the selected owner\n            if (!this.selectedOwner) return [];\n            return this.devicesList.filter(device => device.ownerName === this.selectedOwner.name);\n        },\n        \n        canAddDevice() {  // Checks if we can add a new device\n            return this.newDevice.deviceName && this.newDevice.deviceName.trim();  // Ensure name is filled\n        }\n    },\n    \n    methods: {\n        // Owner methods\n        addOwner() {\n            this.attempted = true;\n            \n            if (!this.newOwner.name.trim()) return;  // Ensure name is filled to add owner\n\n            // Send request to add new owner\n            this.send({\n                topic: \"add_owner\",\n                payload: {\n                    name: this.newOwner.name.trim(),\n                    email: this.newOwner.email.trim(),\n                    phone: this.newOwner.phone.trim()\n                }\n            });\n            \n            // Reset new owner fields\n            this.newOwner = { name: '', email: '', phone: '' };\n            this.attempted = false;\n        },\n        \n        editOwner(owner) {\n            this.editingOwner = { ...owner };  // Copy selected owner for editing\n            this.editOwnerDialog = true;\n        },\n        \n        saveOwner() {\n            this.send({\n                topic: \"update_owner\",\n                payload: {\n                    name: this.editingOwner.name,  // Ensure we send the name\n                    email: this.editingOwner.email,\n                    phone: this.editingOwner.phone,\n                    devices: this.owners[this.editingOwner.name].devices || []  // Using name as key\n                }\n            });\n            this.editOwnerDialog = false;\n        },\n        \n        deleteOwner(ownerName) {  // Use name for deletion\n            const owner = this.owners[ownerName];  // Find the owner by name\n            const deviceCount = owner.devices ? owner.devices.length : 0;\n            \n            const message = deviceCount > 0 \n                ? `Owner \"${owner.name}\" has ${deviceCount} devices. Delete anyway?`  // Change to devices\n                : `Delete owner \"${owner.name}\"?`;\n                \n            if (confirm(message)) {\n                this.send({\n                    topic: \"delete_owner\", \n                    payload: {name: ownerName} // Pass the name to delete\n                });\n            }\n        },\n        \n        // Device methods\n       \naddDevice() {  // Adds a new device\n    if (!this.canAddDevice) return;  // Check if device can be added\n    \n    this.errorMessage = '';\n\n    // Construct the binary pins with the new structure\n    const binaryPins = this.newDevice.binaryPins.map(pin => ({\n        label: pin.label,               // Get the label\n        trigger: pin.trigger || 'High', // Default to 'High' if not set\n        alertLevel: pin.alertLevel || 'None' // Default to 'None' if not set\n    }));\n\n    // Construct the analog pins with the new structure\n    const analogPins = this.newDevice.analogPins.map(pin => ({\n        value: pin.value || '',         // Get the value\n        lowThreshold: pin.lowThreshold !== undefined ? pin.lowThreshold : 0, // Default to 0 if not set\n        highThreshold: pin.highThreshold !== undefined ? pin.highThreshold : 100, // Default to 100 if not set\n        alertLevel: pin.alertLevel || 'None' // Default to 'None' if not set\n    }));\n\n    // Send the new device to be added\n    this.send({\n        topic: \"add_device\",  // New message to server to add a device\n        payload: {\n            deviceName: this.newDevice.deviceName.trim(),  // Use name for identification\n            ownerName: this.newDevice.ownerName, // Include owner name\n            binaryPins: binaryPins, // Use the new structure for binary pins\n            analogPins: analogPins // Use the new structure for analog pins\n        }\n    });\n    \n    // Reset new device fields\n    this.newDevice = {\n        deviceName: '',  // Update to match your original casing\n        ownerName: '',   // Reset the owner name\n        binaryPins: Array(8).fill({ label: '', trigger: 'High', alertLevel: 'None' }), // Ensure appropriate structure\n        analogPins: Array(4).fill({ value: '', lowThreshold: 0, highThreshold: 100, alertLevel: 'None' }) // Ensure appropriate structure\n    };\n},\n\neditDevice(device) {  \n    console.log(\"Editing device:\", device); // Log the device being edited\n\n    // Ensure device exists\n    if (!device) {\n        console.error(\"No device found to edit\");\n        return;\n    }\n\n    // Initialization of editingDevice\n    this.editingDevice = {\n        deviceName: device.deviceName, // Set the device name\n        ownerName: device.ownerName,     // Set the owner name\n        // Initialize binary pins with defaults if not present\n        binaryPins: (device.binaryPins && device.binaryPins.length > 0 ? \n            device.binaryPins.map(pin => ({\n                label: pin.label || '',                      // Get pin label\n                trigger: pin.trigger || 'High',              // Default trigger to 'High'\n                alertLevel: pin.alertLevel || 'None'         // Default alert level to 'None'\n            })) : Array(8).fill({ label: '', trigger: 'High', alertLevel: 'None' })), \n        // Initialize analog pins with defaults if not present\n        analogPins: (device.analogPins && device.analogPins.length > 0 ? \n            device.analogPins.map(pin => ({\n                value: pin.value || '',                       // Get pin value or default to empty string\n                lowThreshold: pin.lowThreshold || 0,         // Default low threshold to 0\n                highThreshold: pin.highThreshold || 100,     // Default high threshold to 100\n                alertLevel: pin.alertLevel || 'None'         // Default alert level to 'None'\n            })) : Array(4).fill({ value: '', lowThreshold: 0, highThreshold: 100, alertLevel: 'None' })),\n        lastSeen: device.lastSeen  // Last seen property\n    };\n\n    // Open the edit dialog, set tab and visibility\n    this.editDialog = true; \n    this.editTab = 'binary'; // Set initial view tab\n    this.viewDialog = false; // Ensure that the view dialog is closed\n\n    console.log(\"Current editingDevice state:\", this.editingDevice); // Log the state of editingDevice\n},\n        \n        \n        saveDevice() {  // Save updated device information\n            this.send({\n                topic: \"update_device\",  // New topic for updating devices\n                payload: {\n                    deviceName: this.editingDevice.deviceName,  // Use name for updating\n                    ownerName: this.editingDevice.ownerName, // Include updated owner name\n                    binaryPins: this.editingDevice.binaryPins,\n                    analogPins: this.editingDevice.analogPins,\n                    lastSeen: this.editingDevice.lastSeen\n                }\n            });\n            this.editDialog = false;\n        },\n        \n        deleteDevice(deviceName) {  // Delete a device using its name\n            console.log(\"Trying to delete device:\", deviceName); // Log the device name before deletion\n            if (confirm(`Delete device \"${deviceName}\"?`)) {\n                this.send({\n                    topic: \"delete_device\",  // New message to server to delete the specified devic\n                    payload: {deviceName: deviceName} // Pass the name to delete\n                });\n            }\n        },\n        \n        showOwnerDevices(ownerName) {  // Show devices owned by the selected owner\n            this.selectedOwner = { \n                name: ownerName, \n                ...this.owners[ownerName] \n            };\n            this.ownerDevicesDialog = true;\n        },\n        \n        // Utility methods\n        formatDate(dateStr) {  // Format dates for display\n            return new Date(dateStr).toLocaleString();\n        },\n        \n        clearError() {\n            this.errorMessage = '';  // Clear any error messages\n        },\n        \ngetBinaryPinCount(item) {  // Count non-empty binary pins\n    if (!item.binaryPins) return 0;\n    return item.binaryPins.filter(pin => pin && pin.label && pin.label.trim()).length; // Ensure pin.label exists\n},\n\ngetAnalogPinCount(item) {  // Count non-empty analog pins\n    if (!item.analogPins) return 0;\n    return item.analogPins.filter(pin => pin && typeof pin.value === 'string' && pin.value.trim()).length; // Ensure pin.value is a string\n}\n    },\n    \n    mounted() {\n        this.send({ topic: \"get_owners\" });  // Request owners from the server\n        this.send({ topic: \"get_devices\" });  // Request devices from the server\n    },\n    \nwatch: {\n    msg: {\n        handler(newMsg) {\n                            console.log(\"*** handler received topic: \" + newMsg.topic + \" payload: \" + JSON.stringify(newMsg.payload));\n            if (newMsg && newMsg.topic === \"owners_data\") {\n                this.owners = newMsg.payload || {};  // Set owners data received from the server\n            } else if (newMsg && newMsg.topic === \"devices_data\") {  // Handle devices data\n                this.devices = newMsg.payload || {};  // Set devices data\n            } else if (newMsg && newMsg.topic === \"device_error\") {  // Handle device-related errors\n                this.errorMessage = newMsg.payload.error;\n            } else if (newMsg && newMsg.topic === \"device_added\") {  // Device added successfully\n                // Use name as the key to add the new device\n                this.devices = { ...this.devices, [newMsg.payload.deviceName]: newMsg.payload };\n                this.errorMessage = '';\n                // Refresh the owners list with device association (if it isn't already managed by another mechanism)\n                if (this.owners[newMsg.payload.ownerName]) {\n                    // Add the device to the existing owner's devices\n                    if (!this.owners[newMsg.payload.ownerName].devices.includes(newMsg.payload.name)) {\n                        this.owners[newMsg.payload.ownerName].devices.push(newMsg.payload.name);\n                    }\n                }\n                console.log(\"Device added:\", newMsg.payload.name);\n            } else if (newMsg && newMsg.topic === \"device_updated\") {  // Device updated successfully\n                // Update the device by name\n                this.devices = { ...this.devices, [newMsg.payload.deviceName]: newMsg.payload };\n                console.log(\"Device updated:\", newMsg.payload.name);\n            } else if (newMsg && newMsg.topic === \"device_deleted\") {  // Device deleted successfully\n                const updatedDevices = { ...this.devices };\n                delete updatedDevices[newMsg.payload.deviceName];  // Remove device using name\n                this.devices = updatedDevices;\n                console.log(\"Device deleted:\", newMsg.payload.name);\n            } else if (newMsg && newMsg.topic === \"owner_added\") {\n                this.owners = { ...this.owners, [newMsg.payload.name]: newMsg.payload };  // Add new owner\n            } else if (newMsg && newMsg.topic === \"owner_updated\") {\n                this.owners = { ...this.owners, [newMsg.payload.name]: newMsg.payload };  // Update existing owner\n            } else if (newMsg && newMsg.topic === \"owner_deleted\") {\n                const updatedOwners = { ...this.owners };\n                delete updatedOwners[newMsg.payload.name];  // Remove owner using name\n                this.owners = updatedOwners;\n            }\n        },\n        deep: true\n    }\n}\n}\n</script>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1320,
+        "y": 240,
+        "wires": [
+            [
+                "03b8ce6774a2abb5",
+                "7100665dc8d8ec55"
+            ]
+        ]
+    },
+    {
+        "id": "1dd74ca63fa183e2",
+        "type": "inject",
+        "z": "62f31c6b53afb626",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "add_node",
+        "payload": "{     \"topic\": \"add_node\",     \"payload\": {         \"nodeId\": \"557\",         \"name\": \"Node Name\",         \"ownerId\": \"ownerId\",         \"binaryPins\": [\"pin1\", \"pin2\"],         \"analogPins\": [\"pinA\", \"pinB\"]     } }",
+        "payloadType": "json",
+        "x": 1070,
+        "y": 440,
+        "wires": [
+            [
+                "7100665dc8d8ec55"
+            ]
+        ]
+    },
+    {
+        "id": "526ecc0b4996d3ac",
+        "type": "mqtt in",
+        "z": "bfe4d76a50650ba0",
+        "name": "LoRa messages from MQ",
+        "topic": "#",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "315ea8347fb746b3",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 470,
+        "y": 140,
+        "wires": [
+            [
+                "873542552da0316f",
+                "5ba5b8a6628e04d6"
+            ]
+        ]
+    },
+    {
+        "id": "a55a6868925ad162",
+        "type": "function",
+        "z": "bfe4d76a50650ba0",
+        "name": "Parse LoRa message",
+        "func": "const topic = msg.topic; // Retrieve the topic from the incoming message\nconst payload = msg.payload; // Retrieve the payload containing the necessary data\n\n// Retrieve the devices from global context\nconst devices = global.get(\"devices\") || {};\nconst currentDeviceName = payload.nodeId.toString(); // Use nodeId for identification\nconst currentDevice = devices[currentDeviceName];\n\nnode.log(\"Received message for topic: \" + topic + \" json: \" + JSON.stringify(msg)); // Log the whole message\n\nif (!currentDevice) {\n    node.warn(\"Device not found for nodeId: \" + payload.nodeId);\n    return null; // Stop processing if the device is not found\n}\n\n// Initialize an array to collect alerts\nconst alerts = [];\n\n// Check binary pins using bitwise operations\nconst binaryPinStates = payload.digital; // Assuming msg.payload.digital contains the binary pin byte\nnode.log(\"Binary pin states received: \" + binaryPinStates.toString(2).padStart(currentDevice.binaryPins.length, '0')); // Log binary states in binary format\n\ncurrentDevice.binaryPins.forEach((pin, index) => {\n    // Check if pin label is defined; if not, skip this pin\n    if (!pin.label) {\n        node.log(`Skipping binary pin index: ${index} because pin label is undefined.`);\n        return; // Skip to the next iteration\n    }\n\n    // Get the state of the current binary pin using bitwise AND and shifting\n    const pinState = (binaryPinStates >> index) & 1; // Get the value of the current bit\n    node.log(`Checking binary pin index: ${index}, pin label: ${pin.label}, pin state: ${pinState}`); // Log the current pin evaluation\n\n    // Check for High trigger\n    if (pin.trigger === 'High' && pinState === 1) { // High trigger alert\n        alerts.push({\n            ownerName: currentDevice.ownerName,\n            deviceName: currentDevice.deviceName,\n            pinLabel: pin.label,\n            alertMessage: `Triggered HIGH`,\n            timestamp: payload.time_iso\n        });\n        node.log(`Alert added for binary pin: ${pin.label} HIGH`); // Log alert addition\n    }\n    // Check for Low trigger\n    else if (pin.trigger === 'Low' && pinState === 0) { // Low trigger alert\n        alerts.push({\n            ownerName: currentDevice.ownerName,\n            deviceName: currentDevice.deviceName,\n            pinLabel: pin.label,\n            alertMessage: `Triggered LOW`,\n            timestamp: payload.time_iso\n        });\n        node.log(`Alert added for binary pin: ${pin.label} LOW`); // Log alert addition\n    } else {\n        node.log(`No alert triggered for binary pin ${pin.label}. Expected: ${pin.trigger}, Actual state: ${pinState}`); // Log when no alert is triggered\n    }\n});\n\n// Check analog pins\ncurrentDevice.analogPins.forEach((pin, index) => {\n    // Check if pin label is defined; if not, skip this pin\n    if (!pin.label) {\n        node.log(`Skipping analog pin index: ${index} because pin label is undefined.`);\n        return; // Skip to the next iteration\n    }\n\n    // Assuming msg.payload.analog holds the pin values for the corresponding index\n    if (payload.analog && msg.payload.analog[index] !== undefined) {\n        const analogValue = msg.payload.analog[index];\n        node.log(`Checking analog pin index: ${index}, pin label: ${pin.label}, value: ${analogValue}`); // Log the current analog evaluation\n        if (analogValue < pin.lowThreshold) { // Low threshold alert\n            alerts.push({\n                ownerName: currentDevice.ownerName,\n                deviceName: currentDevice.deviceName,\n                pinLabel: pin.label,\n                alertMessage: `Analog value is LOW: ${analogValue}`,\n                timestamp: payload.time_iso\n            });\n            node.log(`Alert added for analog pin: ${pin.label} LOW threshold`); // Log alert for low threshold\n        } else if (analogValue > pin.highThreshold) { // High threshold alert\n            alerts.push({\n                ownerName: currentDevice.ownerName,\n                deviceName: currentDevice.deviceName,\n                pinLabel: pin.label,\n                alertMessage: `Analog value is HIGH: ${analogValue}`,\n                timestamp: payload.time_iso\n            });\n            node.log(`Alert added for analog pin: ${pin.label} HIGH threshold`); // Log alert for high threshold\n        } else {\n            node.log(`No alert for analog pin ${pin.label}. Value within range: ${analogValue}`); // Log if value is within range\n        }\n    } else {\n        node.log(`Analog pin index ${index} does not exist in payload. Skipping.`); // Log if analog data is missing\n    }\n});\n\n// Send the structured alerts to the topic \"add_alert\"\nif (alerts.length > 0) {\n    alerts.forEach(alert => {\n        node.send({\n            topic: \"add_alert\",\n            payload: alert\n        });\n    });\n    node.log(`Total alerts sent: ${alerts.length}`); // Log total number of alerts sent\n} else {\n    node.log(\"No alerts to send.\"); // Log when no alerts are present\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 420,
+        "wires": [
+            [
+                "245051e60d123ed7",
+                "f01a239f5dcac98e"
+            ]
+        ]
+    },
+    {
+        "id": "245051e60d123ed7",
+        "type": "debug",
+        "z": "bfe4d76a50650ba0",
+        "name": "debug 2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 380,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "3e028f50bd6ceb32",
+        "type": "ui-template",
+        "z": "bfe4d76a50650ba0",
+        "group": "5aa9d9b44198b615",
+        "page": "",
+        "ui": "",
+        "name": "Alert Template",
+        "order": 2,
+        "width": "0",
+        "height": "0",
+        "head": "",
+        "format": "<template>\n  <div style=\"width: 100%; padding: 0; margin: 0;\">\n    <style>\n      /* Set general font size for all elements within the container */\n      .v-container {\n        font-size: 0.75rem;\n        padding: 0; /* Remove unnecessary padding */\n      }\n\n      .v-card {\n        width: 100%; /* Make cards full width */\n        margin-bottom: 16px; /* Add margin for vertical spacing */\n      }\n\n      .v-card-title {\n        font-size: 0.85rem;\n      }\n\n      .v-btn {\n        font-size: 0.7rem;\n        padding: 4px 8px;\n      }\n\n      .v-text-field input {\n        font-size: 0.75rem;\n        padding: 4px;\n      }\n\n      .v-data-table {\n        font-size: 0.75rem;\n        min-width: 100%; /* Ensure the data table uses the full width */\n      }\n\n      /* Prevent text from wrapping in table headers and cells */\n      .v-data-table th,\n      .v-data-table td {\n        white-space: nowrap; /* Prevent text from wrapping */\n      }\n\n      .nr-dashboard-cardpanel,\n      .nr-dashboard-template {\n        width: 100% !important;\n      }\n    </style>\n\n    <v-container fluid class=\"pa-6\" style=\"max-width: 1200px;\"> <!-- Adjust max-width -->\n      <h2 class=\"text-h4 d-flex align-center mb-4\">\n        <v-icon class=\"mr-2\">mdi-alarm</v-icon>\n        Alerts Dashboard\n      </h2>\n\n      <v-card>\n        <v-card-title>\n          <v-icon class=\"mr-2\">mdi-magnify</v-icon>\n          Filter Alerts\n        </v-card-title>\n        <v-card-text>\n          <v-text-field\n            v-model=\"alertSearchQuery\"\n            label=\"Search alerts...\"\n            prepend-inner-icon=\"mdi-magnify\"\n            density=\"compact\"\n            clearable\n          ></v-text-field>\n        </v-card-text>\n      </v-card>\n\n      <v-card>\n        <v-card-title>Select User to Clear Alerts</v-card-title>\n        <v-card-text>\n          <v-select\n            v-model=\"selectedOwner\"\n            :items=\"ownerOptions\"\n            item-text=\"title\"\n            item-value=\"value\"\n            label=\"Choose Owner\"\n            clearable\n          ></v-select>\n          <v-btn @click=\"clearAllAlerts\" color=\"red\" class=\"mt-4\">Clear All Alerts</v-btn>\n        </v-card-text>\n      </v-card>\n\n      <v-card>\n        <v-card-title>\n          Current Alerts ({{ filteredAlertsList.length }} of {{ alerts.length }})\n        </v-card-title>\n        <v-data-table\n          :headers=\"alertHeaders\"\n          :items=\"Array.isArray(filteredAlertsList) ? filteredAlertsList : []\"\n          class=\"elevation-0\"\n          density=\"compact\"\n          style=\"overflow-x: auto;\"\n        >\n          <template v-slot:item.ownerName=\"{ item }\">\n            <v-chip size=\"small\">{{ item.ownerName }}</v-chip>\n          </template>\n          <template v-slot:item.deviceName=\"{ item }\">\n            <v-chip size=\"small\">{{ item.deviceName }}</v-chip>\n          </template>\n          <template v-slot:item.pinLabel=\"{ item }\">\n            <v-chip size=\"small\">{{ item.pinLabel }}</v-chip>\n          </template>\n          <template v-slot:item.alertMessage=\"{ item }\">\n            <span>{{ item.alertMessage }}</span>\n          </template>\n          <template v-slot:item.timestamp=\"{ item }\">\n            <span>{{ formatDate(item.timestamp) }}</span>\n          </template>\n          <template v-slot:item.actions=\"{ item }\">\n            <v-btn icon=\"mdi-pencil\" size=\"small\" @click=\"editAlert(item)\"></v-btn>\n            <v-btn icon=\"mdi-delete\" size=\"small\" color=\"error\" @click=\"clear(item)\">Clear</v-btn>\n          </template>\n        </v-data-table>\n      </v-card>\n    </v-container>\n\n    <!-- Additional dialogs can be included below -->\n    <v-dialog v-model=\"editAlertDialog\" max-width=\"400px\">\n      <v-card>\n        <v-card-title>Edit Alert</v-card-title>\n        <v-card-text>\n          <v-text-field v-model=\"editingAlert.alertMessage\" label=\"Alert Message\"></v-text-field>\n          <v-autocomplete\n            v-model=\"editingAlert.ownerName\"\n            :items=\"ownerOptions\"\n            label=\"Owner\"\n            variant=\"outlined\"\n            clearable\n            density=\"compact\"\n          ></v-autocomplete>\n          <v-autocomplete\n            v-model=\"editingAlert.deviceName\"\n            :items=\"deviceOptions\"\n            label=\"Device\"\n            variant=\"outlined\"\n            clearable\n            density=\"compact\"\n          ></v-autocomplete>\n        </v-card-text>\n        <v-card-actions>\n          <v-spacer></v-spacer>\n          <v-btn @click=\"editAlertDialog = false\">Cancel</v-btn>\n          <v-btn @click=\"saveAlert(editingAlert)\" color=\"primary\">Save</v-btn>\n        </v-card-actions>\n      </v-card>\n    </v-dialog>\n  </div>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      alertSearchQuery: '',\n      alerts: [],\n      editingAlert: {},\n      editAlertDialog: false,\n      selectedOwner: null, // Track the selected owner for clearing alerts\n      ownerOptions: [],\n      deviceOptions: []\n    };\n  },\n  computed: {\n    filteredAlertsList() {\n      if (!Array.isArray(this.alerts)) return []; // Ensure alerts is an array\n      const filtered = this.alertSearchQuery\n        ? this.alerts.filter(alert =>\n            alert.alertMessage.toLowerCase().includes(this.alertSearchQuery.toLowerCase()) ||\n            alert.ownerName.toLowerCase().includes(this.alertSearchQuery.toLowerCase()) ||\n            alert.deviceName.toLowerCase().includes(this.alertSearchQuery.toLowerCase()) ||\n            (alert.pinLabel && alert.pinLabel.toLowerCase().includes(this.alertSearchQuery.toLowerCase()))\n          )\n        : this.alerts;\n\n      // Sort the filtered alerts by timestamp in descending order\n      return filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // Most recent first\n    },\n    alertHeaders() {\n      return [\n        { text: 'Owner', value: 'ownerName', sortable: false, width: '150px' }, // Set width for each column\n        { text: 'Device', value: 'deviceName', sortable: false, width: '150px' },\n        { text: 'Pin Name', value: 'pinLabel', sortable: false, width: '120px' },\n        { text: 'Alert Message', value: 'alertMessage', sortable: false, width: '200px' },\n        { text: 'Timestamp', value: 'timestamp', sortable: false, width: '150px' },\n        { text: 'Actions', value: 'actions', sortable: false, width: '100px' }\n      ];\n    }\n  },\n  methods: {\n    formatDate(dateStr) {\n      const date = new Date(dateStr);\n      return !isNaN(date.getTime()) ? date.toLocaleString() : 'Invalid Date';\n    },\n    editAlert(alert) {\n      this.editingAlert = { ...alert };\n      this.editAlertDialog = true;\n    },\n    clear(alert) {\n      if (confirm(`Clear alert \"${alert.alertMessage}\"?`)) {\n        this.send({\n          topic: \"clear_alert\",\n          payload: { alertId: alert.alertId }\n        });\n      }\n    },\n    clearAllAlerts() {\n      // Confirm before clearing all alerts for the selected owner\n      if (!this.selectedOwner) {\n        alert(\"Please select an owner to clear alerts.\");\n        return;\n      }\n\n      // Log selected owner before sending\n      console.log(\"Clearing alerts for owner:\", this.selectedOwner);\n\n      // Send request to the backend to clear all alerts for the selected owner\n      if (confirm(`Are you sure you want to clear all alerts for ${this.selectedOwner}?`)) {\n        this.send({\n          topic: \"clear_all_alerts\",\n          payload: { ownerName: this.selectedOwner } // Ensure ownerName is included\n        });\n      }\n    },\n    saveAlert(updatedAlert) {\n      this.send({\n        topic: \"update_alert\",\n        payload: updatedAlert\n      });\n      this.editAlertDialog = false;\n    }\n  },\n  mounted() {\n    this.send({ topic: \"get_alerts\" });\n    // Fetch owners to populate the ownerOptions\n    this.send({ topic: \"get_owners\" });\n  },\n  watch: {\n    selectedOwner(newVal) {\n      console.log(\"Selected Owner:\", newVal); // Log the entire selected object to see its structure\n    },\n    msg: {\n      handler(newMsg) {\n        if (newMsg && newMsg.topic === \"alerts_data\") {\n          console.log(\"Received alerts data:\", newMsg.payload);\n          this.alerts = Array.isArray(newMsg.payload)\n            ? newMsg.payload.map(alert => ({\n                ...alert,\n                pinLabel: alert.pinLabel || \"\" // Ensure pinLabel is included and defaults to empty\n              }))\n            : [];\n        } else if (newMsg.topic === \"alert_updated\") {\n          const updatedAlert = newMsg.payload;\n          const index = this.alerts.findIndex(alert => alert.alertId === updatedAlert.alertId);\n          if (index !== -1) {\n            this.$set(this.alerts, index, { ...updatedAlert, pinLabel: updatedAlert.pinLabel || \"\" });\n          }\n        } else if (newMsg.topic === \"alert_error\") {\n          alert(newMsg.payload.error);\n        } else if (newMsg.topic === \"owners_data\") {\n          this.ownerOptions = newMsg.payload.map(owner => ({\n            title: owner.name,\n            value: owner.name\n          }));\n          console.log(\"Owner Options:\", this.ownerOptions); // Log the owners\n        } else if (newMsg.topic === \"clear_alerts_response\") {\n          // Handle response after clearing alerts if you send one\n          const clearedAlerts = newMsg.payload; // Assuming you return the remaining alerts here\n          this.alerts = clearedAlerts; // Update the alerts\n        }\n      },\n      deep: true\n    }\n  }\n};\n</script>",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 900,
+        "y": 720,
+        "wires": [
+            [
+                "f01a239f5dcac98e"
+            ]
+        ]
+    },
+    {
+        "id": "8cf7b8cedf39cb2c",
+        "type": "inject",
+        "z": "bfe4d76a50650ba0",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "add_alert",
+        "payload": "{     \"ownerName\": \"Bob\",     \"deviceName\": \"Sensor C\",     \"alertMessage\": \"Motion detected\",     \"pinLabel\": \"Living Room\",    \"timestamp\": \"2025-06-09T12:05:00Z\" }",
+        "payloadType": "json",
+        "x": 490,
+        "y": 780,
+        "wires": [
+            [
+                "f01a239f5dcac98e"
+            ]
+        ]
+    },
+    {
+        "id": "f01a239f5dcac98e",
+        "type": "function",
+        "z": "bfe4d76a50650ba0",
+        "name": "Alert Admin",
+        "func": "// Retrieve the topic from the incoming message\nconst topic = msg.topic;\nconst payload = msg.payload;\n\nconst noLogTopics = [\n    \"alerts_data\",\n    \"alert_error\"\n];\n\n// Log incoming messages unless they're in the no-log list\nif (!noLogTopics.includes(topic)) {\n    node.log(\"Received message for topic: \" + topic + \" json: \" + JSON.stringify(msg));\n}\n\nswitch (topic) {\n    case \"get_alerts\":\n        const alerts = global.get(\"alerts\") || {};\n        msg.payload = Object.values(alerts); // This ensures the payload is an array\n        msg.topic = \"alerts_data\"; // Change the topic for the response\n        node.log(\"Fetched alerts: \" + JSON.stringify(msg.payload)); // Log fetched alerts\n        return msg; // Return the message\n\n    case \"add_alert\":\n        const allAlerts = global.get(\"alerts\") || {};\n        node.log(\"Incoming payload for add_alert: \" + JSON.stringify(payload));\n\n        // Check if the required alert fields are present in the payload\n        if (!payload || !payload.alertMessage || !payload.ownerName || !payload.pinLabel) {\n            node.log(\"Alert details are missing. Cannot add alert.\");\n            return { topic: \"alert_error\", payload: { error: \"Alert details are required.\" } };\n        }\n\n        const alertId = payload.alertId || Date.now().toString(); // Use timestamp for ID if not provided\n        allAlerts[alertId] = {\n            alertId,\n            alertMessage: payload.alertMessage,\n            ownerName: payload.ownerName,\n            deviceName: payload.deviceName || \"\",\n            pinLabel: payload.pinLabel || \"\",\n            timestamp: payload.timestamp || new Date().toISOString()\n        };\n\n        global.set(\"alerts\", allAlerts); // Save updated alerts to global context\n        node.log(\"Added alert: \" + JSON.stringify(allAlerts[alertId]));\n\n        msg.payload = Object.values(allAlerts); // Return the updated list of alerts\n        msg.topic = \"alerts_data\";\n        node.log(\"Outgoing payload for add_alert on topic alerts_data: \" + JSON.stringify(msg.payload));\n        return msg;\n\n    case \"clear_alert\":\n        const alertsToClear = global.get(\"alerts\") || {};\n        if (!payload.alertId) {\n            node.log(\"Alert ID is missing. Cannot clear alert.\");\n            return { topic: \"alert_error\", payload: { error: \"Alert ID is required.\" } };\n        }\n\n        if (alertsToClear[payload.alertId]) {\n            delete alertsToClear[payload.alertId];\n            global.set(\"alerts\", alertsToClear);\n            node.log(\"Cleared alert: \" + payload.alertId);\n            msg.payload = Object.values(alertsToClear);\n            msg.topic = \"alerts_data\";\n        } else {\n            node.log(\"Alert ID not found: \" + payload.alertId);\n            return { topic: \"alert_error\", payload: { error: \"Alert ID not found.\" } };\n        }\n        return msg;\n\n    case \"update_alert\":\n        const alertsToUpdate = global.get(\"alerts\") || {};\n        node.log(\"Incoming payload for update: \" + JSON.stringify(payload));\n        if (alertsToUpdate[payload.alertId]) {\n            alertsToUpdate[payload.alertId] = {\n                ...alertsToUpdate[payload.alertId],\n                ...payload,\n                updated: new Date().toISOString()\n            };\n            global.set(\"alerts\", alertsToUpdate);\n            node.log(\"Updated alert: \" + JSON.stringify(alertsToUpdate[payload.alertId]));\n            msg.payload = Object.values(alertsToUpdate);\n            msg.topic = \"alerts_data\";\n        } else {\n            node.log(\"Alert ID not found: \" + payload.alertId);\n            return { topic: \"alert_error\", payload: { error: \"Alert ID not found.\" } };\n        }\n        return msg;\n\n    case \"delete_alert\":\n        const alertsToDelete = global.get(\"alerts\") || {};\n        if (!payload.alertId) {\n            node.log(\"Alert ID is missing. Cannot delete alert.\");\n            return { topic: \"alert_error\", payload: { error: \"Alert ID is required.\" } };\n        }\n\n        if (alertsToDelete[payload.alertId]) {\n            delete alertsToDelete[payload.alertId];\n            global.set(\"alerts\", alertsToDelete);\n            node.log(\"Deleted alert: \" + payload.alertId);\n            msg.payload = Object.values(alertsToDelete);\n            msg.topic = \"alerts_data\";\n        } else {\n            node.log(\"Alert ID not found.\");\n            return { topic: \"alert_error\", payload: { error: \"Alert ID not found.\" } };\n        }\n        return msg;\n\n    case \"clear_all_alerts\":\n        const ownerNameToClear = payload.ownerName;\n        const alertsToClearAll = global.get(\"alerts\") || {};\n\n        // Log the current state of alerts before clearing\n        node.log(\"Current alerts before clearing for owner \" + ownerNameToClear + \": \" + JSON.stringify(alertsToClearAll));\n\n        // Create an object to store alerts that will remain after clearing\n        const remainingAlerts = {};\n\n        // Iterate through all alerts and remove alerts for the specified owner\n        for (const alertId in alertsToClearAll) {\n            if (alertsToClearAll[alertId].ownerName !== ownerNameToClear) {\n                remainingAlerts[alertId] = alertsToClearAll[alertId]; // Preserve this alert\n            } else {\n                node.log(`Clearing alert: ${alertId} for owner: ${ownerNameToClear}`);\n            }\n        }\n\n        // Log the alerts that will be cleared and those that will remain\n        node.log(\"Alerts to be cleared: \" + JSON.stringify(Object.keys(alertsToClearAll).filter(alertId => alertsToClearAll[alertId].ownerName === ownerNameToClear)));\n        node.log(\"Remaining alerts after clearing: \" + JSON.stringify(remainingAlerts));\n\n        // Update global alerts to only include remaining alerts\n        global.set(\"alerts\", remainingAlerts);\n\n        // Return the updated alerts list back to the frontend\n        msg.payload = Object.values(remainingAlerts); // Convert remaining alerts to an array\n        msg.topic = \"alerts_data\"; // Change topic for the response\n        return msg;\n\n    case \"get_owners\":\n        const owners = global.get(\"owners\") || {};\n        const ownerList = Object.values(owners); // Convert the owners object to an array\n        msg.payload = ownerList.map(owner => ({\n            name: owner.name, // Map the owner structure to return meaningful data\n        }));\n        msg.topic = \"owners_data\"; // Set the topic for the response\n        return msg; // Return the message\n\n    default:\n        node.warn(\"Unrecognized topic: \" + topic);\n        return null;\n}\n\n// Return the message to the caller (redundant since every case returns earlier)\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 920,
+        "wires": [
+            [
+                "3e028f50bd6ceb32"
+            ]
+        ]
+    },
+    {
+        "id": "fadbee19fd967823",
+        "type": "inject",
+        "z": "bfe4d76a50650ba0",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"type\":\"sensor\",\"nodeId\":2697689064,\"counter\":10971,\"battery\":0,\"voltage\":12,\"uptime\":333493,\"analog\":[0,785,873,60],\"digital\":3,\"timestamp_ms\":235403458,\"timestamp\":1749453362,\"time\":\"2025-06-09 17:16:02\",\"time_iso\":\"2025-06-09T17:16:02+1000\",\"GW\":\"WiFi LoRa 32 V3.2\",\"GW_ip\":\"192.168.20.101\",\"GW_mac\":\"30:ED:A0:CB:0E:8C\"}",
+        "payloadType": "json",
+        "x": 450,
+        "y": 340,
+        "wires": [
+            [
+                "a55a6868925ad162",
+                "cfc86772267cc31d"
+            ]
+        ]
+    },
+    {
+        "id": "873542552da0316f",
+        "type": "debug",
+        "z": "bfe4d76a50650ba0",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "cfc86772267cc31d",
+        "type": "debug",
+        "z": "bfe4d76a50650ba0",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "256c9d375e23ce1a",
+        "type": "ui-switch",
+        "z": "bfe4d76a50650ba0",
+        "name": "MQTTonoff",
+        "label": "MQTT on/off",
+        "group": "5aa9d9b44198b615",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": false,
+        "topic": "mqtt",
+        "topicType": "str",
+        "style": "",
+        "className": "",
+        "layout": "row-left",
+        "clickableArea": "switch",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "x": 290,
+        "y": 220,
+        "wires": [
+            [
+                "989a0bbb3612d11c",
+                "0ebc69d9930da2be"
+            ]
+        ]
+    },
+    {
+        "id": "5ba5b8a6628e04d6",
+        "type": "switch",
+        "z": "bfe4d76a50650ba0",
+        "name": "mqtt flow control",
+        "property": "enable",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 630,
+        "y": 240,
+        "wires": [
+            [
+                "a55a6868925ad162"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "989a0bbb3612d11c",
+        "type": "change",
+        "z": "bfe4d76a50650ba0",
+        "name": "Flow Enabler",
+        "rules": [
+            {
+                "t": "set",
+                "p": "enable",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 290,
+        "y": 300,
+        "wires": [
+            [
+                "f21e9bcafa67138d"
+            ]
+        ]
+    },
+    {
+        "id": "0ebc69d9930da2be",
+        "type": "debug",
+        "z": "bfe4d76a50650ba0",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 440,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "f21e9bcafa67138d",
+        "type": "debug",
+        "z": "bfe4d76a50650ba0",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "$flowContext(\"enable\")",
+        "targetType": "jsonata",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "10e107042b67a65d",
+        "type": "ui-template",
+        "z": "e8a3445017fb5db9",
+        "group": "2aac87beefa6189a",
+        "page": "",
+        "ui": "",
+        "name": "System Tasks",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <div style=\"width: 100%; padding: 0;\">\n    <style>\n      .v-container {\n        font-size: 0.85rem;\n        max-width: 100%;\n      }\n\n      .v-card-title {\n        font-size: 1rem;\n      }\n\n      .v-btn {\n        font-size: 0.8rem;\n      }\n    </style>\n\n    <v-container fluid class=\"pa-6\">\n      <v-card class=\"mb-6\">\n        <v-card-title>\n          <h2>Clear Global Data</h2>\n        </v-card-title>\n        <v-card-text>\n          <v-btn color=\"error\" @click=\"openConfirmationDialog\">Clear All Global Data</v-btn>\n\n          <!-- Confirmation Dialog -->\n          <v-dialog v-model=\"clearConfirmDialog\" max-width=\"500px\">\n            <v-card>\n              <v-card-title class=\"text-h5\">Confirm Action</v-card-title>\n              <v-card-text>\n                Are you sure you want to clear all global data? This action cannot be undone.\n              </v-card-text>\n              <v-card-actions>\n                <v-spacer></v-spacer>\n                <v-btn @click=\"clearConfirmDialog = false\">Cancel</v-btn>\n                <v-btn color=\"red\" @click=\"confirmClearGlobalData\">Clear Data</v-btn>\n              </v-card-actions>\n            </v-card>\n          </v-dialog>\n        </v-card-text>\n      </v-card>\n    </v-container>\n  </div>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      clearConfirmDialog: false, // Controls visibility of the confirmation dialog\n    };\n  },\n  methods: {\n    // Opens the confirmation dialog\n    openConfirmationDialog() {\n      this.clearConfirmDialog = true;\n    },\n\n    // Confirms the action to clear all global data\n    confirmClearGlobalData() {\n      // Send a message to Node-RED to clear all global data\n      this.send({\n        topic: \"clear_global_data\",\n        payload: {}, // Add any necessary payload if needed\n      });\n\n      // Close the dialog after action\n      this.clearConfirmDialog = false;\n\n      // Optionally notify user of action initiation\n      this.$notify({\n        title: \"Info\",\n        text: \"Clearing global data...\",\n        type: \"info\",\n      });\n    },\n    \n    // Handle response from Node-RED after clearing data\n    handleDatabaseClearFeedback(msg) {\n      if (msg.topic === \"global_data_cleared\" && msg.payload.success) {\n        this.$notify({\n          title: \"Success\",\n          text: \"Global data cleared successfully!\",\n          type: \"success\",\n        });\n      } else if (msg.topic === \"database_clear_error\") {\n        this.$notify({\n          title: \"Error\",\n          text: msg.payload.error || \"Failed to clear global data.\",\n          type: \"error\",\n        });\n      }\n    },\n\n  },\n};\n</script>",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 440,
+        "y": 160,
+        "wires": [
+            [
+                "a5b4d9fb1e9a6feb"
+            ]
+        ]
+    },
+    {
+        "id": "a5b4d9fb1e9a6feb",
+        "type": "function",
+        "z": "e8a3445017fb5db9",
+        "name": "System Functions",
+        "func": "// Check that the incoming message is for clearing global data\nif (msg.topic === \"clear_global_data\") {\n    // Clear specified global variables\n    global.set(\"owners\", {});  // Reset owners to an empty array\n    global.set(\"devices\", {}); // Reset devices to an empty array\n    global.set(\"alerts\", {});  // Reset alerts to an empty array\n\n    // Log the action in Node-RED's debug console\n    node.log(\"Global variables cleared: owners, devices, alerts.\");\n\n    // Return a message to indicate that action has been performed\n    return { topic: \"global_data_cleared\", payload: { success: true } };\n} else {\n    // Pass through other messages\n    return msg; // Forward other messages as they are\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 420,
+        "wires": [
+            [
+                "10e107042b67a65d"
+            ]
+        ]
+    }
+]
