@@ -536,7 +536,7 @@
         "id": "256c9d375e23ce1a",
         "type": "ui-switch",
         "z": "bfe4d76a50650ba0",
-        "name": "MQTTonoff",
+        "name": "MQTT OFF/ON",
         "label": "MQTT on/off",
         "group": "5aa9d9b44198b615",
         "order": 1,
@@ -558,7 +558,7 @@
         "offvalueType": "bool",
         "officon": "",
         "offcolor": "",
-        "x": 290,
+        "x": 300,
         "y": 220,
         "wires": [
             [
