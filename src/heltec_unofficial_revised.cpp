@@ -1,6 +1,7 @@
 /**  
  * @file heltec_unofficial_revised.cpp  
  * @brief Implementation file for the Heltec ESP32 LoRa library.  
+ * See header file for description and credits
  */  
 
 #include "heltec_unofficial_revised.h"  

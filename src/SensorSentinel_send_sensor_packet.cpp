@@ -63,12 +63,14 @@ void loop() {
     sendSensorPacket();
     lastSensorSendTime = millis();
   }
-  
-  // Check if it's time to send a GNSS packet
-  if (millis() - lastGnssSendTime >= LORA_PUB_GNSS_INTERVAL) {
-    sendGnssPacket();
-    lastGnssSendTime = millis();
-  }
+ 
+  #ifdef GNSS  
+    // Check Vif it's time to send a GNSS packet
+    if (millis() - lastGnssSendTime >= LORA_PUB_GNSS_INTERVAL) {
+      sendGnssPacket();
+      lastGnssSendTime = millis();
+    }
+  #endif
   
   // Use heltec_delay to ensure power button functionality works
   heltec_delay(10);
@@ -110,10 +112,10 @@ void sendSensorPacket() {
   }
   
   // Turn off LED
-  SensorSentinel_led(0);
+  heltec_led(0);
   
   // Update display
-  SensorSentinel_display_update();
+  heltec_display_update();
   
   // Print detailed packet info to Serial
   SensorSentinel_print_packet_info(&packet, false);
@@ -167,7 +169,7 @@ void sendGnssPacket() {
   heltec_led(0);
   
   // Update display
-  SensorSentinel_display_update();
+  heltec_display_update();
   
   // Print detailed packet info to Serial
   SensorSentinel_print_packet_info(&packet, false);
