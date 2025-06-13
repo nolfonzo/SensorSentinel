@@ -1,2 +1,4 @@
+.flows*
+.config*
 nodered.log
-node_modules/
+context/

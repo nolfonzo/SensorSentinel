@@ -1,7 +1,0 @@
-{
-    "projects": {
-        "Sensor_Network": {
-            "credentialSecret": false
-        }
-    }
-}
