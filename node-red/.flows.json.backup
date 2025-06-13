@@ -537,7 +537,11 @@
         "type": "ui-switch",
         "z": "bfe4d76a50650ba0",
         "name": "MQTT OFF/ON",
+<<<<<<< HEAD
         "label": "MQTT OFF/ON",
+=======
+        "label": "MQTT on/off",
+>>>>>>> c53fa3d80f0c671782aa002da6eb6d8ec1e7b9a6
         "group": "5aa9d9b44198b615",
         "order": 1,
         "width": 0,

@@ -14,7 +14,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/05-junction.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/05-junction.js"
             },
             "inject": {
                 "name": "inject",
@@ -25,7 +25,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/20-inject.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/20-inject.js"
             },
             "debug": {
                 "name": "debug",
@@ -36,7 +36,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/21-debug.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/21-debug.js"
             },
             "complete": {
                 "name": "complete",
@@ -47,7 +47,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/24-complete.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/24-complete.js"
             },
             "catch": {
                 "name": "catch",
@@ -58,7 +58,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/25-catch.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/25-catch.js"
             },
             "status": {
                 "name": "status",
@@ -69,7 +69,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/25-status.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/25-status.js"
             },
             "link": {
                 "name": "link",
@@ -82,7 +82,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/60-link.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/60-link.js"
             },
             "comment": {
                 "name": "comment",
@@ -93,7 +93,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/90-comment.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/90-comment.js"
             },
             "global-config": {
                 "name": "global-config",
@@ -104,7 +104,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/91-global-config.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/91-global-config.js"
             },
             "unknown": {
                 "name": "unknown",
@@ -115,7 +115,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/98-unknown.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/common/98-unknown.js"
             },
             "function": {
                 "name": "function",
@@ -126,7 +126,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/10-function.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/10-function.js"
             },
             "switch": {
                 "name": "switch",
@@ -137,7 +137,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/10-switch.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/10-switch.js"
             },
             "change": {
                 "name": "change",
@@ -148,7 +148,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/15-change.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/15-change.js"
             },
             "range": {
                 "name": "range",
@@ -159,7 +159,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/16-range.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/16-range.js"
             },
             "template": {
                 "name": "template",
@@ -170,7 +170,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/80-template.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/80-template.js"
             },
             "delay": {
                 "name": "delay",
@@ -181,7 +181,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/89-delay.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/89-delay.js"
             },
             "trigger": {
                 "name": "trigger",
@@ -192,7 +192,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/89-trigger.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/89-trigger.js"
             },
             "exec": {
                 "name": "exec",
@@ -203,7 +203,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/90-exec.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/90-exec.js"
             },
             "rbe": {
                 "name": "rbe",
@@ -214,7 +214,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/rbe.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/function/rbe.js"
             },
             "tls": {
                 "name": "tls",
@@ -225,7 +225,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/05-tls.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/05-tls.js"
             },
             "httpproxy": {
                 "name": "httpproxy",
@@ -236,7 +236,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/06-httpproxy.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/06-httpproxy.js"
             },
             "mqtt": {
                 "name": "mqtt",
@@ -249,7 +249,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/10-mqtt.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/10-mqtt.js"
             },
             "httpin": {
                 "name": "httpin",
@@ -261,7 +261,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/21-httpin.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/21-httpin.js"
             },
             "httprequest": {
                 "name": "httprequest",
@@ -272,7 +272,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/21-httprequest.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/21-httprequest.js"
             },
             "websocket": {
                 "name": "websocket",
@@ -286,7 +286,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/22-websocket.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/22-websocket.js"
             },
             "tcpin": {
                 "name": "tcpin",
@@ -299,7 +299,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/31-tcpin.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/31-tcpin.js"
             },
             "udp": {
                 "name": "udp",
@@ -311,7 +311,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/32-udp.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/network/32-udp.js"
             },
             "CSV": {
                 "name": "CSV",
@@ -322,7 +322,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/parsers/70-CSV.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/parsers/70-CSV.js"
             },
             "HTML": {
                 "name": "HTML",
@@ -333,7 +333,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/parsers/70-HTML.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/parsers/70-HTML.js"
             },
             "JSON": {
                 "name": "JSON",
@@ -344,7 +344,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/parsers/70-JSON.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/parsers/70-JSON.js"
             },
             "XML": {
                 "name": "XML",
@@ -355,7 +355,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/parsers/70-XML.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/parsers/70-XML.js"
             },
             "YAML": {
                 "name": "YAML",
@@ -366,7 +366,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/parsers/70-YAML.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/parsers/70-YAML.js"
             },
             "split": {
                 "name": "split",
@@ -378,7 +378,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/sequence/17-split.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/sequence/17-split.js"
             },
             "sort": {
                 "name": "sort",
@@ -389,7 +389,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/sequence/18-sort.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/sequence/18-sort.js"
             },
             "batch": {
                 "name": "batch",
@@ -400,7 +400,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/sequence/19-batch.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/sequence/19-batch.js"
             },
             "file": {
                 "name": "file",
@@ -412,7 +412,7 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/storage/10-file.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/storage/10-file.js"
             },
             "watch": {
                 "name": "watch",
@@ -423,7 +423,301 @@
                 "local": false,
                 "user": false,
                 "module": "node-red",
-                "file": "/usr/lib/node_modules/node-red/node_modules/@node-red/nodes/core/storage/23-watch.js"
+                "file": "/opt/homebrew/lib/node_modules/node-red/node_modules/@node-red/nodes/core/storage/23-watch.js"
+            }
+        }
+    },
+    "@flowfuse/node-red-dashboard": {
+        "name": "@flowfuse/node-red-dashboard",
+        "version": "1.24.2",
+        "local": true,
+        "user": true,
+        "nodes": {
+            "ui-base": {
+                "name": "ui-base",
+                "types": [
+                    "ui-base"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/config/ui_base.js"
+            },
+            "ui-page": {
+                "name": "ui-page",
+                "types": [
+                    "ui-page"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/config/ui_page.js"
+            },
+            "ui-link": {
+                "name": "ui-link",
+                "types": [
+                    "ui-link"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/config/ui_link.js"
+            },
+            "ui-group": {
+                "name": "ui-group",
+                "types": [
+                    "ui-group"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/config/ui_group.js"
+            },
+            "ui-theme": {
+                "name": "ui-theme",
+                "types": [
+                    "ui-theme"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/config/ui_theme.js"
+            },
+            "ui-form": {
+                "name": "ui-form",
+                "types": [
+                    "ui-form"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_form.js"
+            },
+            "ui-text-input": {
+                "name": "ui-text-input",
+                "types": [
+                    "ui-text-input"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_text_input.js"
+            },
+            "ui-number-input": {
+                "name": "ui-number-input",
+                "types": [
+                    "ui-number-input"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_number_input.js"
+            },
+            "ui-file-input": {
+                "name": "ui-file-input",
+                "types": [
+                    "ui-file-input"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_file_input.js"
+            },
+            "ui-button": {
+                "name": "ui-button",
+                "types": [
+                    "ui-button"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_button.js"
+            },
+            "ui-button-group": {
+                "name": "ui-button-group",
+                "types": [
+                    "ui-button-group"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_button_group.js"
+            },
+            "ui-dropdown": {
+                "name": "ui-dropdown",
+                "types": [
+                    "ui-dropdown"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_dropdown.js"
+            },
+            "ui-radio-group": {
+                "name": "ui-radio-group",
+                "types": [
+                    "ui-radio-group"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_radio_group.js"
+            },
+            "ui-slider": {
+                "name": "ui-slider",
+                "types": [
+                    "ui-slider"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_slider.js"
+            },
+            "ui-spacer": {
+                "name": "ui-spacer",
+                "types": [
+                    "ui-spacer"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_spacer.js"
+            },
+            "ui-switch": {
+                "name": "ui-switch",
+                "types": [
+                    "ui-switch"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_switch.js"
+            },
+            "ui-text": {
+                "name": "ui-text",
+                "types": [
+                    "ui-text"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_text.js"
+            },
+            "ui-table": {
+                "name": "ui-table",
+                "types": [
+                    "ui-table"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_table.js"
+            },
+            "ui-chart": {
+                "name": "ui-chart",
+                "types": [
+                    "ui-chart"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_chart.js"
+            },
+            "ui-gauge": {
+                "name": "ui-gauge",
+                "types": [
+                    "ui-gauge"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_gauge.js"
+            },
+            "ui-notification": {
+                "name": "ui-notification",
+                "types": [
+                    "ui-notification"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_notification.js"
+            },
+            "ui-audio": {
+                "name": "ui-audio",
+                "types": [
+                    "ui-audio"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_audio.js"
+            },
+            "ui-markdown": {
+                "name": "ui-markdown",
+                "types": [
+                    "ui-markdown"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_markdown.js"
+            },
+            "ui-template": {
+                "name": "ui-template",
+                "types": [
+                    "ui-template"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_template.js"
+            },
+            "ui-event": {
+                "name": "ui-event",
+                "types": [
+                    "ui-event"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_event.js"
+            },
+            "ui-control": {
+                "name": "ui-control",
+                "types": [
+                    "ui-control"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@flowfuse/node-red-dashboard",
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_control.js"
             }
         }
     }
