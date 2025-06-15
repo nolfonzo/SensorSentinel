@@ -56,8 +56,8 @@ void setup() {
   } else {
     both.println("Subscribe failed!");
   }
-  delay(2000);
   heltec_display_update();
+  delay(2000);
    
   // Let the helper libraries handle WiFi and MQTT connection
   SensorSentinel_wifi_begin();
@@ -97,7 +97,7 @@ void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr)
 
    // Clear display for output
   heltec_clear_display();
-  both.println("\nPacket Received!"); 
+  Serial.println("\nPacket Received!"); 
 
   // Check packet size
   if (length > MAX_LORA_PACKET_SIZE) {
@@ -144,8 +144,10 @@ void onBinaryPacketReceived(uint8_t* data, size_t length, float rssi, float snr)
       uint32_t messageCounter = packetJson["counter"];
       
       // Display the extracted information
-      both.printf("Type: %s\n", packetMessageType.c_str());
+      both.printf("Received Type: %s\n", packetMessageType.c_str());
       both.printf("Msg #: %u\n", messageCounter);
+      both.printf("NodeID: %u\n", packetJson["nodeId"].as<uint32_t>());
+
     } else {
       // JSON conversion failed for some reason - this is unexpected!
       both.println("ERROR: JSON conv fail!");

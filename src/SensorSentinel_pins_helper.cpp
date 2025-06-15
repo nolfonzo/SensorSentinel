@@ -3,7 +3,8 @@
  * @brief Implementation of pin-related functions for Heltec boards
  */
 
-#include "SensorSentinel_Pins_Helper.h"
+#include "SensorSentinel_pins_helper.h"
+#include "heltec_unofficial_revised.h"
 #include <Arduino.h>
 
 // Actual arrays for pin access

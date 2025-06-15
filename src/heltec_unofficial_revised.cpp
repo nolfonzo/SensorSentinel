@@ -451,8 +451,6 @@ void heltec_setup() {
       }
     #endif
     
-    heltec_clear_display();
-    
     // ThingPulse library (V3) needs explicit display update that isn't handled by PrintSplitter
     #if defined(ARDUINO_heltec_wifi_32_lora_V3)
       display.display();
@@ -467,9 +465,9 @@ void heltec_setup() {
   #ifndef HELTEC_NO_RADIOLIB  
     int radioStatus = radio.begin();  
     if (radioStatus != RADIOLIB_ERR_NONE) {  
-      both.printf("Radio initialization failed with code %d\n", radioStatus);  
+      Serial.printf("Radio initialization failed with code %d\n", radioStatus);  
     } else {  
-      both.println("Radio initialized OK");  
+      Serial.println("Radio initialized OK");  
       
       // Common parameters for all boards
       radio.setFrequency(HELTEC_LORA_FREQ);
@@ -498,15 +496,12 @@ void heltec_setup() {
     pinMode(BUTTON, INPUT);  
   #endif  
 
-  delay(2000); // Let welcome message be visible
 }
 
 /**
  * @brief The main loop for the Heltec library.
  */
 void heltec_loop() {
-  // Handle display updates for V3.2
-  heltec_display_update();
   
   // Update button state
   button.update();
@@ -520,7 +515,8 @@ void heltec_loop() {
   #ifdef HELTEC_POWER_BUTTON
     if (button.pressedFor(2000)) {
       both.println("\nSleeping...");
-      delay(500);  // Let the message display
+      heltec_display_update();
+      delay(2000);  // Let the message display
       heltec_deep_sleep();
     }
   #endif

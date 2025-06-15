@@ -25,7 +25,7 @@
   // Wireless Tracker available pins (ESP32-S3)
   // Based on Wireless Tracker datasheet
   #define SensorSentinel_ANALOG_PINS     {4, 5, 6, 7}
-  #define SensorSentinel_BOOLEAN_PINS    {39, 40, 41, 42, 43, 44, 45, 46}
+  #define SensorSentinel_BOOLEAN_PINS    {26, 33, 34, 37, 45, 46, 47, 48}
 
 #elif defined(ARDUINO_heltec_wifi_32_lora_V3) || defined(BOARD_HELTEC_V3_2)
   // WiFi LoRa 32 V3/V3.2 available pins (ESP32-S3)

@@ -26,21 +26,22 @@ unsigned long lastGnssSendTime = 0;
 void setup() {
   // Initialize the Heltec board
   heltec_setup();
-  
+
   // Show startup message
   heltec_clear_display();
+
   both.println("\nSensor Packet Sender");
   both.printf("Board: %s\n", heltec_get_board_name());
   both.printf("Battery: %d%% (%.2fV)\n", 
              heltec_battery_percent(), 
              heltec_vbat());
   heltec_display_update();
+  delay(2000);
   
   // Initialize timers with offset to avoid sending both packet types at once
   lastSensorSendTime = millis() - (LORA_PUB_SENSOR_INTERVAL - 5000);  // Send first sensor packet in 5 seconds
   lastGnssSendTime = millis() - (LORA_PUB_GNSS_INTERVAL - 15000);     // Send first GNSS packet in 15 seconds
   
-  delay(2000);
   
   // Show send schedule
   heltec_clear_display();
@@ -51,7 +52,6 @@ void setup() {
   both.println("\nTransmitting...");
   heltec_display_update();
   
-  delay(2000);
 }
 
 void loop() {
@@ -65,7 +65,7 @@ void loop() {
   }
  
   #ifdef GNSS  
-    // Check Vif it's time to send a GNSS packet
+    // Check if it's time to send a GNSS packet
     if (millis() - lastGnssSendTime >= LORA_PUB_GNSS_INTERVAL) {
       sendGnssPacket();
       lastGnssSendTime = millis();
@@ -73,32 +73,33 @@ void loop() {
   #endif
   
   // Use heltec_delay to ensure power button functionality works
-  heltec_delay(10);
+  //heltec_delay(10);
 }
 
 /**
  * Create and send a sensor packet
  */
 void sendSensorPacket() {
+  heltec_clear_display();
+
   // Create and initialize the sensor packet
   SensorSentinel_sensor_packet_t packet;
   bool initSuccess = SensorSentinel_init_sensor_packet(&packet, sensorPacketCounter++);
 
   if (!initSuccess) {
-    Serial.println("ERROR: Failed to initialize sensor packet");
-    both.println("ERROR: Packet init failed");
+    both.printf("ERROR: init pkt fail: %d\n", initSuccess);
+    heltec_display_update();
+    delay(2000);  // Let the error message display
     return;
   } 
 
   // Show basic info on display
-  heltec_clear_display();
-  both.println("\nSending Packet: Sensor");
+  both.println("\nSending Pkt: Sensor");
   both.printf("Packet #%u\n", packet.messageCounter);
+  both.printf("NodeID: %u\n", packet.nodeId);
   both.printf("Battery: %u%% (%.2fV)\n", 
              packet.batteryLevel, 
              packet.batteryVoltage / 1000.0f);
-  heltec_display_update();
-  
   // Turn on LED during transmission
   heltec_led(25);
   
@@ -109,6 +110,9 @@ void sendSensorPacket() {
     both.println("Sensor packet sent OK");
   } else {
     both.printf("ERROR: TX failed: %d\n", state);
+    heltec_display_update();
+    delay(2000);  // Let the error message display
+    return;
   }
   
   // Turn off LED
@@ -135,7 +139,7 @@ void sendGnssPacket() {
   
   // Show basic info on display
   heltec_clear_display();
-  both.println("\nSending Packet: GNSS");
+  both.println("\nSending Pkt: GNSS");
   both.printf("Packet #%u\n", packet.messageCounter);
   both.printf("Battery: %u%% (%.2fV)\n", 
              packet.batteryLevel, 

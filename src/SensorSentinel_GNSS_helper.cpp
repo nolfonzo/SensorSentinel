@@ -2,13 +2,7 @@
  * @file SensorSentinel_GNSS_helper.cpp
  * @brief Helper functions for the TinyGPS library
  */
-
-// GNSS related  
-#ifdef GNSS  
-  TinyGPSPlus gps;  
-  HardwareSerial gpsSerial = HardwareSerial(1);  
-#endif  
-
+#include <SensorSentinel_GNSS_helper.h>
 
 // ====== GNSS functions ======  
 #ifdef GNSS  

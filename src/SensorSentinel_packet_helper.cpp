@@ -37,7 +37,7 @@ uint32_t SensorSentinel_get_node_id() {
  * @param counter Message sequence counter value
  */
 bool SensorSentinel_init_sensor_packet(SensorSentinel_sensor_packet_t* packet, uint32_t counter) {
-  if (!packet) false;
+  if (!packet) return false;
   
   // Clear the structure first
   memset(packet, 0, sizeof(SensorSentinel_sensor_packet_t));
@@ -49,9 +49,10 @@ bool SensorSentinel_init_sensor_packet(SensorSentinel_sensor_packet_t* packet, u
   packet->nodeId = SensorSentinel_get_node_id();
   packet->messageCounter = counter;
   packet->uptime = millis() / 1000;  // Seconds since boot
-  
+ 
   // Get battery information
-  float batteryVolts = heltec_vbat();
+  //float batteryVolts = heltec_vbat();
+  float batteryVolts = 0.0f;    //TODO, the battery code kills the display of the Tacker
   packet->batteryVoltage = (uint16_t)(batteryVolts * 1000.0f);
   packet->batteryLevel = heltec_battery_percent(batteryVolts);
   

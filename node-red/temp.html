@@ -1,0 +1,285 @@
+<template>
+  <div style="width: 100%; padding: 0; margin: 0;">
+    <style>
+      /* Set general font size for all elements within the container */
+      .v-container {
+        font-size: 0.75rem;
+        padding: 0; /* Remove unnecessary padding */
+      }
+
+      .v-card {
+        width: 100%; /* Make cards full width */
+        margin-bottom: 16px; /* Add margin for vertical spacing */
+      }
+
+      .v-card-title {
+        font-size: 0.85rem;
+      }
+
+      .v-btn {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+      }
+
+      .v-text-field input {
+        font-size: 0.75rem;
+        padding: 4px;
+      }
+
+      .v-data-table {
+        font-size: 0.75rem;
+        min-width: 100%; /* Ensure the data table uses the full width */
+      }
+
+/* Target Vuetify 3.x header cells */
+  .v-data-table th,
+  .v-data-table__th,
+  .v-data-table-header th,
+  .v-data-table-header__content {
+    white-space: nowrap !important;
+    font-weight: bold !important; /* Bold headers */
+    background-color: #424242 !important; /* Dark gray background */
+    color: #ffffff !important; /* White text for contrast */
+    padding: 8px !important; /* Ensure padding */
+    height: 36px !important; /* Ensure header height */
+  }
+      .v-data-table td {
+        white-space: nowrap;
+      }
+
+      .nr-dashboard-cardpanel,
+      .nr-dashboard-template {
+        width: 100% !important;
+      }
+    </style>
+
+    <v-container fluid class="pa-6" style="max-width: 1200px;"> <!-- Adjust max-width -->
+      <h2 class="text-h4 d-flex align-center mb-4">
+        <v-icon class="mr-2">mdi-alarm</v-icon>
+        Alerts Dashboard
+      </h2>
+
+      <v-card>
+        <v-card-title>
+          <v-icon class="mr-2">mdi-magnify</v-icon>
+          Filter Alerts
+        </v-card-title>
+        <v-card-text>
+          <v-text-field
+            v-model="alertSearchQuery"
+            label="Search alerts..."
+            prepend-inner-icon="mdi-magnify"
+            density="compact"
+            clearable
+          ></v-text-field>
+        </v-card-text>
+      </v-card>
+
+      <v-card>
+        <v-card-title>Select User to Clear Alerts</v-card-title>
+        <v-card-text>
+          <v-select
+            v-model="selectedOwner"
+            :items="ownerOptions"
+            item-text="title"
+            item-value="value"
+            label="Choose Owner"
+            clearable
+          ></v-select>
+          <v-btn @click="clearAllAlerts" color="red" class="mt-4">Clear All Alerts</v-btn>
+        </v-card-text>
+      </v-card>
+
+      <v-card>
+        <v-card-title>
+          Current Alerts ({{ filteredAlertsList.length }} of {{ alerts.length }})
+        </v-card-title>
+        <v-data-table
+          :headers="alertHeaders"
+          :items="Array.isArray(filteredAlertsList) ? filteredAlertsList : []"
+          class="elevation-0"
+          density="compact"
+          style="overflow-x: auto;"
+        >
+          <template v-slot:item.ownerName="{ item }">
+            <v-chip size="small">{{ item.ownerName }}</v-chip>
+          </template>
+          <template v-slot:item.deviceName="{ item }">
+            <v-chip size="small">{{ item.deviceName }}</v-chip>
+          </template>
+          <template v-slot:item.pinLabel="{ item }">
+            <v-chip size="small">{{ item.pinLabel }}</v-chip>
+          </template>
+          <template v-slot:item.alertMessage="{ item }">
+            <span>{{ item.alertMessage }}</span>
+          </template>
+          <template v-slot:item.timestamp="{ item }">
+            <span>{{ formatDate(item.timestamp) }}</span>
+          </template>
+          <template v-slot:item.actions="{ item }">
+            <v-btn icon="mdi-pencil" size="small" @click="editAlert(item)"></v-btn>
+            <v-btn icon="mdi-delete" size="small" color="error" @click="clear(item)">Clear</v-btn>
+          </template>
+        </v-data-table>
+      </v-card>
+    </v-container>
+
+    <!-- Additional dialogs can be included below -->
+    <v-dialog v-model="editAlertDialog" max-width="400px">
+      <v-card>
+        <v-card-title>Edit Alert</v-card-title>
+        <v-card-text>
+          <v-text-field v-model="editingAlert.alertMessage" label="Alert Message"></v-text-field>
+          <v-autocomplete
+            v-model="editingAlert.ownerName"
+            :items="ownerOptions"
+            label="Owner"
+            variant="outlined"
+            clearable
+            density="compact"
+          ></v-autocomplete>
+          <v-autocomplete
+            v-model="editingAlert.deviceName"
+            :items="deviceOptions"
+            label="Device"
+            variant="outlined"
+            clearable
+            density="compact"
+          ></v-autocomplete>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn @click="editAlertDialog = false">Cancel</v-btn>
+          <v-btn @click="saveAlert(editingAlert)" color="primary">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      alertSearchQuery: '',
+      alerts: [],
+      editingAlert: {},
+      editAlertDialog: false,
+      selectedOwner: null, // Track the selected owner for clearing alerts
+      ownerOptions: [],
+      deviceOptions: []
+    };
+  },
+  computed: {
+    filteredAlertsList() {
+      if (!Array.isArray(this.alerts)) return []; // Ensure alerts is an array
+      const filtered = this.alertSearchQuery
+        ? this.alerts.filter(alert =>
+            alert.alertMessage.toLowerCase().includes(this.alertSearchQuery.toLowerCase()) ||
+            alert.ownerName.toLowerCase().includes(this.alertSearchQuery.toLowerCase()) ||
+            alert.deviceName.toLowerCase().includes(this.alertSearchQuery.toLowerCase()) ||
+            (alert.pinLabel && alert.pinLabel.toLowerCase().includes(this.alertSearchQuery.toLowerCase()))
+          )
+        : this.alerts;
+
+      // Sort the filtered alerts by timestamp in descending order
+      return filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // Most recent first
+    },
+    alertHeaders() {
+      return [
+        { title: 'Owner', key: 'ownerName'}, // Set width for each column
+        { title: 'Device', key: 'deviceName'},
+        { title: 'Pin Name', key: 'pinLabel'},
+        { title: 'Alert Message', key: 'alertMessage'},
+        { title: 'Timestamp', key: 'timestamp'},
+        { title: 'Actions', key: 'actions'}
+      ];
+    }
+  },
+  methods: {
+    formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return !isNaN(date.getTime()) ? date.toLocaleString() : 'Invalid Date';
+    },
+    editAlert(alert) {
+      this.editingAlert = { ...alert };
+      this.editAlertDialog = true;
+    },
+    clear(alert) {
+      if (confirm(`Clear alert "${alert.alertMessage}"?`)) {
+        this.send({
+          topic: "clear_alert",
+          payload: { alertId: alert.alertId }
+        });
+      }
+    },
+    clearAllAlerts() {
+      // Confirm before clearing all alerts for the selected owner
+      if (!this.selectedOwner) {
+        alert("Please select an owner to clear alerts.");
+        return;
+      }
+
+      // Log selected owner before sending
+      console.log("Clearing alerts for owner:", this.selectedOwner);
+
+      // Send request to the backend to clear all alerts for the selected owner
+      if (confirm(`Are you sure you want to clear all alerts for ${this.selectedOwner}?`)) {
+        this.send({
+          topic: "clear_all_alerts",
+          payload: { ownerName: this.selectedOwner } // Ensure ownerName is included
+        });
+      }
+    },
+    saveAlert(updatedAlert) {
+      this.send({
+        topic: "update_alert",
+        payload: updatedAlert
+      });
+      this.editAlertDialog = false;
+    }
+  },
+  mounted() {
+    this.send({ topic: "get_alerts" });
+    // Fetch owners to populate the ownerOptions
+    this.send({ topic: "get_owners" });
+  },
+  watch: {
+    selectedOwner(newVal) {
+      console.log("Selected Owner:", newVal); // Log the entire selected object to see its structure
+    },
+    msg: {
+      handler(newMsg) {
+        if (newMsg && newMsg.topic === "alerts_data") {
+          console.log("Received alerts data:", newMsg.payload);
+          this.alerts = Array.isArray(newMsg.payload)
+            ? newMsg.payload.map(alert => ({
+                ...alert,
+                pinLabel: alert.pinLabel || "" // Ensure pinLabel is included and defaults to empty
+              }))
+            : [];
+        } else if (newMsg.topic === "alert_updated") {
+          const updatedAlert = newMsg.payload;
+          const index = this.alerts.findIndex(alert => alert.alertId === updatedAlert.alertId);
+          if (index !== -1) {
+            this.$set(this.alerts, index, { ...updatedAlert, pinLabel: updatedAlert.pinLabel || "" });
+          }
+        } else if (newMsg.topic === "alert_error") {
+          alert(newMsg.payload.error);
+        } else if (newMsg.topic === "owners_data") {
+          this.ownerOptions = newMsg.payload.map(owner => ({
+            title: owner.name,
+            value: owner.name
+          }));
+          console.log("Owner Options:", this.ownerOptions); // Log the owners
+        } else if (newMsg.topic === "clear_alerts_response") {
+          // Handle response after clearing alerts if you send one
+          const clearedAlerts = newMsg.payload; // Assuming you return the remaining alerts here
+          this.alerts = clearedAlerts; // Update the alerts
+        }
+      },
+      deep: true
+    }
+  }
+};
+</script>

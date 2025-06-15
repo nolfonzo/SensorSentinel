@@ -10,7 +10,7 @@
 
 
 // Include libraries based on configuration  
-#ifdef HELTEC_GNSS  
+#ifdef GNSS  
     #include <TinyGPSPlus.h>  
     // GNSS global variables
     extern TinyGPSPlus gps;
