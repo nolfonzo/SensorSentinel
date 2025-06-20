@@ -169,7 +169,6 @@ boolean SensorSentinel_mqtt_init() {
   
   // Log the MQTT configuration
   Serial.printf("MQTT Server: %s:%d\n", mqtt_server, mqtt_port);
-  Serial.printf("MQTT STATUS Topic: %s\n", mqtt_status_topic);
   Serial.printf("MQTT Buffer Size: %u bytes\n", mqttClient.getBufferSize());
   
   return true;

@@ -12,7 +12,10 @@
 #include "SensorSentinel_packet_helper.h"
 #include "SensorSentinel_mqtt_gateway.h"
 #include "SensorSentinel_wifi_helper.h"
-#include "SensorSentinel_RadioLib_helper.h"
+
+#ifndef NO_RADIOLIB
+  #include "SensorSentinel_RadioLib_helper.h"
+#endif
 
 // Configuration
 #define MAX_LORA_PACKET_SIZE 256 // Maximum packet size we can handle
@@ -44,14 +47,19 @@ void setup()
               heltec_vbat());
 
   // Subscribe to binary packet reception
-  if (SensorSentinel_subscribe_binary_packets(onBinaryPacketReceived))
-  {
-    both.println("Subscribed to packets");
-  }
-  else
-  {
-    both.println("Subscribe failed!");
-  }
+  #ifndef NO_RADIOLIB
+    if (SensorSentinel_subscribe_binary_packets(onBinaryPacketReceived))
+    {
+      both.println("Subscribed to packets");
+    }
+    else
+    {
+      both.println("Subscribe failed!");
+    }
+  #else
+    both. println("No radio, no sub");
+  #endif
+
   heltec_display_update();
   delay(2000);
 
@@ -66,7 +74,7 @@ void loop()
   heltec_loop();
 
   // Process any pending packet receptions
-  SensorSentinel_process_packets();
+  // SensorSentinel_process_packets();  TODO I don't think this is needed
 
   // Let helpers maintain WiFi and MQTT connections
   SensorSentinel_wifi_maintain();
@@ -130,8 +138,12 @@ void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr)
 
     // Display the extracted information
     both.printf("Received Type: %s\n", packetMessageType.c_str());
-    both.printf("Msg #: %u\n", messageCounter);
-    both.printf("NodeID: %u\n", packetJson["nodeId"].as<uint32_t>());
+
+    // both.printf("Msg #: %u\n", messageCounter);  TODO GET messageCounter THIS FROM BINARY PACKAGE, LOOK AT OLD JSON METHOD
+    both.printf("Msg #: %u\n", 0);
+
+    // both.printf("NodeID: %u\n", packetJson["nodeId"].as<uint32_t>());  TODO as above for nodeId
+    both.printf("NodeID: %u\n", 0);
 
     // Print the raw data for debugging
     Serial.printf("Packet data");
@@ -199,35 +211,33 @@ bool forwardPacketToMQTT(uint8_t *data, size_t length, float rssi, float snr)
     return false;
   }
 
-  if (isValidPacket)
+  const char *topic;
+  // TODO get msg type from packet
+  packetMessageType = "sensor";
+
+  if (packetMessageType == "sensor")
   {
+    topic = MQTT_TOPIC_SENSOR;
+  }
+  else if (packetMessageType == "gnss")
+  {
+    topic = MQTT_TOPIC_GNSS;
+  }
+  else
+  {
+    topic = MQTT_TOPIC_DATA;
+  }
+  bool success = SensorSentinel_mqtt_get_client().publish(topic, data, length, false);
 
-    const char *topic;
-
-    if (msgType == "sensor")
-    {
-      topic = MQTT_TOPIC_SENSOR;
-    }
-    else if (msgType == "gnss")
-    {
-      topic = MQTT_TOPIC_GNSS;
-    }
-    else
-    {
-      topic = MQTT_TOPIC_DATA;
-    }
-    bool success = SensorSentinel_mqtt_get_client().publish(topic, data, length, false);
-
-    if (success)
-    {
-      packetsForwarded++;
-      Serial.printf("Forwarded raw data (%u bytes) to %s\n", length, topic);
-      return true;
-    }
-    else
-    {
-      Serial.printf("ERROR: Failed to forward raw data to MQTT topic: %s\n", topic);
-      return false;
-    }
+  if (success)
+  {
+    packetsForwarded++;
+    Serial.printf("Forwarded raw data (%u bytes) to %s\n", length, topic);
+    return true;
+  }
+  else
+  {
+    Serial.printf("ERROR: Failed to forward raw data to MQTT topic: %s\n", topic);
+    return false;
   }
 }
