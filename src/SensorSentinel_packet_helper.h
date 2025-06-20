@@ -17,7 +17,6 @@
 #define SensorSentinel_PACKET_HELPER_H
 
 #include <Arduino.h>
-#include <ArduinoJson.h>
 #include "SensorSentinel_pins_helper.h"  // For SensorSentinel_pin_readings_t structure
 
 /**
@@ -90,50 +89,7 @@ typedef union {
   SensorSentinel_gnss_packet_t gnss;
 } SensorSentinel_packet_t;
 
-/**
- * @brief Error codes for packet JSON conversion
- */
-typedef enum {
-  SensorSentinel_JSON_SUCCESS = 0,
-  SensorSentinel_JSON_ERROR_NULL_PARAMS = 1,
-  SensorSentinel_JSON_ERROR_SMALL_BUFFER = 2,
-  SensorSentinel_JSON_ERROR_UNKNOWN_TYPE = 3,
-  SensorSentinel_JSON_ERROR_INVALID_DATA = 4,
-  SensorSentinel_JSON_ERROR_SERIALIZATION = 5
-} SensorSentinel_json_error_t;
-
-/**
- * @brief Convert a packet to a JSON document
- * 
- * Takes a packet of any supported type and populates a JsonDocument object.
- * This allows for further modification of the JSON before serialization.
- * 
- * @param packet Pointer to the packet to convert
- * @param doc JsonDocument to populate
- * @param errorCode Optional pointer to store error code
- * @return true if conversion succeeded, false if failed
- */
-bool SensorSentinel_packet_to_json_doc(const void* packet, JsonDocument& doc, 
-                              SensorSentinel_json_error_t* errorCode = nullptr);
-
-/**
- * @brief Convert a packet to JSON string format
- * 
- * Takes a packet of any supported type and converts it to a JSON string.
- * This is a wrapper around SensorSentinel_packet_to_json_doc that handles serialization.
- * 
- * @param packet Pointer to the packet to convert
- * @param buffer Output buffer to store the JSON string
- * @param bufferSize Size of the output buffer in bytes
- * @param errorCode Optional pointer to store error code
- * @param prettyPrint Whether to format the JSON with indentation (default: false)
- * @return true if conversion succeeded, false if failed
- */
-bool SensorSentinel_packet_to_json(const void* packet, char* buffer, size_t bufferSize, 
-                          SensorSentinel_json_error_t* errorCode = nullptr, 
-                          bool prettyPrint = false);
-
-/**
+/*/**
  * @brief Get a unique node ID based on the ESP32's MAC address
  * 
  * @return 32-bit unique identifier derived from the MAC address
@@ -183,20 +139,8 @@ size_t SensorSentinel_get_packet_size(uint8_t messageType);
  * @param showAll Whether to show all fields including reserved bytes
  * @return true if the packet was successfully printed, false otherwise
  */
-
 bool SensorSentinel_print_packet_info(const void* packet, bool showAll = false);
-/**
- * @brief Print a packet as JSON to Serial
- * 
- * Converts the packet to JSON format and prints it to Serial.
- * Useful for debugging and integration with other systems.
- * 
- * @param packet Pointer to the packet to print
- * @param prettyPrint Whether to format the JSON with indentation (default: true)
- * @return true if conversion and printing succeeded, false otherwise
- */
 
-bool SensorSentinel_print_packet_json(const void* packet, bool prettyPrint = true);
 /**
  * @brief Parse a received packet buffer into the appropriate packet structure
  * 
@@ -230,55 +174,7 @@ bool SensorSentinel_validate_sensor_packet(const SensorSentinel_sensor_packet_t*
  */
 bool SensorSentinel_validate_gnss_packet(const SensorSentinel_gnss_packet_t* packet);
 
-/**
- * @brief Convert sensor packet to a JSON string
- * 
- * This is a convenience method that creates a JSON document, populates it,
- * and returns the serialized string.
- * 
- * @param packet Pointer to sensor packet structure to convert
- * @param pretty Whether to format the JSON with indentation and whitespace
- * @return String containing the JSON representation of the packet
- */
-String SensorSentinel_sensor_packet_to_json(const SensorSentinel_sensor_packet_t* packet, bool pretty = false);
-
-/**
- * @brief Convert GNSS packet to a JSON string
- * 
- * This is a convenience method that creates a JSON document, populates it,
- * and returns the serialized string.
- * 
- * @param packet Pointer to GNSS packet structure to convert
- * @param pretty Whether to format the JSON with indentation and whitespace
- * @return String containing the JSON representation of the packet
- */
-String SensorSentinel_gnss_packet_to_json(const SensorSentinel_gnss_packet_t* packet, bool pretty = false);
-
-/**
- * @brief Populate an existing JsonDocument with sensor packet data
- * 
- * This method allows you to use your own JsonDocument (which may be part of a
- * larger document) and have it populated with the sensor packet data.
- * 
- * @param packet Pointer to sensor packet structure to convert
- * @param doc Reference to a JsonDocument to populate
- * @return true if the document was successfully populated, false otherwise
- */
-bool SensorSentinel_sensor_packet_to_json_doc(const SensorSentinel_sensor_packet_t* packet, JsonDocument& doc);
-
-/**
- * @brief Populate an existing JsonDocument with GNSS packet data
- * 
- * This method allows you to use your own JsonDocument (which may be part of a
- * larger document) and have it populated with the GNSS packet data.
- * 
- * @param packet Pointer to GNSS packet structure to convert
- * @param doc Reference to a JsonDocument to populate
- * @return true if the document was successfully populated, false otherwise
- */
-bool SensorSentinel_gnss_packet_to_json_doc(const SensorSentinel_gnss_packet_t* packet, JsonDocument& doc);
-
-/**
+/*/**
  * @brief Validate a packet of any supported type
  * 
  * Examines the message type and calls the appropriate type-specific
