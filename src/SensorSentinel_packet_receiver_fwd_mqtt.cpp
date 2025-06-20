@@ -58,7 +58,6 @@ void setup()
   // Let the helper libraries handle WiFi and MQTT connection
   SensorSentinel_wifi_begin();
   SensorSentinel_mqtt_setup(true); // With time sync
-  */
 }
 
 void loop()

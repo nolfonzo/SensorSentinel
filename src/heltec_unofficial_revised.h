@@ -24,30 +24,7 @@
 #define heltec_unofficial_revised_VERSION "1.0.0"
 
 // Optional power button feature (long press for sleep)
-// Uncomment to enable power button functionality
 #define HELTEC_POWER_BUTTON
-
-// Define V3.2 manually since it doesn't have an Arduino board definition  
-#if !defined(ARDUINO_heltec_wifi_32_lora_V3) && \
-    !defined(ARDUINO_heltec_wireless_stick) && \
-    !defined(ARDUINO_heltec_wireless_stick_lite) && \
-    !defined(ARDUINO_heltec_wireless_tracker) && \
-    !defined(BOARD_HELTEC_V3_2)  
-  // No specific board detected - default to V3.2  
-  #define BOARD_HELTEC_V3_2  
-#endif  
-
-// Radio configuration constants
-#define HELTEC_LORA_FREQ    915.0  // MHz, 868.0 for EU regions
-#define HELTEC_LORA_BW      125.0  // kHz
-#define HELTEC_LORA_SF      9      // Spreading factor
-#define HELTEC_LORA_CR      5      // Coding rate
-#define HELTEC_LORA_SYNC    0x12   // Sync word
-
-// Chip-specific settings
-#define HELTEC_SX1262_POWER   14.0    // dBm
-#define HELTEC_SX1262_CURRENT 140.0   // mA
-#define HELTEC_SX1276_POWER   17      // Different scale for SX1276
 
 // Flag to track if display needs updating (for V3.2)  
 extern bool _display_needs_update;  
@@ -62,7 +39,7 @@ extern HotButton button;
 #define LED_RES   8           // LED PWM resolution  
 
 // Common pins for V3, V3.2, and Tracker (S3-based boards)  
-#if defined(ARDUINO_heltec_wifi_32_lora_V3) || defined(BOARD_HELTEC_V3_2) || defined(ARDUINO_heltec_wireless_tracker)  
+#if defined(ARDUINO_heltec_wifi_32_lora_V3) || defined(BOARD_HELTEC_V3_2) || defined(ARDUINO_heltec_wireless_tracker) || defined(WOKWI) 
   #define VEXT      GPIO_NUM_36 // External power control  
   #define VBAT_CTRL GPIO_NUM_37 // Battery voltage measurement control  
   #define VBAT_ADC  GPIO_NUM_1  // Battery voltage ADC pin  
@@ -74,10 +51,9 @@ extern HotButton button;
   #define MOSI      GPIO_NUM_10  
   #define MISO      GPIO_NUM_11  
   #define SCK       GPIO_NUM_9  
-#endif  
+#endif
 
-// Common pins for Wireless Stick and Stick Lite (S2-based boards)  
-#if defined(ARDUINO_heltec_wireless_stick) || defined(ARDUINO_heltec_wireless_stick_lite)  
+#if  defined(ARDUINO_heltec_wireless_stick) || defined(ARDUINO_heltec_wireless_stick_lite)  
   #define VEXT      GPIO_NUM_21 // External power control  
   #define VBAT_CTRL GPIO_NUM_37 // Battery voltage measurement control  
   #define VBAT_ADC  GPIO_NUM_1  // Battery voltage ADC pin  
@@ -89,22 +65,21 @@ extern HotButton button;
   #define MOSI      GPIO_NUM_27  
   #define MISO      GPIO_NUM_19  
   #define SCK       GPIO_NUM_5  
-#endif  
+#endif
 
-// Board-specific pin definitions (only what's unique to each board)  
-#if defined(ARDUINO_heltec_wifi_32_lora_V3) || defined(BOARD_HELTEC_V3_2)  
+#if defined(ARDUINO_heltec_wifi_32_lora_V3) || defined(BOARD_HELTEC_V3_2) || defined(WOKWI) 
   // OLED display pins for V3 and V3.2  
   #define SDA_OLED  GPIO_NUM_17 // OLED SDA  
   #define SCL_OLED  GPIO_NUM_18 // OLED SCL  
   #define RST_OLED  GPIO_NUM_21 // OLED reset  
-#endif  
+#endif
 
 #if defined(ARDUINO_heltec_wireless_stick)  
   // OLED display pins for Wireless Stick  
   #define SDA_OLED  GPIO_NUM_4  // OLED SDA  
   #define SCL_OLED  GPIO_NUM_15 // OLED SCL  
   #define RST_OLED  GPIO_NUM_16 // OLED reset  
-#endif  
+#endif
 
 #if defined(ARDUINO_heltec_wireless_tracker)  
   // TFT display pins for Tracker  
@@ -119,12 +94,22 @@ extern HotButton button;
   // GNSS pins (UC6580)  
   #define GNSS_RX   GPIO_NUM_34  
   #define GNSS_TX   GPIO_NUM_33  
-#endif  
+#endif
 
-
-
-#ifndef HELTEC_NO_RADIOLIB  
+#ifndef NO_RADIOLIB  
   #include "RadioLib.h"  
+
+  #define HELTEC_LORA_FREQ    915.0  // MHz, 868.0 for EU regions
+  #define HELTEC_LORA_BW      125.0  // kHz
+  #define HELTEC_LORA_SF      9      // Spreading factor
+  #define HELTEC_LORA_CR      5      // Coding rate
+  #define HELTEC_LORA_SYNC    0x12   // Sync word
+
+  // Chip-specific settings
+  #define HELTEC_SX1262_POWER   14.0    // dBm
+  #define HELTEC_SX1262_CURRENT 140.0   // mA
+  #define HELTEC_SX1276_POWER   17      // Different scale for SX1276
+
   // Make sure the power off button works when using RADIOLIB_OR_HALT  
   #define RADIOLIB_DO_DURING_HALT delay(10)  
   #include "RadioLib_convenience.h"  
@@ -200,8 +185,6 @@ extern const uint8_t scaled_voltage[100];
 
 // Button state tracking
 extern bool buttonClicked;
-
-// ====== Function Declarations ======
 
 // Basic board functions
 /**

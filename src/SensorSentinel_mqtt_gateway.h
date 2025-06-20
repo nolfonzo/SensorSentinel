@@ -8,7 +8,6 @@
 
 #include <Arduino.h>
 #include <PubSubClient.h>  // MQTT client library
-#include <ArduinoJson.h>   // JSON processing library
 #include <WiFi.h>          // ESP32 WiFi library
 
 /**
@@ -86,20 +85,6 @@ boolean SensorSentinel_mqtt_setup(boolean syncTimeOnConnect = true);
 boolean SensorSentinel_mqtt_maintain();
 
 /**
- * @brief Add timestamp fields to a JSON document
- * 
- * Adds timestamp_ms (millis) and, if time is synchronized, also adds:
- * - timestamp (Unix epoch)
- * - time (formatted time string, if requested)
- * - time_iso (ISO 8601 format, if requested)
- * 
- * @param doc JSON document to add timestamp fields to
- * @param useFormattedTime Whether to include formatted time strings (default: false)
- * @return boolean True if synchronized time was available
- */
-boolean SensorSentinel_mqtt_add_timestamp(JsonDocument& doc, bool useFormattedTime = false);
-
-/**
  * @brief Publish a string message to an MQTT topic
  * 
  * @param topic The topic to publish to
@@ -108,52 +93,6 @@ boolean SensorSentinel_mqtt_add_timestamp(JsonDocument& doc, bool useFormattedTi
  * @return boolean True if published successfully
  */
 boolean SensorSentinel_mqtt_publish(const char* topic, const char* payload, boolean retained = false);
-
-/**
- * @brief Publish a JSON document to an MQTT topic
- * 
- * Serializes the JSON document and publishes it to the specified topic.
- * Automatically adds timestamp information.
- * 
- * @param topic The topic to publish to
- * @param doc The JSON document to publish
- * @param retained Whether the message should be retained by the broker (default: false)
- * @param useFormattedTime Whether to include formatted time in timestamps (default: false)
- * @return boolean True if published successfully
- */
-boolean SensorSentinel_mqtt_publish_json(const char* topic, JsonDocument& doc, boolean retained = false, boolean useFormattedTime = false);
-
-/**
- * @brief Publish device status to the status topic
- * 
- * Creates a detailed status message with device information, runtime metrics,
- * connection details, and publishes it to the status topic.
- * 
- * @param status Status message (e.g., "ok", "error", etc.)
- * @param retained Whether the message should be retained by the broker (default: true)
- * @return boolean True if published successfully
- */
-boolean SensorSentinel_mqtt_publish_status(const char* status, boolean retained = true);
-
-/**
- * @brief Publish "ok" status with default settings
- * 
- * Simplified version of SensorSentinel_mqtt_publish_status that uses "ok" as status
- * and sets the retained flag to true.
- * 
- * @return boolean True if published successfully
- */
-boolean SensorSentinel_mqtt_publish_status();
-
-/**
- * @brief Display MQTT status on the Heltec OLED display
- * 
- * Shows a compact status summary on the display with WiFi signal strength,
- * MQTT connection status, packet count, battery level, and uptime.
- * Also logs detailed information to the serial console.
- * 
- */
-void SensorSentinel_mqtt_log_status();
 
 /**
  * @brief Get reference to the MQTT client object

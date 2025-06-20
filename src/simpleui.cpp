@@ -12,6 +12,10 @@
 #define SCREEN_HEIGHT 64
 #define OLED_ADDR 0x3C  // I2C address
 
+
+
+
+
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RST);
 
 void setup() {

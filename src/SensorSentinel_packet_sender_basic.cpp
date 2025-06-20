@@ -67,7 +67,8 @@ void transmitPacket() {
     
     lastTxTime = millis();
   #else
-    both.println("\nRadio not available");
+    both.println("\nRadio not avail");
+    lastTxTime = millis();
   #endif
 }
 
@@ -80,7 +81,7 @@ void setup() {
   
   // Display board information
   heltec_clear_display(1, 1);
-  both.println("Heltec LoRa Sender");
+  both.println("LoRa Sender");
   both.printf("Board: %s\n", SensorSentinel_get_board_name());
   
   heltec_clear_display(1, 1);
@@ -100,8 +101,7 @@ void loop() {
   // Handle button, power control, and display updates
   heltec_loop();
   
-  bool txLegal = millis() > lastTxTime + minimumPause;
-  bool timeToTransmit = txLegal && lastTxTime > 0; // Auto-transmit when legal
+  bool txLegal = lastTxTime == 0 || millis() > lastTxTime + minimumPause;
   bool buttonPressed = heltec_button_clicked();    // Using the library function
 
   // Handle button press - trigger manual transmission
@@ -113,13 +113,8 @@ void loop() {
     both.printf("Tx queued\nDuty cycle\nWait %i secs", waitSeconds);
   }
   
-  // Handle automatic transmission based on duty cycle
-  if (timeToTransmit) {
-    transmitPacket();
-  }
-  
-  // If this is first run, start the transmission cycle
-  if (lastTxTime == 0) {
+  // Handle automatic transmission based on duty cycle or 1st run
+  if (txLegel) {
     transmitPacket();
   }
   

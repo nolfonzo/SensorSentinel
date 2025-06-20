@@ -34,7 +34,7 @@
  */
 typedef struct {
   // Header information
-  uint8_t messageType;         // Always SensorSentinel_MSG_BASIC (0x01)
+  uint8_t messageType;         // 
   uint32_t nodeId;             // Unique node identifier (from MAC address)
   uint32_t messageCounter;     // Sequence number
   uint32_t uptime;             // uptime in seconds

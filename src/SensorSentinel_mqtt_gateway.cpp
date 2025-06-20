@@ -32,8 +32,6 @@ const int mqtt_port = MQTT_PORT;
 const char* mqtt_user = MQTT_USER;
 const char* mqtt_password = MQTT_PASSWORD;
 
-const char* mqtt_status_topic = MQTT_TOPIC_STATUS;   // Status topic
-
 // Magic constant replaced with a named constant
 #define TIME_SYNC_EPOCH 1600000000  // Sept 2020, indicates time is synced
 
@@ -342,42 +340,6 @@ boolean SensorSentinel_mqtt_maintain() {
 }
 
 /**
- * @brief Add timestamp fields to a JSON document
- */
-boolean SensorSentinel_mqtt_add_timestamp(JsonDocument& doc, bool useFormattedTime) {
-  // Always include millis timestamp (milliseconds since boot)
-  doc["timestamp_ms"] = millis();
-  
-  // Check if we have a synchronized time source
-  time_t now = time(nullptr);
-  if (now > TIME_SYNC_EPOCH) {
-    // Add Unix timestamp (seconds since epoch)
-    doc["timestamp"] = (uint32_t)now;
-    
-    // Add formatted time if requested
-    if (useFormattedTime) {
-      char timeString[25];
-      struct tm timeinfo;
-      localtime_r(&now, &timeinfo);
-      strftime(timeString, sizeof(timeString), "%Y-%m-%d %H:%M:%S", &timeinfo);
-      doc["time"] = timeString;
-      
-      // Add ISO 8601 time format for better standard compatibility
-      strftime(timeString, sizeof(timeString), "%Y-%m-%dT%H:%M:%S%z", &timeinfo);
-      doc["time_iso"] = timeString;
-    }
-    
-    return true;
-  } else {
-    // Time not synchronized
-    if (useFormattedTime) {
-      Serial.println("WARNING: Using unsynchronized time in document");
-    }
-    return false;
-  }
-}
-
-/**
  * @brief Publish a message to an MQTT topic
  */
 boolean SensorSentinel_mqtt_publish(const char* topic, const char* payload, boolean retained) {
@@ -433,156 +395,6 @@ boolean SensorSentinel_mqtt_publish(const char* topic, const char* payload, bool
   }
   
   return result;
-}
-
-/**
- * @brief Publish a JSON document to an MQTT topic
- */
-boolean SensorSentinel_mqtt_publish_json(const char* topic, JsonDocument& doc, boolean retained, boolean useFormattedTime) {
-  // Validate MQTT connection
-  if (!mqttClient.connected()) {
-    Serial.printf("ERROR: Cannot publish JSON to %s - MQTT not connected\n", topic);
-    return false;
-  }
-  
-  // Validate topic
-  if (topic == NULL || strlen(topic) == 0) {
-    Serial.println("ERROR: Cannot publish JSON - empty topic");
-    return false;
-  }
-  
-  // Add timestamp information
-  SensorSentinel_mqtt_add_timestamp(doc, useFormattedTime);
-  // Add standard metadata to all JSON documents
-  doc["GW"] = heltec_get_board_name();
-  doc["GW_ip"] = SensorSentinel_wifi_ip();
-  doc["GW_mac"] = SensorSentinel_wifi_mac();
-  
-  // Check size before serialization
-  size_t jsonSize = measureJson(doc);
-  size_t maxMqttSize = mqttClient.getBufferSize();
-  
-  // Ensure JSON isn't too large
-  if (jsonSize > maxMqttSize - 20) { // Allow safety margin
-    Serial.printf("ERROR: JSON too large for topic %s (%u bytes, max %u)\n", 
-                 topic, jsonSize, maxMqttSize - 20);
-    return false;
-  }
-  
-  // Use static buffer at MQTT max size
-  char buffer[MQTT_MAX_PACKET_SIZE];
-  size_t serializedLength = serializeJson(doc, buffer, sizeof(buffer));
-  
-  if (serializedLength == 0 || serializedLength >= sizeof(buffer) - 1) {
-    Serial.printf("ERROR: JSON serialization failed or truncated for topic %s\n", topic);
-    return false;
-  }
-  
-  // Log the serialization size for larger documents
-  if (jsonSize > 100) {
-    Serial.printf("Publishing JSON to %s: %u bytes\n", topic, serializedLength);
-  }
-  
-  // Publish the serialized JSON
-  boolean result = mqttClient.publish(topic, buffer, retained);
-  
-  if (!result) {
-    Serial.printf("ERROR: JSON publish failed to topic %s (state=%d)\n", 
-                 topic, mqttClient.state());
-    
-    // Print the JSON that failed to publish for debugging (only for smaller documents)
-    if (jsonSize < 200) {
-      Serial.println("Failed JSON content:");
-      serializeJsonPretty(doc, Serial);
-      Serial.println();
-    } else {
-      Serial.printf("Failed JSON too large to print (%u bytes)\n", jsonSize);
-    }
-  } else {
-    Serial.printf("Successfully published JSON to topic %s\n", topic);
-    lastPublishTime = millis();
-    publishCount++;
-  }
-  
-  return result;
-}
-
-/**
- * @brief Display brief MQTT status to Serial
- * 
- */
-void SensorSentinel_mqtt_log_status() {
-
-  // Log more detailed information to serial
-  Serial.println("----- MQTT Status -----");
-  Serial.printf("WiFi: %s (RSSI: %ddBm, Quality: %d%%)\n", 
-               SensorSentinel_wifi_connected() ? "Connected" : "Disconnected",
-               SensorSentinel_wifi_rssi(), SensorSentinel_wifi_quality());
-  
-  Serial.printf("MQTT: %s (State: %d, Reconnects: %u)\n", 
-               mqttClient.connected() ? "Connected" : "Disconnected",
-               mqttClient.state(), reconnectCounter);
-  
-  Serial.printf("Packets: %u\n", publishCount);
-  Serial.printf("Memory: %u bytes free\n", ESP.getFreeHeap());
-  Serial.printf("Battery: %d%%\n", heltec_battery_percent());
-  Serial.printf("Uptime: %lu minutes\n", millis() / 60000);
-  Serial.println("----------------------");
-}
-
-/**
- * @brief Publish device status information to the MQTT status topic
- */
-boolean SensorSentinel_mqtt_publish_status(const char* status, boolean retained) {
-  Serial.println("Attempting to publish a status message");
-
-  // Don't attempt to publish if not connected
-  if (!mqttClient.connected()) {
-    Serial.println("ERROR: Cannot publish status - MQTT not connected");
-    return false;
-  }
-  
-  // Create status document
-  JsonDocument statusDoc;
-  
-  // Add basic status information
-  statusDoc["status"] = (status != NULL && strlen(status) > 0) ? status : "ok";
-  statusDoc["client_id"] = SensorSentinel_mqtt_get_client_id();
-  
-  // Add device information
-  statusDoc["board"] = heltec_get_board_name();
-  statusDoc["mac"] = SensorSentinel_wifi_mac();
-  statusDoc["ip"] = SensorSentinel_wifi_ip();
-  
-  // Add runtime metrics
-  statusDoc["uptime"] = millis() / 1000; // seconds
-  statusDoc["free_heap"] = ESP.getFreeHeap(); // bytes
-  statusDoc["sketch_size"] = ESP.getSketchSize(); // bytes
-  statusDoc["free_sketch_space"] = ESP.getFreeSketchSpace(); // bytes
-  
-  // Add connection information
-  statusDoc["wifi_rssi"] = SensorSentinel_wifi_rssi();
-  statusDoc["wifi_qual"] = SensorSentinel_wifi_quality(); // Now defined above
-  statusDoc["mqtt_state"] = mqttClient.state();
-  statusDoc["mqtt_con_time"] = (mqttClient.connected() ? 
-      (millis() - lastMqttConnectionAttempt) / 1000 : 0); // seconds
-  statusDoc["mqtt_recons"] = reconnectCounter;
-  statusDoc["mqtt_pubs"] = publishCount;
- 
-  // Add time information with both formatted and epoch time
-  SensorSentinel_mqtt_add_timestamp(statusDoc, true);
-  
-  // Log the status info to Serial
-  SensorSentinel_mqtt_log_status();
-  // Publish to status topic
-  return SensorSentinel_mqtt_publish_json(mqtt_status_topic, statusDoc, retained, true);
-}
-
-/**
- * @brief Simple overload for status publishing with defaults
- */
-boolean SensorSentinel_mqtt_publish_status() {
-  return SensorSentinel_mqtt_publish_status("ok", false);
 }
 
 /**

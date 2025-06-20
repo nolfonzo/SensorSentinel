@@ -10,8 +10,8 @@
 #include "SensorSentinel_packet_helper.h"
 
 // Configuration
-// #define SENSOR_INTERVAL 30000  // Sensor send interval in milliseconds 
-// #define GNSS_INTERVAL   90000  // GNSS send interval in milliseconds 
+#define SENSOR_INTERVAL 30000  // Sensor send interval in milliseconds 
+#define GNSS_INTERVAL   90000  // GNSS send interval in milliseconds 
 
 // Forward declarations
 void sendSensorPacket();
@@ -39,16 +39,16 @@ void setup() {
   delay(2000);
   
   // Initialize timers with offset to avoid sending both packet types at once
-  lastSensorSendTime = millis() - (LORA_PUB_SENSOR_INTERVAL - 5000);  // Send first sensor packet in 5 seconds
-  lastGnssSendTime = millis() - (LORA_PUB_GNSS_INTERVAL - 15000);     // Send first GNSS packet in 15 seconds
+  lastSensorSendTime = millis() - (SENSOR_INTERVAL); 
+  lastGnssSendTime = millis() - (GNSS_INTERVAL + 5000);
   
   
   // Show send schedule
   heltec_clear_display();
   both.println("\nSend Schedule");
   both.println("\nIntervals:");
-  both.printf("Sensor data: %dsec\n", LORA_PUB_SENSOR_INTERVAL/1000);
-  both.printf("GNSS data: %dsec\n", LORA_PUB_GNSS_INTERVAL/1000);
+  both.printf("Sensor data: %dsec\n", SENSOR_INTERVAL/1000);
+  both.printf("GNSS data: %dsec\n", GNSS_INTERVAL/1000);
   both.println("\nTransmitting...");
   heltec_display_update();
   
@@ -59,21 +59,19 @@ void loop() {
   heltec_loop();
   
   // Check if it's time to send a sensor packet
-  if (millis() - lastSensorSendTime >= LORA_PUB_SENSOR_INTERVAL) {
+  if (millis() - lastSensorSendTime >= SENSOR_INTERVAL) {
     sendSensorPacket();
     lastSensorSendTime = millis();
   }
  
   #ifdef GNSS  
     // Check if it's time to send a GNSS packet
-    if (millis() - lastGnssSendTime >= LORA_PUB_GNSS_INTERVAL) {
+    if (millis() - lastGnssSendTime >= GNSS_INTERVAL) {
       sendGnssPacket();
       lastGnssSendTime = millis();
     }
   #endif
   
-  // Use heltec_delay to ensure power button functionality works
-  //heltec_delay(10);
 }
 
 /**
@@ -103,17 +101,21 @@ void sendSensorPacket() {
   // Turn on LED during transmission
   heltec_led(25);
   
-  // Send the packet using RadioLib
-  int state = radio.transmit((uint8_t*)&packet, sizeof(packet));
-  
-  if (state == RADIOLIB_ERR_NONE) {
-    both.println("Sensor packet sent OK");
-  } else {
-    both.printf("ERROR: TX failed: %d\n", state);
-    heltec_display_update();
-    delay(2000);  // Let the error message display
-    return;
-  }
+  #ifndef NO_RADIOLIB
+    // Send the packet using RadioLib
+    int state = radio.transmit((uint8_t*)&packet, sizeof(packet));
+    
+    if (state == RADIOLIB_ERR_NONE) {
+      both.println("Sensor packet sent OK");
+    } else {
+      both.printf("ERROR: TX failed: %d\n", state);
+      heltec_display_update();
+      delay(2000);  // Let the error message display
+      return;
+    }
+  #else
+      both.println("No Radio");
+  #endif
   
   // Turn off LED
   heltec_led(0);
@@ -123,8 +125,6 @@ void sendSensorPacket() {
   
   // Print detailed packet info to Serial
   SensorSentinel_print_packet_info(&packet, false);
-  // Print the packet as JSON
-  SensorSentinel_print_packet_json(&packet); 
 
   Serial.println("---------------------------\n");
 }
@@ -145,29 +145,25 @@ void sendGnssPacket() {
              packet.batteryLevel, 
              packet.batteryVoltage / 1000.0f);
   
-  // Show location info if available
-  if (hasFix) {
-    both.printf("GPS: %.5f, %.5f\n", packet.latitude, packet.longitude);
-    both.printf("HDOP: %.1f\n", packet.hdop / 10.0f);
-  } else {
-    both.println("GPS: No fix");
-  }
-  
   heltec_display_update();
   
   // Turn on LED during transmission
   heltec_led(25);
   
-  // Send the packet using RadioLib
-  int state = radio.transmit((uint8_t*)&packet, sizeof(packet));
-  
-  if (state == RADIOLIB_ERR_NONE) {
-    Serial.println("GNSS packet sent successfully!");
-    both.println("GNSS packet sent OK");
-  } else {
-    Serial.printf("ERROR: Transmission failed: %d\n", state);
-    both.printf("ERROR: TX failed: %d\n", state);
-  }
+  #ifndef NO_RADIOLIB
+    // Send the packet using RadioLib
+    int state = radio.transmit((uint8_t*)&packet, sizeof(packet));
+    
+    if (state == RADIOLIB_ERR_NONE) {
+      Serial.println("GNSS packet sent successfully!");
+      both.println("GNSS packet sent OK");
+    } else {
+      Serial.printf("ERROR: Transmission failed: %d\n", state);
+      both.printf("ERROR: TX failed: %d\n", state);
+    }
+  #else
+      both.println("No Radio");
+  #endif
   
   // Turn off LED
   heltec_led(0);
@@ -177,8 +173,6 @@ void sendGnssPacket() {
   
   // Print detailed packet info to Serial
   SensorSentinel_print_packet_info(&packet, false);
-  // Print the packet as JSON
-  SensorSentinel_print_packet_json(&packet);  
 
   Serial.println("---------------------------\n");
 }

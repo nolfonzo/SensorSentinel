@@ -29,7 +29,7 @@ void _handleLoRaRx() {
  * @return true if subscription was successful  
  */  
 bool SensorSentinel_subscribe_packets(PacketCallback callback) {  
-  #ifndef HELTEC_NO_RADIOLIB  
+  #ifndef NO_RADIOLIB  
     // Validate input  
     if (callback == NULL) {  
       Serial.println("Error: NULL callback provided");  
@@ -73,7 +73,7 @@ bool SensorSentinel_subscribe_packets(PacketCallback callback) {
  * @return true if subscription was successful  
  */  
 bool SensorSentinel_subscribe_binary_packets(BinaryPacketCallback callback) {  
-  #ifndef HELTEC_NO_RADIOLIB  
+  #ifndef NO_RADIOLIB  
     // Validate input  
     if (callback == NULL) {  
       Serial.println("Error: NULL callback provided");  
@@ -116,7 +116,7 @@ bool SensorSentinel_subscribe_binary_packets(BinaryPacketCallback callback) {
  * @return true if unsubscription was successful  
  */  
 bool SensorSentinel_unsubscribe_packets() {  
-  #ifndef HELTEC_NO_RADIOLIB  
+  #ifndef NO_RADIOLIB  
     // Clear the callback  
     _packetCallback = NULL;  
     
@@ -153,7 +153,7 @@ bool SensorSentinel_unsubscribe_packets() {
  * @return true if unsubscription was successful  
  */  
 bool SensorSentinel_unsubscribe_binary_packets() {  
-  #ifndef HELTEC_NO_RADIOLIB  
+  #ifndef NO_RADIOLIB  
     // Clear the callback  
     _binaryPacketCallback = NULL;  
     
@@ -189,7 +189,7 @@ bool SensorSentinel_unsubscribe_binary_packets() {
  * @brief Process any received packets in the main loop  
  */  
 void SensorSentinel_process_packets() {  
-  #ifndef HELTEC_NO_RADIOLIB  
+  #ifndef NO_RADIOLIB  
     if (_packetReceived) {  
       // Clear flag immediately to prevent race conditions  
       _packetReceived = false;  

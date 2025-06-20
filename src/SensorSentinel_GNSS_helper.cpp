@@ -6,14 +6,6 @@
 
 // ====== GNSS functions ======  
 #ifdef GNSS  
-  /**  
-   * @brief Initializes the GNSS module  
-   */  
-  void SensorSentinel_gnss_begin() {  
-    heltec_ve(true);  // Power on GNSS via Vext  
-    delay(100);  
-    gpsSerial.begin(9600, SERIAL_8N1, GNSS_RX, GNSS_TX);  
-  }  
 
   /**  
    * @brief Puts the GNSS module to sleep  

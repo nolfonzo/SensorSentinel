@@ -6,19 +6,6 @@
 
 #include "heltec_unofficial_revised.h"  
 
-// ====== Constants ======  
-// Radio configuration  
-#define HELTEC_LORA_FREQ    915.0  // MHz, 868.0 for EU regions  
-#define HELTEC_LORA_BW      125.0  // kHz  
-#define HELTEC_LORA_SF      9      // Spreading factor  
-#define HELTEC_LORA_CR      5      // Coding rate  
-#define HELTEC_LORA_SYNC    0x12   // Sync word  
-
-// Chip-specific settings  
-#define HELTEC_SX1262_POWER   14.0    // dBm  
-#define HELTEC_SX1262_CURRENT 140.0   // mA  
-#define HELTEC_SX1276_POWER   17      // Different scale for SX1276  
-
 // Battery calibration  
 const float min_voltage = 3.04;  
 const float max_voltage = 4.26;  
@@ -41,7 +28,7 @@ HotButton button(BUTTON);
 bool buttonClicked = false;  
 
 // RadioLib instances based on board type  
-#ifndef HELTEC_NO_RADIOLIB  
+#ifndef NO_RADIOLIB  
   #if defined(ARDUINO_heltec_wireless_stick) || defined(ARDUINO_heltec_wireless_stick_lite)  
     SX1276 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);  
   #elif defined(ARDUINO_heltec_wireless_tracker)  
@@ -99,8 +86,10 @@ const char* heltec_get_board_name() {
     return "Wireless Stick";  
   #elif defined(ARDUINO_heltec_wireless_stick_lite)  
     return "Wireless Stick Lite";  
+  #elif defined(WOKWI)  
+    return "Wokwi simulator";  
   #else  
-    return "Unknown Heltec Board";  
+    return "Unknown Board";  
   #endif  
 }  
 
@@ -353,7 +342,7 @@ void heltec_deep_sleep(int seconds) {
   #endif  
   
   // Put radio to sleep  
-  #ifndef HELTEC_NO_RADIOLIB  
+  #ifndef NO_RADIOLIB  
     radio.begin();  
     radio.sleep(false); // 'false' for no warm start  
   #endif  
@@ -448,7 +437,26 @@ void heltec_setup() {
         Serial.println("SSD1306 allocation failed\n");  
       } else {  
         Serial.println("OLED initialized OK");
-      }
+        display.clearDisplay();
+  
+        // Set text properties
+        display.setTextSize(1);
+        display.setTextColor(SSD1306_WHITE);
+        
+        // Add content to the display
+        display.setCursor(0, 0);
+        display.println("Heltec LoRa 32 v3.2");
+        display.setCursor(0, 16);
+        display.println("OLED Test");
+        display.setCursor(0, 32);
+        display.println("Adafruit Library");
+        
+        // Draw a rectangle around the edge
+        display.drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SSD1306_WHITE);
+        
+        // Send the buffer to the display
+        display.display();
+        }
     #endif
     
     // ThingPulse library (V3) needs explicit display update that isn't handled by PrintSplitter
@@ -462,7 +470,7 @@ void heltec_setup() {
   #endif
   
   // Initialize RadioLib module  
-  #ifndef HELTEC_NO_RADIOLIB  
+  #ifndef NO_RADIOLIB  
     int radioStatus = radio.begin();  
     if (radioStatus != RADIOLIB_ERR_NONE) {  
       Serial.printf("Radio initialization failed with code %d\n", radioStatus);  
