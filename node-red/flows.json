@@ -24,6 +24,14 @@
         "env": []
     },
     {
+        "id": "b320d858532c1eb7",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "ac73cfbba5e1dcae",
         "type": "ui-base",
         "name": "My Dashboard",
@@ -244,6 +252,32 @@
         "groupType": "default"
     },
     {
+        "id": "mqtt_broker",
+        "type": "mqtt-broker",
+        "name": "Local MQTT Broker",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
         "id": "03b8ce6774a2abb5",
         "type": "function",
         "z": "62f31c6b53afb626",
@@ -343,8 +377,8 @@
         "id": "526ecc0b4996d3ac",
         "type": "mqtt in",
         "z": "bfe4d76a50650ba0",
-        "name": "LoRa messages from MQ",
-        "topic": "#",
+        "name": "Parsed sensor packets",
+        "topic": "lora/out/#",
         "qos": "2",
         "datatype": "json",
         "broker": "315ea8347fb746b3",
@@ -352,7 +386,7 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 470,
+        "x": 460,
         "y": 140,
         "wires": [
             [
@@ -558,7 +592,7 @@
         "offvalueType": "bool",
         "officon": "",
         "offcolor": "",
-        "x": 300,
+        "x": 280,
         "y": 220,
         "wires": [
             [
@@ -619,6 +653,82 @@
         ]
     },
     {
+        "id": "74592d25870dc84b",
+        "type": "mqtt out",
+        "z": "bfe4d76a50650ba0",
+        "name": "MQTT pub",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "315ea8347fb746b3",
+        "x": 1290,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "122a10cd50f2b674",
+        "type": "inject",
+        "z": "bfe4d76a50650ba0",
+        "name": "Sensor packet",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lora/sensor",
+        "payload": "{\"type\":\"sensor\",\"nodeId\":862487472,\"counter\":5670,\"battery\":0,\"voltage\":0,\"uptime\":173667,\"analog\":[553,593,569,71],\"digital\":198,\"timestamp_ms\":168713090,\"timestamp\":1750146309,\"time\":\"2025-06-17 17:45:09\",\"time_iso\":\"2025-06-17T17:45:09+1000\",\"GW\":\"WiFi LoRa 32 V3.2\",\"GW_ip\":\"192.168.20.101\",\"GW_mac\":\"30:ED:A0:CB:0E:8C\"}",
+        "payloadType": "json",
+        "x": 1020,
+        "y": 40,
+        "wires": [
+            [
+                "74592d25870dc84b"
+            ]
+        ]
+    },
+    {
+        "id": "0a0d227dfd8d6a9f",
+        "type": "inject",
+        "z": "bfe4d76a50650ba0",
+        "name": "GNSS packet",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lora/gnss",
+        "payload": "{\"type\":\"gnss\",\"nodeId\":862487472,\"counter\":1916,\"battery\":0,\"voltage\":2,\"uptime\":173719,\"latitude\":0,\"longitude\":0,\"speed\":0,\"course\":0,\"hdop\":0,\"timestamp_ms\":168765244,\"timestamp\":1750146361,\"time\":\"2025-06-17 17:46:01\",\"time_iso\":\"2025-06-17T17:46:01+1000\",\"GW\":\"WiFi LoRa 32 V3.2\",\"GW_ip\":\"192.168.20.101\",\"GW_mac\":\"30:ED:A0:CB:0E:8C\"}",
+        "payloadType": "json",
+        "x": 1010,
+        "y": 100,
+        "wires": [
+            [
+                "74592d25870dc84b"
+            ]
+        ]
+    },
+    {
         "id": "10e107042b67a65d",
         "type": "ui-template",
         "z": "e8a3445017fb5db9",
@@ -663,5 +773,233 @@
                 "10e107042b67a65d"
             ]
         ]
+    },
+    {
+        "id": "sensor_inject",
+        "type": "inject",
+        "z": "b320d858532c1eb7",
+        "name": "Sensor Packet Every 30s",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 310,
+        "y": 120,
+        "wires": [
+            [
+                "sensor_function"
+            ]
+        ]
+    },
+    {
+        "id": "sensor_function",
+        "type": "function",
+        "z": "b320d858532c1eb7",
+        "name": "Generate Sensor Packet",
+        "func": "// Get or initialize message counter\nlet counter = flow.get('sensor_counter') || 1000;\n\n// Fake sensor packet data\nconst packet = {\n    messageType: 0x01,\n    nodeId: 2697689064,\n    messageCounter: counter,\n    uptime: 3600,\n    batteryLevel: 85,\n    batteryVoltage: 3700,\n    pins: {\n        analog: [1024, 2048, 512, 3072],\n        boolean: 0b10110011\n    },\n    reserved: [0x00, 0x00]\n};\n\n// Create binary buffer (27 bytes)\nconst buffer = Buffer.alloc(27);\nlet offset = 0;\n\n// Write fields (little-endian)\nbuffer.writeUInt8(packet.messageType, offset); offset += 1;\nbuffer.writeUInt32LE(packet.nodeId, offset); offset += 4;\nbuffer.writeUInt32LE(packet.messageCounter, offset); offset += 4;\nbuffer.writeUInt32LE(packet.uptime, offset); offset += 4;\nbuffer.writeUInt8(packet.batteryLevel, offset); offset += 1;\nbuffer.writeUInt16LE(packet.batteryVoltage, offset); offset += 2;\nfor (let i = 0; i < 4; i++) {\n    buffer.writeUInt16LE(packet.pins.analog[i], offset); offset += 2;\n}\nbuffer.writeUInt8(packet.pins.boolean, offset); offset += 1;\nbuffer.writeUInt8(packet.reserved[0], offset); offset += 1;\nbuffer.writeUInt8(packet.reserved[1], offset);\n\n// Increment and save counter\ncounter++;\nflow.set('sensor_counter', counter);\n\n// Set MQTT payload and topic\nmsg.payload = buffer;\nmsg.topic = 'lora/in/sensor';\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 180,
+        "wires": [
+            [
+                "sensor_mqtt",
+                "77ef2d41ae630a1b"
+            ]
+        ]
+    },
+    {
+        "id": "sensor_mqtt",
+        "type": "mqtt out",
+        "z": "b320d858532c1eb7",
+        "name": "Publish Sensor Packet",
+        "topic": "",
+        "qos": "1",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "315ea8347fb746b3",
+        "x": 920,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "gnss_inject",
+        "type": "inject",
+        "z": "b320d858532c1eb7",
+        "name": "GNSS Packet Every 30s (15s delay)",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "15",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 290,
+        "y": 240,
+        "wires": [
+            [
+                "gnss_function"
+            ]
+        ]
+    },
+    {
+        "id": "gnss_function",
+        "type": "function",
+        "z": "b320d858532c1eb7",
+        "name": "Generate GNSS Packet",
+        "func": "// Get or initialize message counter\nlet counter = flow.get('gnss_counter') || 1000;\n\n// Fake GNSS packet data\nconst packet = {\n    messageType: 0x02,\n    nodeId: 2697689064,\n    messageCounter: counter,\n    uptime: 3600,\n    batteryLevel: 85,\n    batteryVoltage: 3700,\n    latitude: 37.7749,\n    longitude: -122.4194,\n    speed: 10.5,\n    hdop: 12,\n    course: 180.0,\n    reserved: [0x00, 0x00]\n};\n\n// Create binary buffer (35 bytes)\nconst buffer = Buffer.alloc(35);\nlet offset = 0;\n\n// Write fields (little-endian)\nbuffer.writeUInt8(packet.messageType, offset); offset += 1;\nbuffer.writeUInt32LE(packet.nodeId, offset); offset += 4;\nbuffer.writeUInt32LE(packet.messageCounter, offset); offset += 4;\nbuffer.writeUInt32LE(packet.uptime, offset); offset += 4;\nbuffer.writeUInt8(packet.batteryLevel, offset); offset += 1;\nbuffer.writeUInt16LE(packet.batteryVoltage, offset); offset += 2;\nbuffer.writeFloatLE(packet.latitude, offset); offset += 4;\nbuffer.writeFloatLE(packet.longitude, offset); offset += 4;\nbuffer.writeFloatLE(packet.speed, offset); offset += 4;\nbuffer.writeUInt8(packet.hdop, offset); offset += 1;\nbuffer.writeFloatLE(packet.course, offset); offset += 4;\nbuffer.writeUInt8(packet.reserved[0], offset); offset += 1;\nbuffer.writeUInt8(packet.reserved[1], offset);\n\n// Increment and save counter\ncounter++;\nflow.set('gnss_counter', counter);\n\n// Set MQTT payload and topic\nmsg.payload = buffer;\nmsg.topic = 'lora/in/gnss';\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 400,
+        "wires": [
+            [
+                "gnss_mqtt"
+            ]
+        ]
+    },
+    {
+        "id": "gnss_mqtt",
+        "type": "mqtt out",
+        "z": "b320d858532c1eb7",
+        "name": "Publish GNSS Packet",
+        "topic": "",
+        "qos": "1",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "315ea8347fb746b3",
+        "x": 900,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "mqtt_in",
+        "type": "mqtt in",
+        "z": "b320d858532c1eb7",
+        "name": "Subscribe to lora/in/#",
+        "topic": "lora/in/#",
+        "qos": "1",
+        "datatype": "buffer",
+        "broker": "mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 280,
+        "y": 540,
+        "wires": [
+            [
+                "parse_function"
+            ]
+        ]
+    },
+    {
+        "id": "parse_function",
+        "type": "function",
+        "z": "b320d858532c1eb7",
+        "name": "Parse Binary to JSON",
+        "func": "// Get binary buffer\nconst buffer = msg.payload;\nconst topic = msg.topic;\n\n// Check for null or invalid buffer\nif (!buffer) {\n    msg.payload = { error: \"Invalid parameters\" };\n    msg.topic = 'lora/out/error';\n    return msg;\n}\n\n// Check messageType (first byte)\nconst messageType = buffer.readUInt8(0);\nlet packet = {};\n\ntry {\n    if (messageType === 0x01 && buffer.length === 27) {\n        // Sensor packet (27 bytes)\n        let offset = 0;\n        const nodeId = buffer.readUInt32LE(offset + 1);\n        \n        // Validate nodeId\n        if (nodeId === 0) {\n            msg.payload = { error: \"Invalid packet data\" };\n            msg.topic = 'lora/out/error';\n            return msg;\n        }\n\n        packet = {\n            type: \"sensor\",\n            nodeId: nodeId,\n            counter: buffer.readUInt32LE(offset + 5),\n            battery: buffer.readUInt8(offset + 13),\n            voltage: buffer.readUInt16LE(offset + 14),\n            uptime: buffer.readUInt32LE(offset + 9),\n            analog: [\n                buffer.readUInt16LE(offset + 16),\n                buffer.readUInt16LE(offset + 18),\n                buffer.readUInt16LE(offset + 20),\n                buffer.readUInt16LE(offset + 22)\n            ],\n            digital: buffer.readUInt8(offset + 24)\n        };\n        msg.topic = 'lora/out/sensor';\n    } else if (messageType === 0x02 && buffer.length === 35) {\n        // GNSS packet (35 bytes)\n        let offset = 0;\n        const nodeId = buffer.readUInt32LE(offset + 1);\n        const latitude = buffer.readFloatLE(offset + 16);\n        const longitude = buffer.readFloatLE(offset + 20);\n\n        // Validate nodeId and coordinates\n        if (nodeId === 0 ||\n            latitude < -90.0 || latitude > 90.0 ||\n            longitude < -180.0 || longitude > 180.0) {\n            msg.payload = { error: \"Invalid packet data\" };\n            msg.topic = 'lora/out/error';\n            return msg;\n        }\n\n        packet = {\n            type: \"gnss\",\n            nodeId: nodeId,\n            counter: buffer.readUInt32LE(offset + 5),\n            battery: buffer.readUInt8(offset + 13),\n            voltage: buffer.readUInt16LE(offset + 14),\n            uptime: buffer.readUInt32LE(offset + 9),\n            latitude: latitude,\n            longitude: longitude,\n            speed: buffer.readFloatLE(offset + 24),\n            course: buffer.readFloatLE(offset + 29),\n            hdop: buffer.readUInt8(offset + 28) / 10.0\n        };\n        msg.topic = 'lora/out/gnss';\n    } else {\n        // Unknown packet type\n        msg.payload = { error: `Unknown packet type: 0x${messageType.toString(16).padStart(2, '0').toUpperCase()}` };\n        msg.topic = 'lora/out/error';\n        return msg;\n    }\n} catch (e) {\n    // Handle parsing errors\n    msg.payload = { error: \"JSON serialization error\" };\n    msg.topic = 'lora/out/error';\n    return msg;\n}\n\n// Set JSON payload\nmsg.payload = packet;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 660,
+        "wires": [
+            [
+                "debug_output",
+                "json_mqtt"
+            ]
+        ]
+    },
+    {
+        "id": "debug_output",
+        "type": "debug",
+        "z": "b320d858532c1eb7",
+        "name": "Debug JSON",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 910,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "json_mqtt",
+        "type": "mqtt out",
+        "z": "b320d858532c1eb7",
+        "name": "Publish JSON",
+        "topic": "",
+        "qos": "1",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "mqtt_broker",
+        "x": 900,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "77ef2d41ae630a1b",
+        "type": "debug",
+        "z": "b320d858532c1eb7",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 880,
+        "y": 180,
+        "wires": []
     }
 ]

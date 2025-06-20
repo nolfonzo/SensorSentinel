@@ -15,6 +15,10 @@
             "tours": {
                 "welcome": "4.0.9"
             }
+        },
+        "menu-menu-item-sidebar": true,
+        "debug": {
+            "clearType": "all"
         }
     }
 }

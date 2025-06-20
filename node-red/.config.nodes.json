@@ -442,7 +442,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/config/ui_base.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/config/ui_base.js"
             },
             "ui-page": {
                 "name": "ui-page",
@@ -453,7 +453,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/config/ui_page.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/config/ui_page.js"
             },
             "ui-link": {
                 "name": "ui-link",
@@ -464,7 +464,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/config/ui_link.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/config/ui_link.js"
             },
             "ui-group": {
                 "name": "ui-group",
@@ -475,7 +475,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/config/ui_group.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/config/ui_group.js"
             },
             "ui-theme": {
                 "name": "ui-theme",
@@ -486,7 +486,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/config/ui_theme.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/config/ui_theme.js"
             },
             "ui-form": {
                 "name": "ui-form",
@@ -497,7 +497,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_form.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_form.js"
             },
             "ui-text-input": {
                 "name": "ui-text-input",
@@ -508,7 +508,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_text_input.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_text_input.js"
             },
             "ui-number-input": {
                 "name": "ui-number-input",
@@ -519,7 +519,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_number_input.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_number_input.js"
             },
             "ui-file-input": {
                 "name": "ui-file-input",
@@ -530,7 +530,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_file_input.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_file_input.js"
             },
             "ui-button": {
                 "name": "ui-button",
@@ -541,7 +541,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_button.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_button.js"
             },
             "ui-button-group": {
                 "name": "ui-button-group",
@@ -552,7 +552,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_button_group.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_button_group.js"
             },
             "ui-dropdown": {
                 "name": "ui-dropdown",
@@ -563,7 +563,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_dropdown.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_dropdown.js"
             },
             "ui-radio-group": {
                 "name": "ui-radio-group",
@@ -574,7 +574,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_radio_group.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_radio_group.js"
             },
             "ui-slider": {
                 "name": "ui-slider",
@@ -585,7 +585,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_slider.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_slider.js"
             },
             "ui-spacer": {
                 "name": "ui-spacer",
@@ -596,7 +596,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_spacer.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_spacer.js"
             },
             "ui-switch": {
                 "name": "ui-switch",
@@ -607,7 +607,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_switch.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_switch.js"
             },
             "ui-text": {
                 "name": "ui-text",
@@ -618,7 +618,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_text.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_text.js"
             },
             "ui-table": {
                 "name": "ui-table",
@@ -629,7 +629,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_table.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_table.js"
             },
             "ui-chart": {
                 "name": "ui-chart",
@@ -640,7 +640,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_chart.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_chart.js"
             },
             "ui-gauge": {
                 "name": "ui-gauge",
@@ -651,7 +651,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_gauge.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_gauge.js"
             },
             "ui-notification": {
                 "name": "ui-notification",
@@ -662,7 +662,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_notification.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_notification.js"
             },
             "ui-audio": {
                 "name": "ui-audio",
@@ -673,7 +673,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_audio.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_audio.js"
             },
             "ui-markdown": {
                 "name": "ui-markdown",
@@ -684,7 +684,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_markdown.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_markdown.js"
             },
             "ui-template": {
                 "name": "ui-template",
@@ -695,7 +695,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_template.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_template.js"
             },
             "ui-event": {
                 "name": "ui-event",
@@ -706,7 +706,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_event.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_event.js"
             },
             "ui-control": {
                 "name": "ui-control",
@@ -717,7 +717,7 @@
                 "local": true,
                 "user": false,
                 "module": "@flowfuse/node-red-dashboard",
-                "file": "/Users/nolfonzo/code/SensorSentinel2/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_control.js"
+                "file": "/Users/nolfonzo/code/SensorSentinel/node-red/node_modules/@flowfuse/node-red-dashboard/nodes/widgets/ui_control.js"
             }
         }
     }
