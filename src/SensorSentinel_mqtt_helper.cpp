@@ -1,11 +1,11 @@
 /**
- * @file SensorSentinel_mqtt_gateway.cpp
+ * @file SensorSentinel_mqtt_helper.cpp
  * @brief Implementation of MQTT helper functions for Heltec boards
  */
 
 #include "heltec_unofficial_revised.h"
 #include <WiFi.h>  // Include this explicitly for WiFiClient
-#include "SensorSentinel_mqtt_gateway.h"
+#include "SensorSentinel_mqtt_helper.h"
 #include "SensorSentinel_wifi_helper.h"
 
 // Module variables

@@ -1,10 +1,10 @@
 /**
- * @file SensorSentinel_mqtt_gateway.h
+ * @file SensorSentinel_mqtt_helper.h
  * @brief MQTT helper functions for Heltec boards
  */
 
-#ifndef SensorSentinel_MQTT_GATEWAY_H
-#define SensorSentinel_MQTT_GATEWAY_H
+#ifndef SensorSentinel_MQTT_HELPER_H
+#define SensorSentinel_MQTT_HELPER_H
 
 #include <Arduino.h>
 #include <PubSubClient.h>  // MQTT client library
@@ -114,4 +114,4 @@ PubSubClient& SensorSentinel_mqtt_get_client();
  */
 int SensorSentinel_wifi_quality();
 
-#endif // SensorSentinel_MQTT_GATEWAY_H
+#endif // SensorSentinel_MQTT_HELPER_H

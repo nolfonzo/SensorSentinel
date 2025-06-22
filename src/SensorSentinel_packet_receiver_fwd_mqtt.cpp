@@ -5,16 +5,16 @@
  * Listens for incoming packets, displays them, and forwards them to MQTT topics:
  * - Sensor packets go to lora/sensor
  * - GNSS packets go to lora/gnss
- * Uses the SensorSentinel_mqtt_gateway for MQTT connectivity.
+ * Uses the SensorSentinel_mqtt_helper for MQTT connectivity.
  */
 
 #include "heltec_unofficial_revised.h"
 #include "SensorSentinel_packet_helper.h"
-#include "SensorSentinel_mqtt_gateway.h"
+#include "SensorSentinel_mqtt_helper.h"
 #include "SensorSentinel_wifi_helper.h"
 
 #ifndef NO_RADIOLIB
-  #include "SensorSentinel_RadioLib_helper.h"
+#include "SensorSentinel_RadioLib_helper.h"
 #endif
 
 // Configuration
@@ -46,19 +46,19 @@ void setup()
               heltec_battery_percent(),
               heltec_vbat());
 
-  // Subscribe to binary packet reception
-  #ifndef NO_RADIOLIB
-    if (SensorSentinel_subscribe_binary_packets(onBinaryPacketReceived))
-    {
-      both.println("Subscribed to packets");
-    }
-    else
-    {
-      both.println("Subscribe failed!");
-    }
-  #else
-    both. println("No radio, no sub");
-  #endif
+// Subscribe to binary packet reception
+#ifndef NO_RADIOLIB
+  if (SensorSentinel_subscribe_binary_packets(onBinaryPacketReceived))
+  {
+    both.println("Subscribed to packets");
+  }
+  else
+  {
+    both.println("Subscribe failed!");
+  }
+#else
+  both.println("No radio, no sub");
+#endif
 
   heltec_display_update();
   delay(2000);
@@ -73,8 +73,10 @@ void loop()
   // Handle system tasks
   heltec_loop();
 
+#ifndef NO_RADIOLIB
   // Process any pending packet receptions
-  // SensorSentinel_process_packets();  TODO I don't think this is needed
+  SensorSentinel_process_packets();
+#endif
 
   // Let helpers maintain WiFi and MQTT connections
   SensorSentinel_wifi_maintain();

@@ -61,7 +61,6 @@ bool SensorSentinel_init_sensor_packet(SensorSentinel_sensor_packet_t* packet, u
   return true;
 }
 
-
 /**
  * @brief Initialize a GNSS packet with device information and location data if available
  * 

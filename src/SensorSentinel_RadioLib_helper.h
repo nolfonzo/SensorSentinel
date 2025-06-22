@@ -8,7 +8,6 @@
 
 #include <heltec_unofficial_revised.h>
 
-
 /**
  * @brief Callback function type for string packet reception
  * @param data Reference to the received packet data as a String
@@ -44,30 +43,20 @@ extern float _packetSnr;
 void _handleLoRaRx();
 
 /**
- * @brief Subscribe to LoRa packet reception events
- * @param callback Function to be called when a packet is received
+ * @brief Subscribe to LoRa packet reception events (string and/or binary)
+ * @param packetCallback Function for string packet reception (optional)
+ * @param binaryPacketCallback Function for binary packet reception (optional)
  * @return true if subscription was successful
  */
-bool SensorSentinel_subscribe_packets(PacketCallback callback);
+bool SensorSentinel_subscribe(PacketCallback packetCallback, BinaryPacketCallback binaryPacketCallback);
 
 /**
- * @brief Unsubscribe from LoRa packet reception events
+ * @brief Unsubscribe from LoRa packet reception events (string and/or binary)
+ * @param packetCallback true to unsubscribe from string packets
+ * @param binaryPacketCallback true to unsubscribe from binary packets
  * @return true if unsubscription was successful
  */
-bool SensorSentinel_unsubscribe_packets();
-
-/**
- * @brief Subscribe to LoRa binary packet reception events
- * @param callback Function to be called when a binary packet is received
- * @return true if subscription was successful
- */
-bool SensorSentinel_subscribe_binary_packets(BinaryPacketCallback callback);
-
-/**
- * @brief Unsubscribe from LoRa binary packet reception events
- * @return true if unsubscription was successful
- */
-bool SensorSentinel_unsubscribe_binary_packets();
+bool SensorSentinel_unsubscribe(bool packetCallback, bool binaryPacketCallback);
 
 /**
  * @brief Process any received packets in the main loop
