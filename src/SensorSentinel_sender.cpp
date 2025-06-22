@@ -1,5 +1,5 @@
 /**
- * @file SensorSentinel_send_sensor_packet.cpp
+ * @file SensorSentinel_sender.cpp
  * @brief Periodic sensor and GNSS packet sender
  * 
  * Sends sensor packets every 30 seconds and GNSS packets every 90 seconds

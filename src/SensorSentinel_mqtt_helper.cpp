@@ -77,14 +77,14 @@ boolean SensorSentinel_mqtt_sync_time(long timezone, int daylightOffset,
                       const char* ntpServer1, const char* ntpServer2, 
                       const char* ntpServer3) {
   if (!SensorSentinel_wifi_connected()) {
-    Serial.println("ERROR: Cannot sync time - WiFi not connected");
+    Serial.println("\nERROR: Cannot sync time - WiFi not connected");
     return false;
   }
   
-  Serial.printf("Configuring time sync with timezone offset: %ld seconds\n", timezone);
+  Serial.printf("\nConfiguring time sync with timezone offset: %ld seconds\n", timezone);
   configTime(timezone, daylightOffset, ntpServer1, ntpServer2, ntpServer3);
   
-  Serial.println("Waiting for NTP time sync...");
+  Serial.println("\nWaiting for NTP time sync...");
   
   // Wait up to 5 seconds for time to be set
   unsigned long startAttempt = millis();
@@ -99,11 +99,11 @@ boolean SensorSentinel_mqtt_sync_time(long timezone, int daylightOffset,
     char timeString[25];
     strftime(timeString, sizeof(timeString), "%Y-%m-%d %H:%M:%S", &timeinfo);
     
-    Serial.print("NTP time synchronized: ");
-    Serial.println(timeString);
+    Serial.print("\nNTP time synchronized: ");
+    Serial.print(timeString);
     return true;
   } else {
-    Serial.println("ERROR: Failed to sync time via NTP after 5 seconds");
+    Serial.println("\nERROR: Failed to sync time via NTP after 5 seconds");
     return false;
   }
 }
@@ -168,8 +168,8 @@ boolean SensorSentinel_mqtt_init() {
   mqttClientId = SensorSentinel_mqtt_get_client_id();
   
   // Log the MQTT configuration
-  Serial.printf("MQTT Server: %s:%d\n", mqtt_server, mqtt_port);
-  Serial.printf("MQTT Buffer Size: %u bytes\n", mqttClient.getBufferSize());
+  Serial.printf("\nMQTT Server: %s:%d\n", mqtt_server, mqtt_port);
+  Serial.printf("\nMQTT Buffer Size: %u bytes\n", mqttClient.getBufferSize());
   
   return true;
 }
@@ -272,26 +272,26 @@ boolean SensorSentinel_mqtt_setup(boolean syncTimeOnConnect) {
   
   // Only proceed if WiFi is connected
   if (!SensorSentinel_wifi_connected()) {
-    Serial.println("ERROR: WiFi not connected - MQTT setup deferred");
+    Serial.println("\nERROR: WiFi not connected - MQTT setup deferred");
     return false;
   }
   
   // Sync time if requested
   if (syncTimeOnConnect) {
-    Serial.println("Syncing time...");
+    Serial.println("\nSyncing time...");
     
     // Use the timezone defined in platformio.ini
     #ifdef TIMEZONE_OFFSET
     long timezone = TIMEZONE_OFFSET;
     Serial.printf("Using timezone offset from config: %ld seconds\n", timezone);
     if (!SensorSentinel_mqtt_sync_time(timezone, 0, "pool.ntp.org", "time.nist.gov", "time.google.com")) {
-      Serial.println("WARNING: Time sync failed, continuing with unsynchronized time");
+      Serial.println("\nWARNING: Time sync failed, continuing with unsynchronized time");
     }
     #else
     // Fallback if not defined
-    Serial.println("WARNING: TIMEZONE_OFFSET not defined, using default UTC+0");
+    Serial.println("\nWARNING: TIMEZONE_OFFSET not defined, using default UTC+0");
     if (!SensorSentinel_mqtt_sync_time(0, 0, "pool.ntp.org", "time.nist.gov", "time.google.com")) {  // Default to UTC
-      Serial.println("WARNING: Time sync failed, continuing with unsynchronized time");
+      Serial.println("\nWARNING: Time sync failed, continuing with unsynchronized time");
     }
     #endif
   }
@@ -299,9 +299,9 @@ boolean SensorSentinel_mqtt_setup(boolean syncTimeOnConnect) {
   // Connect to MQTT broker
   boolean connected = SensorSentinel_mqtt_connect();
   if (connected) {
-    Serial.println("MQTT setup completed successfully");
+    Serial.println("\nMQTT setup completed successfully");
   } else {
-    Serial.println("MQTT setup completed but broker connection failed - will retry later");
+    Serial.println("\nMQTT setup completed but broker connection failed - will retry later");
   }
   
   return connected;
@@ -322,11 +322,11 @@ boolean SensorSentinel_mqtt_maintain() {
     // Try to reconnect at defined interval
     unsigned long now = millis();
     if (now - lastMqttConnectionAttempt > mqttConnectionInterval) {
-      Serial.println("MQTT disconnected, attempting reconnection...");
+      Serial.println("\nMQTT disconnected, attempting reconnection...");
       if (SensorSentinel_mqtt_connect()) {
-        Serial.println("MQTT reconnected successfully");
+        Serial.println("\nMQTT reconnected successfully");
       } else {
-        Serial.printf("MQTT reconnection fail, will retry in %u seconds (state=%d)\n", 
+        Serial.printf("\nMQTT reconnection fail, will retry in %u seconds (state=%d)\n", 
                      mqttConnectionInterval/1000, mqttClient.state());
       }
     }
@@ -350,7 +350,7 @@ boolean SensorSentinel_mqtt_publish(const char* topic, const char* payload, bool
   
   // Validate topic
   if (topic == NULL || strlen(topic) == 0) {
-    Serial.println("ERROR: Cannot publish - empty topic");
+    Serial.println("\nERROR: Cannot publish - empty topic");
     return false;
   }
   

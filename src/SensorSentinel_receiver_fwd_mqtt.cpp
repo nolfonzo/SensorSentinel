@@ -1,5 +1,5 @@
 /**
- * @file SensorSentinel_packet_receiver_fwd_mqtt.cpp
+ * @file SensorSentinel_receiver_fwd_mqtt.cpp
  * @brief Sensor and GNSS packet receiver for Heltec boards with MQTT forwarding
  *
  * Listens for incoming packets, displays them, and forwards them to MQTT topics:
@@ -41,8 +41,8 @@ void setup()
   // Clear display and show startup message
   heltec_clear_display();
   both.println("Packet Receiver+MQTT");
-  both.printf("Board: %s\n", heltec_get_board_name());
-  both.printf("Battery: %d%% (%.2fV)\n",
+  both.printf("\nBoard: %s\n", heltec_get_board_name());
+  both.printf("\nBattery: %d%% (%.2fV)\n",
               heltec_battery_percent(),
               heltec_vbat());
 
@@ -94,7 +94,7 @@ void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr)
 
   // Clear display for output
   heltec_clear_display();
-  Serial.println("\nPacket Received!");
+  Serial.println("Packet Received!");
 
   // Check packet size
   if (length > MAX_LORA_PACKET_SIZE)
@@ -102,8 +102,8 @@ void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr)
     Serial.printf("ERROR: Packet too large: %u bytes\n", length);
     heltec_clear_display();
     both.println("Packet too large!");
-    both.printf("Size: %u bytes (max %u)\n", length, MAX_LORA_PACKET_SIZE);
-    both.printf("RSSI: %.1f dB, SNR: %.1f dB\n", rssi, snr);
+    both.printf("\nSize: %u bytes (max %u)\n", length, MAX_LORA_PACKET_SIZE);
+    both.printf("\nRSSI: %.1f dB, SNR: %.1f dB\n", rssi, snr);
     heltec_display_update();
     delay(2000);
     heltec_led(0);
@@ -139,16 +139,16 @@ void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr)
   {
 
     // Display the extracted information
-    both.printf("Received Type: %s\n", packetMessageType.c_str());
+    both.printf("\nReceived Type: %s\n", packetMessageType.c_str());
 
     // both.printf("Msg #: %u\n", messageCounter);  TODO GET messageCounter THIS FROM BINARY PACKAGE, LOOK AT OLD JSON METHOD
-    both.printf("Msg #: %u\n", 0);
+    both.printf("\nMsg #: %u\n", 0);
 
     // both.printf("NodeID: %u\n", packetJson["nodeId"].as<uint32_t>());  TODO as above for nodeId
-    both.printf("NodeID: %u\n", 0);
+    both.printf("\nNodeID: %u\n", 0);
 
     // Print the raw data for debugging
-    Serial.printf("Packet data");
+    Serial.printf("\nPacket data: ");
     for (size_t i = 0; i < length; i++)
     {
       Serial.printf("%02X", packetBuffer[i]);
@@ -158,7 +158,7 @@ void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr)
     // Serial output for valid packets
     SensorSentinel_print_packet_info(packetBuffer, true);
 
-    Serial.printf("Raw data (%u bytes): ", length);
+    Serial.printf("\nRaw data (%u bytes): ", length);
     for (size_t i = 0; i < length; i++)
     {
       Serial.printf("%02X", packetBuffer[i]);
@@ -166,16 +166,16 @@ void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr)
     Serial.println();
 
     // Common display elements (outside the if/else block)
-    both.printf("RSSI: %.1f dB,\nSNR: %.1f dB\n", rssi, snr);
-    both.printf("Size: %u bytes\n", length);
-    both.printf("Total Rx: %u\n", packetsReceived + 1);
+    both.printf("\nRSSI: %.1f dB,\nSNR: %.1f dB\n", rssi, snr);
+    both.printf("\nSize: %u bytes\n", length);
+    both.printf("\nTotal Rx: %u\n", packetsReceived + 1);
     Serial.println("---------------------------");
 
     // Forward the packet to MQTT - global variables are used internally
     bool mqttForwarded = forwardPacketToMQTT(packetBuffer, length, rssi, snr);
 
     // Serial output for packet statistics
-    Serial.printf("Packets received: %u, Forwarded: %u\n", packetsReceived + 1, packetsForwarded);
+    Serial.printf("\nPackets received: %u, Forwarded: %u\n", packetsReceived + 1, packetsForwarded);
     Serial.println("---------------------------");
     Serial.println("---------------------------\n");
 
@@ -213,33 +213,17 @@ bool forwardPacketToMQTT(uint8_t *data, size_t length, float rssi, float snr)
     return false;
   }
 
-  const char *topic;
-  // TODO get msg type from packet
-  packetMessageType = "sensor";
-
-  if (packetMessageType == "sensor")
-  {
-    topic = MQTT_TOPIC_SENSOR;
-  }
-  else if (packetMessageType == "gnss")
-  {
-    topic = MQTT_TOPIC_GNSS;
-  }
-  else
-  {
-    topic = MQTT_TOPIC_DATA;
-  }
-  bool success = SensorSentinel_mqtt_get_client().publish(topic, data, length, false);
+  bool success = SensorSentinel_mqtt_get_client().publish(MQTT_TOPIC, data, length, false);
 
   if (success)
   {
     packetsForwarded++;
-    Serial.printf("Forwarded raw data (%u bytes) to %s\n", length, topic);
+    Serial.printf("\nForwarded raw data (%u bytes) to %s\n", length, MQTT_TOPIC);
     return true;
   }
   else
   {
-    Serial.printf("ERROR: Failed to forward raw data to MQTT topic: %s\n", topic);
+    Serial.printf("\nERROR: Failed to forward raw data to MQTT topic: %s\n", MQTT_TOPIC);
     return false;
   }
 }
