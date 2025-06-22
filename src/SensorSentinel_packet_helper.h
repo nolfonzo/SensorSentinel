@@ -136,23 +136,10 @@ size_t SensorSentinel_get_packet_size(uint8_t messageType);
  * message type field in the packet. Handles both sensor and GNSS packets.
  * 
  * @param packet Pointer to the packet buffer (any type)
- * @param showAll Whether to show all fields including reserved bytes
+ * @param length
  * @return true if the packet was successfully printed, false otherwise
  */
-bool SensorSentinel_print_packet_info(const void* packet, bool showAll = false);
-
-/**
- * @brief Parse a received packet buffer into the appropriate packet structure
- * 
- * Converts raw bytes from radio/serial into a structured packet,
- * validates the data, and returns success/failure.
- * 
- * @param buffer Raw buffer containing packet data
- * @param length Length of the buffer in bytes
- * @param packet Pointer to packet union to populate
- * @return true if parsing was successful, false if packet is invalid
- */
-bool SensorSentinel_parse_packet(uint8_t* buffer, size_t length, SensorSentinel_packet_t* packet);
+bool SensorSentinel_print_packet_info(const void* packet, size_t length);
 
 /**
  * @brief Validate a sensor packet structure for consistency

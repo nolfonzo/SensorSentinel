@@ -152,6 +152,8 @@ void loop()
   // Handle button, power control, GNSS updates, and display updates
   // This also calls SensorSentinel_process_packets() which processes LoRa packets
   heltec_loop();
+  
+  SensorSentinel_process_packets();
 
   bool txLegal = millis() > lastTxTime + minimumPause;
   bool buttonPressed = heltec_button_clicked();

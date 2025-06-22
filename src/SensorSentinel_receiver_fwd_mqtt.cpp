@@ -48,7 +48,7 @@ void setup()
 
 // Subscribe to binary packet reception
 #ifndef NO_RADIOLIB
-  if (SensorSentinel_subscribe_binary_packets(onBinaryPacketReceived))
+  if (SensorSentinel_subscribe(NULL, onBinaryPacketReceived))
   {
     both.println("Subscribed to packets");
   }
@@ -57,7 +57,7 @@ void setup()
     both.println("Subscribe failed!");
   }
 #else
-  both.println("No radio, no sub");
+  both.println("No radio, No sub");
 #endif
 
   heltec_display_update();
@@ -94,12 +94,10 @@ void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr)
 
   // Clear display for output
   heltec_clear_display();
-  Serial.println("Packet Received!");
 
   // Check packet size
   if (length > MAX_LORA_PACKET_SIZE)
   {
-    Serial.printf("ERROR: Packet too large: %u bytes\n", length);
     heltec_clear_display();
     both.println("Packet too large!");
     both.printf("\nSize: %u bytes (max %u)\n", length, MAX_LORA_PACKET_SIZE);
@@ -116,28 +114,8 @@ void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr)
   // Basic validation - check if it's a known message type with the right size
   bool isValidPacket = SensorSentinel_validate_packet(packetBuffer, length, true);
 
-  // Calculate time since last packet (for Serial output only)
-  if (lastPacketTime > 0)
-  {
-    unsigned long timeBetweenPackets = (millis() - lastPacketTime) / 1000;
-    Serial.printf("Time since last packet: ");
-    if (timeBetweenPackets < 60)
-    {
-      Serial.printf("%lu seconds\n", timeBetweenPackets);
-    }
-    else if (timeBetweenPackets < 3600)
-    {
-      Serial.printf("%lu minutes\n", timeBetweenPackets / 60);
-    }
-    else
-    {
-      Serial.printf("%lu hours\n", timeBetweenPackets / 3600);
-    }
-  }
-
   if (isValidPacket)
   {
-
     // Display the extracted information
     both.printf("\nReceived Type: %s\n", packetMessageType.c_str());
 
@@ -147,42 +125,29 @@ void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr)
     // both.printf("NodeID: %u\n", packetJson["nodeId"].as<uint32_t>());  TODO as above for nodeId
     both.printf("\nNodeID: %u\n", 0);
 
-    // Print the raw data for debugging
-    Serial.printf("\nPacket data: ");
-    for (size_t i = 0; i < length; i++)
-    {
-      Serial.printf("%02X", packetBuffer[i]);
-    }
-    Serial.println();
-
-    // Serial output for valid packets
-    SensorSentinel_print_packet_info(packetBuffer, true);
-
-    Serial.printf("\nRaw data (%u bytes): ", length);
-    for (size_t i = 0; i < length; i++)
-    {
-      Serial.printf("%02X", packetBuffer[i]);
-    }
-    Serial.println();
-
     // Common display elements (outside the if/else block)
     both.printf("\nRSSI: %.1f dB,\nSNR: %.1f dB\n", rssi, snr);
     both.printf("\nSize: %u bytes\n", length);
     both.printf("\nTotal Rx: %u\n", packetsReceived + 1);
+
+    // Serial output for valid packets
+    SensorSentinel_print_packet_info(packetBuffer, length);
     Serial.println("---------------------------");
 
     // Forward the packet to MQTT - global variables are used internally
     bool mqttForwarded = forwardPacketToMQTT(packetBuffer, length, rssi, snr);
 
-    // Serial output for packet statistics
-    Serial.printf("\nPackets received: %u, Forwarded: %u\n", packetsReceived + 1, packetsForwarded);
-    Serial.println("---------------------------");
-    Serial.println("---------------------------\n");
-
     // MQTT status display
     if (!mqttForwarded)
     {
       both.println("MQTT: Forward failed");
+    }
+    else
+    {
+      // Serial output for packet statistics
+      Serial.printf("\nPackets received: %u, Forwarded: %u\n", packetsReceived + 1, packetsForwarded);
+      Serial.println("---------------------------");
+      Serial.println("---------------------------\n");
     }
   }
 
