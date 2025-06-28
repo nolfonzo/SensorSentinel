@@ -98,7 +98,7 @@ const char* heltec_get_board_name() {
  */  
 void heltec_display_update() {  
   #ifndef HELTEC_NO_DISPLAY  
-    #if defined(BOARD_HELTEC_V3_2)   
+    #if defined(BOARD_HELTEC_V3_2) || defined(WOKWI)
       display.display();  
     #endif  
   #endif  
@@ -295,6 +295,7 @@ void heltec_display_power(bool on) {
  */  
 void heltec_clear_display(uint8_t textSize, uint8_t rotation) {  
   #ifndef HELTEC_NO_DISPLAY  
+      display.setTextWrap(true);
     #ifdef ARDUINO_heltec_wireless_tracker  
       display.fillScreen(ST7735_BLACK);  
       display.setTextColor(ST7735_WHITE);  
@@ -302,12 +303,15 @@ void heltec_clear_display(uint8_t textSize, uint8_t rotation) {
       display.setRotation(rotation);  
       display.setTextSize(textSize);  
     #elif defined(ARDUINO_heltec_wifi_32_lora_V3)  
+      display.setContrast(255);  
       display.clear();  
       display.setColor(WHITE);  
       display.setTextAlignment(TEXT_ALIGN_LEFT);  
       if (textSize == 1) display.setFont(ArialMT_Plain_10);  
       else if (textSize == 2) display.setFont(ArialMT_Plain_16);  
       else display.setFont(ArialMT_Plain_24);  
+      display.flipScreenVertically();
+      display.display();
     #else  
       display.clearDisplay();  
       display.setTextSize(textSize);  
@@ -414,58 +418,27 @@ void heltec_setup() {
   
     // Initialize display
   #ifndef HELTEC_NO_DISPLAY  
+      heltec_display_power(true);  
     #ifdef ARDUINO_heltec_wireless_tracker  
       // Initialize TFT display for Wireless Tracker
-      heltec_display_power(true);  
       display.initR(INITR_MINI160x80);
-      display.fillScreen(ST7735_BLACK);  
-      display.setTextColor(ST7735_WHITE);  
-      display.setTextSize(1);  
-      display.setTextWrap(true);
     #elif defined(ARDUINO_heltec_wifi_32_lora_V3)  
       // Initialize OLED for V3 - ThingPulse library
-      heltec_display_power(true);  
       Wire.begin(SDA_OLED, SCL_OLED);  
       display.init();  
-      display.setContrast(255);  
-      display.flipScreenVertically();
     #else  
-      // Initialize OLED for V3.2 and Wireless Stick - Adafruit library
+      // Initialize OLED for V3.2 and Wireless Stick and Wokwi simulator - Adafruit library
       heltec_display_power(true);  
       Wire.begin(SDA_OLED, SCL_OLED);  
       if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {  
         Serial.println("SSD1306 allocation failed\n");  
       } else {  
         Serial.println("OLED initialized OK");
-        display.clearDisplay();
-  
-        // Set text properties
-        display.setTextSize(1);
-        display.setTextColor(SSD1306_WHITE);
-        
-        // Add content to the display
-        display.setCursor(0, 0);
-        display.println("Heltec LoRa 32 v3.2");
-        display.setCursor(0, 16);
-        display.println("OLED Test");
-        display.setCursor(0, 32);
-        display.println("Adafruit Library");
-        
-        // Draw a rectangle around the edge
-        display.drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SSD1306_WHITE);
-        
-        // Send the buffer to the display
-        display.display();
-        }
+      }
     #endif
-    
-    // ThingPulse library (V3) needs explicit display update that isn't handled by PrintSplitter
-    #if defined(ARDUINO_heltec_wifi_32_lora_V3)
-      display.display();
-    #endif
+    heltec_clear_display();  // Clear display with default text size and rotation
   #else
     // No display - just log to Serial
-    Serial.println("\nHeltec ESP32 LoRa");  
     Serial.println(heltec_get_board_name());
   #endif
   

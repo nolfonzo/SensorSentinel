@@ -20,8 +20,13 @@
 #define SensorSentinel_ANALOG_COUNT    4  // All boards have 4 analog pins
 #define SensorSentinel_BOOLEAN_COUNT   8  // All boards have 8 boolean pins
 
+#if defined(WOKWI)
+  // Wokwi available pins
+  #define SensorSentinel_ANALOG_PINS     {32, 33, 34, 35}
+  #define SensorSentinel_BOOLEAN_PINS    {4, 5, 6, 36, 36, 37, 38, 39}
+
 // Available pins for external use (analog and digital) - board specific
-#if defined(ARDUINO_heltec_wireless_tracker)
+#elif defined(ARDUINO_heltec_wireless_tracker)
   // Wireless Tracker available pins (ESP32-S3)
   // Based on Wireless Tracker datasheet
   #define SensorSentinel_ANALOG_PINS     {4, 5, 6, 7}

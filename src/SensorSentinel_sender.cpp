@@ -30,7 +30,7 @@ void setup() {
   // Show startup message
   heltec_clear_display();
 
-  both.println("\nSensor Packet Sender");
+  both.println("\nPacket Sender");
   both.printf("Board: %s\n", heltec_get_board_name());
   both.printf("Battery: %d%% (%.2fV)\n", 
              heltec_battery_percent(), 
