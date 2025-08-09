@@ -17,9 +17,6 @@
 #include "SensorSentinel_RadioLib_helper.h"
 #endif
 
-// Configuration
-#define MAX_LORA_PACKET_SIZE 256 // Maximum packet size we can handle
-
 // Global variables
 uint8_t packetBuffer[MAX_LORA_PACKET_SIZE]; // Buffer to hold received packet
 unsigned long lastPacketTime = 0;
@@ -31,7 +28,8 @@ String packetMessageType; // Current packet message type
 
 // Function prototypes
 void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr);
-bool forwardPacketToMQTT(uint8_t *data, size_t length, float rssi, float snr);
+
+#define STARTUP_DISPLAY_DELAY 2000
 
 void setup()
 {
@@ -41,8 +39,8 @@ void setup()
   // Clear display and show startup message
   heltec_clear_display();
   both.println("Packet Receiver+MQTT");
-  both.printf("\nBoard: %s\n", heltec_get_board_name());
-  both.printf("\nBattery: %d%% (%.2fV)\n",
+  both.printf("Board: %s\n", heltec_get_board_name());
+  both.printf("Battery: %d%% (%.2fV)\n",
               heltec_battery_percent(),
               heltec_vbat());
 
@@ -50,18 +48,18 @@ void setup()
 #ifndef NO_RADIOLIB
   if (SensorSentinel_subscribe(NULL, onBinaryPacketReceived))
   {
-    both.println("Subscribed to packets");
+    both.println("\nSubscribed to packets");
   }
   else
   {
-    both.println("Subscribe failed!");
+    both.println("\nSubscribe failed!");
   }
 #else
-  both.println("No radio, No sub");
+  both.println("\nNo radio, No sub");
 #endif
 
   heltec_display_update();
-  delay(2000);
+  delay(STARTUP_DISPLAY_DELAY);
 
   // Let the helper libraries handle WiFi and MQTT connection
   SensorSentinel_wifi_begin();
@@ -95,60 +93,50 @@ void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr)
   // Clear display for output
   heltec_clear_display();
 
-  // Check packet size
-  if (length > MAX_LORA_PACKET_SIZE)
-  {
-    heltec_clear_display();
-    both.println("Packet too large!");
-    both.printf("\nSize: %u bytes (max %u)\n", length, MAX_LORA_PACKET_SIZE);
-    both.printf("\nRSSI: %.1f dB, SNR: %.1f dB\n", rssi, snr);
-    heltec_display_update();
-    delay(2000);
-    heltec_led(0);
-    return;
-  }
-
-  // Store packet in buffer
+   // Store packet in buffer
   memcpy(packetBuffer, data, length);
 
   // Basic validation - check if it's a known message type with the right size
-  bool isValidPacket = SensorSentinel_validate_packet(packetBuffer, length, true);
+  bool isValidPacket = SensorSentinel_validate_packet(packetBuffer, length);
 
   if (isValidPacket)
   {
+    uint8_t messageType = *((uint8_t *)data);
+    packetMessageType = SensorSentinel_message_type_to_string(messageType);
+
     // Display the extracted information
     both.printf("\nReceived Type: %s\n", packetMessageType.c_str());
-
-    // both.printf("Msg #: %u\n", messageCounter);  TODO GET messageCounter THIS FROM BINARY PACKAGE, LOOK AT OLD JSON METHOD
-    both.printf("\nMsg #: %u\n", 0);
-
-    // both.printf("NodeID: %u\n", packetJson["nodeId"].as<uint32_t>());  TODO as above for nodeId
-    both.printf("\nNodeID: %u\n", 0);
+    both.printf("Msg #: %u\n", SensorSentinel_get_message_counter(packetBuffer));
+    both.printf("NodeID: %u\n", SensorSentinel_extract_node_id_from_packet(packetBuffer));
 
     // Common display elements (outside the if/else block)
-    both.printf("\nRSSI: %.1f dB,\nSNR: %.1f dB\n", rssi, snr);
-    both.printf("\nSize: %u bytes\n", length);
-    both.printf("\nTotal Rx: %u\n", packetsReceived + 1);
+    both.printf("RSSI: %.1f dB,\nSNR: %.1f dB\n", rssi, snr);
+    both.printf("Size: %u bytes\n", length);
+    both.printf("Total Rx: %u\n", packetsReceived + 1);
 
     // Serial output for valid packets
     SensorSentinel_print_packet_info(packetBuffer, length);
     Serial.println("---------------------------");
 
-    // Forward the packet to MQTT - global variables are used internally
-    bool mqttForwarded = forwardPacketToMQTT(packetBuffer, length, rssi, snr);
-
-    // MQTT status display
-    if (!mqttForwarded)
-    {
-      both.println("MQTT: Forward failed");
+    // Forward the packet to MQTT using new helper function
+    MqttForwardStatus mqttStatus = SensorSentinel_mqtt_forward_packet(packetBuffer, length, rssi, snr);
+    
+    // Display MQTT status
+    both.printf("MQTT: %s\n", SensorSentinel_mqtt_status_to_string(mqttStatus));
+    
+    if (mqttStatus == MQTT_SUCCESS) {
+        packetsForwarded++;
+        // Serial output for packet statistics
+        Serial.printf("\nPackets received: %u, Forwarded: %u\n", packetsReceived + 1, packetsForwarded);
+        Serial.println("---------------------------");
+        Serial.println("---------------------------\n\n");
     }
-    else
-    {
-      // Serial output for packet statistics
-      Serial.printf("\nPackets received: %u, Forwarded: %u\n", packetsReceived + 1, packetsForwarded);
-      Serial.println("---------------------------");
-      Serial.println("---------------------------\n");
-    }
+  } 
+  else 
+  {
+    // Handle invalid packet case
+    both.println("Invalid packet received");
+    SensorSentinel_print_invalid_packet(data, length);
   }
 
   heltec_display_update();
@@ -159,36 +147,4 @@ void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr)
 
   // Turn off LED
   heltec_led(0);
-}
-
-/**
- * Forward a received packet to the appropriate MQTT topic
- * @param data Pointer to the packet data
- * @param length Length of the packet in bytes
- * @param rssi RSSI value for the received packet
- * @param snr SNR value for the received packet
- * @return true if forwarding was successful, false otherwise
- */
-bool forwardPacketToMQTT(uint8_t *data, size_t length, float rssi, float snr)
-{
-  // Skip if MQTT is not connected
-  if (!SensorSentinel_mqtt_get_client().connected())
-  {
-    Serial.println("MQTT not connected - cannot forward packet");
-    return false;
-  }
-
-  bool success = SensorSentinel_mqtt_get_client().publish(MQTT_TOPIC, data, length, false);
-
-  if (success)
-  {
-    packetsForwarded++;
-    Serial.printf("\nForwarded raw data (%u bytes) to %s\n", length, MQTT_TOPIC);
-    return true;
-  }
-  else
-  {
-    Serial.printf("\nERROR: Failed to forward raw data to MQTT topic: %s\n", MQTT_TOPIC);
-    return false;
-  }
 }

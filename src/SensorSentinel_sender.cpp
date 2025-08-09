@@ -35,22 +35,18 @@ void setup() {
   both.printf("Battery: %d%% (%.2fV)\n", 
              heltec_battery_percent(), 
              heltec_vbat());
-  heltec_display_update();
-  delay(2000);
-  
-  // Initialize timers with offset to avoid sending both packet types at once
-  lastSensorSendTime = millis() - (SENSOR_INTERVAL); 
-  lastGnssSendTime = millis() - (GNSS_INTERVAL + 5000);
-  
   
   // Show send schedule
-  heltec_clear_display();
-  both.println("\nSend Schedule");
-  both.println("\nIntervals:");
+  both.println("\nSend Intervals:");
   both.printf("Sensor data: %dsec\n", SENSOR_INTERVAL/1000);
   both.printf("GNSS data: %dsec\n", GNSS_INTERVAL/1000);
-  both.println("\nTransmitting...");
+
   heltec_display_update();
+  delay(2000); // Let the message display for a while
+  
+  // Initialize timers with offset to avoid sending both packet types at once
+  lastSensorSendTime = millis() - SENSOR_INTERVAL; 
+  lastGnssSendTime = millis() - GNSS_INTERVAL + 5000;
   
 }
 

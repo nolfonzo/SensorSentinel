@@ -75,23 +75,41 @@ size_t PrintSplitter::write(const uint8_t *buffer, size_t size) {
  * @brief Gets a string describing the current board  
  * @return Board description  
  */  
-const char* heltec_get_board_name() {  
-  #if defined(ARDUINO_heltec_wireless_tracker)  
-    return "Wireless Tracker";  
-  #elif defined(BOARD_HELTEC_V3_2)  
-    return "WiFi LoRa 32 V3.2";  
-  #elif defined(ARDUINO_heltec_wifi_32_lora_V3)  
-    return "WiFi LoRa 32 V3";  
-  #elif defined(ARDUINO_heltec_wireless_stick)  
-    return "Wireless Stick";  
-  #elif defined(ARDUINO_heltec_wireless_stick_lite)  
-    return "Wireless Stick Lite";  
-  #elif defined(WOKWI)  
-    return "Wokwi simulator";  
-  #else  
-    return "Unknown Board";  
-  #endif  
-}  
+typedef enum {
+    BOARD_WIRELESS_TRACKER,
+    BOARD_WIFI_LORA_V3,
+    BOARD_WIFI_LORA_V3_2,
+    BOARD_WIRELESS_STICK,
+    BOARD_WIRELESS_STICK_LITE,
+    BOARD_WOKWI,
+    BOARD_UNKNOWN
+} board_type_t;
+
+static board_type_t get_board_type() {
+    #if defined(ARDUINO_heltec_wireless_tracker)
+        return BOARD_WIRELESS_TRACKER;
+    #elif defined(BOARD_HELTEC_V3_2)
+        return BOARD_WIFI_LORA_V3_2;
+    #elif defined(ARDUINO_heltec_wifi_32_lora_V3)
+        return BOARD_WIFI_LORA_V3;
+    #elif defined(ARDUINO_heltec_wireless_stick)
+        return BOARD_WIRELESS_STICK;
+    #elif defined(ARDUINO_heltec_wireless_stick_lite)
+        return BOARD_WIRELESS_STICK_LITE;
+    #elif defined(WOKWI)
+        return BOARD_WOKWI;
+    #else
+        return BOARD_UNKNOWN;
+    #endif
+}
+
+const char* heltec_get_board_name() {
+    static const char* board_names[] = {
+        "Wireless Tracker", "WiFi LoRa 32 V3", "WiFi LoRa 32 V3.2",
+        "Wireless Stick", "Wireless Stick Lite", "Wokwi simulator", "Unknown Board"
+    };
+    return board_names[get_board_type()];
+}
 
 /**  
  * @brief Updates the display buffer to the screen.  
@@ -293,33 +311,43 @@ void heltec_display_power(bool on) {
  * @param textSize Text size (default = 1).  
  * @param rotation Display rotation (default = 0).  
  */  
-void heltec_clear_display(uint8_t textSize, uint8_t rotation) {  
-  #ifndef HELTEC_NO_DISPLAY  
-      display.setTextWrap(true);
-    #ifdef ARDUINO_heltec_wireless_tracker  
-      display.fillScreen(ST7735_BLACK);  
-      display.setTextColor(ST7735_WHITE);  
-      display.setCursor(0, 0);  
-      display.setRotation(rotation);  
-      display.setTextSize(textSize);  
-    #elif defined(ARDUINO_heltec_wifi_32_lora_V3)  
-      display.setContrast(255);  
-      display.clear();  
-      display.setColor(WHITE);  
-      display.setTextAlignment(TEXT_ALIGN_LEFT);  
-      if (textSize == 1) display.setFont(ArialMT_Plain_10);  
-      else if (textSize == 2) display.setFont(ArialMT_Plain_16);  
-      else display.setFont(ArialMT_Plain_24);  
-      display.flipScreenVertically();
-      display.display();
-    #else  
-      display.clearDisplay();  
-      display.setTextSize(textSize);  
-      display.setTextColor(SSD1306_WHITE);  
-      display.setCursor(0, 0);  
-      display.display();  
-    #endif  
-  #endif  
+void heltec_clear_display(uint8_t textSize, uint8_t rotation) {
+    #ifndef HELTEC_NO_DISPLAY
+    board_type_t board = get_board_type();
+    
+    switch(board) {
+        case BOARD_WIRELESS_TRACKER:
+            #ifdef ARDUINO_heltec_wireless_tracker
+            display.fillScreen(ST77XX_BLACK);
+            display.setTextColor(ST77XX_WHITE);
+            display.setCursor(0, 0);
+            display.setRotation(rotation);
+            display.setTextSize(textSize);
+            #endif
+            break;
+            
+        case BOARD_WIFI_LORA_V3:
+            #ifdef ARDUINO_heltec_wifi_32_lora_V3
+            display.setContrast(255);
+            display.clear();
+            display.setColor(WHITE);
+            display.setTextAlignment(TEXT_ALIGN_LEFT);
+            display.setFont(textSize == 1 ? ArialMT_Plain_10 : 
+                           textSize == 2 ? ArialMT_Plain_16 : ArialMT_Plain_24);
+            display.flipScreenVertically();
+            display.display();
+            #endif
+            break;
+            
+        default: // V3.2, Wireless Stick, etc.
+            display.clearDisplay();
+            display.setTextSize(textSize);
+            display.setTextColor(SSD1306_WHITE);
+            display.setCursor(0, 0);
+            display.display();
+            break;
+    }
+    #endif
 }  
 
 
@@ -329,79 +357,145 @@ void heltec_clear_display(uint8_t textSize, uint8_t rotation) {
  * @brief Puts the device into deep sleep mode.  
  * @param seconds The number of seconds to sleep before waking up (default = 0).  
  */  
-void heltec_deep_sleep(int seconds) {  
-  #ifdef WiFi_h  
-    WiFi.disconnect(true);  
-  #endif  
-  
-  // Turn off display  
-  #ifndef HELTEC_NO_DISPLAY  
-    #ifdef ARDUINO_heltec_wireless_tracker  
-      heltec_tft_power(false);  
-    #elif defined(ARDUINO_heltec_wifi_32_lora_V3)  
-      display.displayOff();  
-    #else  
-      display.ssd1306_command(SSD1306_DISPLAYOFF);  
-    #endif  
-  #endif  
-  
-  // Put radio to sleep  
-  #ifndef NO_RADIOLIB  
-    radio.begin();  
-    radio.sleep(false); // 'false' for no warm start  
-  #endif  
-  
-  // Turn off external power  
-  heltec_ve(false);  
-  
-  // Turn off LED  
-  heltec_led(0);  
-  
-  // Set all common pins to input to save power  
-  pinMode(VBAT_CTRL, INPUT);  
-  pinMode(VBAT_ADC, INPUT);  
-  pinMode(DIO1, INPUT);  
-  pinMode(RST_LoRa, INPUT);  
-  pinMode(BUSY_LoRa, INPUT);  
-  pinMode(SS, INPUT);  
-  pinMode(MISO, INPUT);  
-  pinMode(MOSI, INPUT);  
-  pinMode(SCK, INPUT);  
-  
-  // Board-specific pin shutdown  
-  #ifdef ARDUINO_heltec_wireless_tracker  
-    pinMode(TFT_CS, INPUT);  
-    pinMode(TFT_RST, INPUT);  
-    pinMode(TFT_DC, INPUT);  
-    pinMode(TFT_SCLK, INPUT);  
-    pinMode(TFT_MOSI, INPUT);  
-    pinMode(TFT_VTFT, INPUT);  
-    pinMode(TFT_LED, INPUT);  
-    pinMode(GNSS_RX, INPUT);  
-    pinMode(GNSS_TX, INPUT);  
-  #elif !defined(HELTEC_NO_DISPLAY)  
-    // For all boards with OLED displays  
-    pinMode(SDA_OLED, INPUT);  
-    pinMode(SCL_OLED, INPUT);  
-    pinMode(RST_OLED, INPUT);  
-  #endif  
+static void shutdown_display() {
+    #ifndef HELTEC_NO_DISPLAY
+    board_type_t board = get_board_type();
+    
+    switch(board) {
+        case BOARD_WIRELESS_TRACKER:
+            heltec_tft_power(false);
+            break;
+        case BOARD_WIFI_LORA_V3:
+            #ifdef ARDUINO_heltec_wifi_32_lora_V3
+            display.displayOff();
+            #endif
+            break;
+        default:
+            display.ssd1306_command(SSD1306_DISPLAYOFF);
+            break;
+    }
+    #endif
+}
 
+static void shutdown_pins() {
+    // Common pins for all boards
+    const int common_pins[] = {VBAT_CTRL, VBAT_ADC, DIO1, RST_LoRa, 
+                              BUSY_LoRa, SS, MISO, MOSI, SCK};
+    
+    for(int pin : common_pins) {
+        pinMode(pin, INPUT);
+    }
+    
+    // Board-specific pins (only if defined)
+    board_type_t board = get_board_type();
+    if (board == BOARD_WIRELESS_TRACKER) {
+        #ifdef ARDUINO_heltec_wireless_tracker
+        const int tracker_pins[] = {TFT_CS, TFT_RST, TFT_DC, TFT_SCLK, 
+                                   TFT_MOSI, TFT_VTFT, TFT_LED, GNSS_RX, GNSS_TX};
+        for(int pin : tracker_pins) {
+            pinMode(pin, INPUT);
+        }
+        #endif
+    } else {
+        #ifndef HELTEC_NO_DISPLAY
+        const int oled_pins[] = {SDA_OLED, SCL_OLED, RST_OLED};
+        for(int pin : oled_pins) {
+            pinMode(pin, INPUT);
+        }
+        #endif
+    }
+}
 
-  
-  // Set button wakeup if applicable  
-  #ifdef HELTEC_POWER_BUTTON  
-    esp_sleep_enable_ext0_wakeup(BUTTON, LOW);  
-    button.waitForRelease();  
-  #endif  
-  
-  // Set timer wakeup if applicable  
-  if (seconds > 0) {  
-    esp_sleep_enable_timer_wakeup((int64_t)seconds * 1000000);  
-  }  
-  
-  // Start deep sleep  
-  esp_deep_sleep_start();  
-}  
+void heltec_deep_sleep(int seconds) {
+    #ifdef WiFi_h
+    WiFi.disconnect(true);
+    #endif
+    
+    shutdown_display();
+    
+    #ifndef NO_RADIOLIB
+    radio.begin();
+    radio.sleep(false);
+    #endif
+    
+    heltec_ve(false);
+    heltec_led(0);
+    shutdown_pins();
+    
+    #ifdef HELTEC_POWER_BUTTON
+    esp_sleep_enable_ext0_wakeup(BUTTON, LOW);
+    button.waitForRelease();
+    #endif
+    
+    if (seconds > 0) {
+        esp_sleep_enable_timer_wakeup((int64_t)seconds * 1000000);
+    }
+    
+    esp_deep_sleep_start();
+}
+
+// ====== Helper functions ======
+static void setup_display() {
+    #ifndef HELTEC_NO_DISPLAY
+    heltec_display_power(true);
+    board_type_t board = get_board_type();
+    
+    switch(board) {
+        case BOARD_WIRELESS_TRACKER:
+            #ifdef ARDUINO_heltec_wireless_tracker
+            display.initR(INITR_MINI160x80);  // This is for Adafruit_ST7735
+            #endif
+            break;
+            
+        case BOARD_WIFI_LORA_V3:
+            #ifdef ARDUINO_heltec_wifi_32_lora_V3
+            Wire.begin(SDA_OLED, SCL_OLED);
+            display.init();  // This is for SSD1306Wire
+            #endif
+            break;
+            
+        default: // V3.2, Wireless Stick, etc. (Adafruit_SSD1306)
+            Wire.begin(SDA_OLED, SCL_OLED);
+            if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+                Serial.println("SSD1306 allocation failed");
+            } else {
+                Serial.println("OLED initialized OK");
+            }
+            break;
+    }
+    heltec_clear_display();
+    #else
+    Serial.println(heltec_get_board_name());
+    #endif
+}
+
+static void setup_radio() {
+    #ifndef NO_RADIOLIB
+    int radioStatus = radio.begin();
+    if (radioStatus != RADIOLIB_ERR_NONE) {
+        Serial.printf("Radio initialization failed with code %d\n", radioStatus);
+        return;
+    }
+    
+    Serial.println("Radio initialized OK");
+    
+    // Common settings
+    radio.setFrequency(HELTEC_LORA_FREQ);
+    radio.setBandwidth(HELTEC_LORA_BW);
+    radio.setSpreadingFactor(HELTEC_LORA_SF);
+    radio.setCodingRate(HELTEC_LORA_CR);
+    radio.setSyncWord(HELTEC_LORA_SYNC);
+    
+    // Power settings based on radio chip
+    board_type_t board = get_board_type();
+    if (board == BOARD_WIRELESS_STICK || board == BOARD_WIRELESS_STICK_LITE) {
+        radio.setOutputPower(HELTEC_SX1276_POWER);
+    } else {
+        radio.setOutputPower(HELTEC_SX1262_POWER);
+        radio.setCurrentLimit(HELTEC_SX1262_CURRENT);
+    }
+    #endif
+}
 
 // ====== Main functions ======  
 /**  
@@ -416,90 +510,28 @@ void heltec_setup() {
     hspi->begin(SCK, MISO, MOSI, SS);  
   #endif  
   
-    // Initialize display
-  #ifndef HELTEC_NO_DISPLAY  
-      heltec_display_power(true);  
-    #ifdef ARDUINO_heltec_wireless_tracker  
-      // Initialize TFT display for Wireless Tracker
-      display.initR(INITR_MINI160x80);
-    #elif defined(ARDUINO_heltec_wifi_32_lora_V3)  
-      // Initialize OLED for V3 - ThingPulse library
-      Wire.begin(SDA_OLED, SCL_OLED);  
-      display.init();  
-    #else  
-      // Initialize OLED for V3.2 and Wireless Stick and Wokwi simulator - Adafruit library
-      heltec_display_power(true);  
-      Wire.begin(SDA_OLED, SCL_OLED);  
-      if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {  
-        Serial.println("SSD1306 allocation failed\n");  
-      } else {  
-        Serial.println("OLED initialized OK");
-      }
+    setup_display();
+    setup_radio();
+    
+    // Initialize LED
+    ledcSetup(LED_CHAN, 5000, 8);
+    ledcAttachPin(LED_PIN, LED_CHAN);
+    ledcWrite(LED_CHAN, 0);
+    
+    #ifdef HELTEC_POWER_BUTTON
+    pinMode(BUTTON, INPUT);
     #endif
-    heltec_clear_display();  // Clear display with default text size and rotation
-  #else
-    // No display - just log to Serial
-    Serial.println(heltec_get_board_name());
-  #endif
-  
-  // Initialize RadioLib module  
-  #ifndef NO_RADIOLIB  
-    int radioStatus = radio.begin();  
-    if (radioStatus != RADIOLIB_ERR_NONE) {  
-      Serial.printf("Radio initialization failed with code %d\n", radioStatus);  
-    } else {  
-      Serial.println("Radio initialized OK");  
-      
-      // Common parameters for all boards
-      radio.setFrequency(HELTEC_LORA_FREQ);
-      radio.setBandwidth(HELTEC_LORA_BW);
-      radio.setSpreadingFactor(HELTEC_LORA_SF);
-      radio.setCodingRate(HELTEC_LORA_CR);
-      radio.setSyncWord(HELTEC_LORA_SYNC);
-
-      // Chip-specific parameters
-      #if defined(ARDUINO_heltec_wireless_stick) || defined(ARDUINO_heltec_wireless_stick_lite)
-        radio.setOutputPower(HELTEC_SX1276_POWER);
-      #else
-        radio.setOutputPower(HELTEC_SX1262_POWER);
-        radio.setCurrentLimit(HELTEC_SX1262_CURRENT);
-      #endif
-    }  
-  #endif  
-
-  // Initialize the built-in LED  
-  ledcSetup(LED_CHAN, 5000, 8);  
-  ledcAttachPin(LED_PIN, LED_CHAN);  
-  ledcWrite(LED_CHAN, 0); // Turn off initially  
-
-  // Initialize the button  
-  #ifdef HELTEC_POWER_BUTTON  
-    pinMode(BUTTON, INPUT);  
-  #endif  
-
 }
 
 /**
- * @brief The main loop for the Heltec library.
+ * @brief Main loop function that should be called regularly
+ * Handles button updates and other periodic tasks
  */
 void heltec_loop() {
-  
-  // Update button state
-  button.update();
-  
-  // Check for a single click
-  if (button.isSingleClick()) {
-    buttonClicked = true;
-  }
-  
-  // Handle power button functionality
   #ifdef HELTEC_POWER_BUTTON
-    if (button.pressedFor(2000)) {
-      both.println("\nSleeping...");
-      heltec_display_update();
-      delay(2000);  // Let the message display
-      heltec_deep_sleep();
+    button.update();
+    if (button.pressed()) {  // Changed to use pressed() method
+      buttonClicked = true;
     }
   #endif
-
 }

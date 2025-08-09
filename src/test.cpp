@@ -2,7 +2,7 @@
 
 
 void setup() {
-  Serial.begin(9600); // Must be 9600
+  Serial.begin(115200); // Must be 9600
   Serial.println("Hello Arduino\n");
 }
 

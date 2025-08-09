@@ -8,7 +8,7 @@
 #include <string.h> // For memcpy
 
 // Get a unique node ID based on ESP32's MAC address
-uint32_t SensorSentinel_get_node_id()
+uint32_t SensorSentinel_generate_node_id()
 {
 // Use WiFi MAC address if WiFi is available
 #if defined(ESP32) && !defined(SensorSentinel_NO_WIFI)
@@ -49,7 +49,7 @@ bool SensorSentinel_init_sensor_packet(SensorSentinel_sensor_packet_t *packet, u
   packet->messageType = SensorSentinel_MSG_SENSOR; // Using new constant name
 
   // Set basic information
-  packet->nodeId = SensorSentinel_get_node_id();
+  packet->nodeId = SensorSentinel_generate_node_id(); // Updated function name
   packet->messageCounter = counter;
   packet->uptime = millis() / 1000; // Seconds since boot
 
@@ -87,7 +87,7 @@ bool SensorSentinel_init_gnss_packet(SensorSentinel_gnss_packet_t *packet, uint3
   packet->messageType = SensorSentinel_MSG_GNSS;
 
   // Set basic information
-  packet->nodeId = SensorSentinel_get_node_id();
+  packet->nodeId = SensorSentinel_generate_node_id(); // Updated function name
   packet->messageCounter = counter;
   packet->uptime = millis() / 1000; // Seconds since boot
 
@@ -267,24 +267,29 @@ bool SensorSentinel_print_packet_info(const void *packet, size_t length)
  * Checks packet structure, field values, and internal consistency.
  *
  * @param data Pointer to the packet data
- * @param dataSize Size of the packet data in bytes
- * @param verbose Whether to print detailed error messages to Serial
+ * @param length Size of the packet data in bytes
  * @return true if the packet is valid, false otherwise
  */
-bool SensorSentinel_validate_packet(const void *data, size_t dataSize, bool verbose)
-{
+bool SensorSentinel_validate_packet(const void *data, size_t length)
+{ 
+// Check packet size
+  if (length > MAX_LORA_PACKET_SIZE)
+  {
+    Serial.println("Packet too large!");
+    Serial.printf("\nSize: %u bytes (max %u)\n", length, MAX_LORA_PACKET_SIZE);
+    return false;
+  }
+
   if (!data)
   {
-    if (verbose)
-      Serial.println("ERROR: Null packet pointer");
+    Serial.println("ERROR: Null packet pointer");
     return false;
   }
 
   // Need at least one byte for the message type
-  if (dataSize < 1)
+  if (length < 1)
   {
-    if (verbose)
-      Serial.println("ERROR: Packet too small to contain message type");
+    Serial.println("ERROR: Packet length zero");
     return false;
   }
 
@@ -297,166 +302,27 @@ bool SensorSentinel_validate_packet(const void *data, size_t dataSize, bool verb
   // Check if it's a known message type
   if (expectedSize == 0)
   {
-    if (verbose)
-      Serial.printf("Unknown message type 0x%02X\n", messageType);
-    return false;
+    Serial.printf("Unknown message type 0x%02X\n", messageType);
   }
 
   // Check if the data size matches the expected size
-  if (dataSize != expectedSize)
+  if (length != expectedSize)
   {
-    if (verbose)
       Serial.printf("ERROR: Incorrect packet size - expected %u bytes, got %u bytes\n",
-                    expectedSize, dataSize);
+                    expectedSize, length);
     return false;
   }
 
-  // Validate based on message type
-  switch (messageType)
-  {
-  case SensorSentinel_MSG_SENSOR:
-  {
-    const SensorSentinel_sensor_packet_t *packet = (const SensorSentinel_sensor_packet_t *)data;
+  // All checks passed
+  return true;
 
-    // Validate message type (should match what we extracted)
-    if (packet->messageType != SensorSentinel_MSG_SENSOR)
-    {
-      if (verbose)
-        Serial.println("ERROR: Message type field corrupted");
-      return false;
-    }
-
-    // Validate node ID (non-zero)
-    if (packet->nodeId == 0)
-    {
-      if (verbose)
-        Serial.println("ERROR: Invalid node ID (zero)");
-      return false;
-    }
-
-    // Validate battery level
-    if (packet->batteryLevel > 100)
-    {
-      if (verbose)
-        Serial.printf("ERROR: Invalid battery level: %u%%\n", packet->batteryLevel);
-      return false;
-    }
-
-    // Log a warning for very low voltage that might indicate USB power
-    if (packet->batteryVoltage < 2000 || packet->batteryVoltage > 4500)
-    {
-      Serial.printf("WARNING: Low battery voltage: %u mV (likely USB power)\n", packet->batteryVoltage);
-    }
-
-    // Validate analog readings (optional - depends on your hardware)
-    // For example, if you know the ADC is 12-bit, values should be 0-4095
-    for (int i = 0; i < 4; i++)
-    {
-      if (packet->pins.analog[i] > 4095)
-      {
-        if (verbose)
-          Serial.printf("ERROR: Analog value A%d exceeds maximum (got %u)\n",
-                        i, packet->pins.analog[i]);
-        return false;
-      }
-    }
-
-    // All checks passed
-    return true;
-  }
-
-  case SensorSentinel_MSG_GNSS:
-  {
-    const SensorSentinel_gnss_packet_t *packet = (const SensorSentinel_gnss_packet_t *)data;
-
-    // Validate message type
-    if (packet->messageType != SensorSentinel_MSG_GNSS)
-    {
-      if (verbose)
-        Serial.println("ERROR: Message type field corrupted");
-      return false;
-    }
-
-    // Validate node ID
-    if (packet->nodeId == 0)
-    {
-      if (verbose)
-        Serial.println("ERROR: Invalid node ID (zero)");
-      return false;
-    }
-
-    // Validate battery level
-    if (packet->batteryLevel > 100)
-    {
-      if (verbose)
-        Serial.printf("ERROR: Invalid battery level: %u%%\n", packet->batteryLevel);
-      return false;
-    }
-
-    // Log a warning for very low voltage that might indicate USB power
-    if (packet->batteryVoltage < 2000 || packet->batteryVoltage > 4500)
-    {
-      Serial.printf("WARNING: Low battery voltage: %u mV (likely USB power)\n", packet->batteryVoltage);
-    }
-
-    // Validate latitude (-90 to +90 degrees)
-    if (packet->latitude < -90.0 || packet->latitude > 90.0)
-    {
-      if (verbose)
-        Serial.printf("ERROR: Invalid latitude: %.6f\n", packet->latitude);
-      return false;
-    }
-
-    // Validate longitude (-180 to +180 degrees)
-    if (packet->longitude < -180.0 || packet->longitude > 180.0)
-    {
-      if (verbose)
-        Serial.printf("ERROR: Invalid longitude: %.6f\n", packet->longitude);
-      return false;
-    }
-
-    // Validate speed (non-negative)
-    if (packet->speed < 0.0)
-    {
-      if (verbose)
-        Serial.printf("ERROR: Negative speed: %.1f km/h\n", packet->speed);
-      return false;
-    }
-
-    // Validate course (0-359.99 degrees)
-    if (packet->course < 0.0 || packet->course >= 360.0)
-    {
-      if (verbose)
-        Serial.printf("ERROR: Invalid course: %.1f degrees\n", packet->course);
-      return false;
-    }
-
-    // Validate HDOP (typically 0-100, higher values indicate poor precision)
-    if (packet->hdop > 200)
-    { // Very high HDOP suggests bad data
-      if (verbose)
-        Serial.printf("ERROR: Unrealistic HDOP value: %.1f\n", packet->hdop / 10.0f);
-      return false;
-    }
-
-    // All checks passed
-    return true;
-  }
-
-  default:
-    // This shouldn't happen (we already checked message type)
-    if (verbose)
-      Serial.printf("ERROR: Unhandled message type 0x%02X\n", messageType);
-    return false;
-  }
 }
 
-bool SensorSentinel_copy_packet(void *dest, size_t destSize, const void *src, bool verbose = false)
+bool SensorSentinel_copy_packet(void *dest, size_t destSize, const void *src)
 {
   if (!dest || !src)
   {
-    if (verbose)
-      Serial.println("ERROR: Null pointer in copy operation");
+    Serial.println("ERROR: Null pointer in copy operation");
     return false;
   }
 
@@ -468,15 +334,13 @@ bool SensorSentinel_copy_packet(void *dest, size_t destSize, const void *src, bo
 
   if (copySize == 0)
   {
-    if (verbose)
-      Serial.printf("ERROR: Unknown packet type 0x%02X\n", messageType);
+    Serial.printf("ERROR: Unknown packet type 0x%02X\n", messageType);
     return false;
   }
 
   if (destSize < copySize)
   {
-    if (verbose)
-      Serial.printf("ERROR: Destination buffer too small (need %u, have %u)\n",
+    Serial.printf("ERROR: Destination buffer too small (need %u, have %u)\n",
                     copySize, destSize);
     return false;
   }
@@ -484,11 +348,67 @@ bool SensorSentinel_copy_packet(void *dest, size_t destSize, const void *src, bo
   // Perform the copy
   memcpy(dest, src, copySize);
 
-  if (verbose)
-  {
-    Serial.printf("INFO: Successfully copied packet type 0x%02X (%u bytes)\n",
+  Serial.printf("INFO: Successfully copied packet type 0x%02X (%u bytes)\n",
                   messageType, copySize);
-  }
 
   return true;
+}
+
+const char* SensorSentinel_message_type_to_string(uint8_t messageType) {
+    switch(messageType) {
+        case SensorSentinel_MSG_SENSOR:
+            return "Sensor";
+        case SensorSentinel_MSG_GNSS:
+            return "GNSS";
+        default:
+            return "Unknown";
+    }
+}
+
+uint32_t SensorSentinel_get_message_counter(const void* data) {
+    const SensorSentinel_packet_t* packet = (const SensorSentinel_packet_t*)data;
+    uint8_t messageType = packet->sensor.messageType;  // Both packet types have messageType at same offset
+
+    if (messageType == SensorSentinel_MSG_SENSOR) {
+        return packet->sensor.messageCounter;
+    } else if (messageType == SensorSentinel_MSG_GNSS) {
+        return packet->gnss.messageCounter;
+    }
+    return 0;
+}
+
+uint32_t SensorSentinel_extract_node_id_from_packet(const void* data) {
+    const SensorSentinel_packet_t* packet = (const SensorSentinel_packet_t*)data;
+    uint8_t messageType = packet->sensor.messageType;  // Both packet types have messageType at same offset
+
+    if (messageType == SensorSentinel_MSG_SENSOR) {
+        return packet->sensor.nodeId;
+    } else if (messageType == SensorSentinel_MSG_GNSS) {
+        return packet->gnss.nodeId;
+    }
+    return 0;
+}
+
+void SensorSentinel_print_invalid_packet(const uint8_t* data, size_t length) {
+    Serial.println("Invalid packet contents:");
+    
+    // Print hex values
+    Serial.print("HEX: ");
+    for(size_t i = 0; i < length; i++) {
+        if(data[i] < 0x10) Serial.print("0");
+        Serial.print(data[i], HEX);
+        Serial.print(" ");
+    }
+    Serial.println();
+    
+    // Print ASCII representation
+    Serial.print("ASCII: ");
+    for(size_t i = 0; i < length; i++) {
+        if(isprint(data[i])) {
+            Serial.print((char)data[i]);
+        } else {
+            Serial.print(".");
+        }
+    }
+    Serial.println("\n---------------------------");
 }

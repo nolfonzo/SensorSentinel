@@ -8,110 +8,54 @@
 #include "SensorSentinel_mqtt_helper.h"
 #include "SensorSentinel_wifi_helper.h"
 
+// Move this define to here
+#ifndef MQTT_TOPIC
+#define MQTT_TOPIC "lora/data"
+#endif
+
+// Magic constant replaced with a named constant
+#define TIME_SYNC_EPOCH 1600000000  // Sept 2020, indicates time is synced
+
+// WiFi and MQTT client instances
+extern WiFiClient wifiClient;  // Declare external reference to WiFi client
+PubSubClient mqttClient(wifiClient);  // Use the external WiFi client
+
+// Define the config instance (not the struct)
+MqttConfig mqttConfig = {
+    .server = MQTT_SERVER,
+    .port = MQTT_PORT,
+    .user = MQTT_USER,
+    .password = MQTT_PASSWORD,
+    .connectionInterval = 5000,
+    .socketTimeout = 10,  // Add comma here if you plan to add more fields
+};
+
 // Module variables
-static PubSubClient mqttClient(wifiClient);
 static String mqttClientId = "";
 static unsigned long lastMqttConnectionAttempt = 0;
 static unsigned long lastPublishTime = 0;
 static uint32_t reconnectCounter = 0;
 static uint32_t publishCount = 0;
-static unsigned int mqttConnectionInterval = 5000; // 5 seconds between connection attempts
 
-// Define MQTT configuration variables using platformio.ini values
-#ifndef MQTT_USER
-#define MQTT_USER ""  // Default to empty if not defined
-#endif
+// Replace the getMqttStateString function with:
 
-#ifndef MQTT_PASSWORD
-#define MQTT_PASSWORD ""  // Default to empty if not defined
-#endif
+static const struct { int code; const char* desc; } MQTT_STATES[] = {
+    {-4, "Connection Timeout"}, {-3, "Connection Lost"}, {-2, "Connect Failed"},
+    {-1, "Disconnected"}, {0, "Connected"}, {1, "Bad Protocol"},
+    {2, "Bad Client ID"}, {3, "Unavailable"}, {4, "Bad Credentials"}, {5, "Unauthorized"}
+};
 
-// Define the actual global variables required by the MQTT implementation
-const char* mqtt_server = MQTT_SERVER;
-const int mqtt_port = MQTT_PORT;  
-const char* mqtt_user = MQTT_USER;
-const char* mqtt_password = MQTT_PASSWORD;
-
-// Magic constant replaced with a named constant
-#define TIME_SYNC_EPOCH 1600000000  // Sept 2020, indicates time is synced
-
-// Template function for min
-template <typename T>
-T min(T a, T b) {
-  return (a < b) ? a : b;
-}
-
-// Calculate WiFi signal quality from RSSI
-int SensorSentinel_wifi_quality() {
-  int rssi = SensorSentinel_wifi_rssi();
-  if (rssi <= -100) {
-    return 0;
-  } else if (rssi >= -50) {
-    return 100;
-  } else {
-    return 2 * (rssi + 100);
-  }
-}
-
-// MQTT state error strings for better diagnostics
 const char* getMqttStateString(int state) {
-  switch (state) {
-    case -4: return "MQTT_CONNECTION_TIMEOUT";
-    case -3: return "MQTT_CONNECTION_LOST";
-    case -2: return "MQTT_CONNECT_FAILED";
-    case -1: return "MQTT_DISCONNECTED";
-    case 0: return "MQTT_CONNECTED";
-    case 1: return "MQTT_CONNECT_BAD_PROTOCOL";
-    case 2: return "MQTT_CONNECT_BAD_CLIENT_ID";
-    case 3: return "MQTT_CONNECT_UNAVAILABLE";
-    case 4: return "MQTT_CONNECT_BAD_CREDENTIALS";
-    case 5: return "MQTT_CONNECT_UNAUTHORIZED";
-    default: return "MQTT_UNKNOWN_ERROR";
-  }
-}
-
-/**
- * @brief Sync time with NTP servers
- */
-boolean SensorSentinel_mqtt_sync_time(long timezone, int daylightOffset,
-                      const char* ntpServer1, const char* ntpServer2, 
-                      const char* ntpServer3) {
-  if (!SensorSentinel_wifi_connected()) {
-    Serial.println("\nERROR: Cannot sync time - WiFi not connected");
-    return false;
-  }
-  
-  Serial.printf("\nConfiguring time sync with timezone offset: %ld seconds\n", timezone);
-  configTime(timezone, daylightOffset, ntpServer1, ntpServer2, ntpServer3);
-  
-  Serial.println("\nWaiting for NTP time sync...");
-  
-  // Wait up to 5 seconds for time to be set
-  unsigned long startAttempt = millis();
-  while (time(nullptr) < TIME_SYNC_EPOCH && millis() - startAttempt < 5000) {
-    delay(100);
-  }
-  
-  if (time(nullptr) > TIME_SYNC_EPOCH) {
-    time_t now = time(nullptr);
-    struct tm timeinfo;
-    localtime_r(&now, &timeinfo);
-    char timeString[25];
-    strftime(timeString, sizeof(timeString), "%Y-%m-%d %H:%M:%S", &timeinfo);
-    
-    Serial.print("\nNTP time synchronized: ");
-    Serial.print(timeString);
-    return true;
-  } else {
-    Serial.println("\nERROR: Failed to sync time via NTP after 5 seconds");
-    return false;
-  }
+    for (const auto& s : MQTT_STATES) {
+        if (s.code == state) return s.desc;
+    }
+    return "Unknown Error";
 }
 
 /**
  * @brief Sync time with default parameters
  */
-boolean SensorSentinel_mqtt_sync_time_default() {  // Renamed to avoid ambiguity
+boolean SensorSentinel_mqtt_sync_time_default() {
   // Default NTP servers and timezone
   #ifdef TIMEZONE_OFFSET
   long timezone = TIMEZONE_OFFSET;
@@ -121,6 +65,29 @@ boolean SensorSentinel_mqtt_sync_time_default() {  // Renamed to avoid ambiguity
   
   return SensorSentinel_mqtt_sync_time(timezone, 0, 
                         "pool.ntp.org", "time.nist.gov", "time.google.com");
+}
+
+/**
+ * @brief Synchronize time via NTP with custom parameters
+ */
+boolean SensorSentinel_mqtt_sync_time(
+    long timezone,
+    int daylightOffset,
+    const char* ntpServer1,
+    const char* ntpServer2,
+    const char* ntpServer3) {
+    
+    configTime(timezone, daylightOffset, ntpServer1, ntpServer2, ntpServer3);
+    
+    time_t now = time(nullptr);
+    int attempts = 0;
+    while (now < TIME_SYNC_EPOCH && attempts < 20) {
+        delay(500);
+        now = time(nullptr);
+        attempts++;
+    }
+    
+    return now >= TIME_SYNC_EPOCH;
 }
 
 /**
@@ -151,24 +118,24 @@ boolean SensorSentinel_mqtt_init() {
   Serial.println("Initializing MQTT client...");
   
   // Validate MQTT server settings
-  if (strlen(mqtt_server) == 0) {
+  if (strlen(mqttConfig.server) == 0) {
     Serial.println("ERROR: MQTT server address is empty");
     return false;
   }
   
-  if (mqtt_port <= 0 || mqtt_port > 65535) {
-    Serial.printf("ERROR: Invalid MQTT port: %d\n", mqtt_port);
+  if (mqttConfig.port <= 0 || mqttConfig.port > 65535) {
+    Serial.printf("ERROR: Invalid MQTT port: %d\n", mqttConfig.port);
     return false;
   }
   
   // Configure the MQTT client with server and port
-  mqttClient.setServer(mqtt_server, mqtt_port);
+  mqttClient.setServer(mqttConfig.server, mqttConfig.port);
   
   // Test client ID generation
   mqttClientId = SensorSentinel_mqtt_get_client_id();
   
   // Log the MQTT configuration
-  Serial.printf("\nMQTT Server: %s:%d\n", mqtt_server, mqtt_port);
+  Serial.printf("\nMQTT Server: %s:%d\n", mqttConfig.server, mqttConfig.port);
   Serial.printf("\nMQTT Buffer Size: %u bytes\n", mqttClient.getBufferSize());
   
   return true;
@@ -178,227 +145,95 @@ boolean SensorSentinel_mqtt_init() {
  * @brief Connect to the MQTT broker
  */
 boolean SensorSentinel_mqtt_connect() {
-  // Check WiFi connection first
-  if (!SensorSentinel_wifi_connected()) {
-    Serial.println("ERROR: Cannot connect to MQTT - WiFi not connected");
-    return false;
-  }
-  
-  // Check if already connected
-  if (mqttClient.connected()) {
-    return true;
-  }
-  
-  // Don't try to connect too frequently
-  unsigned long now = millis();
-  if (now - lastMqttConnectionAttempt < mqttConnectionInterval && lastMqttConnectionAttempt > 0) {
-    // Just report current state without attempting connection
-    if (mqttClient.state() != MQTT_DISCONNECTED) {
-      Serial.printf("MQTT connection in progress, state: %d\n", mqttClient.state());
-    }
-    return false;
-  }
-  
-  lastMqttConnectionAttempt = now;
-  
-  // Get client ID
-  String clientId = SensorSentinel_mqtt_get_client_id();
-  
-  // Show connection attempt
-  Serial.printf("Connecting to MQTT broker %s as %s...", mqtt_server, clientId.c_str());
-  
-  // Set a shorter connection timeout
-  mqttClient.setSocketTimeout(10); // 10 seconds socket timeout instead of default 15
-  
-  // Connect with or without credentials
-  boolean connectResult;
-  if (strlen(mqtt_user) > 0) {
-    // Use credentials
-    connectResult = mqttClient.connect(clientId.c_str(), mqtt_user, mqtt_password);
-    if (!connectResult) {
-      Serial.printf("Failed with credentials, retrying without...");
-      delay(500); // Brief delay before retry
-      connectResult = mqttClient.connect(clientId.c_str()); // Try without credentials
-    }
-  } else {
-    // No credentials
-    connectResult = mqttClient.connect(clientId.c_str());
-  }
-  
-  if (connectResult) {
-    Serial.println("MQTT Connected!");
-    Serial.printf("Server: %s\n", mqtt_server);
-    Serial.printf("Client: %s\n", clientId.c_str());
-    return true;
-  } else {
-    int mqttState = mqttClient.state();
-    Serial.printf("failed, rc=%d ", mqttState);
-    
-    // Provide more detailed error message
-    switch (mqttState) {
-      case -4: Serial.println("(MQTT_CONNECTION_TIMEOUT)"); break;
-      case -3: Serial.println("(MQTT_CONNECTION_LOST)"); break;
-      case -2: Serial.println("(MQTT_CONNECT_FAILED)"); break;
-      case -1: Serial.println("(MQTT_DISCONNECTED)"); break;
-      case 1: Serial.println("(MQTT_CONNECT_BAD_PROTOCOL)"); break;
-      case 2: Serial.println("(MQTT_CONNECT_BAD_CLIENT_ID)"); break;
-      case 3: Serial.println("(MQTT_CONNECT_UNAVAILABLE)"); break;
-      case 4: Serial.println("(MQTT_CONNECT_BAD_CREDENTIALS)"); break;
-      case 5: Serial.println("(MQTT_CONNECT_UNAUTHORIZED)"); break;
-      default: Serial.printf("(Unknown error %d)\n", mqttState);
+    if (!SensorSentinel_wifi_connected()) {
+        return false;
     }
     
-    // Update display with error
-    heltec_battery_percent();
-    both.println("MQTT Connection Fail");
-    both.printf("Error: %d\n", mqttState);
-    both.printf("Retry in %d sec\n", mqttConnectionInterval/1000);
-    heltec_display_update();
-    delay(2000);
-    return false;
-  }
+    if (mqttClient.connected()) {
+        return true;
+    }
+    
+    // Rate limiting
+    unsigned long now = millis();
+    if (now - lastMqttConnectionAttempt < mqttConfig.connectionInterval) {
+        return false;
+    }
+    
+    lastMqttConnectionAttempt = now;
+    String clientId = SensorSentinel_mqtt_get_client_id();
+    mqttClient.setSocketTimeout(mqttConfig.socketTimeout);
+    
+    boolean success = strlen(mqttConfig.user) > 0 ?
+        mqttClient.connect(clientId.c_str(), mqttConfig.user, mqttConfig.password) :
+        mqttClient.connect(clientId.c_str());
+    
+    reconnectCounter = success ? 0 : reconnectCounter + 1;
+    
+    if (success) {
+        Serial.println("MQTT connected successfully");
+    } else {
+        Serial.printf("MQTT connection failed: %s\n", getMqttStateString(mqttClient.state()));
+    }
+    
+    return success;
 }
 
 /**
- * @brief Setup MQTT with optional time synchronization
+ * @brief Forward a packet to the MQTT broker
+ * @param data Pointer to the data to be sent
+ * @param length Length of the data
+ * @param rssi RSSI value for the packet
+ * @param snr SNR value for the packet
+ * @return Status of the forwarding operation
  */
-boolean SensorSentinel_mqtt_setup(boolean syncTimeOnConnect) {
-  
-  // Initialize MQTT client
-  if (!SensorSentinel_mqtt_init()) {
-    Serial.println("ERROR: MQTT initialization failed");
-    return false;
-  }
-  
-  // Only proceed if WiFi is connected
-  if (!SensorSentinel_wifi_connected()) {
-    Serial.println("\nERROR: WiFi not connected - MQTT setup deferred");
-    return false;
-  }
-  
-  // Sync time if requested
-  if (syncTimeOnConnect) {
-    Serial.println("\nSyncing time...");
-    
-    // Use the timezone defined in platformio.ini
-    #ifdef TIMEZONE_OFFSET
-    long timezone = TIMEZONE_OFFSET;
-    Serial.printf("Using timezone offset from config: %ld seconds\n", timezone);
-    if (!SensorSentinel_mqtt_sync_time(timezone, 0, "pool.ntp.org", "time.nist.gov", "time.google.com")) {
-      Serial.println("\nWARNING: Time sync failed, continuing with unsynchronized time");
-    }
-    #else
-    // Fallback if not defined
-    Serial.println("\nWARNING: TIMEZONE_OFFSET not defined, using default UTC+0");
-    if (!SensorSentinel_mqtt_sync_time(0, 0, "pool.ntp.org", "time.nist.gov", "time.google.com")) {  // Default to UTC
-      Serial.println("\nWARNING: Time sync failed, continuing with unsynchronized time");
-    }
-    #endif
-  }
-  
-  // Connect to MQTT broker
-  boolean connected = SensorSentinel_mqtt_connect();
-  if (connected) {
-    Serial.println("\nMQTT setup completed successfully");
-  } else {
-    Serial.println("\nMQTT setup completed but broker connection failed - will retry later");
-  }
-  
-  return connected;
+MqttForwardStatus SensorSentinel_mqtt_forward_packet(uint8_t *data, size_t length, float rssi, float snr) {
+    if (!SensorSentinel_validate_packet(data, length)) return MQTT_INVALID_PACKET;
+    if (!mqttClient.connected()) return MQTT_NOT_CONNECTED;
+    return mqttClient.publish(MQTT_TOPIC, data, length, false) ? MQTT_SUCCESS : MQTT_PUBLISH_FAILED;
 }
 
 /**
- * @brief Maintain MQTT connection - call this regularly in loop()
+ * @brief Convert MQTT forward status to string
+ */
+const char* SensorSentinel_mqtt_status_to_string(MqttForwardStatus status) {
+    switch(status) {
+        case MQTT_SUCCESS:
+            return "Success";
+        case MQTT_NOT_CONNECTED:
+            return "Not Connected";
+        case MQTT_PUBLISH_FAILED:
+            return "Publish Failed";
+        case MQTT_INVALID_PACKET:
+            return "Invalid Packet";
+        default:
+            return "Unknown Status";
+    }
+}
+
+/**
+ * @brief Setup MQTT connection
+ */
+boolean SensorSentinel_mqtt_setup(bool enableLogging) {
+    if (!SensorSentinel_wifi_connected()) {
+        Serial.println("Cannot setup MQTT - WiFi not connected");
+        return false;
+    }
+
+    if (!SensorSentinel_mqtt_init()) {
+        Serial.println("MQTT initialization failed");
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * @brief Maintain MQTT connection and handle keepalive
  */
 boolean SensorSentinel_mqtt_maintain() {
-  // First check WiFi connectivity
-  if (!SensorSentinel_wifi_maintain()) {
-    // WiFi is not connected, so MQTT can't work
-    return false;
-  }
-  
-  // Check MQTT connection
-  if (!mqttClient.connected()) {
-    // Try to reconnect at defined interval
-    unsigned long now = millis();
-    if (now - lastMqttConnectionAttempt > mqttConnectionInterval) {
-      Serial.println("\nMQTT disconnected, attempting reconnection...");
-      if (SensorSentinel_mqtt_connect()) {
-        Serial.println("\nMQTT reconnected successfully");
-      } else {
-        Serial.printf("\nMQTT reconnection fail, will retry in %u seconds (state=%d)\n", 
-                     mqttConnectionInterval/1000, mqttClient.state());
-      }
+    if (!mqttClient.connected()) {
+        return SensorSentinel_mqtt_connect();
     }
-    return false;  // Not connected right now
-  } else {
-    // Client connected - process MQTT messages
     mqttClient.loop();
     return true;
-  }
-}
-
-/**
- * @brief Publish a message to an MQTT topic
- */
-boolean SensorSentinel_mqtt_publish(const char* topic, const char* payload, boolean retained) {
-  // Validate MQTT connection
-  if (!mqttClient.connected()) {
-    Serial.printf("ERROR: Cannot publish to %s - MQTT not connected\n", topic);
-    return false;
-  }
-  
-  // Validate topic
-  if (topic == NULL || strlen(topic) == 0) {
-    Serial.println("\nERROR: Cannot publish - empty topic");
-    return false;
-  }
-  
-  // Validate payload
-  if (payload == NULL) {
-    Serial.printf("ERROR: Cannot publish to %s - NULL payload\n", topic);
-    return false;
-  }
-  
-  // Calculate payload size for logging
-  size_t payloadLength = strlen(payload);
-  
-  // Ensure payload isn't too large for MQTT client
-  if (payloadLength > mqttClient.getBufferSize()) {
-    Serial.printf("ERROR: Payload too large (%u bytes, max %u) for topic %s\n", 
-                 payloadLength, mqttClient.getBufferSize(), topic);
-    return false;
-  }
-  
-  // Log publication attempt
-  if (payloadLength > 100) {
-    // For long payloads, just show the length and beginning
-    Serial.printf("Publishing to %s: [%u bytes] %.50s...\n", 
-                 topic, payloadLength, payload);
-  } else {
-    // For shorter payloads, show the entire content
-    Serial.printf("Publishing to %s: %s\n", topic, payload);
-  }
-  
-  // Attempt to publish
-  boolean result = mqttClient.publish(topic, payload, retained);
-  
-  // Handle publish result
-  if (!result) {
-    Serial.printf("ERROR: Publish failed to topic %s (state=%d)\n", 
-                 topic, mqttClient.state());
-  } else {
-    // Update last publish time for monitoring
-    lastPublishTime = millis();
-    publishCount++;
-  }
-  
-  return result;
-}
-
-/**
- * @brief Get the MQTT client object
- */
-PubSubClient& SensorSentinel_mqtt_get_client() {
-  return mqttClient;
 }

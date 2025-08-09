@@ -25,6 +25,9 @@
 #define SensorSentinel_MSG_SENSOR        0x01  // Basic sensor data packet
 #define SensorSentinel_MSG_GNSS         0x02  // GNSS location data packet
 
+// Configuration
+#define MAX_LORA_PACKET_SIZE 256 // Maximum packet size we can handle
+
 /**
  * @brief Basic sensor packet structure
  * 
@@ -89,12 +92,12 @@ typedef union {
   SensorSentinel_gnss_packet_t gnss;
 } SensorSentinel_packet_t;
 
-/*/**
+/*//**
  * @brief Get a unique node ID based on the ESP32's MAC address
  * 
  * @return 32-bit unique identifier derived from the MAC address
  */
-uint32_t SensorSentinel_get_node_id();
+uint32_t SensorSentinel_generate_node_id();
 
 /**
  * @brief Initialize a basic sensor packet with device information
@@ -142,6 +145,17 @@ size_t SensorSentinel_get_packet_size(uint8_t messageType);
 bool SensorSentinel_print_packet_info(const void* packet, size_t length);
 
 /**
+ * @brief Print invalid packet contents for debugging
+ * 
+ * Prints both hexadecimal and ASCII representations of the packet data
+ * to the Serial output.
+ * 
+ * @param data Pointer to the packet data
+ * @param length Length of the packet in bytes
+ */
+void SensorSentinel_print_invalid_packet(const uint8_t* data, size_t length);
+
+/**
  * @brief Validate a sensor packet structure for consistency
  * 
  * Checks that a packet has valid values and is internally consistent.
@@ -169,10 +183,33 @@ bool SensorSentinel_validate_gnss_packet(const SensorSentinel_gnss_packet_t* pac
  * exact type is not known at compile time.
  * 
  * @param data Pointer to the packet data
- * @param dataSize Size of the packet data in bytes
- * @param verbose Whether to print detailed error messages to Serial
+ * @param length Size of the packet data in bytes
  * @return true if the packet is valid, false otherwise
  */
-bool SensorSentinel_validate_packet(const void* data, size_t dataSize, bool verbose = false);
+bool SensorSentinel_validate_packet(const void* data, size_t length);
+
+/**
+ * @brief Convert a message type to a human-readable string
+ * 
+ * @param messageType The message type byte (SensorSentinel_MSG_SENSOR or SensorSentinel_MSG_GNSS)
+ * @return const char* Returns "Sensor", "GNSS", or "Unknown"
+ */
+const char* SensorSentinel_message_type_to_string(uint8_t messageType);
+
+/**
+ * @brief Get the message counter from a packet
+ * 
+ * @param data Pointer to the packet data
+ * @return uint32_t The message counter value
+ */
+uint32_t SensorSentinel_get_message_counter(const void* data);
+
+/**
+ * @brief Get the node ID from a packet
+ * 
+ * @param data Pointer to the packet data
+ * @return uint32_t The node ID value
+ */
+uint32_t SensorSentinel_extract_node_id_from_packet(const void* data);
 
 #endif // SensorSentinel_PACKET__HELPER_H

@@ -28,7 +28,7 @@ void transmitPacket() {
   message += "\nTemp:" + String(heltec_temperature(), 1) + "C";
   message += "\nup:" + String(millis()/1000) + "s";  // Changed "Up:" to "up:" to match receiver parsing
   
-  heltec_clear_display(2, 1);
+  heltec_clear_display();
   both.printf("TX %s ", message.c_str());
   
   #ifndef HELTEC_NO_RADIO_INSTANCE
@@ -70,6 +70,7 @@ void transmitPacket() {
     both.println("\nRadio not avail");
     lastTxTime = millis();
   #endif
+  heltec_display_update();
 }
 
 void setup() {
@@ -80,21 +81,21 @@ void setup() {
   gpio_install_isr_service(ESP_INTR_FLAG_LEVEL1);
   
   // Display board information
-  heltec_clear_display(1, 1);
+  heltec_clear_display();
   both.println("LoRa Sender");
-  both.printf("Board: %s\n", SensorSentinel_get_board_name());
-  
-  heltec_clear_display(1, 1);
+  both.printf("Board: %s\n", heltec_get_board_name());
+  heltec_display_update();
+  delay(2000);
+
+  heltec_clear_display();
   both.println("Initializing...");
   
   both.printf("Auto-tx using %0.1f%% duty cycle\n", DUTY_CYCLE_PERCENT);
   both.println("Button = Manual TX");
   both.println("Ready!");
-  
-  Serial.println("\n====== LoRa Sender Ready ======");
-  Serial.printf("Battery: %d%%\n", heltec_battery_percent());
-  Serial.printf("CPU Temp: %.1f°C\n", heltec_temperature());
-  Serial.println("===============================\n");
+  heltec_display_update();
+  delay(2000);
+
 }
 
 void loop() {
@@ -109,12 +110,13 @@ void loop() {
     transmitPacket();
   } else if (buttonPressed && !txLegal) {
     int waitSeconds = ((minimumPause - (millis() - lastTxTime)) / 1000) + 1;
-    heltec_clear_display(2,1);
+    heltec_clear_display();
     both.printf("Tx queued\nDuty cycle\nWait %i secs", waitSeconds);
+    heltec_display_update();
   }
   
   // Handle automatic transmission based on duty cycle or 1st run
-  if (txLegel) {
+  if (txLegal) {
     transmitPacket();
   }
   

@@ -58,16 +58,11 @@ typedef struct {
 } SensorSentinel_pin_readings_t;
 
 // Function declarations
-int8_t SensorSentinel_get_analog_pin(uint8_t index);
-int8_t SensorSentinel_get_boolean_pin(uint8_t index);
-uint8_t SensorSentinel_get_analog_count();
-uint8_t SensorSentinel_get_boolean_count();
 int16_t SensorSentinel_read_analog(uint8_t index);
 int8_t SensorSentinel_read_boolean(uint8_t index);
 int8_t SensorSentinel_write_boolean(uint8_t index, uint8_t value);
-uint8_t SensorSentinel_read_all_analog(uint16_t* values, uint8_t maxValues);
-void SensorSentinel_read_analog_with_padding(uint16_t* values, uint8_t arraySize);
-uint8_t SensorSentinel_read_boolean_byte(uint8_t maxBits = 8);
+void SensorSentinel_read_all_analog(uint16_t* values, uint8_t arraySize);
+uint8_t SensorSentinel_read_all_boolean();
 void SensorSentinel_read_all_pins(SensorSentinel_pin_readings_t* readings);
 void SensorSentinel_print_available_pins();
 

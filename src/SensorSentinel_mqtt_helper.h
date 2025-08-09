@@ -9,6 +9,17 @@
 #include <Arduino.h>
 #include <PubSubClient.h>  // MQTT client library
 #include <WiFi.h>          // ESP32 WiFi library
+#include "SensorSentinel_packet_helper.h"
+
+/**
+ * @brief Status codes for MQTT forwarding operations
+ */
+enum MqttForwardStatus {
+    MQTT_SUCCESS,      ///< Packet successfully forwarded
+    MQTT_NOT_CONNECTED,///< MQTT client not connected
+    MQTT_PUBLISH_FAILED,///< Publish operation failed
+    MQTT_INVALID_PACKET ///< Packet validation failed
+};
 
 /**
  * @brief Synchronize time via NTP with custom parameters
@@ -113,5 +124,37 @@ PubSubClient& SensorSentinel_mqtt_get_client();
  * @return int Signal quality percentage (0-100)
  */
 int SensorSentinel_wifi_quality();
+
+/**
+ * @brief Convert MQTT status to human-readable string
+ * @param status The MQTT forward status code
+ * @return const char* String representation of the status
+ */
+const char* SensorSentinel_mqtt_status_to_string(MqttForwardStatus status);
+
+/**
+ * @brief Forward a packet to MQTT broker
+ * @param data Pointer to packet data
+ * @param length Length of packet data
+ * @param rssi Signal strength of received packet
+ * @param snr Signal-to-noise ratio of received packet
+ * @return MqttForwardStatus Status of the forward operation
+ */
+MqttForwardStatus SensorSentinel_mqtt_forward_packet(uint8_t *data, size_t length, float rssi, float snr);
+
+struct MqttConfig {
+    const char* server;
+    int port;
+    const char* user;
+    const char* password;
+    unsigned int connectionInterval;
+    unsigned int socketTimeout;
+};
+
+extern MqttConfig mqttConfig;
+
+#ifndef MQTT_TOPIC
+#define MQTT_TOPIC "lora/data"  // Default topic if not defined in platformio.ini
+#endif
 
 #endif // SensorSentinel_MQTT_HELPER_H
