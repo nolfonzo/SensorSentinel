@@ -1,4 +1,22 @@
 nodered.log
-context/
-node_modules/
 *.backup
+
+# Node-RED runtime files
+.config.nodes.json
+.config.nodes.json.backup
+.config.runtime.json
+.config.runtime.json.backup
+.config.users.json
+.config.users.json.backup
+
+# Node modules and lock files (optional - see below)
+node_modules/
+context/
+package-lock.json
+
+# Node-RED logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
