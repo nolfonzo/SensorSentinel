@@ -36,7 +36,10 @@ void setup()
   // Initialize the Heltec board
   heltec_setup();
 
-  // Clear display and show startup message
+  Serial.printf("Sensor packet size: %d bytes\n", sizeof(SensorSentinel_sensor_packet_t));
+  Serial.printf("Pin readings size: %d bytes\n", sizeof(SensorSentinel_pin_readings_t));
+  Serial.printf("GNSS packet size: %d bytes\n", sizeof(SensorSentinel_gnss_packet_t));
+
   heltec_clear_display();
   both.println("Packet Receiver+MQTT");
   both.printf("Board: %s\n", heltec_get_board_name());

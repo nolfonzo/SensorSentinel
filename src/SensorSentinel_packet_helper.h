@@ -36,7 +36,7 @@
  */
 typedef struct {
   // Header information
-  uint8_t messageType;         // 
+  uint8_t messageType;         // Always SensorSentinel_MSG_SENSOR (0x01)
   uint32_t nodeId;             // Unique node identifier (from MAC address)
   uint32_t messageCounter;     // Sequence number
   uint32_t uptime;             // uptime in seconds
@@ -92,7 +92,7 @@ typedef union {
   SensorSentinel_gnss_packet_t gnss;
 } SensorSentinel_packet_t;
 
-/*//**
+/**
  * @brief Get a unique node ID based on the ESP32's MAC address
  * 
  * @return 32-bit unique identifier derived from the MAC address
@@ -127,7 +127,7 @@ bool SensorSentinel_init_gnss_packet(SensorSentinel_gnss_packet_t* packet, uint3
  * 
  * Returns the appropriate size in bytes for a given message type.
  * 
- * @param messageType The type of message (SensorSentinel_MSG_BASIC or SensorSentinel_MSG_GNSS)
+ * @param messageType The type of message (SensorSentinel_MSG_SENSOR or SensorSentinel_MSG_GNSS)
  * @return The size of the packet in bytes
  */
 size_t SensorSentinel_get_packet_size(uint8_t messageType);
@@ -139,7 +139,7 @@ size_t SensorSentinel_get_packet_size(uint8_t messageType);
  * message type field in the packet. Handles both sensor and GNSS packets.
  * 
  * @param packet Pointer to the packet buffer (any type)
- * @param length
+ * @param length Length of the packet in bytes
  * @return true if the packet was successfully printed, false otherwise
  */
 bool SensorSentinel_print_packet_info(const void* packet, size_t length);
@@ -175,7 +175,7 @@ bool SensorSentinel_validate_sensor_packet(const SensorSentinel_sensor_packet_t*
  */
 bool SensorSentinel_validate_gnss_packet(const SensorSentinel_gnss_packet_t* packet);
 
-/*/**
+/**
  * @brief Validate a packet of any supported type
  * 
  * Examines the message type and calls the appropriate type-specific
@@ -212,4 +212,4 @@ uint32_t SensorSentinel_get_message_counter(const void* data);
  */
 uint32_t SensorSentinel_extract_node_id_from_packet(const void* data);
 
-#endif // SensorSentinel_PACKET__HELPER_H
+#endif // SensorSentinel_PACKET_HELPER_H

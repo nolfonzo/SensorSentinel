@@ -339,12 +339,14 @@ void heltec_clear_display(uint8_t textSize, uint8_t rotation) {
             #endif
             break;
             
-        default: // V3.2, Wireless Stick, etc.
+        default: // V3.2, Wireless Stick, etc. - ONLY for OLED boards
+            #if !defined(ARDUINO_heltec_wireless_tracker)
             display.clearDisplay();
             display.setTextSize(textSize);
             display.setTextColor(SSD1306_WHITE);
             display.setCursor(0, 0);
             display.display();
+            #endif
             break;
     }
     #endif
@@ -363,15 +365,19 @@ static void shutdown_display() {
     
     switch(board) {
         case BOARD_WIRELESS_TRACKER:
+            #ifdef ARDUINO_heltec_wireless_tracker
             heltec_tft_power(false);
+            #endif
             break;
         case BOARD_WIFI_LORA_V3:
             #ifdef ARDUINO_heltec_wifi_32_lora_V3
             display.displayOff();
             #endif
             break;
-        default:
+        default: // V3.2, Wireless Stick, etc. - ONLY for OLED boards
+            #if !defined(ARDUINO_heltec_wireless_tracker)
             display.ssd1306_command(SSD1306_DISPLAYOFF);
+            #endif
             break;
     }
     #endif
@@ -397,7 +403,7 @@ static void shutdown_pins() {
         }
         #endif
     } else {
-        #ifndef HELTEC_NO_DISPLAY
+        #if !defined(ARDUINO_heltec_wireless_tracker) && !defined(HELTEC_NO_DISPLAY)
         const int oled_pins[] = {SDA_OLED, SCL_OLED, RST_OLED};
         for(int pin : oled_pins) {
             pinMode(pin, INPUT);
@@ -443,24 +449,26 @@ static void setup_display() {
     switch(board) {
         case BOARD_WIRELESS_TRACKER:
             #ifdef ARDUINO_heltec_wireless_tracker
-            display.initR(INITR_MINI160x80);  // This is for Adafruit_ST7735
+            display.initR(INITR_MINI160x80);
             #endif
             break;
             
         case BOARD_WIFI_LORA_V3:
             #ifdef ARDUINO_heltec_wifi_32_lora_V3
             Wire.begin(SDA_OLED, SCL_OLED);
-            display.init();  // This is for SSD1306Wire
+            display.init();
             #endif
             break;
             
-        default: // V3.2, Wireless Stick, etc. (Adafruit_SSD1306)
+        default: // V3.2, Wireless Stick, etc. - ONLY for OLED boards
+            #if !defined(ARDUINO_heltec_wireless_tracker)
             Wire.begin(SDA_OLED, SCL_OLED);
             if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
                 Serial.println("SSD1306 allocation failed");
             } else {
                 Serial.println("OLED initialized OK");
             }
+            #endif
             break;
     }
     heltec_clear_display();
