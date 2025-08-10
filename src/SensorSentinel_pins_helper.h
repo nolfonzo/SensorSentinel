@@ -55,7 +55,7 @@
 typedef struct {
   uint16_t analog[4];   // 4 analog values
   uint8_t boolean;      // 8 boolean values packed as bits
-} SensorSentinel_pin_readings_t;
+} __attribute__((packed)) SensorSentinel_pin_readings_t;
 
 // Function declarations
 int16_t SensorSentinel_read_analog(uint8_t index);
