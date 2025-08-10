@@ -399,7 +399,7 @@
         "id": "a55a6868925ad162",
         "type": "function",
         "z": "bfe4d76a50650ba0",
-        "name": "Parse LoRa message",
+        "name": "Process JSON message",
         "func": "const topic = msg.topic; // Retrieve the topic from the incoming message\nconst payload = msg.payload; // Retrieve the payload containing the necessary data\n\n// Retrieve the devices from global context\nconst devices = global.get(\"devices\") || {};\nconst currentDeviceName = payload.nodeId.toString(); // Use nodeId for identification\nconst currentDevice = devices[currentDeviceName];\n\nnode.log(\"Received message for topic: \" + topic + \" json: \" + JSON.stringify(msg)); // Log the whole message\n\nif (!currentDevice) {\n    node.warn(\"Device not found for nodeId: \" + payload.nodeId);\n    return null; // Stop processing if the device is not found\n}\n\n// Initialize an array to collect alerts\nconst alerts = [];\n\n// Check binary pins using bitwise operations\nconst binaryPinStates = payload.digital; // Assuming msg.payload.digital contains the binary pin byte\nnode.log(\"Binary pin states received: \" + binaryPinStates.toString(2).padStart(currentDevice.binaryPins.length, '0')); // Log binary states in binary format\n\ncurrentDevice.binaryPins.forEach((pin, index) => {\n    // Check if pin label is defined; if not, skip this pin\n    if (!pin.label) {\n        node.log(`Skipping binary pin index: ${index} because pin label is undefined.`);\n        return; // Skip to the next iteration\n    }\n\n    // Get the state of the current binary pin using bitwise AND and shifting\n    const pinState = (binaryPinStates >> index) & 1; // Get the value of the current bit\n    node.log(`Checking binary pin index: ${index}, pin label: ${pin.label}, pin state: ${pinState}`); // Log the current pin evaluation\n\n    // Check for High trigger\n    if (pin.trigger === 'High' && pinState === 1) { // High trigger alert\n        alerts.push({\n            ownerName: currentDevice.ownerName,\n            deviceName: currentDevice.deviceName,\n            pinLabel: pin.label,\n            alertMessage: `Triggered HIGH`,\n            timestamp: payload.time_iso\n        });\n        node.log(`Alert added for binary pin: ${pin.label} HIGH`); // Log alert addition\n    }\n    // Check for Low trigger\n    else if (pin.trigger === 'Low' && pinState === 0) { // Low trigger alert\n        alerts.push({\n            ownerName: currentDevice.ownerName,\n            deviceName: currentDevice.deviceName,\n            pinLabel: pin.label,\n            alertMessage: `Triggered LOW`,\n            timestamp: payload.time_iso\n        });\n        node.log(`Alert added for binary pin: ${pin.label} LOW`); // Log alert addition\n    } else {\n        node.log(`No alert triggered for binary pin ${pin.label}. Expected: ${pin.trigger}, Actual state: ${pinState}`); // Log when no alert is triggered\n    }\n});\n\n// Check analog pins\ncurrentDevice.analogPins.forEach((pin, index) => {\n    // Check if pin label is defined; if not, skip this pin\n    if (!pin.label) {\n        node.log(`Skipping analog pin index: ${index} because pin label is undefined.`);\n        return; // Skip to the next iteration\n    }\n\n    // Assuming msg.payload.analog holds the pin values for the corresponding index\n    if (payload.analog && msg.payload.analog[index] !== undefined) {\n        const analogValue = msg.payload.analog[index];\n        node.log(`Checking analog pin index: ${index}, pin label: ${pin.label}, value: ${analogValue}`); // Log the current analog evaluation\n        if (analogValue < pin.lowThreshold) { // Low threshold alert\n            alerts.push({\n                ownerName: currentDevice.ownerName,\n                deviceName: currentDevice.deviceName,\n                pinLabel: pin.label,\n                alertMessage: `Analog value is LOW: ${analogValue}`,\n                timestamp: payload.time_iso\n            });\n            node.log(`Alert added for analog pin: ${pin.label} LOW threshold`); // Log alert for low threshold\n        } else if (analogValue > pin.highThreshold) { // High threshold alert\n            alerts.push({\n                ownerName: currentDevice.ownerName,\n                deviceName: currentDevice.deviceName,\n                pinLabel: pin.label,\n                alertMessage: `Analog value is HIGH: ${analogValue}`,\n                timestamp: payload.time_iso\n            });\n            node.log(`Alert added for analog pin: ${pin.label} HIGH threshold`); // Log alert for high threshold\n        } else {\n            node.log(`No alert for analog pin ${pin.label}. Value within range: ${analogValue}`); // Log if value is within range\n        }\n    } else {\n        node.log(`Analog pin index ${index} does not exist in payload. Skipping.`); // Log if analog data is missing\n    }\n});\n\n// Send the structured alerts to the topic \"add_alert\"\nif (alerts.length > 0) {\n    alerts.forEach(alert => {\n        node.send({\n            topic: \"add_alert\",\n            payload: alert\n        });\n    });\n    node.log(`Total alerts sent: ${alerts.length}`); // Log total number of alerts sent\n} else {\n    node.log(\"No alerts to send.\"); // Log when no alerts are present\n}",
         "outputs": 1,
         "timeout": 0,
@@ -407,7 +407,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 820,
+        "x": 830,
         "y": 420,
         "wires": [
             [
@@ -688,7 +688,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "lora/sensor",
+        "topic": "lora/out/sensor",
         "payload": "{\"type\":\"sensor\",\"nodeId\":862487472,\"counter\":5670,\"battery\":0,\"voltage\":0,\"uptime\":173667,\"analog\":[553,593,569,71],\"digital\":198,\"timestamp_ms\":168713090,\"timestamp\":1750146309,\"time\":\"2025-06-17 17:45:09\",\"time_iso\":\"2025-06-17T17:45:09+1000\",\"GW\":\"WiFi LoRa 32 V3.2\",\"GW_ip\":\"192.168.20.101\",\"GW_mac\":\"30:ED:A0:CB:0E:8C\"}",
         "payloadType": "json",
         "x": 1020,
@@ -717,7 +717,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "lora/gnss",
+        "topic": "lora/out/gnss",
         "payload": "{\"type\":\"gnss\",\"nodeId\":862487472,\"counter\":1916,\"battery\":0,\"voltage\":2,\"uptime\":173719,\"latitude\":0,\"longitude\":0,\"speed\":0,\"course\":0,\"hdop\":0,\"timestamp_ms\":168765244,\"timestamp\":1750146361,\"time\":\"2025-06-17 17:46:01\",\"time_iso\":\"2025-06-17T17:46:01+1000\",\"GW\":\"WiFi LoRa 32 V3.2\",\"GW_ip\":\"192.168.20.101\",\"GW_mac\":\"30:ED:A0:CB:0E:8C\"}",
         "payloadType": "json",
         "x": 1010,
@@ -778,7 +778,7 @@
         "id": "sensor_inject",
         "type": "inject",
         "z": "b320d858532c1eb7",
-        "name": "Sensor Packet Every 30s",
+        "name": "Inject Sensor Packet",
         "props": [
             {
                 "p": "payload"
@@ -795,7 +795,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 310,
+        "x": 300,
         "y": 120,
         "wires": [
             [
@@ -808,7 +808,7 @@
         "type": "function",
         "z": "b320d858532c1eb7",
         "name": "Generate Sensor Packet",
-        "func": "// Get or initialize message counter\nlet counter = flow.get('sensor_counter') || 1000;\n\n// Fake sensor packet data\nconst packet = {\n    messageType: 0x01,\n    nodeId: 2697689064,\n    messageCounter: counter,\n    uptime: 3600,\n    batteryLevel: 85,\n    batteryVoltage: 3700,\n    pins: {\n        analog: [1024, 2048, 512, 3072],\n        boolean: 0b10110011\n    },\n    reserved: [0x00, 0x00]\n};\n\n// Create binary buffer (27 bytes)\nconst buffer = Buffer.alloc(27);\nlet offset = 0;\n\n// Write fields (little-endian)\nbuffer.writeUInt8(packet.messageType, offset); offset += 1;\nbuffer.writeUInt32LE(packet.nodeId, offset); offset += 4;\nbuffer.writeUInt32LE(packet.messageCounter, offset); offset += 4;\nbuffer.writeUInt32LE(packet.uptime, offset); offset += 4;\nbuffer.writeUInt8(packet.batteryLevel, offset); offset += 1;\nbuffer.writeUInt16LE(packet.batteryVoltage, offset); offset += 2;\nfor (let i = 0; i < 4; i++) {\n    buffer.writeUInt16LE(packet.pins.analog[i], offset); offset += 2;\n}\nbuffer.writeUInt8(packet.pins.boolean, offset); offset += 1;\nbuffer.writeUInt8(packet.reserved[0], offset); offset += 1;\nbuffer.writeUInt8(packet.reserved[1], offset);\n\n// Increment and save counter\ncounter++;\nflow.set('sensor_counter', counter);\n\n// Set MQTT payload and topic\nmsg.payload = buffer;\nmsg.topic = 'lora/in/sensor';\nreturn msg;",
+        "func": "// Get or initialize message counter\nlet counter = flow.get('sensor_counter') || 1000;\n\n// Test sensor packet data\nconst packet = {\n    messageType: 0x01,\n    nodeId: 2697689064,\n    messageCounter: counter,\n    uptime: 3600,\n    batteryLevel: 85,\n    batteryVoltage: 3700,\n    pins: {\n        analog: [1024, 2048, 512, 3072],\n        boolean: 0b10110011\n    },\n    reserved: [0x00, 0x00]\n};\n\n// Create binary buffer (27 bytes)\nconst buffer = Buffer.alloc(27);\nlet offset = 0;\n\n// Write fields (little-endian)\nbuffer.writeUInt8(packet.messageType, offset); offset += 1;\nbuffer.writeUInt32LE(packet.nodeId, offset); offset += 4;\nbuffer.writeUInt32LE(packet.messageCounter, offset); offset += 4;\nbuffer.writeUInt32LE(packet.uptime, offset); offset += 4;\nbuffer.writeUInt8(packet.batteryLevel, offset); offset += 1;\nbuffer.writeUInt16LE(packet.batteryVoltage, offset); offset += 2;\nfor (let i = 0; i < 4; i++) {\n    buffer.writeUInt16LE(packet.pins.analog[i], offset); offset += 2;\n}\nbuffer.writeUInt8(packet.pins.boolean, offset); offset += 1;\nbuffer.writeUInt8(packet.reserved[0], offset); offset += 1;\nbuffer.writeUInt8(packet.reserved[1], offset);\n\n// Increment and save counter\ncounter++;\nflow.set('sensor_counter', counter);\n\n// Set MQTT payload and topic\nmsg.payload = buffer;\nmsg.topic = 'lora/in/sensor';\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -846,7 +846,7 @@
         "id": "gnss_inject",
         "type": "inject",
         "z": "b320d858532c1eb7",
-        "name": "GNSS Packet Every 30s (15s delay)",
+        "name": "Inject GNSS Packet",
         "props": [
             {
                 "p": "payload"
@@ -863,7 +863,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 290,
+        "x": 240,
         "y": 240,
         "wires": [
             [
@@ -935,7 +935,7 @@
         "type": "function",
         "z": "b320d858532c1eb7",
         "name": "Parse Binary to JSON",
-        "func": "// Get binary buffer\nconst buffer = msg.payload;\nconst topic = msg.topic;\n\n// Check for null or invalid buffer\nif (!buffer) {\n    msg.payload = { error: \"Invalid parameters\" };\n    msg.topic = 'lora/out/error';\n    return msg;\n}\n\n// Check messageType (first byte)\nconst messageType = buffer.readUInt8(0);\nlet packet = {};\n\ntry {\n    if (messageType === 0x01 && buffer.length === 27) {\n        // Sensor packet (27 bytes)\n        let offset = 0;\n        const nodeId = buffer.readUInt32LE(offset + 1);\n        \n        // Validate nodeId\n        if (nodeId === 0) {\n            msg.payload = { error: \"Invalid packet data\" };\n            msg.topic = 'lora/out/error';\n            return msg;\n        }\n\n        packet = {\n            type: \"sensor\",\n            nodeId: nodeId,\n            counter: buffer.readUInt32LE(offset + 5),\n            battery: buffer.readUInt8(offset + 13),\n            voltage: buffer.readUInt16LE(offset + 14),\n            uptime: buffer.readUInt32LE(offset + 9),\n            analog: [\n                buffer.readUInt16LE(offset + 16),\n                buffer.readUInt16LE(offset + 18),\n                buffer.readUInt16LE(offset + 20),\n                buffer.readUInt16LE(offset + 22)\n            ],\n            digital: buffer.readUInt8(offset + 24)\n        };\n        msg.topic = 'lora/out/sensor';\n    } else if (messageType === 0x02 && buffer.length === 35) {\n        // GNSS packet (35 bytes)\n        let offset = 0;\n        const nodeId = buffer.readUInt32LE(offset + 1);\n        const latitude = buffer.readFloatLE(offset + 16);\n        const longitude = buffer.readFloatLE(offset + 20);\n\n        // Validate nodeId and coordinates\n        if (nodeId === 0 ||\n            latitude < -90.0 || latitude > 90.0 ||\n            longitude < -180.0 || longitude > 180.0) {\n            msg.payload = { error: \"Invalid packet data\" };\n            msg.topic = 'lora/out/error';\n            return msg;\n        }\n\n        packet = {\n            type: \"gnss\",\n            nodeId: nodeId,\n            counter: buffer.readUInt32LE(offset + 5),\n            battery: buffer.readUInt8(offset + 13),\n            voltage: buffer.readUInt16LE(offset + 14),\n            uptime: buffer.readUInt32LE(offset + 9),\n            latitude: latitude,\n            longitude: longitude,\n            speed: buffer.readFloatLE(offset + 24),\n            course: buffer.readFloatLE(offset + 29),\n            hdop: buffer.readUInt8(offset + 28) / 10.0\n        };\n        msg.topic = 'lora/out/gnss';\n    } else {\n        // Unknown packet type\n        msg.payload = { error: `Unknown packet type: 0x${messageType.toString(16).padStart(2, '0').toUpperCase()}` };\n        msg.topic = 'lora/out/error';\n        return msg;\n    }\n} catch (e) {\n    // Handle parsing errors\n    msg.payload = { error: \"JSON serialization error\" };\n    msg.topic = 'lora/out/error';\n    return msg;\n}\n\n// Set JSON payload\nmsg.payload = packet;\nreturn msg;",
+        "func": "// Get binary buffer\nconst buffer = msg.payload;\nconst topic = msg.topic;\n\n// Check for null or invalid buffer\nif (!buffer) {\n    msg.payload = { error: \"Invalid parameters\" };\n    msg.topic = 'lora/out/error';\n    return msg;\n}\n\n// Check messageType (first byte)\nconst messageType = buffer.readUInt8(0);\nlet packet = {};\n\ntry {\n    if (messageType === 0x01 && buffer.length === 27) {\n        const nodeId = buffer.readUInt32LE(1);  // Offset 1-4\n        \n        // Validate nodeId\n        if (nodeId === 0) {\n            msg.payload = { error: \"Invalid packet data - nodeId is 0\" };\n            msg.topic = 'lora/out/error';\n            return msg;\n        }\n\n        packet = {\n            type: \"sensor\",\n            nodeId: nodeId,\n            counter: buffer.readUInt32LE(5),     // Offset 5-8\n            uptime: buffer.readUInt32LE(9),      // Offset 9-12\n            battery: buffer.readUInt8(13),       // Offset 13\n            voltage: buffer.readUInt16LE(14),    // Offset 14-15\n            analog: [\n                buffer.readUInt16LE(16),         // Offset 16-17\n                buffer.readUInt16LE(18),         // Offset 18-19\n                buffer.readUInt16LE(20),         // Offset 20-21\n                buffer.readUInt16LE(22)          // Offset 22-23\n            ],\n            digital: buffer.readUInt8(24)        // Offset 24\n        };\n        msg.topic = 'lora/out/sensor';\n        \n    } else if (messageType === 0x02 && buffer.length === 35) {\n        const nodeId = buffer.readUInt32LE(1);\n        const latitude = buffer.readFloatLE(16);\n        const longitude = buffer.readFloatLE(20);\n\n        if (nodeId === 0 ||\n            latitude < -90.0 || latitude > 90.0 ||\n            longitude < -180.0 || longitude > 180.0) {\n            msg.payload = { error: \"Invalid packet data\" };\n            msg.topic = 'lora/out/error';\n            return msg;\n        }\n\n        packet = {\n            type: \"gnss\",\n            nodeId: nodeId,\n            counter: buffer.readUInt32LE(5),\n            uptime: buffer.readUInt32LE(9),\n            battery: buffer.readUInt8(13),\n            voltage: buffer.readUInt16LE(14),\n            latitude: latitude,\n            longitude: longitude,\n            speed: buffer.readFloatLE(24),\n            hdop: buffer.readUInt8(28) / 10.0,\n            course: buffer.readFloatLE(29)\n        };\n        msg.topic = 'lora/out/gnss';\n        \n    } else {\n        // Unknown packet type or wrong length\n        msg.payload = { \n            error: `Unknown packet: type=0x${messageType.toString(16).padStart(2, '0').toUpperCase()}, length=${buffer.length}`\n        };\n        msg.topic = 'lora/out/error';\n        return msg;\n    }\n} catch (e) {\n    msg.payload = { error: `Parsing error: ${e.message}` };\n    msg.topic = 'lora/out/error';\n    return msg;\n}\n\nmsg.payload = packet;\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -959,6 +959,7 @@
         "active": true,
         "tosidebar": true,
         "console": false,
+        "tostatus": false,
         "complete": "payload",
         "targetType": "msg",
         "statusVal": "",
