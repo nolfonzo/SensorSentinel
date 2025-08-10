@@ -11,6 +11,7 @@ nodered.log
 
 # Node modules and lock files (optional - see below)
 node_modules/
+context/
 package-lock.json
 
 # Node-RED logs
