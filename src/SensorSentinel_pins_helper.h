@@ -12,7 +12,7 @@
  */
 
 #ifndef SensorSentinel_PINS_HELPER_H
-#define SensorSentinel_PINS__HELPER_H
+#define SensorSentinel_PINS_HELPER_H
 
 #include <Arduino.h>
 

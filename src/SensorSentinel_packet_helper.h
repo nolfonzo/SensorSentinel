@@ -87,7 +87,7 @@ typedef union {
     uint8_t messageType;
     uint32_t nodeId;
     uint32_t messageCounter;
-  } header;
+  } __attribute__((packed)) header;  // ← Add this!
   SensorSentinel_sensor_packet_t sensor;
   SensorSentinel_gnss_packet_t gnss;
 } SensorSentinel_packet_t;
@@ -202,14 +202,13 @@ const char* SensorSentinel_message_type_to_string(uint8_t messageType);
  * @param data Pointer to the packet data
  * @return uint32_t The message counter value
  */
-uint32_t SensorSentinel_get_message_counter(const void* data);
+uint32_t SensorSentinel_get_message_counter_from_packet(uint8_t *data);
 
 /**
- * @brief Get the node ID from a packet
- * 
- * @param data Pointer to the packet data
- * @return uint32_t The node ID value
+ * @brief Extract the node ID from a received packet
+ * @param data Pointer to packet data
+ * @return Node ID from the packet
  */
-uint32_t SensorSentinel_extract_node_id_from_packet(const void* data);
+uint32_t SensorSentinel_extract_node_id_from_packet(uint8_t *data);
 
-#endif // SensorSentinel_PACKET_HELPER_H
+#endif // SensorSentinel_PACKET__HELPER_H

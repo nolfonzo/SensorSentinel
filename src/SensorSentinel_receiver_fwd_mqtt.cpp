@@ -26,8 +26,21 @@ uint32_t packetsForwarded = 0;
 // Variables for packet processing
 String packetMessageType; // Current packet message type
 
+#define PACKET_CACHE_SIZE 50  // Remember last 50 packets
+
+// Packet cache to prevent duplicate MQTT messages
+struct ReceivedPacketCache {
+    uint32_t nodeId;
+    uint32_t messageCounter;
+    unsigned long timestamp;
+};
+ReceivedPacketCache receivedCache[PACKET_CACHE_SIZE];
+uint8_t receivedCacheIndex = 0;
+
 // Function prototypes
 void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr);
+bool isPacketAlreadyProcessed(uint32_t nodeId, uint32_t messageCounter);
+void addToReceivedCache(uint32_t nodeId, uint32_t messageCounter);
 
 #define STARTUP_DISPLAY_DELAY 2000
 
@@ -67,6 +80,9 @@ void setup()
   // Let the helper libraries handle WiFi and MQTT connection
   SensorSentinel_wifi_begin();
   SensorSentinel_mqtt_setup(true); // With time sync
+
+  // Initialize received packet cache
+  memset(receivedCache, 0, sizeof(receivedCache));
 }
 
 void loop()
@@ -109,7 +125,7 @@ void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr)
 
     // Display the extracted information
     both.printf("\nReceived Type: %s\n", packetMessageType.c_str());
-    both.printf("Msg #: %u\n", SensorSentinel_get_message_counter(packetBuffer));
+    both.printf("Msg #: %u\n", SensorSentinel_get_message_counter_from_packet(packetBuffer));
     both.printf("NodeID: %u\n", SensorSentinel_extract_node_id_from_packet(packetBuffer));
 
     // Common display elements (outside the if/else block)
@@ -121,33 +137,66 @@ void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr)
     SensorSentinel_print_packet_info(packetBuffer, length);
     Serial.println("---------------------------");
 
-    // Forward the packet to MQTT using new helper function
-    MqttForwardStatus mqttStatus = SensorSentinel_mqtt_forward_packet(packetBuffer, length, rssi, snr);
-    
-    // Display MQTT status
-    both.printf("MQTT: %s\n", SensorSentinel_mqtt_status_to_string(mqttStatus));
-    
-    if (mqttStatus == MQTT_SUCCESS) {
-        packetsForwarded++;
-        // Serial output for packet statistics
-        Serial.printf("\nPackets received: %u, Forwarded: %u\n", packetsReceived + 1, packetsForwarded);
-        Serial.println("---------------------------");
-        Serial.println("---------------------------\n\n");
+    // Check if the packet has already been processed
+    uint32_t nodeId = SensorSentinel_extract_node_id_from_packet(packetBuffer);
+    uint32_t messageCounter = SensorSentinel_get_message_counter_from_packet(packetBuffer);
+
+    if (!isPacketAlreadyProcessed(nodeId, messageCounter)) {
+        Serial.printf("NEW: Processing packet from Node %u (Msg #%u)\n", nodeId, messageCounter);
+        
+        // Add to cache BEFORE processing to prevent race conditions
+        addToReceivedCache(nodeId, messageCounter);
+        
+        // Forward the packet to MQTT using new helper function
+        MqttForwardStatus mqttStatus = SensorSentinel_mqtt_forward_packet(packetBuffer, length, rssi, snr);
+        
+        // Display MQTT status
+        both.printf("MQTT: %s\n", SensorSentinel_mqtt_status_to_string(mqttStatus));
+        
+        if (mqttStatus == MQTT_SUCCESS) {
+            packetsForwarded++;
+            // Serial output for packet statistics
+            Serial.printf("\nPackets received: %u, Forwarded: %u\n", packetsReceived + 1, packetsForwarded);
+            Serial.println("---------------------------");
+            Serial.println("---------------------------\n\n");
+          }
+    } else {
+        Serial.printf("DUPLICATE: Already processed packet from Node %u (Msg #%u) - SKIPPING MQTT\n", 
+                      nodeId, messageCounter);
+        both.println("Duplicate - SKIPPED");
     }
-  } 
-  else 
-  {
-    // Handle invalid packet case
-    both.println("Invalid packet received");
-    SensorSentinel_print_invalid_packet(data, length);
-  }
 
-  heltec_display_update();
+    heltec_display_update();
 
-  // Update counters and timers
-  packetsReceived++;
-  lastPacketTime = millis();
+    // Update counters and timers
+    packetsReceived++;
+    lastPacketTime = millis();
 
-  // Turn off LED
-  heltec_led(0);
+    // Turn off LED
+    heltec_led(0);
+  } // ← This closes the if (isValidPacket) block
+} // ← ADD THIS MISSING CLOSING BRACE FOR onBinaryPacketReceived!
+
+/**
+ * Check if we've already processed this packet
+ */
+bool isPacketAlreadyProcessed(uint32_t nodeId, uint32_t messageCounter) {
+    for (int i = 0; i < PACKET_CACHE_SIZE; i++) {
+        if (receivedCache[i].nodeId == nodeId && 
+            receivedCache[i].messageCounter == messageCounter) {
+            return true; // Already processed
+        }
+    }
+    return false; // New packet
+}
+
+/**
+ * Remember that we've processed this packet
+ */
+void addToReceivedCache(uint32_t nodeId, uint32_t messageCounter) {
+    receivedCache[receivedCacheIndex].nodeId = nodeId;
+    receivedCache[receivedCacheIndex].messageCounter = messageCounter;
+    receivedCache[receivedCacheIndex].timestamp = millis();
+    
+    receivedCacheIndex = (receivedCacheIndex + 1) % PACKET_CACHE_SIZE;
 }

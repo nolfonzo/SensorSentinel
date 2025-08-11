@@ -7,17 +7,28 @@
 #include "heltec_unofficial_revised.h"
 #include <string.h> // For memcpy
 
+// Add after your existing global variables:
+static uint32_t cached_node_id = 0;
+
 // Get a unique node ID based on ESP32's MAC address
 uint32_t SensorSentinel_generate_node_id()
 {
-// Use WiFi MAC address if WiFi is available
+  // Return cached value if already generated
+  if (cached_node_id != 0) {
+    return cached_node_id;
+  }
+  
+  // Generate once and cache - using original WiFi MAC logic
 #if defined(ESP32) && !defined(SensorSentinel_NO_WIFI)
   uint8_t mac[6];
   esp_read_mac(mac, ESP_MAC_WIFI_STA);
 
   // Create a 32-bit ID from the MAC (using the last 4 bytes)
-  return ((uint32_t)mac[2] << 24) | ((uint32_t)mac[3] << 16) |
-         ((uint32_t)mac[4] << 8) | mac[5];
+  cached_node_id = ((uint32_t)mac[2] << 24) | ((uint32_t)mac[3] << 16) |
+                   ((uint32_t)mac[4] << 8) | mac[5];
+  
+  Serial.printf("Generated NodeID from WiFi MAC: 0x%08X (MAC: %02X:%02X:%02X:%02X:%02X:%02X)\n", 
+                cached_node_id, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 #else
   // Fallback to a generated ID if WiFi is not available
   uint32_t chipId = 0;
@@ -25,8 +36,12 @@ uint32_t SensorSentinel_generate_node_id()
   {
     chipId |= ((ESP.getEfuseMac() >> (40 - i)) & 0xff) << i;
   }
-  return chipId;
+  cached_node_id = chipId;
+  
+  Serial.printf("Generated NodeID from Chip ID (no WiFi): 0x%08X\n", cached_node_id);
 #endif
+
+  return cached_node_id;
 }
 
 /**
@@ -46,10 +61,10 @@ bool SensorSentinel_init_sensor_packet(SensorSentinel_sensor_packet_t *packet, u
   memset(packet, 0, sizeof(SensorSentinel_sensor_packet_t));
 
   // Set message type
-  packet->messageType = SensorSentinel_MSG_SENSOR; // Using new constant name
+  packet->messageType = SensorSentinel_MSG_SENSOR;
 
-  // Set basic information
-  packet->nodeId = SensorSentinel_generate_node_id(); // Updated function name
+  // Set basic information - now uses cached NodeID
+  packet->nodeId = SensorSentinel_generate_node_id(); // ← Already correct!
   packet->messageCounter = counter;
   packet->uptime = millis() / 1000; // Seconds since boot
 
@@ -365,28 +380,18 @@ const char* SensorSentinel_message_type_to_string(uint8_t messageType) {
     }
 }
 
-uint32_t SensorSentinel_get_message_counter(const void* data) {
-    const SensorSentinel_packet_t* packet = (const SensorSentinel_packet_t*)data;
-    uint8_t messageType = packet->sensor.messageType;  // Both packet types have messageType at same offset
-
-    if (messageType == SensorSentinel_MSG_SENSOR) {
-        return packet->sensor.messageCounter;
-    } else if (messageType == SensorSentinel_MSG_GNSS) {
-        return packet->gnss.messageCounter;
-    }
-    return 0;
+uint32_t SensorSentinel_get_message_counter_from_packet(uint8_t *data) {
+    if (!data) return 0;
+    
+    SensorSentinel_packet_t* packet = (SensorSentinel_packet_t*)data;
+    return packet->header.messageCounter;
 }
 
-uint32_t SensorSentinel_extract_node_id_from_packet(const void* data) {
-    const SensorSentinel_packet_t* packet = (const SensorSentinel_packet_t*)data;
-    uint8_t messageType = packet->sensor.messageType;  // Both packet types have messageType at same offset
-
-    if (messageType == SensorSentinel_MSG_SENSOR) {
-        return packet->sensor.nodeId;
-    } else if (messageType == SensorSentinel_MSG_GNSS) {
-        return packet->gnss.nodeId;
-    }
-    return 0;
+uint32_t SensorSentinel_extract_node_id_from_packet(uint8_t *data) {
+    if (!data) return 0;
+    
+    SensorSentinel_packet_t* packet = (SensorSentinel_packet_t*)data;
+    return packet->header.nodeId;
 }
 
 void SensorSentinel_print_invalid_packet(const uint8_t* data, size_t length) {
