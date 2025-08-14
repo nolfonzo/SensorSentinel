@@ -94,21 +94,8 @@ boolean SensorSentinel_mqtt_sync_time(
  * @brief Get a unique client ID for MQTT based on ESP32's MAC address
  */
 String SensorSentinel_mqtt_get_client_id() {
-  // Create a unique client ID based on MAC address
-  String macAddress = SensorSentinel_wifi_mac();
-  String clientId;
-  
-  if (macAddress.length() < 9) {
-    Serial.println("ERROR: Failed to get valid MAC address for client ID");
-    clientId = "HeltecGW-Fallback";
-  } else {
-    clientId = "HeltecGW-";
-    clientId += macAddress.substring(9);
-    clientId.replace(":", "");
-  }
-  
-  Serial.printf("MQTT Client ID: %s\n", clientId.c_str());
-  return clientId;
+    uint32_t nodeId = SensorSentinel_generate_node_id();
+    return "SensorSentinel-" + String(nodeId, HEX);  // e.g., "SensorSentinel-12345678"
 }
 
 /**

@@ -64,23 +64,30 @@ void setup()
 #ifndef NO_RADIOLIB
   if (SensorSentinel_subscribe(NULL, onBinaryPacketReceived))
   {
-    both.println("\nSubscribed to packets");
+    both.println("Subscribed to packets");
   }
   else
   {
-    both.println("\nSubscribe failed!");
+    both.println("Subscribe failed!");
   }
 #else
-  both.println("\nNo radio, No sub");
+  both.println("No radio, No sub");
 #endif
 
-  heltec_display_update();
-  delay(STARTUP_DISPLAY_DELAY);
 
   // Let the helper libraries handle WiFi and MQTT connection
   SensorSentinel_wifi_begin();
   SensorSentinel_mqtt_setup(true); // With time sync
 
+  // Add IP address display before the display update
+  if (SensorSentinel_wifi_connected()) {
+    both.printf("IP: %s\n", WiFi.localIP().toString().c_str());
+  } else {
+    both.println("No WiFi");
+  }
+
+  heltec_display_update();
+  delay(STARTUP_DISPLAY_DELAY);
   // Initialize received packet cache
   memset(receivedCache, 0, sizeof(receivedCache));
 }
@@ -129,7 +136,7 @@ void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr)
     both.printf("NodeID: %u\n", SensorSentinel_extract_node_id_from_packet(packetBuffer));
 
     // Common display elements (outside the if/else block)
-    both.printf("RSSI: %.1f dB,\nSNR: %.1f dB\n", rssi, snr);
+    both.printf("RSSI: %.1f dB\n", rssi);
     both.printf("Size: %u bytes\n", length);
     both.printf("Total Rx: %u\n", packetsReceived + 1);
 
