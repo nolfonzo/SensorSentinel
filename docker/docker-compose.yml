@@ -1,0 +1,61 @@
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sensorsentinel
+      POSTGRES_USER: sensorsentinel
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sensorsentinel"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nocodb:
+    container_name: nocodb
+    image: nocodb/nocodb:latest
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NC_DB: "pg://postgres:5432?u=sensorsentinel&p=${DB_PASSWORD}&d=sensorsentinel"
+    volumes:
+      - ./nocodb/data:/usr/app/data
+    ports:
+      - "8080:8080"                   # NocoDB web UI
+
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:2
+    restart: unless-stopped
+    volumes:
+      - ./mosquitto/config:/mosquitto/config:ro
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    ports:
+      - "1883:1883"                   # MQTT
+      - "9001:9001"                   # WebSockets
+
+  nodered:
+    container_name: nodered
+    image: nodered/node-red:latest
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
+      - postgres
+    volumes:
+      - ./nodered/data:/data
+    ports:
+      - "1880:1880"                   # Node-RED web UI
+    environment:
+      TZ: Australia/Sydney
+      NOTIFY_EMAIL_USER: ${NOTIFY_EMAIL_USER}
+      NOTIFY_EMAIL_PASS: ${NOTIFY_EMAIL_PASS}

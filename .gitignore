@@ -5,3 +5,17 @@
 .vscode/ipch
 .DS_Store
 .specstory/history/
+
+# Docker secrets and runtime data
+docker/.env
+docker/postgres/data/
+docker/nocodb/data/
+docker/mosquitto/data/
+docker/mosquitto/log/
+docker/nodered/data/node_modules/
+docker/nodered/data/.config.*
+docker/nodered/data/flows_cred.json
+docker/nodered/data/.flows*.backup
+docker/nodered/data/package-lock.json
+docker/nodered/data/settings.js
+docker/nodered/data/lib/
