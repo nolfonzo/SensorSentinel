@@ -10,6 +10,7 @@
 
 #include "heltec_unofficial_revised.h"
 #include "SensorSentinel_packet_helper.h"
+#include "SensorSentinel_diag.h"
 
 #ifndef NO_RADIOLIB
 #include "SensorSentinel_RadioLib_helper.h"
@@ -52,6 +53,9 @@ uint32_t packetsRepeated = 0;
 void setup() {
   // Initialize the Heltec board
   heltec_setup();
+
+  // Check if user wants diagnostic mode (hold PRG within 3 seconds)
+  SensorSentinel_diag_check();
 
   // Show startup message
   heltec_clear_display();

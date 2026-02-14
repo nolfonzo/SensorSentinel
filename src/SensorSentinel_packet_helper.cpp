@@ -69,8 +69,7 @@ bool SensorSentinel_init_sensor_packet(SensorSentinel_sensor_packet_t *packet, u
   packet->uptime = millis() / 1000; // Seconds since boot
 
   // Get battery information
-  // float batteryVolts = heltec_vbat();
-  float batteryVolts = 0.0f; // TODO, the battery code kills the display of the Tacker
+  float batteryVolts = heltec_vbat();
   packet->batteryVoltage = (uint16_t)(batteryVolts * 1000.0f);
   packet->batteryLevel = heltec_battery_percent(batteryVolts);
 
