@@ -1,6 +1,6 @@
 /**
  * @file SensorSentinel_diag.cpp
- * @brief On-demand WiFi diagnostic mode implementation
+ * @brief On-demand WiFi diagnostic mode with configurable send interval
  */
 
 #include "SensorSentinel_diag.h"
@@ -9,14 +9,34 @@
 #include "SensorSentinel_packet_helper.h"
 #include <WiFi.h>
 #include <WebServer.h>
+#include <Preferences.h>
 
 static WebServer server(80);
+static Preferences prefs;
+
+static const char* NVS_NAMESPACE = "sentinel";
+static const char* NVS_KEY_INTERVAL = "interval";
+static const int DEFAULT_INTERVAL = 30;
+
+int SensorSentinel_diag_get_interval() {
+  prefs.begin(NVS_NAMESPACE, true);  // read-only
+  int val = prefs.getInt(NVS_KEY_INTERVAL, DEFAULT_INTERVAL);
+  prefs.end();
+  return val;
+}
+
+static void SensorSentinel_diag_set_interval(int seconds) {
+  prefs.begin(NVS_NAMESPACE, false);  // read-write
+  prefs.putInt(NVS_KEY_INTERVAL, seconds);
+  prefs.end();
+}
 
 static String buildPage() {
   uint32_t nodeId = SensorSentinel_generate_node_id();
   float vbat = heltec_vbat();
   int pct = heltec_battery_percent(vbat);
   unsigned long uptimeSec = millis() / 1000;
+  int currentInterval = SensorSentinel_diag_get_interval();
 
   String html = "<!DOCTYPE html><html><head>"
     "<meta charset='utf-8'>"
@@ -30,9 +50,27 @@ static String buildPage() {
     "td,th{padding:4px 12px;text-align:left;border-bottom:1px solid #333;}"
     "th{color:#0af;}"
     ".val{color:#0f0;font-weight:bold;}"
+    "button{padding:10px 20px;margin:5px;font-size:16px;font-family:monospace;"
+    "border:2px solid #0af;background:#1a1a2e;color:#0af;cursor:pointer;}"
+    "button:hover{background:#0af;color:#1a1a2e;}"
+    "button.active{background:#0f0;color:#1a1a2e;border-color:#0f0;}"
     "</style></head><body>";
 
   html += "<h1>SensorSentinel Diagnostics</h1>";
+
+  // Send interval config
+  html += "<h2>Send Interval</h2>";
+  html += "<p>Current: <span class='val'>" + String(currentInterval) + "s";
+  html += (currentInterval <= 30) ? " (Fast)" : " (Slow)";
+  html += "</span></p>";
+  html += "<form method='POST' action='/setmode'>";
+  html += "<button type='submit' name='interval' value='30'";
+  if (currentInterval == 30) html += " class='active'";
+  html += ">Fast (30s)</button>";
+  html += "<button type='submit' name='interval' value='300'";
+  if (currentInterval == 300) html += " class='active'";
+  html += ">Slow (5min)</button>";
+  html += "</form>";
 
   // Device info
   html += "<h2>Device</h2><table>";
@@ -88,6 +126,29 @@ static void handleRoot() {
   server.send(200, "text/html", buildPage());
 }
 
+static void handleSetMode() {
+  if (server.hasArg("interval")) {
+    int newInterval = server.arg("interval").toInt();
+    if (newInterval == 30 || newInterval == 300) {
+      SensorSentinel_diag_set_interval(newInterval);
+      String msg = "<!DOCTYPE html><html><head>"
+        "<meta charset='utf-8'>"
+        "<meta http-equiv='refresh' content='2;url=/'>"
+        "<style>body{font-family:monospace;background:#1a1a2e;color:#0f0;"
+        "display:flex;justify-content:center;align-items:center;height:100vh;}"
+        "</style></head><body>"
+        "<h2>Interval set to " + String(newInterval) + "s. Redirecting...</h2>"
+        "</body></html>";
+      server.send(200, "text/html", msg);
+      Serial.printf("Interval changed to %ds\n", newInterval);
+    } else {
+      server.send(400, "text/plain", "Invalid interval");
+    }
+  } else {
+    server.send(400, "text/plain", "Missing interval parameter");
+  }
+}
+
 void SensorSentinel_diag_check() {
   // Show prompt on display
   heltec_clear_display();
@@ -140,6 +201,7 @@ void SensorSentinel_diag_run() {
 
   // Start web server
   server.on("/", handleRoot);
+  server.on("/setmode", HTTP_POST, handleSetMode);
   server.begin();
 
   Serial.printf("Diagnostic AP started: %s\n", ssid);
