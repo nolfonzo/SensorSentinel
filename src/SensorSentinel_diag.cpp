@@ -14,20 +14,35 @@
 static WebServer server(80);
 static Preferences prefs;
 
-static const char* NVS_NAMESPACE = "sentinel";
-static const char* NVS_KEY_INTERVAL = "interval";
-static const int DEFAULT_INTERVAL = 30;
+static const char* NVS_NAMESPACE           = "sentinel";
+static const char* NVS_KEY_INTERVAL        = "interval";
+static const char* NVS_KEY_SENSOR_INTERVAL = "sensor_ivl";
+static const int   DEFAULT_INTERVAL        = 30;   // sender sleep interval (s)
+static const int   DEFAULT_SENSOR_INTERVAL = 60;   // repeater sensor TX interval (s)
 
 int SensorSentinel_diag_get_interval() {
-  prefs.begin(NVS_NAMESPACE, true);  // read-only
+  prefs.begin(NVS_NAMESPACE, true);
   int val = prefs.getInt(NVS_KEY_INTERVAL, DEFAULT_INTERVAL);
   prefs.end();
   return val;
 }
 
 static void SensorSentinel_diag_set_interval(int seconds) {
-  prefs.begin(NVS_NAMESPACE, false);  // read-write
+  prefs.begin(NVS_NAMESPACE, false);
   prefs.putInt(NVS_KEY_INTERVAL, seconds);
+  prefs.end();
+}
+
+int SensorSentinel_diag_get_sensor_interval() {
+  prefs.begin(NVS_NAMESPACE, true);
+  int val = prefs.getInt(NVS_KEY_SENSOR_INTERVAL, DEFAULT_SENSOR_INTERVAL);
+  prefs.end();
+  return val;
+}
+
+static void SensorSentinel_diag_set_sensor_interval(int seconds) {
+  prefs.begin(NVS_NAMESPACE, false);
+  prefs.putInt(NVS_KEY_SENSOR_INTERVAL, seconds);
   prefs.end();
 }
 
@@ -58,7 +73,23 @@ static String buildPage() {
 
   html += "<h1>SensorSentinel Diagnostics</h1>";
 
-  // Send interval config
+#if REPEATER_MODE
+  // Repeater: show sensor TX interval
+  int currentSensorInterval = SensorSentinel_diag_get_sensor_interval();
+  html += "<h2>Sensor Interval</h2>";
+  html += "<p>How often this node transmits its own sensor data.</p>";
+  html += "<p>Current: <span class='val'>" + String(currentSensorInterval) + "s</span></p>";
+  html += "<form method='POST' action='/setmode'>";
+  int sensorOpts[] = {30, 60, 300, 600};
+  const char* sensorLabels[] = {"30s", "1 min", "5 min", "10 min"};
+  for (int i = 0; i < 4; i++) {
+    html += "<button type='submit' name='sensor_interval' value='" + String(sensorOpts[i]) + "'";
+    if (currentSensorInterval == sensorOpts[i]) html += " class='active'";
+    html += ">" + String(sensorLabels[i]) + "</button>";
+  }
+  html += "</form>";
+#else
+  // Sender: show sleep interval
   html += "<h2>Send Interval</h2>";
   html += "<p>Current: <span class='val'>" + String(currentInterval) + "s";
   html += (currentInterval <= 30) ? " (Fast)" : " (Slow)";
@@ -71,6 +102,7 @@ static String buildPage() {
   if (currentInterval == 300) html += " class='active'";
   html += ">Slow (5min)</button>";
   html += "</form>";
+#endif
 
   // Device info
   html += "<h2>Device</h2><table>";
@@ -127,25 +159,36 @@ static void handleRoot() {
 }
 
 static void handleSetMode() {
+  auto redirectOk = [](String msg) {
+    String html = "<!DOCTYPE html><html><head>"
+      "<meta charset='utf-8'>"
+      "<meta http-equiv='refresh' content='2;url=/'>"
+      "<style>body{font-family:monospace;background:#1a1a2e;color:#0f0;"
+      "display:flex;justify-content:center;align-items:center;height:100vh;}"
+      "</style></head><body><h2>" + msg + " Redirecting...</h2></body></html>";
+    server.send(200, "text/html", html);
+  };
+
   if (server.hasArg("interval")) {
-    int newInterval = server.arg("interval").toInt();
-    if (newInterval == 30 || newInterval == 300) {
-      SensorSentinel_diag_set_interval(newInterval);
-      String msg = "<!DOCTYPE html><html><head>"
-        "<meta charset='utf-8'>"
-        "<meta http-equiv='refresh' content='2;url=/'>"
-        "<style>body{font-family:monospace;background:#1a1a2e;color:#0f0;"
-        "display:flex;justify-content:center;align-items:center;height:100vh;}"
-        "</style></head><body>"
-        "<h2>Interval set to " + String(newInterval) + "s. Redirecting...</h2>"
-        "</body></html>";
-      server.send(200, "text/html", msg);
-      Serial.printf("Interval changed to %ds\n", newInterval);
+    int v = server.arg("interval").toInt();
+    if (v == 30 || v == 300) {
+      SensorSentinel_diag_set_interval(v);
+      Serial.printf("Send interval set to %ds\n", v);
+      redirectOk("Interval set to " + String(v) + "s.");
     } else {
       server.send(400, "text/plain", "Invalid interval");
     }
+  } else if (server.hasArg("sensor_interval")) {
+    int v = server.arg("sensor_interval").toInt();
+    if (v == 30 || v == 60 || v == 300 || v == 600) {
+      SensorSentinel_diag_set_sensor_interval(v);
+      Serial.printf("Sensor interval set to %ds\n", v);
+      redirectOk("Sensor interval set to " + String(v) + "s.");
+    } else {
+      server.send(400, "text/plain", "Invalid sensor interval");
+    }
   } else {
-    server.send(400, "text/plain", "Missing interval parameter");
+    server.send(400, "text/plain", "Missing parameter");
   }
 }
 

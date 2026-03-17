@@ -39,7 +39,7 @@ extern HotButton button;
 #define LED_RES   8           // LED PWM resolution  
 
 // Common pins for V3, V3.2, and Tracker (S3-based boards)  
-#if defined(ARDUINO_heltec_wifi_32_lora_V3) || defined(BOARD_HELTEC_V3_2) || defined(ARDUINO_heltec_wireless_tracker) || defined(WOKWI) 
+#if defined(ARDUINO_heltec_wifi_lora_32_V3) || defined(BOARD_HELTEC_V3_2) || defined(ARDUINO_heltec_wireless_tracker) || defined(WOKWI)
   #define VEXT      GPIO_NUM_36 // External power control  
   #define VBAT_CTRL GPIO_NUM_37 // Battery voltage measurement control  
   #define VBAT_ADC  GPIO_NUM_1  // Battery voltage ADC pin  
@@ -67,7 +67,7 @@ extern HotButton button;
   #define SCK       GPIO_NUM_5  
 #endif
 
-#if defined(ARDUINO_heltec_wifi_32_lora_V3) || defined(BOARD_HELTEC_V3_2) || defined(WOKWI) 
+#if defined(ARDUINO_heltec_wifi_lora_32_V3) || defined(BOARD_HELTEC_V3_2) || defined(WOKWI)
   // OLED display pins for V3 and V3.2  
   #define SDA_OLED  GPIO_NUM_17 // OLED SDA  
   #define SCL_OLED  GPIO_NUM_18 // OLED SCL  

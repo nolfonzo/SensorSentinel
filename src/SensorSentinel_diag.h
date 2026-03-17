@@ -24,9 +24,15 @@ void SensorSentinel_diag_check();
 void SensorSentinel_diag_run();
 
 /**
- * @brief Get the configured send interval from NVS
+ * @brief Get the configured send interval from NVS (sender mode)
  * @return Interval in seconds (default 30 if not set)
  */
 int SensorSentinel_diag_get_interval();
+
+/**
+ * @brief Get the configured sensor TX interval from NVS (repeater mode)
+ * @return Interval in seconds (default 60 if not set)
+ */
+int SensorSentinel_diag_get_sensor_interval();
 
 #endif // SensorSentinel_DIAG_H
