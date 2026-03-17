@@ -127,7 +127,7 @@ void sendSensorPacket() {
 
   heltec_led(0);
 
-  SensorSentinel_print_packet_info(&packet, false);
+  SensorSentinel_print_packet_info(&packet, sizeof(packet));
   Serial.println("---------------------------\n");
 }
 
@@ -136,7 +136,7 @@ void sendSensorPacket() {
  */
 void sendGnssPacket() {
   SensorSentinel_gnss_packet_t packet;
-  bool hasFix = SensorSentinel_init_gnss_packet(&packet, gnssPacketCounter++);
+  bool hasFix = SensorSentinel_init_gnss_packet(&packet, gnssPacketCounter);
 
   Serial.println("Sending Pkt: GNSS");
   Serial.printf("Msg: #%u  NodeID: %u  Bat: %u%%\n",
@@ -147,16 +147,18 @@ void sendGnssPacket() {
 #ifndef NO_RADIOLIB
   int state = radio.transmit((uint8_t*)&packet, sizeof(packet));
   if (state == RADIOLIB_ERR_NONE) {
+    gnssPacketCounter++;
     Serial.println("GNSS packet sent OK");
   } else {
     Serial.printf("ERROR: TX failed: %d\n", state);
   }
 #else
+  gnssPacketCounter++;
   Serial.println("No Radio");
 #endif
 
   heltec_led(0);
 
-  SensorSentinel_print_packet_info(&packet, false);
+  SensorSentinel_print_packet_info(&packet, sizeof(packet));
   Serial.println("---------------------------\n");
 }
