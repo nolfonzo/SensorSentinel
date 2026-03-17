@@ -38,7 +38,7 @@
   #define SensorSentinel_ANALOG_PINS     {1, 2, 3, 4}
   #define SensorSentinel_BOOLEAN_PINS    {33, 34, 35, 39, 40, 41, 42, 46}
 
-#elif defined(ARDUINO_SensorSentinel_wireless_stick) || defined(ARDUINO_SensorSentinel_wireless_stick_lite)
+#elif defined(ARDUINO_heltec_wireless_stick) || defined(ARDUINO_heltec_wireless_stick_lite)
   // Wireless Stick/Stick Lite available pins
   #define SensorSentinel_ANALOG_PINS     {1, 2, 3, 4}
   #define SensorSentinel_BOOLEAN_PINS    {5, 6, 7, 33, 34, 35, 36, 37}
@@ -56,6 +56,10 @@ typedef struct {
   uint16_t analog[4];   // 4 analog values
   uint8_t boolean;      // 8 boolean values packed as bits
 } __attribute__((packed)) SensorSentinel_pin_readings_t;
+
+// Pin arrays (defined in SensorSentinel_pins_helper.cpp)
+extern const uint8_t SensorSentinel_analog_pins[SensorSentinel_ANALOG_COUNT];
+extern const uint8_t SensorSentinel_boolean_pins[SensorSentinel_BOOLEAN_COUNT];
 
 // Function declarations
 int16_t SensorSentinel_read_analog(uint8_t index);

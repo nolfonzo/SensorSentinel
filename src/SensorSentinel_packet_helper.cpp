@@ -69,8 +69,7 @@ bool SensorSentinel_init_sensor_packet(SensorSentinel_sensor_packet_t *packet, u
   packet->uptime = millis() / 1000; // Seconds since boot
 
   // Get battery information
-  // float batteryVolts = heltec_vbat();
-  float batteryVolts = 0.0f; // TODO, the battery code kills the display of the Tacker
+  float batteryVolts = heltec_vbat();
   packet->batteryVoltage = (uint16_t)(batteryVolts * 1000.0f);
   packet->batteryLevel = heltec_battery_percent(batteryVolts);
 
@@ -223,7 +222,7 @@ bool SensorSentinel_print_packet_info(const void *packet, size_t length)
       Serial.printf("  [%d]: 0x%02X\n", i, sensorPacket->reserved[i]);
     }
 
-    return true;
+    break;
   }
 
   case SensorSentinel_MSG_GNSS:
@@ -258,7 +257,7 @@ bool SensorSentinel_print_packet_info(const void *packet, size_t length)
     {
       Serial.printf("  [%d]: 0x%02X\n", i, gnssPacket->reserved[i]);
     }
-    return true;
+    break;
   }
 
   default:
@@ -266,13 +265,14 @@ bool SensorSentinel_print_packet_info(const void *packet, size_t length)
     return false;
   }
 
-  Serial.printf("\n\nRaw data (%u bytes): ", length);
+  Serial.printf("\nRaw data (%u bytes): ", length);
   const uint8_t* packetData = static_cast<const uint8_t*>(packet);
   for (size_t i = 0; i < length; i++)
   {
     Serial.printf("%02X", packetData[i]);
   }
   Serial.println();
+  return true;
 }
 
 /**

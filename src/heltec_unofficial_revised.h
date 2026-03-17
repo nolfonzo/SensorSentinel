@@ -110,9 +110,8 @@ extern HotButton button;
   #define HELTEC_SX1262_CURRENT 140.0   // mA
   #define HELTEC_SX1276_POWER   17      // Different scale for SX1276
 
-  // Make sure the power off button works when using RADIOLIB_OR_HALT  
-  #define RADIOLIB_DO_DURING_HALT delay(10)  
-  #include "RadioLib_convenience.h"  
+  // RadioLib_convenience.h provides RADIOLIB_OR_HALT macro (not used in this project)
+  // See https://github.com/ropg/heltec_esp32_lora_v3 if needed
 
   // RadioLib instances based on board type  
   #if defined(ARDUINO_heltec_wireless_stick) || defined(ARDUINO_heltec_wireless_stick_lite)  
