@@ -7,6 +7,7 @@
 #include <WiFi.h>  // Include this explicitly for WiFiClient
 #include "SensorSentinel_mqtt_helper.h"
 #include "SensorSentinel_wifi_helper.h"
+#include "SensorSentinel_diag.h"
 
 // Move this define to here
 #ifndef MQTT_TOPIC
@@ -20,9 +21,12 @@
 extern WiFiClient wifiClient;  // Declare external reference to WiFi client
 PubSubClient mqttClient(wifiClient);  // Use the external WiFi client
 
+// Resolved MQTT server (NVS override or compile-time default)
+static String _mqttServerResolved;
+
 // Define the config instance (not the struct)
 MqttConfig mqttConfig = {
-    .server = MQTT_SERVER,
+    .server = MQTT_SERVER,  // overridden in SensorSentinel_mqtt_init()
     .port = MQTT_PORT,
     .user = MQTT_USER,
     .password = MQTT_PASSWORD,
@@ -103,7 +107,11 @@ String SensorSentinel_mqtt_get_client_id() {
  */
 boolean SensorSentinel_mqtt_init() {
   Serial.println("Initializing MQTT client...");
-  
+
+  // Apply NVS override for MQTT server if set
+  _mqttServerResolved = SensorSentinel_diag_get_mqtt_server();
+  mqttConfig.server = _mqttServerResolved.c_str();
+
   // Validate MQTT server settings
   if (strlen(mqttConfig.server) == 0) {
     Serial.println("ERROR: MQTT server address is empty");

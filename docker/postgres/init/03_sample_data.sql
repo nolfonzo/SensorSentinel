@@ -14,15 +14,17 @@ END $$;
 INSERT INTO owners (name, email, phone, notify_via) VALUES
   ('Alice Harbour',  'alice@example.com',  '+61400000001', 'email'),
   ('Bob Seawright',  'bob@example.com',    '+61400000002', 'email'),
-  ('Carol Mariner',  'carol@example.com',  '+61400000003', 'email');
+  ('Carol Mariner',  'carol@example.com',  '+61400000003', 'email'),
+  ('Dev User',       'dev@example.com',    '+61400000099', 'email');
 
 -- ── Devices ───────────────────────────────────────────────────────────────────
--- node_id values are realistic MAC-derived IDs (fake)
+-- node_id values are realistic MAC-derived IDs (fake), except device 5 which is real
 INSERT INTO devices (node_id, display_name, owner_id) VALUES
   (2712847316, 'Bow Sensor - Seabreeze',    1),  -- Alice's boat
   (3054261894, 'Engine Room - Seabreeze',   1),  -- Alice's boat
   (1876543210, 'Bilge Monitor - Waverunner', 2), -- Bob's boat
-  (4123456789, 'Cockpit Sensor - Odyssey',  3);  -- Carol's boat
+  (4123456789, 'Cockpit Sensor - Odyssey',  3),  -- Carol's boat
+  (2697662092, 'Dev Node - Test Unit',      4);  -- Real device (node 0xa0cb0e8c)
 -- Trigger auto-creates 8 digital + 4 analog pins for each device
 
 -- ── Analog pin labels & thresholds ───────────────────────────────────────────

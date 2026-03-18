@@ -17,6 +17,7 @@ static Preferences prefs;
 static const char* NVS_NAMESPACE           = "sentinel";
 static const char* NVS_KEY_INTERVAL        = "interval";
 static const char* NVS_KEY_SENSOR_INTERVAL = "sensor_ivl";
+static const char* NVS_KEY_MQTT_SERVER     = "mqtt_srv";
 static const int   DEFAULT_INTERVAL        = 30;   // sender sleep interval (s)
 static const int   DEFAULT_SENSOR_INTERVAL = 60;   // repeater sensor TX interval (s)
 
@@ -43,6 +44,19 @@ int SensorSentinel_diag_get_sensor_interval() {
 static void SensorSentinel_diag_set_sensor_interval(int seconds) {
   prefs.begin(NVS_NAMESPACE, false);
   prefs.putInt(NVS_KEY_SENSOR_INTERVAL, seconds);
+  prefs.end();
+}
+
+String SensorSentinel_diag_get_mqtt_server() {
+  prefs.begin(NVS_NAMESPACE, true);
+  String val = prefs.getString(NVS_KEY_MQTT_SERVER, MQTT_SERVER);
+  prefs.end();
+  return val;
+}
+
+static void SensorSentinel_diag_set_mqtt_server(const String& server) {
+  prefs.begin(NVS_NAMESPACE, false);
+  prefs.putString(NVS_KEY_MQTT_SERVER, server);
   prefs.end();
 }
 
@@ -103,6 +117,17 @@ static String buildPage() {
   html += ">Slow (5min)</button>";
   html += "</form>";
 #endif
+
+  // MQTT server
+  String currentMqtt = SensorSentinel_diag_get_mqtt_server();
+  html += "<h2>MQTT Server</h2>";
+  html += "<p>Current: <span class='val'>" + currentMqtt + "</span></p>";
+  html += "<form method='POST' action='/setmode'>";
+  html += "<input type='text' name='mqtt_server' value='" + currentMqtt + "' "
+          "style='font-family:monospace;background:#111;color:#0f0;border:1px solid #0af;"
+          "padding:6px;width:260px;font-size:14px;'>";
+  html += " <button type='submit'>Set</button>";
+  html += "</form>";
 
   // Device info
   html += "<h2>Device</h2><table>";
@@ -186,6 +211,16 @@ static void handleSetMode() {
       redirectOk("Sensor interval set to " + String(v) + "s.");
     } else {
       server.send(400, "text/plain", "Invalid sensor interval");
+    }
+  } else if (server.hasArg("mqtt_server")) {
+    String v = server.arg("mqtt_server");
+    v.trim();
+    if (v.length() > 0 && v.length() < 64) {
+      SensorSentinel_diag_set_mqtt_server(v);
+      Serial.printf("MQTT server set to %s\n", v.c_str());
+      redirectOk("MQTT server set to " + v + ".");
+    } else {
+      server.send(400, "text/plain", "Invalid MQTT server");
     }
   } else {
     server.send(400, "text/plain", "Missing parameter");

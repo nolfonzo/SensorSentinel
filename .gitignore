@@ -19,3 +19,11 @@ docker/nodered/data/.flows*.backup
 docker/nodered/data/package-lock.json
 docker/nodered/data/settings.js
 docker/nodered/data/lib/
+
+# Runtime data volumes (not config)
+docker/grafana/data/
+docker/nocodb/data/
+docker/postgres/data/
+docker/mosquitto/data/
+docker/mosquitto/log/
+docker/nodered/data/.npm/

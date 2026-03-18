@@ -1,0 +1,196 @@
+{
+  "title": "SensorSentinel",
+  "uid": "sensorsentinel",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "30s",
+  "time": { "from": "now-24h", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Active Alerts",
+      "type": "table",
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 8 },
+      "datasource": { "type": "postgres", "uid": "sensorsentinel" },
+      "options": {
+        "sortBy": [{ "displayName": "Last Seen", "desc": true }],
+        "cellHeight": "sm"
+      },
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Alert Level" },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-background"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  { "type": "value", "options": { "High":   { "color": "red",    "index": 0 } } },
+                  { "type": "value", "options": { "Medium": { "color": "orange", "index": 1 } } },
+                  { "type": "value", "options": { "Low":    { "color": "yellow", "index": 2 } } }
+                ]
+              },
+              { "id": "custom.width", "value": 100 }
+            ]
+          },
+          { "matcher": { "id": "byName", "options": "Count" },    "properties": [{ "id": "custom.width", "value": 70 }] },
+          { "matcher": { "id": "byName", "options": "Device" },   "properties": [{ "id": "custom.width", "value": 140 }] },
+          { "matcher": { "id": "byName", "options": "Pin" },      "properties": [{ "id": "custom.width", "value": 140 }] },
+          { "matcher": { "id": "byName", "options": "Owner" },    "properties": [{ "id": "custom.width", "value": 120 }] },
+          { "matcher": { "id": "byName", "options": "Last Seen" },"properties": [{ "id": "custom.width", "value": 160 }] }
+        ]
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT a.updated_at AS \"Last Seen\", d.display_name AS \"Device\", o.name AS \"Owner\", a.pin_label AS \"Pin\", a.alert_message AS \"Message\", a.alert_level AS \"Alert Level\", a.count AS \"Count\" FROM alerts a JOIN devices d ON a.device_id = d.id LEFT JOIN owners o ON d.owner_id = o.id ORDER BY a.updated_at DESC",
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Alert Events (24h)",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 8, "w": 14, "h": 8 },
+      "datasource": { "type": "postgres", "uid": "sensorsentinel" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "lineWidth": 2, "fillOpacity": 10, "drawStyle": "bars", "barAlignment": 0 }
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT date_trunc('hour', e.created_at) AS time, d.display_name AS metric, COUNT(*) AS value FROM events e JOIN devices d ON e.device_id = d.id WHERE e.created_at >= $__timeFrom() AND e.created_at <= $__timeTo() GROUP BY 1, 2 ORDER BY 1",
+          "format": "time_series"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Devices",
+      "type": "table",
+      "gridPos": { "x": 14, "y": 8, "w": 10, "h": 8 },
+      "datasource": { "type": "postgres", "uid": "sensorsentinel" },
+      "options": { "cellHeight": "sm" },
+      "fieldConfig": {
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "Device" },    "properties": [{ "id": "custom.width", "value": 150 }] },
+          { "matcher": { "id": "byName", "options": "Owner" },     "properties": [{ "id": "custom.width", "value": 120 }] },
+          { "matcher": { "id": "byName", "options": "Last Seen" }, "properties": [{ "id": "custom.width", "value": 160 }] }
+        ]
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT d.display_name AS \"Device\", o.name AS \"Owner\", d.last_seen AS \"Last Seen\" FROM devices d LEFT JOIN owners o ON d.owner_id = o.id ORDER BY d.last_seen DESC NULLS LAST",
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Total Active Alerts",
+      "type": "stat",
+      "gridPos": { "x": 0, "y": 16, "w": 4, "h": 4 },
+      "datasource": { "type": "postgres", "uid": "sensorsentinel" },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 1 },
+              { "color": "red", "value": 5 }
+            ]
+          },
+          "mappings": []
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT COUNT(*) AS \"Alerts\" FROM alerts",
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Devices Online (seen < 5 min)",
+      "type": "stat",
+      "gridPos": { "x": 4, "y": 16, "w": 4, "h": 4 },
+      "datasource": { "type": "postgres", "uid": "sensorsentinel" },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "green", "value": 1 }
+            ]
+          }
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT COUNT(*) AS \"Online\" FROM devices WHERE last_seen >= NOW() - INTERVAL '5 minutes'",
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Messages (24h)",
+      "type": "stat",
+      "gridPos": { "x": 8, "y": 16, "w": 4, "h": 4 },
+      "datasource": { "type": "postgres", "uid": "sensorsentinel" },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "blue", "value": null }]
+          }
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT COUNT(*) AS \"Messages\" FROM events WHERE created_at >= NOW() - INTERVAL '24 hours'",
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Recent Events",
+      "type": "table",
+      "gridPos": { "x": 0, "y": 20, "w": 24, "h": 8 },
+      "datasource": { "type": "postgres", "uid": "sensorsentinel" },
+      "options": {
+        "sortBy": [{ "displayName": "Time", "desc": true }],
+        "cellHeight": "sm"
+      },
+      "fieldConfig": {
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "Time" },    "properties": [{ "id": "custom.width", "value": 160 }] },
+          { "matcher": { "id": "byName", "options": "Device" },  "properties": [{ "id": "custom.width", "value": 140 }] },
+          { "matcher": { "id": "byName", "options": "Type" },    "properties": [{ "id": "custom.width", "value": 80 }] },
+          { "matcher": { "id": "byName", "options": "Node ID" }, "properties": [{ "id": "custom.width", "value": 120 }] }
+        ]
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT e.created_at AS \"Time\", d.display_name AS \"Device\", e.message_type AS \"Type\", e.node_id AS \"Node ID\", e.payload AS \"Payload\" FROM events e LEFT JOIN devices d ON e.device_id = d.id WHERE e.created_at >= $__timeFrom() AND e.created_at <= $__timeTo() ORDER BY e.created_at DESC LIMIT 100",
+          "format": "table"
+        }
+      ]
+    }
+  ]
+}

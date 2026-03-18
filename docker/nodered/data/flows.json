@@ -27,7 +27,7 @@
         "database": "sensorsentinel",
         "ssl": false,
         "user": "sensorsentinel",
-        "password": "s3ns0rS3nt1n3l"
+        "password": "$(DB_PASSWORD)"
     },
     {
         "id": "mqtt-lora-in",
@@ -78,7 +78,7 @@
         "type": "function",
         "z": "alerts-flow-tab",
         "name": "Build DB Queries",
-        "func": "const payload = msg.payload;\nif (!payload || !payload.nodeId) return null;\nif (payload.error) return null;\n\n// Query 1: Update device last_seen\n// Query 2: Get device + pin configs for threshold checking\n// Query 3: Log event\n\nmsg.nodeId = payload.nodeId;\nmsg.sensorData = payload;\n\n// First, update last_seen and get device info with pin configs\nmsg.query = `\n    WITH updated AS (\n        UPDATE devices SET last_seen = NOW() WHERE node_id = ${payload.nodeId}\n        RETURNING id, node_id, display_name, owner_id\n    )\n    SELECT\n        d.id as device_id,\n        d.display_name,\n        o.name as owner_name,\n        o.email as owner_email,\n        o.phone as owner_phone,\n        o.notify_via,\n        json_agg(DISTINCT jsonb_build_object(\n            'pin_index', dp.pin_index,\n            'label', dp.label,\n            'trigger', dp.trigger,\n            'alert_level', dp.alert_level\n        )) FILTER (WHERE dp.label != '' AND dp.trigger != 'None') as digital_pins,\n        json_agg(DISTINCT jsonb_build_object(\n            'pin_index', ap.pin_index,\n            'label', ap.label,\n            'low_threshold', ap.low_threshold,\n            'high_threshold', ap.high_threshold,\n            'alert_level', ap.alert_level\n        )) FILTER (WHERE ap.label != '' AND ap.alert_level != 'None') as analog_pins\n    FROM updated d\n    LEFT JOIN owners o ON d.owner_id = o.id\n    LEFT JOIN digital_pins dp ON dp.device_id = d.id\n    LEFT JOIN analog_pins ap ON ap.device_id = d.id\n    GROUP BY d.id, d.display_name, o.name, o.email, o.phone, o.notify_via\n`;\n\nreturn msg;",
+        "func": "const payload = msg.payload;\nif (!payload || !payload.nodeId) return null;\nif (payload.error) return null;\n\nmsg.nodeId = payload.nodeId;\nmsg.sensorData = payload;\n\nmsg.query = `\n    WITH updated AS (\n        UPDATE devices SET last_seen = NOW() WHERE node_id = $1\n        RETURNING id, node_id, display_name, owner_id\n    )\n    SELECT\n        d.id as device_id,\n        d.display_name,\n        o.name as owner_name,\n        o.email as owner_email,\n        o.phone as owner_phone,\n        o.notify_via,\n        json_agg(DISTINCT jsonb_build_object(\n            'pin_index', dp.pin_index,\n            'label', dp.label,\n            'trigger', dp.trigger,\n            'alert_level', dp.alert_level\n        )) FILTER (WHERE dp.label != '' AND dp.trigger != 'None') as digital_pins,\n        json_agg(DISTINCT jsonb_build_object(\n            'pin_index', ap.pin_index,\n            'label', ap.label,\n            'low_threshold', ap.low_threshold,\n            'high_threshold', ap.high_threshold,\n            'alert_level', ap.alert_level\n        )) FILTER (WHERE ap.label != '' AND ap.alert_level != 'None') as analog_pins\n    FROM updated d\n    LEFT JOIN owners o ON d.owner_id = o.id\n    LEFT JOIN digital_pins dp ON dp.device_id = d.id\n    LEFT JOIN analog_pins ap ON ap.device_id = d.id\n    GROUP BY d.id, d.display_name, o.name, o.email, o.phone, o.notify_via\n`;\nmsg.params = [payload.nodeId];\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -108,8 +108,8 @@
         "type": "function",
         "z": "alerts-flow-tab",
         "name": "Check Thresholds",
-        "func": "const rows = msg.payload;\nconst sensorData = msg.sensorData;\n\nif (!rows || rows.length === 0) {\n    node.warn('Device not found for nodeId: ' + msg.nodeId);\n    return null;\n}\n\nconst device = rows[0];\nconst alerts = [];\n\n// Check digital pins\nif (device.digital_pins && sensorData.digital !== undefined) {\n    device.digital_pins.forEach(pin => {\n        const pinState = (sensorData.digital >> pin.pin_index) & 1;\n        if (pin.trigger === 'High' && pinState === 1) {\n            alerts.push({\n                deviceId: device.device_id,\n                ownerName: device.owner_name,\n                ownerEmail: device.owner_email,\n                notifyVia: device.notify_via,\n                deviceName: device.display_name,\n                nodeId: msg.nodeId,\n                pinLabel: pin.label,\n                alertMessage: 'Triggered HIGH',\n                alertLevel: pin.alert_level\n            });\n        } else if (pin.trigger === 'Low' && pinState === 0) {\n            alerts.push({\n                deviceId: device.device_id,\n                ownerName: device.owner_name,\n                ownerEmail: device.owner_email,\n                notifyVia: device.notify_via,\n                deviceName: device.display_name,\n                nodeId: msg.nodeId,\n                pinLabel: pin.label,\n                alertMessage: 'Triggered LOW',\n                alertLevel: pin.alert_level\n            });\n        }\n    });\n}\n\n// Check analog pins\nif (device.analog_pins && sensorData.analog) {\n    device.analog_pins.forEach(pin => {\n        const value = sensorData.analog[pin.pin_index];\n        if (value === undefined) return;\n        if (pin.low_threshold !== null && value < pin.low_threshold) {\n            alerts.push({\n                deviceId: device.device_id,\n                ownerName: device.owner_name,\n                ownerEmail: device.owner_email,\n                notifyVia: device.notify_via,\n                deviceName: device.display_name,\n                nodeId: msg.nodeId,\n                pinLabel: pin.label,\n                alertMessage: `Analog value LOW: ${value}`,\n                alertLevel: pin.alert_level\n            });\n        } else if (pin.high_threshold !== null && value > pin.high_threshold) {\n            alerts.push({\n                deviceId: device.device_id,\n                ownerName: device.owner_name,\n                ownerEmail: device.owner_email,\n                notifyVia: device.notify_via,\n                deviceName: device.display_name,\n                nodeId: msg.nodeId,\n                pinLabel: pin.label,\n                alertMessage: `Analog value HIGH: ${value}`,\n                alertLevel: pin.alert_level\n            });\n        }\n    });\n}\n\n// Log event to DB\nconst logMsg = {\n    query: `INSERT INTO events (device_id, node_id, message_type, payload)\n            VALUES (${device.device_id}, ${msg.nodeId}, '${sensorData.type}', '${JSON.stringify(sensorData)}'::jsonb)`,\n    payload: ''\n};\nnode.send([null, logMsg]);\n\n// Process alerts\nif (alerts.length > 0) {\n    alerts.forEach(alert => {\n        const alertMsg = {\n            query: `INSERT INTO alerts (device_id, pin_label, alert_message, alert_level)\n                    VALUES (${alert.deviceId}, '${alert.pinLabel}', '${alert.alertMessage}', '${alert.alertLevel}')\n                    ON CONFLICT (device_id, pin_label)\n                    DO UPDATE SET alert_message = EXCLUDED.alert_message,\n                                 count = alerts.count + 1,\n                                 updated_at = NOW()`,\n            payload: '',\n            alert: alert\n        };\n        node.send([alertMsg, null]);\n    });\n} else {\n    node.log('No alerts for nodeId: ' + msg.nodeId);\n}\n\nreturn null;",
-        "outputs": 2,
+        "func": "const rows = msg.payload;\nconst sensorData = msg.sensorData;\n\nif (!rows || rows.length === 0) {\n    node.warn('Unknown device for nodeId: ' + msg.nodeId);\n    node.send([null, null, {nodeId: msg.nodeId, sensorData: sensorData}]);\n    return null;\n}\n\nconst device = rows[0];\nconst alerts = [];\n\nif (device.digital_pins && sensorData.digital !== undefined) {\n    device.digital_pins.forEach(pin => {\n        const pinState = (sensorData.digital >> pin.pin_index) & 1;\n        if (pin.trigger === 'High' && pinState === 1) {\n            alerts.push({deviceId: device.device_id, ownerName: device.owner_name, ownerEmail: device.owner_email, notifyVia: device.notify_via, deviceName: device.display_name, nodeId: msg.nodeId, pinLabel: pin.label, alertMessage: 'Triggered HIGH', alertLevel: pin.alert_level});\n        } else if (pin.trigger === 'Low' && pinState === 0) {\n            alerts.push({deviceId: device.device_id, ownerName: device.owner_name, ownerEmail: device.owner_email, notifyVia: device.notify_via, deviceName: device.display_name, nodeId: msg.nodeId, pinLabel: pin.label, alertMessage: 'Triggered LOW', alertLevel: pin.alert_level});\n        }\n    });\n}\n\nif (device.analog_pins && sensorData.analog) {\n    device.analog_pins.forEach(pin => {\n        const value = sensorData.analog[pin.pin_index];\n        if (value === undefined) return;\n        if (pin.low_threshold !== null && value < pin.low_threshold) {\n            alerts.push({deviceId: device.device_id, ownerName: device.owner_name, ownerEmail: device.owner_email, notifyVia: device.notify_via, deviceName: device.display_name, nodeId: msg.nodeId, pinLabel: pin.label, alertMessage: `Analog value LOW: ${value}`, alertLevel: pin.alert_level});\n        } else if (pin.high_threshold !== null && value > pin.high_threshold) {\n            alerts.push({deviceId: device.device_id, ownerName: device.owner_name, ownerEmail: device.owner_email, notifyVia: device.notify_via, deviceName: device.display_name, nodeId: msg.nodeId, pinLabel: pin.label, alertMessage: `Analog value HIGH: ${value}`, alertLevel: pin.alert_level});\n        }\n    });\n}\n\nconst logMsg = {\n    query: 'INSERT INTO events (device_id, node_id, message_type, payload) VALUES ($1, $2, $3, $4::jsonb)',\n    params: [device.device_id, msg.nodeId, sensorData.type, JSON.stringify(sensorData)],\n    payload: ''\n};\nnode.send([null, logMsg, null]);\n\nif (alerts.length > 0) {\n    alerts.forEach(alert => {\n        const alertMsg = {\n            query: 'INSERT INTO alerts (device_id, pin_label, alert_message, alert_level) VALUES ($1, $2, $3, $4) ON CONFLICT (device_id, pin_label) DO UPDATE SET alert_message = EXCLUDED.alert_message, count = alerts.count + 1, updated_at = NOW()',\n            params: [alert.deviceId, alert.pinLabel, alert.alertMessage, alert.alertLevel],\n            payload: '',\n            alert: alert\n        };\n        node.send([alertMsg, null, null]);\n    });\n} else {\n    node.log('No alerts for nodeId: ' + msg.nodeId);\n}\n\nreturn null;",
+        "outputs": 3,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
@@ -117,7 +117,7 @@
         "libs": [],
         "x": 1010,
         "y": 120,
-        "wires": [["db-upsert-alert"], ["db-log-event"]]
+        "wires": [["db-upsert-alert"], ["db-log-event"], ["auto-register-device"]]
     },
     {
         "id": "db-upsert-alert",
@@ -152,7 +152,7 @@
         "type": "function",
         "z": "alerts-flow-tab",
         "name": "Send Notification",
-        "func": "const alert = msg.alert;\nif (!alert) return null;\n\n// Rate limit: check if we recently notified for this device+pin\nconst key = `notified_${alert.deviceId}_${alert.pinLabel.replace(/\\s+/g, '_')}`;\nconst lastNotified = flow.get(key) || 0;\nconst now = Date.now();\nconst cooldownMs = 5 * 60 * 1000; // 5 minute cooldown\n\nif (now - lastNotified < cooldownMs) {\n    node.log(`Notification suppressed (cooldown): ${alert.pinLabel}`);\n    return null;\n}\nflow.set(key, now);\n\nconst transporter = nodemailer.createTransport({\n    host: 'smtp.gmail.com',\n    port: 465,\n    secure: true,\n    auth: {\n        user: env.get('NOTIFY_EMAIL_USER'),\n        pass: env.get('NOTIFY_EMAIL_PASS')\n    }\n});\n\nconst recipient = alert.ownerEmail;\nif (!recipient) {\n    node.warn('No email for owner: ' + alert.ownerName);\n    return null;\n}\n\nconst subject = `SensorSentinel Alert: ${alert.pinLabel} on ${alert.deviceName}`;\nconst body = `Alert for ${alert.ownerName}\\n\\nDevice: ${alert.deviceName}\\nSensor: ${alert.pinLabel}\\nMessage: ${alert.alertMessage}\\nLevel: ${alert.alertLevel}\\nTime: ${new Date().toISOString()}`;\n\ntransporter.sendMail({\n    from: '\"SensorSentinel\" <' + env.get('NOTIFY_EMAIL_USER') + '>',\n    to: recipient,\n    subject: subject,\n    text: body\n}).then(() => {\n    node.log('Notification sent to ' + recipient);\n}).catch(err => {\n    node.error('Notification failed: ' + err.message);\n});\n\nreturn msg;",
+        "func": "const alert = msg.alert;\nif (!alert) return null;\n\nconst key = `notified_${alert.deviceId}_${alert.pinLabel.replace(/\\s+/g, '_')}`;\nconst lastNotified = flow.get(key) || 0;\nconst now = Date.now();\nconst cooldownMs = 5 * 60 * 1000;\n\nif (now - lastNotified < cooldownMs) {\n    node.log(`Notification suppressed (cooldown): ${alert.pinLabel}`);\n    return null;\n}\nflow.set(key, now);\n\nconst transporter = nodemailer.createTransport({\n    host: 'smtp.gmail.com',\n    port: 465,\n    secure: true,\n    auth: {\n        user: env.get('NOTIFY_EMAIL_USER'),\n        pass: env.get('NOTIFY_EMAIL_PASS')\n    }\n});\n\nconst recipient = alert.ownerEmail;\nif (!recipient) {\n    node.warn('No email for owner: ' + alert.ownerName);\n    return null;\n}\n\nconst subject = `SensorSentinel Alert: ${alert.pinLabel} on ${alert.deviceName}`;\nconst body = `Alert for ${alert.ownerName}\\n\\nDevice: ${alert.deviceName}\\nSensor: ${alert.pinLabel}\\nMessage: ${alert.alertMessage}\\nLevel: ${alert.alertLevel}\\nTime: ${new Date().toISOString()}`;\n\ntransporter.sendMail({\n    from: '\"SensorSentinel\" <' + env.get('NOTIFY_EMAIL_USER') + '>',\n    to: recipient,\n    subject: subject,\n    text: body\n}).then(() => {\n    node.log('Notification sent to ' + recipient);\n}).catch(err => {\n    node.error('Notification failed: ' + err.message);\n});\n\nreturn msg;",
         "outputs": 1,
         "timeout": "10",
         "noerr": 0,
@@ -191,6 +191,65 @@
         "targetType": "msg",
         "x": 1440,
         "y": 160,
+        "wires": []
+    },
+    {
+        "id": "auto-register-device",
+        "type": "function",
+        "z": "alerts-flow-tab",
+        "name": "Auto-Register Device",
+        "func": "const nodeId = msg.nodeId;\nconst displayName = 'Node-' + nodeId.toString(16).padStart(8, '0').toUpperCase();\nmsg.query = 'INSERT INTO devices (node_id, display_name) VALUES ($1, $2) ON CONFLICT (node_id) DO NOTHING';\nmsg.params = [nodeId, displayName];\nmsg.newDeviceName = displayName;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1230,
+        "y": 220,
+        "wires": [["db-auto-register"]]
+    },
+    {
+        "id": "db-auto-register",
+        "type": "postgresql",
+        "z": "alerts-flow-tab",
+        "name": "Insert New Device",
+        "query": "",
+        "postgreSQLConfig": "postgres-config",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 1440,
+        "y": 220,
+        "wires": [["notify-new-device"]]
+    },
+    {
+        "id": "notify-new-device",
+        "type": "function",
+        "z": "alerts-flow-tab",
+        "name": "Build New Device Notification",
+        "func": "msg.topic = 'sentinel/new_device';\nmsg.payload = JSON.stringify({\n    nodeId: msg.nodeId,\n    displayName: msg.newDeviceName,\n    firstSeen: new Date().toISOString()\n});\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1660,
+        "y": 220,
+        "wires": [["publish-new-device"]]
+    },
+    {
+        "id": "publish-new-device",
+        "type": "mqtt out",
+        "z": "alerts-flow-tab",
+        "name": "Publish New Device",
+        "topic": "",
+        "qos": "0",
+        "retain": "",
+        "broker": "mqtt-broker-config",
+        "x": 1880,
+        "y": 220,
         "wires": []
     },
     {

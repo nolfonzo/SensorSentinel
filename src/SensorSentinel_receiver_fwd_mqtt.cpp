@@ -12,6 +12,7 @@
 #include "SensorSentinel_packet_helper.h"
 #include "SensorSentinel_mqtt_helper.h"
 #include "SensorSentinel_wifi_helper.h"
+#include "SensorSentinel_diag.h"
 
 #ifndef NO_RADIOLIB
 #include "SensorSentinel_RadioLib_helper.h"
@@ -48,6 +49,9 @@ void setup()
 {
   // Initialize the Heltec board
   heltec_setup();
+
+  // Hold PRG button on boot to enter diagnostic/config mode
+  SensorSentinel_diag_check();
 
   Serial.printf("Sensor packet size: %d bytes\n", sizeof(SensorSentinel_sensor_packet_t));
   Serial.printf("Pin readings size: %d bytes\n", sizeof(SensorSentinel_pin_readings_t));

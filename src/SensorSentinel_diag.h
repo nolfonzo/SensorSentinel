@@ -10,6 +10,8 @@
 #ifndef SensorSentinel_DIAG_H
 #define SensorSentinel_DIAG_H
 
+#include <Arduino.h>
+
 /**
  * @brief Check if the user wants diagnostic mode
  *
@@ -34,5 +36,11 @@ int SensorSentinel_diag_get_interval();
  * @return Interval in seconds (default 60 if not set)
  */
 int SensorSentinel_diag_get_sensor_interval();
+
+/**
+ * @brief Get the configured MQTT server from NVS
+ * @return MQTT server string (falls back to compile-time MQTT_SERVER if not set)
+ */
+String SensorSentinel_diag_get_mqtt_server();
 
 #endif // SensorSentinel_DIAG_H
