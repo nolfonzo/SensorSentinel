@@ -158,6 +158,12 @@ void onBinaryPacketReceived(uint8_t *data, size_t length, float rssi, float snr)
         // Add to cache BEFORE processing to prevent race conditions
         addToReceivedCache(nodeId, messageCounter);
         
+        // Show the packet before attempting MQTT. The display was cleared at
+        // the top of this function and forwarding blocks while the broker is
+        // unreachable, so without this the screen stays empty for the whole
+        // timeout and the LoRa side looks dead when only MQTT is down.
+        heltec_display_update();
+
         // Forward the packet to MQTT using new helper function
         MqttForwardStatus mqttStatus = SensorSentinel_mqtt_forward_packet(packetBuffer, length, rssi, snr);
         

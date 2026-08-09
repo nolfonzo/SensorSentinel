@@ -22,10 +22,20 @@ const uint8_t scaled_voltage[100] = {
   94, 90, 81, 80, 76, 73, 66, 52, 32, 7  
 };  
 
-// ====== Global variables ======  
-// Button related  
-HotButton button(BUTTON);  
-bool buttonClicked = false;  
+// ====== Global variables ======
+// Button related
+HotButton button(BUTTON);
+bool buttonClicked = false;
+
+#ifndef NO_RADIOLIB
+// See the header for where these come from — they mirror the gateway's own
+// channel plan, so anything transmitted here lands on a channel it is already
+// listening to.
+const float AU915_SB0[AU915_SB0_COUNT] = {
+  915.2, 915.4, 915.6, 915.8, 916.0, 916.2, 916.4, 916.6
+};
+#endif
+
 
 // RadioLib instances based on board type  
 #ifndef NO_RADIOLIB  
@@ -115,11 +125,16 @@ const char* heltec_get_board_name() {
  * @brief Updates the display buffer to the screen.  
  */  
 void heltec_display_update() {  
-  #ifndef HELTEC_NO_DISPLAY  
-    #if defined(BOARD_HELTEC_V3_2) || defined(WOKWI)
-      display.display();  
-    #endif  
-  #endif  
+  #ifndef HELTEC_NO_DISPLAY
+    // Must match the OLED pin guard above: the plain V3 and the V3.2 share the
+    // same panel. This was gated on BOARD_HELTEC_V3_2 alone, so any env that
+    // did not pass -DBOARD_HELTEC_V3_2 (e.g. heltec_wifi_lora_32_V3, used for
+    // the receiver) compiled this to an empty function — every draw went to
+    // the framebuffer and was never pushed, giving a permanently blank screen.
+    #if defined(ARDUINO_heltec_wifi_lora_32_V3) || defined(BOARD_HELTEC_V3_2) || defined(WOKWI)
+      display.display();
+    #endif
+  #endif
 }  
 
 /**  

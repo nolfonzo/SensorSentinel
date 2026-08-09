@@ -46,7 +46,62 @@ static uint8_t          _cacheIndex = 0;
 static unsigned long    _lastOwnSensorTx = 0;
 static uint32_t         _packetsRepeated = 0;
 static unsigned long    _sensorIntervalMs = 60000; // loaded from NVS in setup()
+static unsigned long    _nextSensorGapMs  = 60000; // _sensorIntervalMs + jitter
 #endif
+
+// ── TX channel selection ───────────────────────────────────────────────────────
+// _txChannel is read once at boot: the diag web UI only takes effect after a
+// reboot anyway, and this keeps a flash read off the transmit path.
+static int      _txChannel = 0;      // -1 = hop, 0-7 = locked
+static uint32_t _hopState  = 0;      // PRNG state, seeded from the chip MAC
+
+// Seeding from the MAC rather than a shared constant means every node walks a
+// different channel sequence. Two nodes on a common sequence whose timers drift
+// into step would collide on every cycle for hours — that looks like a dead
+// boat, not a busy channel. It also stays reproducible: knowing a node's MAC
+// tells you which channel it will use next, which a bench receiver can follow.
+static void initTxChannel() {
+  _txChannel = SensorSentinel_diag_get_channel();
+  _hopState  = (uint32_t)(ESP.getEfuseMac() & 0xFFFFFFFFULL);
+  if (_hopState == 0) _hopState = 1;   // a zero seed would never advance
+}
+
+#ifndef NO_RADIOLIB
+static void applyTxChannel() {
+  int idx;
+  if (_txChannel >= 0 && _txChannel < AU915_SB0_COUNT) {
+    idx = _txChannel;
+  } else {
+    _hopState = _hopState * 1664525u + 1013904223u;   // Numerical Recipes LCG
+    idx = (_hopState >> 16) & (AU915_SB0_COUNT - 1);
+  }
+  radio.setFrequency(AU915_SB0[idx]);
+}
+
+// setFrequency() is sticky, so after a hopped transmission the radio is still
+// tuned to whichever channel it just used. A repeater must go back to its
+// listening channel or it silently starts monitoring the wrong one — and with
+// only one SX1262 it cannot watch more than that.
+static void restoreRxChannel() {
+#if REPEATER_MODE
+  radio.setFrequency(HELTEC_LORA_FREQ);
+#endif
+}
+#endif
+
+// Re-scramble the gap between transmissions. Crystals sit within ~20 ppm of one
+// another, so two nodes on a fixed 30 s period that drift into alignment stay
+// overlapped for hours before separating. Jitter turns that long, correlated
+// blackout into an occasional independent packet loss.
+static unsigned long jitteredMs(unsigned long baseMs) {
+  return baseMs + (esp_random() % 4000UL) - 2000UL;   // ±2 s
+}
+
+// Sender mode sleeps in whole seconds rather than milliseconds; same reasoning.
+static int jitteredSec(int baseSec) {
+  int v = baseSec + (int)(esp_random() % 5UL) - 2;    // ±2 s
+  return (v < 1) ? 1 : v;
+}
 
 // ── Forward declarations ───────────────────────────────────────────────────────
 void sendSensorPacket();
@@ -67,17 +122,23 @@ void setup() {
 #if REPEATER_MODE
   // ── Repeater mode: full startup, stay awake ──────────────────────────────
   SensorSentinel_diag_check();
+  initTxChannel();
 
   heltec_clear_display();
   both.println("\nSensorSentinel");
   both.printf("Board: %s\n", heltec_get_board_name());
   both.printf("Mode: Repeater\n");
+  // Shown so a board left locked for bench work is obvious at a glance rather
+  // than looking like a node the gateway only hears occasionally.
+  if (_txChannel < 0) both.printf("CH: HOP\n");
+  else                both.printf("CH: %.1f LOCK\n", AU915_SB0[_txChannel]);
   both.printf("Battery: %d%% (%.2fV)\n", heltec_battery_percent(), heltec_vbat());
   heltec_display_update();
   delay(2000);
 
   memset(_seenPackets, 0, sizeof(_seenPackets));
   _sensorIntervalMs = (unsigned long)SensorSentinel_diag_get_sensor_interval() * 1000UL;
+  _nextSensorGapMs  = jitteredMs(_sensorIntervalMs);
 
 #ifndef NO_RADIOLIB
   if (SensorSentinel_subscribe(NULL, onPacketReceived)) {
@@ -93,6 +154,11 @@ void setup() {
   // ── Sender (deep sleep) mode ──────────────────────────────────────────────
   bool timerWake = heltec_wakeup_was_timer();
 
+  // Must run on every wake, not just the first: a timer wake skips the banner
+  // below but still transmits, and without this the channel would be whatever
+  // the static initialiser left behind.
+  initTxChannel();
+
   if (!timerWake) {
     SensorSentinel_diag_check();
 
@@ -103,6 +169,8 @@ void setup() {
 
     int interval = SensorSentinel_diag_get_interval();
     both.printf("Mode: %s (%ds)\n", (interval <= 30) ? "Fast" : "Slow", interval);
+    if (_txChannel < 0) both.printf("CH: HOP\n");
+    else                both.printf("CH: %.1f LOCK\n", AU915_SB0[_txChannel]);
     heltec_display_update();
 
     flashLedForMode(interval);
@@ -120,7 +188,7 @@ void setup() {
 #endif
 
   wakeCount++;
-  heltec_deep_sleep(SensorSentinel_diag_get_interval());
+  heltec_deep_sleep(jitteredSec(SensorSentinel_diag_get_interval()));
 #endif
 }
 
@@ -133,15 +201,17 @@ void loop() {
   SensorSentinel_process_packets();
 #endif
 
-  // Send own sensor data on a timer
-  if (millis() - _lastOwnSensorTx >= _sensorIntervalMs) {
+  // Send own sensor data on a timer, re-jittered after every send so this node
+  // cannot stay in lockstep with another one.
+  if (millis() - _lastOwnSensorTx >= _nextSensorGapMs) {
     sendSensorPacket();
     _lastOwnSensorTx = millis();
+    _nextSensorGapMs = jitteredMs(_sensorIntervalMs);
   }
 
 #else
   // Sender mode: loop() should never run (deep sleep restarts from setup).
-  heltec_deep_sleep(SensorSentinel_diag_get_interval());
+  heltec_deep_sleep(jitteredSec(SensorSentinel_diag_get_interval()));
 #endif
 }
 
@@ -171,7 +241,9 @@ void sendSensorPacket() {
   heltec_led(25);
 
 #ifndef NO_RADIOLIB
+  applyTxChannel();
   int state = radio.transmit((uint8_t*)&packet, sizeof(packet));
+  restoreRxChannel();
   if (state == RADIOLIB_ERR_NONE) {
     sensorPacketCounter++;
     Serial.println("Sensor TX OK");
@@ -203,7 +275,9 @@ void sendGnssPacket() {
   heltec_led(25);
 
 #ifndef NO_RADIOLIB
+  applyTxChannel();
   int state = radio.transmit((uint8_t*)&packet, sizeof(packet));
+  restoreRxChannel();
   if (state == RADIOLIB_ERR_NONE) {
     gnssPacketCounter++;
     Serial.println("GNSS TX OK");
@@ -249,7 +323,9 @@ void repeatPacket(uint8_t *data, size_t length) {
   // A two-radio design would solve this, but is not supported by these boards.
   delay(REPEAT_DELAY_MS);
   heltec_led(50);
+  applyTxChannel();
   int state = radio.transmit(data, length);
+  restoreRxChannel();
   heltec_led(0);
 
   if (state == RADIOLIB_ERR_NONE) {

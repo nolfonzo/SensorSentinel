@@ -30,8 +30,14 @@ MqttConfig mqttConfig = {
     .port = MQTT_PORT,
     .user = MQTT_USER,
     .password = MQTT_PASSWORD,
-    .connectionInterval = 5000,
-    .socketTimeout = 10,  // Add comma here if you plan to add more fields
+    // socketTimeout must stay well under connectionInterval. connect() blocks
+    // for the full socketTimeout when the broker is unreachable, so if the
+    // timeout exceeds the interval the next attempt is already due the moment
+    // one returns and the device sits in connect() ~100% of the time — the
+    // display never redraws and the board looks hung rather than reporting
+    // the error. 3 s of every 15 s leaves it responsive while down.
+    .connectionInterval = 15000,
+    .socketTimeout = 3,  // Add comma here if you plan to add more fields
 };
 
 // Module variables

@@ -43,4 +43,16 @@ int SensorSentinel_diag_get_sensor_interval();
  */
 String SensorSentinel_diag_get_mqtt_server();
 
+/**
+ * @brief Get the configured TX channel from NVS
+ *
+ * The gateway listens to all 8 AU915 sub-band 0 channels at once, but a single
+ * SX1262 node can only sit on one. Locking to a channel therefore keeps a
+ * Heltec bench receiver able to follow every packet; hopping spreads the fleet
+ * out so boats stop colliding with each other.
+ *
+ * @return 0-7 to lock to that channel, or -1 to hop (default 0 = 915.2 MHz)
+ */
+int SensorSentinel_diag_get_channel();
+
 #endif // SensorSentinel_DIAG_H

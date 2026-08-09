@@ -18,8 +18,15 @@ static const char* NVS_NAMESPACE           = "sentinel";
 static const char* NVS_KEY_INTERVAL        = "interval";
 static const char* NVS_KEY_SENSOR_INTERVAL = "sensor_ivl";
 static const char* NVS_KEY_MQTT_SERVER     = "mqtt_srv";
+static const char* NVS_KEY_CHANNEL         = "lora_chan";
 static const int   DEFAULT_INTERVAL        = 30;   // sender sleep interval (s)
 static const int   DEFAULT_SENSOR_INTERVAL = 60;   // repeater sensor TX interval (s)
+// Default to hopping: the gateway demodulates all 8 channels at once, so
+// spreading transmissions costs nothing there and is what stops boats colliding
+// with each other. Lock a board to a single channel from the diag UI when a
+// bench Heltec receiver — one SX1262, one channel — needs to follow every
+// packet, otherwise it will only catch about 1 in 8.
+static const int   DEFAULT_CHANNEL         = -1;   // -1 = hop, 0-7 = locked
 
 int SensorSentinel_diag_get_interval() {
   prefs.begin(NVS_NAMESPACE, true);
@@ -52,6 +59,19 @@ String SensorSentinel_diag_get_mqtt_server() {
   String val = prefs.getString(NVS_KEY_MQTT_SERVER, MQTT_SERVER);
   prefs.end();
   return val;
+}
+
+int SensorSentinel_diag_get_channel() {
+  prefs.begin(NVS_NAMESPACE, true);
+  int val = prefs.getInt(NVS_KEY_CHANNEL, DEFAULT_CHANNEL);
+  prefs.end();
+  return val;
+}
+
+static void SensorSentinel_diag_set_channel(int channel) {
+  prefs.begin(NVS_NAMESPACE, false);
+  prefs.putInt(NVS_KEY_CHANNEL, channel);
+  prefs.end();
 }
 
 static void SensorSentinel_diag_set_mqtt_server(const String& server) {
@@ -117,6 +137,28 @@ static String buildPage() {
   html += ">Slow (5min)</button>";
   html += "</form>";
 #endif
+
+  // TX channel. LOCK keeps a single-channel bench receiver able to follow every
+  // packet; HOP spreads transmissions over all 8 channels the gateway monitors,
+  // which is what stops boats colliding with each other in the field.
+  int currentChannel = SensorSentinel_diag_get_channel();
+  html += "<h2>TX Channel</h2>";
+  html += "<p>HOP spreads across all 8 channels (fleet use). LOCK pins one "
+          "channel so a single-channel Heltec receiver can follow it.</p>";
+  html += "<p>Current: <span class='val'>";
+  html += (currentChannel < 0) ? "HOP"
+                               : String(AU915_SB0[currentChannel], 1) + " MHz (LOCK)";
+  html += "</span></p>";
+  html += "<form method='POST' action='/setmode'>";
+  html += "<button type='submit' name='channel' value='-1'";
+  if (currentChannel < 0) html += " class='active'";
+  html += ">HOP</button>";
+  for (int i = 0; i < AU915_SB0_COUNT; i++) {
+    html += "<button type='submit' name='channel' value='" + String(i) + "'";
+    if (currentChannel == i) html += " class='active'";
+    html += ">" + String(AU915_SB0[i], 1) + "</button>";
+  }
+  html += "</form>";
 
   // MQTT server
   String currentMqtt = SensorSentinel_diag_get_mqtt_server();
@@ -202,6 +244,17 @@ static void handleSetMode() {
       redirectOk("Interval set to " + String(v) + "s.");
     } else {
       server.send(400, "text/plain", "Invalid interval");
+    }
+  } else if (server.hasArg("channel")) {
+    int v = server.arg("channel").toInt();
+    if (v >= -1 && v < AU915_SB0_COUNT) {
+      SensorSentinel_diag_set_channel(v);
+      String what = (v < 0) ? String("HOP")
+                            : String(AU915_SB0[v], 1) + " MHz (LOCK)";
+      Serial.printf("TX channel set to %s\n", what.c_str());
+      redirectOk("Channel set to " + what + ".");
+    } else {
+      server.send(400, "text/plain", "Invalid channel");
     }
   } else if (server.hasArg("sensor_interval")) {
     int v = server.arg("sensor_interval").toInt();

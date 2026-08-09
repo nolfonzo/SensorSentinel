@@ -99,11 +99,37 @@ extern HotButton button;
 #ifndef NO_RADIOLIB  
   #include "RadioLib.h"  
 
-  #define HELTEC_LORA_FREQ    915.0  // MHz, 868.0 for EU regions
+  // AU915 channel 0. The HT-M7603 gateway listens on channels 0-7 (915.2-916.6
+  // MHz, 200 kHz spacing); 915.0 is below the lowest channel in the plan, so
+  // packets sent there are never heard. 868.0 for EU regions.
+  #define HELTEC_LORA_FREQ    915.2  // MHz
   #define HELTEC_LORA_BW      125.0  // kHz
-  #define HELTEC_LORA_SF      9      // Spreading factor
+  // SF7 rather than SF9: ~67 ms on air per 27-byte packet instead of ~226 ms,
+  // so ~3.4x less channel occupancy and ~3x less TX energy. Costs ~6 dB of
+  // sensitivity (SF7 floor ~-123 dBm vs SF9 ~-129), which is affordable at the
+  // ~-92 dBm we measure. The gateway needs no change - its chan_multiSF_0..7
+  // carry no spread_factor key and demodulate every SF concurrently.
+  #define HELTEC_LORA_SF      7      // Spreading factor
   #define HELTEC_LORA_CR      5      // Coding rate
-  #define HELTEC_LORA_SYNC    0x12   // Sync word
+  #define HELTEC_LORA_SYNC    0x12   // Sync word. 0x12 = LoRa private. The
+                                     // HT-M7603 runs Heltec's Custom MQTT
+                                     // firmware, NOT a LoRaWAN packet
+                                     // forwarder: the node_example.ino it
+                                     // serves at http://<gw>/node_example.ino
+                                     // never calls Radio.SetPublicNetwork(),
+                                     // so the concentrator stays on the
+                                     // private sync word. 0x34 was tried on
+                                     // the assumption it was a normal LoRaWAN
+                                     // gateway — it is not.
+
+  // AU915 sub-band 0 uplink channels, taken from the HT-M7603's live
+  // /lora/global_conf.json: radio_0 at 915.5 MHz with IF offsets
+  // -300/-100/+100/+300 kHz, radio_1 at 916.2 MHz with -200/0/+200/+400 kHz.
+  // The SX1303 demodulates all eight simultaneously, so a node may transmit on
+  // any of them with no gateway-side change. HELTEC_LORA_FREQ above is the
+  // power-on default and equals AU915_SB0[0].
+  #define AU915_SB0_COUNT 8
+  extern const float AU915_SB0[AU915_SB0_COUNT];
 
   // Chip-specific settings
   #define HELTEC_SX1262_POWER   14.0    // dBm
