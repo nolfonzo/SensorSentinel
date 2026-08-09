@@ -86,6 +86,7 @@ services:
       - ./nodered/data:/data
     ports:
       - "1880:1880"                   # Node-RED web UI
+      - "1700:1700/udp"               # Semtech packet-forwarder uplink
     environment:
       TZ: Australia/Sydney
       DB_PASSWORD: ${DB_PASSWORD}

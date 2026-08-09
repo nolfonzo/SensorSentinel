@@ -40,7 +40,11 @@
         "broker": "mqtt-broker-config",
         "x": 130,
         "y": 80,
-        "wires": [["parse-binary"]]
+        "wires": [
+            [
+                "parse-binary"
+            ]
+        ]
     },
     {
         "id": "parse-binary",
@@ -56,7 +60,11 @@
         "libs": [],
         "x": 370,
         "y": 80,
-        "wires": [["publish-json", "process-message"]]
+        "wires": [
+            [
+                "dedupe-node"
+            ]
+        ]
     },
     {
         "id": "publish-json",
@@ -87,7 +95,11 @@
         "libs": [],
         "x": 590,
         "y": 120,
-        "wires": [["db-get-device"]]
+        "wires": [
+            [
+                "db-get-device"
+            ]
+        ]
     },
     {
         "id": "db-get-device",
@@ -101,7 +113,11 @@
         "outputs": 1,
         "x": 800,
         "y": 120,
-        "wires": [["check-thresholds"]]
+        "wires": [
+            [
+                "check-thresholds"
+            ]
+        ]
     },
     {
         "id": "check-thresholds",
@@ -117,7 +133,17 @@
         "libs": [],
         "x": 1010,
         "y": 120,
-        "wires": [["db-upsert-alert"], ["db-log-event"], ["auto-register-device"]]
+        "wires": [
+            [
+                "db-upsert-alert"
+            ],
+            [
+                "db-log-event"
+            ],
+            [
+                "auto-register-device"
+            ]
+        ]
     },
     {
         "id": "db-upsert-alert",
@@ -131,7 +157,11 @@
         "outputs": 1,
         "x": 1230,
         "y": 100,
-        "wires": [["send-notification"]]
+        "wires": [
+            [
+                "send-notification"
+            ]
+        ]
     },
     {
         "id": "db-log-event",
@@ -145,7 +175,11 @@
         "outputs": 1,
         "x": 1230,
         "y": 160,
-        "wires": [["debug-events"]]
+        "wires": [
+            [
+                "debug-events"
+            ]
+        ]
     },
     {
         "id": "send-notification",
@@ -158,10 +192,19 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "libs": [{"var": "nodemailer", "module": "nodemailer"}],
+        "libs": [
+            {
+                "var": "nodemailer",
+                "module": "nodemailer"
+            }
+        ],
         "x": 1440,
         "y": 100,
-        "wires": [["debug-alerts"]]
+        "wires": [
+            [
+                "debug-alerts"
+            ]
+        ]
     },
     {
         "id": "debug-alerts",
@@ -207,7 +250,11 @@
         "libs": [],
         "x": 1230,
         "y": 220,
-        "wires": [["db-auto-register"]]
+        "wires": [
+            [
+                "db-auto-register"
+            ]
+        ]
     },
     {
         "id": "db-auto-register",
@@ -221,7 +268,11 @@
         "outputs": 1,
         "x": 1440,
         "y": 220,
-        "wires": [["notify-new-device"]]
+        "wires": [
+            [
+                "notify-new-device"
+            ]
+        ]
     },
     {
         "id": "notify-new-device",
@@ -237,7 +288,11 @@
         "libs": [],
         "x": 1660,
         "y": 220,
-        "wires": [["publish-new-device"]]
+        "wires": [
+            [
+                "publish-new-device"
+            ]
+        ]
     },
     {
         "id": "publish-new-device",
@@ -272,7 +327,11 @@
         "topic": "",
         "x": 150,
         "y": 80,
-        "wires": [["prune-query"]]
+        "wires": [
+            [
+                "prune-query"
+            ]
+        ]
     },
     {
         "id": "prune-query",
@@ -288,7 +347,11 @@
         "libs": [],
         "x": 370,
         "y": 80,
-        "wires": [["prune-db"]]
+        "wires": [
+            [
+                "prune-db"
+            ]
+        ]
     },
     {
         "id": "prune-db",
@@ -302,7 +365,11 @@
         "outputs": 1,
         "x": 580,
         "y": 80,
-        "wires": [["prune-debug"]]
+        "wires": [
+            [
+                "prune-debug"
+            ]
+        ]
     },
     {
         "id": "prune-debug",
@@ -317,6 +384,199 @@
         "targetType": "msg",
         "x": 780,
         "y": 80,
+        "wires": []
+    },
+    {
+        "id": "gw-adapter-tab",
+        "type": "tab",
+        "label": "Gateway Adapter",
+        "disabled": false,
+        "info": "Translates HT-M7603 gateway MQTT into the raw-Buffer form the alerts pipeline expects."
+    },
+    {
+        "id": "gw-mqtt-in",
+        "type": "mqtt in",
+        "z": "gw-adapter-tab",
+        "name": "HT-M7603 uplink",
+        "topic": "GWID/+/UP",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "mqtt-broker-config",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 120,
+        "wires": [
+            [
+                "gw-decode-fn"
+            ]
+        ]
+    },
+    {
+        "id": "gw-decode-fn",
+        "type": "function",
+        "z": "gw-adapter-tab",
+        "name": "Unwrap gateway envelope",
+        "func": "// Unwrap the HT-M7603 gateway envelope into the raw LoRa payload.\n// Gateway publishes JSON to GWID/<eui>/UP with the payload base64-encoded.\n// Downstream flows expect a bare Buffer on lora/in/#, so translate and\n// republish, preserving radio metadata on msg.gateway.\n\nlet env = msg.payload;\n\n// payload may arrive as Buffer/string depending on the mqtt node's output mode\nif (Buffer.isBuffer(env)) env = env.toString('utf8');\nif (typeof env === 'string') {\n    try { env = JSON.parse(env); }\n    catch (e) {\n        node.warn('gateway: payload is not JSON: ' + String(env).slice(0, 80));\n        return null;\n    }\n}\nif (!env || typeof env !== 'object' || !env.data) {\n    node.warn('gateway: no data field in envelope');\n    return null;\n}\n\nlet buf;\ntry { buf = Buffer.from(env.data, 'base64'); }\ncatch (e) { node.warn('gateway: base64 decode failed'); return null; }\n\nif (!buf.length) { node.warn('gateway: empty payload'); return null; }\n\n// sanity-check against the two known packet shapes before passing it on\nconst t = buf.readUInt8(0);\nif (!((t === 0x01 && buf.length === 27) || (t === 0x02 && buf.length === 35))) {\n    node.warn('gateway: unrecognised packet type=0x' + t.toString(16) +\n              ' len=' + buf.length + ' (expected 0x01/27 or 0x02/35)');\n    // still forward it - the parser reports its own error, and seeing the\n    // rejection downstream is more useful than dropping it silently here\n}\n\nmsg.gateway = {\n    eui:  (msg.topic || '').split('/')[1] || null,\n    freq: env.freq  !== undefined ? env.freq  : null,\n    datr: env.datr  !== undefined ? env.datr  : null,\n    rssi: env.rssi  !== undefined ? env.rssi  : null,\n    snr:  env.lsnr  !== undefined ? env.lsnr  : null,\n    size: env.size  !== undefined ? env.size  : buf.length\n};\n\nnode.status({ fill: 'green', shape: 'dot',\n              text: 'rx ' + buf.length + 'B rssi ' + msg.gateway.rssi });\n\nmsg.payload = buf;\nmsg.topic = 'lora/in/gw';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 120,
+        "wires": [
+            [
+                "gw-mqtt-out",
+                "gw-debug"
+            ]
+        ]
+    },
+    {
+        "id": "gw-mqtt-out",
+        "type": "mqtt out",
+        "z": "gw-adapter-tab",
+        "name": "-> lora/in/gw",
+        "topic": "lora/in/gw",
+        "qos": "0",
+        "retain": "false",
+        "broker": "mqtt-broker-config",
+        "x": 730,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "gw-debug",
+        "type": "debug",
+        "z": "gw-adapter-tab",
+        "name": "gateway rx",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 720,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "gw-udp-in",
+        "type": "udp in",
+        "z": "gw-adapter-tab",
+        "name": "Packet Forwarder :1700",
+        "iface": "",
+        "port": "1700",
+        "ipv": "udp4",
+        "multicast": "false",
+        "group": "",
+        "datatype": "buffer",
+        "x": 190,
+        "y": 460,
+        "wires": [
+            [
+                "gw-udp-decode"
+            ]
+        ]
+    },
+    {
+        "id": "gw-udp-decode",
+        "type": "function",
+        "z": "gw-adapter-tab",
+        "name": "Decode Semtech UDP",
+        "func": "// Semtech UDP packet forwarder -> the same MQTT envelope the HT-M7603 emits,\n// so a Dragino/RAK/sx1302_hal gateway feeds the Gateway Adapter below without a\n// second translation path, and no vendor's proprietary MQTT mode can trap us.\n//\n//   byte  0     protocol version (0x02)\n//   bytes 1-2   token, echoed in the ACK\n//   byte  3     packet type\n//   bytes 4-11  gateway EUI (PUSH_DATA / PULL_DATA)\n//   bytes 12+   JSON payload (PUSH_DATA only)\n\nconst PUSH_DATA = 0x00, PUSH_ACK = 0x01;\nconst PULL_DATA = 0x02, PULL_ACK = 0x04;\n\nconst buf = msg.payload;\nif (!Buffer.isBuffer(buf) || buf.length < 4) { return null; }\n\nconst token = buf.slice(1, 3);\nconst kind = buf[3];\n\n// A forwarder that gets no ACK decides the server is down and starts buffering,\n// so acknowledge before anything that might fail.\nif (kind === PULL_DATA) {\n    // Downlink keepalive. We never transmit, but without the ACK the gateway\n    // logs the server as unreachable.\n    const pull = Buffer.concat([Buffer.from([0x02]), token, Buffer.from([PULL_ACK])]);\n    return [{ payload: pull, ip: msg.ip, port: msg.port }, null];\n}\nif (kind !== PUSH_DATA) { return null; }\n\nconst ack = Buffer.concat([Buffer.from([0x02]), token, Buffer.from([PUSH_ACK])]);\nconst ackMsg = { payload: ack, ip: msg.ip, port: msg.port };\n\nif (buf.length < 12) { return [ackMsg, null]; }\nconst eui = buf.slice(4, 12).toString('hex').toUpperCase();\n\nconst body = buf.slice(12);\nif (body.length === 0) { return [ackMsg, null]; }   // keepalive with no payload\n\nlet parsed;\ntry {\n    parsed = JSON.parse(body.toString('utf8'));\n} catch (e) {\n    node.warn('udp: undecodable JSON from ' + msg.ip + ' (' + body.length + ' bytes)');\n    return [ackMsg, null];\n}\n\n// freq/datr/rssi/lsnr/size/data already match the Heltec envelope; the extra\n// Semtech fields (tmst, chan, codr) are ignored downstream.\nconst out = [];\nfor (const rxpk of (parsed.rxpk || [])) {\n    out.push({ topic: 'GWID/' + eui + '/UP', payload: rxpk });\n}\n\nif (out.length > 0) {\n    node.status({ fill: 'green', shape: 'dot', text: eui + ' ' + out.length + ' pkt' });\n}\nreturn [ackMsg, out];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 460,
+        "wires": [
+            [
+                "gw-udp-ack"
+            ],
+            [
+                "gw-udp-mqtt"
+            ]
+        ]
+    },
+    {
+        "id": "gw-udp-ack",
+        "type": "udp out",
+        "z": "gw-adapter-tab",
+        "name": "ACK to gateway",
+        "addr": "",
+        "iface": "",
+        "port": "",
+        "ipv": "udp4",
+        "outport": "1700",
+        "base64": false,
+        "multicast": "false",
+        "x": 730,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "gw-udp-mqtt",
+        "type": "mqtt out",
+        "z": "gw-adapter-tab",
+        "name": "publish GWID/<eui>/UP",
+        "topic": "",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "mqtt-broker-config",
+        "x": 750,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "dedupe-node",
+        "type": "function",
+        "z": "alerts-flow-tab",
+        "name": "Dedupe by node+counter",
+        "func": "// One physical transmission can reach us by several independent paths: the\n// HT-M7603 via GWID/<eui>/UP, a Heltec receiver via lora/in, and any second\n// gateway added later. Each forwards without knowing the others exist, so the\n// on-device caches (_seenPackets in the repeater, receivedCache in the\n// receiver) cannot catch it - they only ever see their own copy.\n//\n// Time-windowed rather than a UNIQUE index on (node_id, counter):\n// sensorPacketCounter is RTC_DATA_ATTR, so it survives deep sleep but RESETS\n// TO 0 on power loss. A permanent constraint would silently reject valid\n// packets from any node that had been power-cycled.\n\nconst WINDOW_MS = 120000;   // ~2 min: far longer than any path's delivery skew\n\nconst p = msg.payload || {};\nconst nodeId = p.nodeId;\nconst counter = p.counter;\n\n// Anything we cannot key on is passed through rather than dropped: losing real\n// data would be worse than storing an occasional duplicate.\nif (nodeId === undefined || counter === undefined) {\n    node.warn('dedupe: payload missing nodeId/counter, passing through');\n    return [msg, null];\n}\n\nconst key = nodeId + ':' + (p.type || 'sensor') + ':' + counter;\nconst now = Date.now();\nconst seen = context.get('seen') || {};\n\n// Prune before the lookup so the object cannot grow without bound.\nfor (const k in seen) {\n    if (now - seen[k] > WINDOW_MS) { delete seen[k]; }\n}\n\nif (seen[key] !== undefined) {\n    const age = now - seen[key];\n    const dropped = (context.get('dropped') || 0) + 1;\n    context.set('dropped', dropped);\n    context.set('seen', seen);\n    node.status({ fill: 'yellow', shape: 'ring', text: 'dropped ' + dropped + ' dup' });\n    msg.dedupe = { key: key, ageMs: age, dropped: dropped };\n    return [null, msg];\n}\n\nseen[key] = now;\ncontext.set('seen', seen);\nnode.status({ fill: 'green', shape: 'dot', text: 'pass ' + key });\nreturn [msg, null];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 80,
+        "wires": [
+            [
+                "publish-json",
+                "process-message"
+            ],
+            [
+                "dedupe-drops-debug"
+            ]
+        ]
+    },
+    {
+        "id": "dedupe-drops-debug",
+        "type": "debug",
+        "z": "alerts-flow-tab",
+        "name": "dedupe drops",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "dedupe",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 830,
+        "y": 140,
         "wires": []
     }
 ]

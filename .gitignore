@@ -27,3 +27,7 @@ docker/postgres/data/
 docker/mosquitto/data/
 docker/mosquitto/log/
 docker/nodered/data/.npm/
+
+# Timestamped backups taken before editing configs/flows in place
+*.bak
+*.bak-*
