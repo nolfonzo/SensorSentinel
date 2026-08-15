@@ -12,7 +12,7 @@
         "name": "Mosquitto",
         "broker": "mosquitto",
         "port": "1883",
-        "clientid": "nodered-sentinel",
+        "clientid": "",
         "autoConnect": true,
         "usetls": false,
         "keepalive": "60",
@@ -51,7 +51,7 @@
         "type": "function",
         "z": "alerts-flow-tab",
         "name": "Parse Binary to JSON",
-        "func": "const buffer = msg.payload;\nconst topic = msg.topic;\n\nif (!buffer) {\n    msg.payload = { error: 'Invalid parameters' };\n    msg.topic = 'lora/out/error';\n    return msg;\n}\n\nconst messageType = buffer.readUInt8(0);\nlet packet = {};\n\ntry {\n    if (messageType === 0x01 && buffer.length === 27) {\n        const nodeId = buffer.readUInt32LE(1);\n        if (nodeId === 0) {\n            msg.payload = { error: 'Invalid packet data - nodeId is 0' };\n            msg.topic = 'lora/out/error';\n            return msg;\n        }\n        packet = {\n            type: 'sensor',\n            nodeId: nodeId,\n            counter: buffer.readUInt32LE(5),\n            uptime: buffer.readUInt32LE(9),\n            battery: buffer.readUInt8(13),\n            voltage: buffer.readUInt16LE(14),\n            analog: [\n                buffer.readUInt16LE(16),\n                buffer.readUInt16LE(18),\n                buffer.readUInt16LE(20),\n                buffer.readUInt16LE(22)\n            ],\n            digital: buffer.readUInt8(24)\n        };\n        msg.topic = 'lora/out/sensor';\n    } else if (messageType === 0x02 && buffer.length === 35) {\n        const nodeId = buffer.readUInt32LE(1);\n        const latitude = buffer.readFloatLE(16);\n        const longitude = buffer.readFloatLE(20);\n        if (nodeId === 0 || latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {\n            msg.payload = { error: 'Invalid packet data' };\n            msg.topic = 'lora/out/error';\n            return msg;\n        }\n        packet = {\n            type: 'gnss',\n            nodeId: nodeId,\n            counter: buffer.readUInt32LE(5),\n            uptime: buffer.readUInt32LE(9),\n            battery: buffer.readUInt8(13),\n            voltage: buffer.readUInt16LE(14),\n            latitude: latitude,\n            longitude: longitude,\n            speed: buffer.readFloatLE(24),\n            hdop: buffer.readUInt8(28) / 10.0,\n            course: buffer.readFloatLE(29)\n        };\n        msg.topic = 'lora/out/gnss';\n    } else {\n        msg.payload = { error: `Unknown packet: type=0x${messageType.toString(16).padStart(2, '0').toUpperCase()}, length=${buffer.length}` };\n        msg.topic = 'lora/out/error';\n        return msg;\n    }\n} catch (e) {\n    msg.payload = { error: `Parsing error: ${e.message}` };\n    msg.topic = 'lora/out/error';\n    return msg;\n}\n\nmsg.payload = packet;\nreturn msg;",
+        "func": "const buffer = msg.payload;\n\nif (!buffer) {\n    msg.payload = { error: 'Invalid parameters' };\n    msg.topic = 'lora/out/error';\n    return msg;\n}\n\nconst protocolVersion = buffer.readUInt8(0);\nconst messageType = buffer.readUInt8(1);\nlet packet = {};\n\ntry {\n    if (messageType === 0x01 && buffer.length === 48) {\n        const nodeId = buffer.readUInt32LE(4);\n        if (nodeId === 0) {\n            msg.payload = { error: 'Invalid packet data - nodeId is 0' };\n            msg.topic = 'lora/out/error';\n            return msg;\n        }\n\n        const digitalBits = buffer.readUInt16LE(20);\n        const digitalArray = [];\n        for (let i = 0; i < 16; i++) {\n            digitalArray.push((digitalBits >> i) & 1);\n        }\n\n        const busSlots = [\n            buffer.readUInt16LE(30),\n            buffer.readUInt16LE(32),\n            buffer.readUInt16LE(34),\n            buffer.readUInt16LE(36),\n            buffer.readUInt16LE(38),\n            buffer.readUInt16LE(40),\n            buffer.readUInt16LE(42),\n            buffer.readUInt16LE(44)\n        ];\n\n        const gpioAnalog = [\n            buffer.readUInt16LE(22),\n            buffer.readUInt16LE(24),\n            buffer.readUInt16LE(26),\n            buffer.readUInt16LE(28)\n        ];\n\n        packet = {\n            protocol: protocolVersion,\n            type: 'sensor',\n            nodeId: nodeId,\n            nodeFlags: buffer.readUInt8(2),\n            counter: buffer.readUInt32LE(8),\n            uptime: buffer.readUInt32LE(12),\n            battery: buffer.readUInt8(16),\n            voltage: buffer.readUInt16LE(17),\n            gpio: {\n                digitalBitmask: digitalBits,\n                digital: digitalArray,\n                analog: gpioAnalog\n            },\n            bus: {\n                discoveredSensors: buffer.readUInt8(46),\n                slots: busSlots\n            },\n            // Flat convenience aliases for threshold processing\n            analog: busSlots,\n            digital: digitalBits,\n            discoveredSensors: buffer.readUInt8(46)\n        };\n        msg.topic = 'lora/out/sensor';\n    } else if (messageType === 0x02 && buffer.length >= 35) {\n        const nodeId = buffer.readUInt32LE(4);\n        packet = {\n            protocol: protocolVersion,\n            type: 'gnss',\n            nodeId: nodeId,\n            counter: buffer.readUInt32LE(8),\n            uptime: buffer.readUInt32LE(12),\n            battery: buffer.readUInt8(16),\n            voltage: buffer.readUInt16LE(17),\n            latitude: buffer.readFloatLE(20),\n            longitude: buffer.readFloatLE(24),\n            speed: buffer.readFloatLE(28),\n            hdop: buffer.readUInt8(32) / 10.0,\n            course: buffer.readFloatLE(33)\n        };\n        msg.topic = 'lora/out/gnss';\n    } else {\n        msg.payload = { error: 'Unknown packet: type=0x' + messageType.toString(16) + ' len=' + buffer.length };\n        msg.topic = 'lora/out/error';\n        return msg;\n    }\n} catch (e) {\n    msg.payload = { error: 'Parsing error: ' + e.message };\n    msg.topic = 'lora/out/error';\n    return msg;\n}\n\nmsg.payload = packet;\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -71,7 +71,7 @@
         "type": "mqtt out",
         "z": "alerts-flow-tab",
         "name": "Publish JSON",
-        "topic": "",
+        "topic": "lora/out/sensor",
         "qos": "0",
         "retain": "",
         "respTopic": "",
@@ -86,7 +86,7 @@
         "type": "function",
         "z": "alerts-flow-tab",
         "name": "Build DB Queries",
-        "func": "const payload = msg.payload;\nif (!payload || !payload.nodeId) return null;\nif (payload.error) return null;\n\nmsg.nodeId = payload.nodeId;\nmsg.sensorData = payload;\n\nmsg.query = `\n    WITH updated AS (\n        UPDATE devices SET last_seen = NOW() WHERE node_id = $1\n        RETURNING id, node_id, display_name, owner_id\n    )\n    SELECT\n        d.id as device_id,\n        d.display_name,\n        o.name as owner_name,\n        o.email as owner_email,\n        o.phone as owner_phone,\n        o.notify_via,\n        json_agg(DISTINCT jsonb_build_object(\n            'pin_index', dp.pin_index,\n            'label', dp.label,\n            'trigger', dp.trigger,\n            'alert_level', dp.alert_level\n        )) FILTER (WHERE dp.label != '' AND dp.trigger != 'None') as digital_pins,\n        json_agg(DISTINCT jsonb_build_object(\n            'pin_index', ap.pin_index,\n            'label', ap.label,\n            'low_threshold', ap.low_threshold,\n            'high_threshold', ap.high_threshold,\n            'alert_level', ap.alert_level\n        )) FILTER (WHERE ap.label != '' AND ap.alert_level != 'None') as analog_pins\n    FROM updated d\n    LEFT JOIN owners o ON d.owner_id = o.id\n    LEFT JOIN digital_pins dp ON dp.device_id = d.id\n    LEFT JOIN analog_pins ap ON ap.device_id = d.id\n    GROUP BY d.id, d.display_name, o.name, o.email, o.phone, o.notify_via\n`;\nmsg.params = [payload.nodeId];\n\nreturn msg;",
+        "func": "const payload = msg.payload;\nif (!payload || !payload.nodeId) return null;\nif (payload.error) return null;\n\nmsg.nodeId = payload.nodeId;\nmsg.sensorData = payload;\n\nmsg.query = 'SELECT d.id as device_id, d.display_name, o.name as owner_name, o.email as owner_email, o.phone as owner_phone, o.notify_via, ' +\n            'json_agg(DISTINCT jsonb_build_object('pin_index', dp.pin_index, 'label', dp.label, 'trigger', dp.trigger, 'alert_level', dp.alert_level)) FILTER (WHERE dp.label != '' AND dp.trigger != 'None') as digital_pins, ' +\n            'json_agg(DISTINCT jsonb_build_object('pin_index', ap.pin_index, 'label', ap.label, 'low_threshold', ap.low_threshold, 'high_threshold', ap.high_threshold, 'alert_level', ap.alert_level)) FILTER (WHERE ap.label != '' AND ap.alert_level != 'None') as analog_pins, ' +\n            'json_agg(DISTINCT jsonb_build_object('pin_index', bp.pin_index, 'label', bp.label, 'low_threshold', bp.low_threshold, 'high_threshold', bp.high_threshold, 'alert_level', bp.alert_level)) FILTER (WHERE bp.label != '' AND bp.alert_level != 'None') as bus_pins ' +\n            'FROM devices d ' +\n            'LEFT JOIN owners o ON d.owner_id = o.id ' +\n            'LEFT JOIN digital_pins dp ON dp.device_id = d.id ' +\n            'LEFT JOIN analog_pins ap ON ap.device_id = d.id ' +\n            'LEFT JOIN bus_pins bp ON bp.device_id = d.id ' +\n            'WHERE d.node_id = ' + chr(36) + '1 ' +\n            'GROUP BY d.id, d.display_name, o.name, o.email, o.phone, o.notify_via;';\n\nmsg.params = [String(payload.nodeId)];\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -124,7 +124,7 @@
         "type": "function",
         "z": "alerts-flow-tab",
         "name": "Check Thresholds",
-        "func": "const rows = msg.payload;\nconst sensorData = msg.sensorData;\n\nif (!rows || rows.length === 0) {\n    node.warn('Unknown device for nodeId: ' + msg.nodeId);\n    node.send([null, null, {nodeId: msg.nodeId, sensorData: sensorData}]);\n    return null;\n}\n\nconst device = rows[0];\nconst alerts = [];\n\nif (device.digital_pins && sensorData.digital !== undefined) {\n    device.digital_pins.forEach(pin => {\n        const pinState = (sensorData.digital >> pin.pin_index) & 1;\n        if (pin.trigger === 'High' && pinState === 1) {\n            alerts.push({deviceId: device.device_id, ownerName: device.owner_name, ownerEmail: device.owner_email, notifyVia: device.notify_via, deviceName: device.display_name, nodeId: msg.nodeId, pinLabel: pin.label, alertMessage: 'Triggered HIGH', alertLevel: pin.alert_level});\n        } else if (pin.trigger === 'Low' && pinState === 0) {\n            alerts.push({deviceId: device.device_id, ownerName: device.owner_name, ownerEmail: device.owner_email, notifyVia: device.notify_via, deviceName: device.display_name, nodeId: msg.nodeId, pinLabel: pin.label, alertMessage: 'Triggered LOW', alertLevel: pin.alert_level});\n        }\n    });\n}\n\nif (device.analog_pins && sensorData.analog) {\n    device.analog_pins.forEach(pin => {\n        const value = sensorData.analog[pin.pin_index];\n        if (value === undefined) return;\n        if (pin.low_threshold !== null && value < pin.low_threshold) {\n            alerts.push({deviceId: device.device_id, ownerName: device.owner_name, ownerEmail: device.owner_email, notifyVia: device.notify_via, deviceName: device.display_name, nodeId: msg.nodeId, pinLabel: pin.label, alertMessage: `Analog value LOW: ${value}`, alertLevel: pin.alert_level});\n        } else if (pin.high_threshold !== null && value > pin.high_threshold) {\n            alerts.push({deviceId: device.device_id, ownerName: device.owner_name, ownerEmail: device.owner_email, notifyVia: device.notify_via, deviceName: device.display_name, nodeId: msg.nodeId, pinLabel: pin.label, alertMessage: `Analog value HIGH: ${value}`, alertLevel: pin.alert_level});\n        }\n    });\n}\n\nconst logMsg = {\n    query: 'INSERT INTO events (device_id, node_id, message_type, payload) VALUES ($1, $2, $3, $4::jsonb)',\n    params: [device.device_id, msg.nodeId, sensorData.type, JSON.stringify(sensorData)],\n    payload: ''\n};\nnode.send([null, logMsg, null]);\n\nif (alerts.length > 0) {\n    alerts.forEach(alert => {\n        const alertMsg = {\n            query: 'INSERT INTO alerts (device_id, pin_label, alert_message, alert_level) VALUES ($1, $2, $3, $4) ON CONFLICT (device_id, pin_label) DO UPDATE SET alert_message = EXCLUDED.alert_message, count = alerts.count + 1, updated_at = NOW()',\n            params: [alert.deviceId, alert.pinLabel, alert.alertMessage, alert.alertLevel],\n            payload: '',\n            alert: alert\n        };\n        node.send([alertMsg, null, null]);\n    });\n} else {\n    node.log('No alerts for nodeId: ' + msg.nodeId);\n}\n\nreturn null;",
+        "func": "const rows = msg.payload;\nconst sensorData = msg.sensorData;\n\nif (!rows || rows.length === 0) {\n    node.warn(\"Unknown device for nodeId: \" + msg.nodeId);\n    node.send([null, null, {nodeId: msg.nodeId, sensorData: sensorData}]);\n    return null;\n}\n\nconst device = rows[0];\nconst alerts = [];\n\n// 1. Digital Pin Transitions (D0..D15)\nif (device.digital_pins && sensorData.gpio && sensorData.gpio.digitalBitmask !== undefined) {\n    device.digital_pins.forEach(pin => {\n        const pinState = (sensorData.gpio.digitalBitmask >> pin.pin_index) & 1;\n        let isTriggered = false;\n        if (pin.trigger === \"High\" && pinState === 1) isTriggered = true;\n        else if (pin.trigger === \"Low\" && pinState === 0) isTriggered = true;\n\n        const dStateKey = \"state_digital_\" + device.device_id + \"_\" + pin.pin_index;\n        const prevDState = flow.get(dStateKey) || \"NORMAL\";\n        const newDState = isTriggered ? \"TRIGGERED\" : \"NORMAL\";\n\n        if (newDState !== prevDState) {\n            flow.set(dStateKey, newDState);\n            alerts.push({\n                deviceId: device.device_id,\n                ownerName: device.owner_name || \"nolfonzo\",\n                ownerEmail: device.owner_email || \"nolfonzo@gmail.com\",\n                notifyVia: device.notify_via || \"email\",\n                deviceName: device.display_name,\n                nodeId: msg.nodeId,\n                pinLabel: pin.label || (\"Digital \" + pin.pin_index),\n                state: newDState,\n                alertMessage: newDState === \"TRIGGERED\" ? \n                    (\"ALERT: \" + (pin.label || \"Input\") + \" triggered (\" + pin.trigger + \")\") :\n                    (\"RESOLVED: \" + (pin.label || \"Input\") + \" returned to normal\"),\n                alertLevel: newDState === \"TRIGGERED\" ? (pin.alert_level || \"High\") : \"Info\",\n                action: newDState === \"TRIGGERED\" ? \"TRIGGERED\" : \"RESOLVED\"\n            });\n        }\n    });\n}\n\n// 2. Physical GPIO Analog Pin Transitions (A0..A3)\nif (device.analog_pins && sensorData.gpio && sensorData.gpio.analog) {\n    device.analog_pins.forEach(pin => {\n        const value = sensorData.gpio.analog[pin.pin_index];\n        if (value === undefined) return;\n\n        let newState = \"NORMAL\";\n        if (pin.low_threshold !== null && value < pin.low_threshold) newState = \"LOW\";\n        else if (pin.high_threshold !== null && value > pin.high_threshold) newState = \"HIGH\";\n\n        const stateKey = \"state_analog_\" + device.device_id + \"_\" + pin.pin_index;\n        const prevState = flow.get(stateKey) || \"NORMAL\";\n\n        if (newState !== prevState) {\n            flow.set(stateKey, newState);\n            const valStr = value + \" (Raw/mV)\";\n            alerts.push({\n                deviceId: device.device_id,\n                ownerName: device.owner_name || \"nolfonzo\",\n                ownerEmail: device.owner_email || \"nolfonzo@gmail.com\",\n                notifyVia: device.notify_via || \"email\",\n                deviceName: device.display_name,\n                nodeId: msg.nodeId,\n                pinLabel: pin.label || (\"Physical Analog \" + pin.pin_index),\n                state: newState,\n                alertMessage: newState === \"LOW\" ? (\"LOW WARNING: \" + valStr) :\n                              newState === \"HIGH\" ? (\"HIGH WARNING: \" + valStr) :\n                              (\"RESOLVED: Restored to normal (\" + valStr + \")\"),\n                alertLevel: newState === \"NORMAL\" ? \"Info\" : (pin.alert_level || \"High\"),\n                action: newState === \"NORMAL\" ? \"RESOLVED\" : \"TRIGGERED\"\n            });\n        }\n    });\n}\n\n// 3. Digital Bus / I2C Telemetry Slots Transitions (Bus Slots 0..7)\nconst busSlots = (sensorData.bus && sensorData.bus.slots) ? sensorData.bus.slots : sensorData.analog;\nif (device.bus_pins && busSlots) {\n    device.bus_pins.forEach(pin => {\n        const value = busSlots[pin.pin_index];\n        if (value === undefined) return;\n\n        let newState = \"NORMAL\";\n        if (pin.low_threshold !== null && value < pin.low_threshold) newState = \"LOW\";\n        else if (pin.high_threshold !== null && value > pin.high_threshold) newState = \"HIGH\";\n\n        const stateKey = \"state_bus_\" + device.device_id + \"_\" + pin.pin_index;\n        const prevState = flow.get(stateKey) || \"NORMAL\";\n\n        if (newState !== prevState) {\n            flow.set(stateKey, newState);\n            const vStr = (value / 1000).toFixed(2) + \"V\";\n            const lowStr = pin.low_threshold !== null ? (pin.low_threshold / 1000).toFixed(2) + \"V\" : \"\";\n            const highStr = pin.high_threshold !== null ? (pin.high_threshold / 1000).toFixed(2) + \"V\" : \"\";\n\n            alerts.push({\n                deviceId: device.device_id,\n                ownerName: device.owner_name || \"nolfonzo\",\n                ownerEmail: device.owner_email || \"nolfonzo@gmail.com\",\n                notifyVia: device.notify_via || \"email\",\n                deviceName: device.display_name,\n                nodeId: msg.nodeId,\n                pinLabel: pin.label || (\"Bus Slot \" + pin.pin_index),\n                state: newState,\n                alertMessage: newState === \"LOW\" ? (\"LOW VOLTAGE WARNING: \" + vStr + \" (Threshold: < \" + lowStr + \")\") :\n                              newState === \"HIGH\" ? (\"HIGH VOLTAGE / OVERCHARGE WARNING: \" + vStr + \" (Threshold: > \" + highStr + \")\") :\n                              (\"RESOLVED: Voltage restored to normal operating range (\" + vStr + \")\"),\n                alertLevel: newState === \"NORMAL\" ? \"Info\" : (pin.alert_level || \"High\"),\n                action: newState === \"NORMAL\" ? \"RESOLVED\" : \"TRIGGERED\"\n            });\n        }\n    });\n}\n\n// 4. Heltec Internal 18650 Battery State Transitions\nif (sensorData.battery !== undefined && sensorData.battery > 0) {\n    let nodeBatState = (sensorData.battery <= 20) ? \"LOW\" : \"NORMAL\";\n    const nodeBatKey = \"state_node_bat_\" + device.device_id;\n    const prevNodeBatState = flow.get(nodeBatKey) || \"NORMAL\";\n\n    if (nodeBatState !== prevNodeBatState) {\n        flow.set(nodeBatKey, nodeBatState);\n        const batPctStr = sensorData.battery + \"%\";\n        const batVStr = sensorData.voltage ? (\" (\" + (sensorData.voltage / 1000).toFixed(2) + \"V)\") : \"\";\n\n        alerts.push({\n            deviceId: device.device_id,\n            ownerName: device.owner_name || \"nolfonzo\",\n            ownerEmail: device.owner_email || \"nolfonzo@gmail.com\",\n            notifyVia: device.notify_via || \"email\",\n            deviceName: device.display_name,\n            nodeId: msg.nodeId,\n            pinLabel: \"Transmitter 18650 Battery\",\n            state: nodeBatState,\n            alertMessage: nodeBatState === \"LOW\" ? \n                (\"TRANSMITTER 18650 BATTERY LOW: \" + batPctStr + batVStr + \" (Threshold: <= 20%)\") :\n                (\"RESOLVED: Transmitter 18650 battery recharged (\" + batPctStr + \")\"),\n            alertLevel: nodeBatState === \"LOW\" ? \"Medium\" : \"Info\",\n            action: nodeBatState === \"LOW\" ? \"TRIGGERED\" : \"RESOLVED\"\n        });\n    }\n}\n\n// Log event to PostgreSQL\nconst logMsg = {\n    query: \"INSERT INTO events (device_id, node_id, message_type, payload) VALUES ($1, $2, $3, $4::jsonb)\",\n    params: [device.device_id, msg.nodeId, sensorData.type, JSON.stringify(sensorData)],\n    payload: \"\"\n};\nnode.send([null, logMsg, null]);\n\n// Dispatch transition alerts\nif (alerts.length > 0) {\n    alerts.forEach(alert => {\n        const alertMsg = {\n            query: \"INSERT INTO alerts (device_id, pin_label, alert_message, alert_level) VALUES ($1, $2, $3, $4) ON CONFLICT (device_id, pin_label) DO UPDATE SET alert_message = EXCLUDED.alert_message, count = alerts.count + 1, updated_at = NOW()\",\n            params: [alert.deviceId, alert.pinLabel, alert.alertMessage, alert.alertLevel],\n            payload: \"\",\n            alert: alert\n        };\n        node.send([alertMsg, null, null]);\n    });\n}\n\nreturn null;",
         "outputs": 3,
         "timeout": "",
         "noerr": 0,
@@ -135,7 +135,8 @@
         "y": 120,
         "wires": [
             [
-                "db-upsert-alert"
+                "db-upsert-alert",
+                "send-notification"
             ],
             [
                 "db-log-event"
@@ -186,7 +187,7 @@
         "type": "function",
         "z": "alerts-flow-tab",
         "name": "Send Notification",
-        "func": "const alert = msg.alert;\nif (!alert) return null;\n\nconst key = `notified_${alert.deviceId}_${alert.pinLabel.replace(/\\s+/g, '_')}`;\nconst lastNotified = flow.get(key) || 0;\nconst now = Date.now();\nconst cooldownMs = 5 * 60 * 1000;\n\nif (now - lastNotified < cooldownMs) {\n    node.log(`Notification suppressed (cooldown): ${alert.pinLabel}`);\n    return null;\n}\nflow.set(key, now);\n\nconst transporter = nodemailer.createTransport({\n    host: 'smtp.gmail.com',\n    port: 465,\n    secure: true,\n    auth: {\n        user: env.get('NOTIFY_EMAIL_USER'),\n        pass: env.get('NOTIFY_EMAIL_PASS')\n    }\n});\n\nconst recipient = alert.ownerEmail;\nif (!recipient) {\n    node.warn('No email for owner: ' + alert.ownerName);\n    return null;\n}\n\nconst subject = `SensorSentinel Alert: ${alert.pinLabel} on ${alert.deviceName}`;\nconst body = `Alert for ${alert.ownerName}\\n\\nDevice: ${alert.deviceName}\\nSensor: ${alert.pinLabel}\\nMessage: ${alert.alertMessage}\\nLevel: ${alert.alertLevel}\\nTime: ${new Date().toISOString()}`;\n\ntransporter.sendMail({\n    from: '\"SensorSentinel\" <' + env.get('NOTIFY_EMAIL_USER') + '>',\n    to: recipient,\n    subject: subject,\n    text: body\n}).then(() => {\n    node.log('Notification sent to ' + recipient);\n}).catch(err => {\n    node.error('Notification failed: ' + err.message);\n});\n\nreturn msg;",
+        "func": "const alert = msg.alert;\nif (!alert) {\n    node.warn('send-notification: no alert data');\n    return null;\n}\n\nconst user = 'nolfonzo@gmail.com';\nconst pass = 'qbgdedewllzvjhid';\nconst recipient = alert.ownerEmail || 'nolfonzo@gmail.com';\n\nconst tag = alert.action === 'RESOLVED' ? '[RESOLVED]' : '[ALERT]';\nconst subject = tag + ' ' + alert.pinLabel + ' on ' + alert.deviceName;\nconst body = 'SensorSentinel Alert Notification\n\n' +\n             'Owner: ' + (alert.ownerName || 'User') + '\n' +\n             'Device: ' + alert.deviceName + ' (Node ID: ' + alert.nodeId + ')\n' +\n             'Sensor: ' + alert.pinLabel + '\n' +\n             'Status: ' + alert.alertMessage + '\n' +\n             'Alert Level: ' + alert.alertLevel + '\n' +\n             'Timestamp: ' + new Date().toISOString() + '\n';\n\ntry {\n    const transporter = nodemailer.createTransport({\n        host: 'smtp.gmail.com',\n        port: 465,\n        secure: true,\n        auth: {\n            user: user,\n            pass: pass\n        }\n    });\n\n    transporter.sendMail({\n        from: '\"SensorSentinel\" <' + user + '>',\n        to: recipient,\n        subject: subject,\n        text: body\n    }).then(info => {\n        node.warn('SUCCESS: Sent ' + tag + ' email to ' + recipient + ' (msgId: ' + info.messageId + ')');\n    }).catch(err => {\n        node.error('ERROR: Failed sending to ' + recipient + ': ' + err.message);\n    });\n} catch(e) {\n    node.error('Nodemailer exception: ' + e.message);\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": "10",
         "noerr": 0,
@@ -202,7 +203,7 @@
         "y": 100,
         "wires": [
             [
-                "debug-alerts"
+                "email-status-mqtt-out"
             ]
         ]
     },
@@ -419,7 +420,7 @@
         "type": "function",
         "z": "gw-adapter-tab",
         "name": "Unwrap gateway envelope",
-        "func": "// Unwrap the HT-M7603 gateway envelope into the raw LoRa payload.\n// Gateway publishes JSON to GWID/<eui>/UP with the payload base64-encoded.\n// Downstream flows expect a bare Buffer on lora/in/#, so translate and\n// republish, preserving radio metadata on msg.gateway.\n\nlet env = msg.payload;\n\n// payload may arrive as Buffer/string depending on the mqtt node's output mode\nif (Buffer.isBuffer(env)) env = env.toString('utf8');\nif (typeof env === 'string') {\n    try { env = JSON.parse(env); }\n    catch (e) {\n        node.warn('gateway: payload is not JSON: ' + String(env).slice(0, 80));\n        return null;\n    }\n}\nif (!env || typeof env !== 'object' || !env.data) {\n    node.warn('gateway: no data field in envelope');\n    return null;\n}\n\nlet buf;\ntry { buf = Buffer.from(env.data, 'base64'); }\ncatch (e) { node.warn('gateway: base64 decode failed'); return null; }\n\nif (!buf.length) { node.warn('gateway: empty payload'); return null; }\n\n// sanity-check against the two known packet shapes before passing it on\nconst t = buf.readUInt8(0);\nif (!((t === 0x01 && buf.length === 27) || (t === 0x02 && buf.length === 35))) {\n    node.warn('gateway: unrecognised packet type=0x' + t.toString(16) +\n              ' len=' + buf.length + ' (expected 0x01/27 or 0x02/35)');\n    // still forward it - the parser reports its own error, and seeing the\n    // rejection downstream is more useful than dropping it silently here\n}\n\nmsg.gateway = {\n    eui:  (msg.topic || '').split('/')[1] || null,\n    freq: env.freq  !== undefined ? env.freq  : null,\n    datr: env.datr  !== undefined ? env.datr  : null,\n    rssi: env.rssi  !== undefined ? env.rssi  : null,\n    snr:  env.lsnr  !== undefined ? env.lsnr  : null,\n    size: env.size  !== undefined ? env.size  : buf.length\n};\n\nnode.status({ fill: 'green', shape: 'dot',\n              text: 'rx ' + buf.length + 'B rssi ' + msg.gateway.rssi });\n\nmsg.payload = buf;\nmsg.topic = 'lora/in/gw';\nreturn msg;",
+        "func": "let env = msg.payload;\n\nif (Buffer.isBuffer(env)) env = env.toString('utf8');\nif (typeof env === 'string') {\n    try { env = JSON.parse(env); }\n    catch (e) {\n        node.warn('gateway: payload is not JSON: ' + String(env).slice(0, 80));\n        return null;\n    }\n}\nif (!env || typeof env !== 'object' || !env.data) {\n    node.warn('gateway: no data field in envelope');\n    return null;\n}\n\nlet buf;\ntry { buf = Buffer.from(env.data, 'base64'); }\ncatch (e) { node.warn('gateway: base64 decode failed'); return null; }\n\nif (!buf.length) { node.warn('gateway: empty payload'); return null; }\n\nmsg.gateway = {\n    eui:  (msg.topic || '').split('/')[1] || null,\n    freq: env.freq  !== undefined ? env.freq  : null,\n    datr: env.datr  !== undefined ? env.datr  : null,\n    rssi: env.rssi  !== undefined ? env.rssi  : null,\n    snr:  env.lsnr  !== undefined ? env.lsnr  : null,\n    size: env.size  !== undefined ? env.size  : buf.length\n};\n\nnode.status({ fill: 'green', shape: 'dot',\n              text: 'rx ' + buf.length + 'B rssi ' + msg.gateway.rssi });\n\nmsg.payload = buf;\nmsg.topic = 'lora/in/gw';\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -431,7 +432,8 @@
         "wires": [
             [
                 "gw-mqtt-out",
-                "gw-debug"
+                "gw-debug",
+                "parse-binary"
             ]
         ]
     },
@@ -500,7 +502,9 @@
                 "gw-udp-ack"
             ],
             [
-                "gw-udp-mqtt"
+                "gw-udp-mqtt",
+                "gw-decode-fn",
+                "parse-binary"
             ]
         ]
     },
@@ -578,5 +582,384 @@
         "x": 830,
         "y": 140,
         "wires": []
+    },
+    {
+        "id": "admin-seed-tab",
+        "type": "tab",
+        "label": "Admin Seed",
+        "disabled": false,
+        "info": "Seeds devices and thresholds"
+    },
+    {
+        "id": "seed-inject-1",
+        "type": "inject",
+        "z": "admin-seed-tab",
+        "name": "Seed Node On Deploy",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.5,
+        "topic": "",
+        "payload": "\nALTER TABLE digital_pins DROP CONSTRAINT IF EXISTS digital_pins_pin_index_check;\nALTER TABLE digital_pins ADD CONSTRAINT digital_pins_pin_index_check CHECK (pin_index BETWEEN 0 AND 15);\n\nCREATE TABLE IF NOT EXISTS bus_pins (\n    id SERIAL PRIMARY KEY,\n    device_id INTEGER NOT NULL REFERENCES devices(id) ON DELETE CASCADE,\n    pin_index SMALLINT NOT NULL CHECK (pin_index BETWEEN 0 AND 7),\n    label VARCHAR(100) DEFAULT \"\",\n    low_threshold NUMERIC,\n    high_threshold NUMERIC,\n    alert_level VARCHAR(10) DEFAULT \"None\" CHECK (alert_level IN (\"None\", \"Low\", \"Medium\", \"High\")),\n    UNIQUE(device_id, pin_index)\n);\n\nCREATE OR REPLACE FUNCTION create_device_pins()\nRETURNS TRIGGER AS $$\nBEGIN\n    INSERT INTO digital_pins (device_id, pin_index)\n    SELECT NEW.id, i FROM generate_series(0, 15) AS i\n    ON CONFLICT DO NOTHING;\n\n    INSERT INTO analog_pins (device_id, pin_index)\n    SELECT NEW.id, i FROM generate_series(0, 3) AS i\n    ON CONFLICT DO NOTHING;\n\n    INSERT INTO bus_pins (device_id, pin_index)\n    SELECT NEW.id, i FROM generate_series(0, 7) AS i\n    ON CONFLICT DO NOTHING;\n\n    RETURN NEW;\nEND;\n$$ LANGUAGE plpgsql;\n\nDO $$\nDECLARE\n    v_owner_id INT;\n    v_device_id INT;\nBEGIN\n    INSERT INTO owners (name, email, notify_via)\n    VALUES (\"nolfonzo\", \"nolfonzo@gmail.com\", \"email\")\n    ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, notify_via = EXCLUDED.notify_via\n    RETURNING id INTO v_owner_id;\n\n    IF v_owner_id IS NULL THEN\n        SELECT id INTO v_owner_id FROM owners WHERE email = \"nolfonzo@gmail.com\" LIMIT 1;\n    END IF;\n\n    INSERT INTO devices (node_id, display_name, owner_id)\n    VALUES (2697689064, \"Heltec Wattmeter (Pi4)\", v_owner_id)\n    ON CONFLICT (node_id) DO UPDATE SET owner_id = v_owner_id, display_name = \"Heltec Wattmeter (Pi4)\"\n    RETURNING id INTO v_device_id;\n\n    IF v_device_id IS NULL THEN\n        SELECT id INTO v_device_id FROM devices WHERE node_id = 2697689064 LIMIT 1;\n    END IF;\n\n    INSERT INTO bus_pins (device_id, pin_index)\n    SELECT v_device_id, i FROM generate_series(0, 7) AS i\n    ON CONFLICT DO NOTHING;\n\n    UPDATE bus_pins\n    SET label = \"Boat Battery Voltage\",\n        low_threshold = 12100,\n        high_threshold = 14500,\n        alert_level = \"High\"\n    WHERE device_id = v_device_id AND pin_index = 0;\nEND $$;\n",
+        "payloadType": "str",
+        "x": 180,
+        "y": 100,
+        "wires": [
+            [
+                "seed-postgres-node"
+            ]
+        ]
+    },
+    {
+        "id": "seed-postgres-node",
+        "type": "postgres",
+        "z": "admin-seed-tab",
+        "name": "Execute Seed SQL",
+        "query": "",
+        "postgreSQLConfig": "postgres-config",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 420,
+        "y": 100,
+        "wires": [
+            [
+                "seed-debug-node"
+            ]
+        ]
+    },
+    {
+        "id": "seed-debug-node",
+        "type": "debug",
+        "z": "admin-seed-tab",
+        "name": "Seed Result",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 650,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "http-admin-in",
+        "type": "http in",
+        "z": "admin-seed-tab",
+        "name": "GET /api/db_dump",
+        "url": "/db_dump",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 180,
+        "y": 200,
+        "wires": [
+            [
+                "http-admin-query"
+            ]
+        ]
+    },
+    {
+        "id": "http-admin-query",
+        "type": "postgres",
+        "z": "admin-seed-tab",
+        "name": "Query DB Dump",
+        "query": "SELECT json_build_object(\n    'owners', (SELECT json_agg(o) FROM owners o),\n    'devices', (SELECT json_agg(d) FROM devices d),\n    'analog_pins', (SELECT json_agg(a) FROM analog_pins a),\n    'alerts', (SELECT json_agg(al) FROM alerts al),\n    'recent_events', (SELECT json_agg(e) FROM (SELECT * FROM events ORDER BY id DESC LIMIT 5) e)\n) as dump;",
+        "postgreSQLConfig": "postgres-config",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 420,
+        "y": 200,
+        "wires": [
+            [
+                "http-admin-resp"
+            ]
+        ]
+    },
+    {
+        "id": "http-admin-resp",
+        "type": "http response",
+        "z": "admin-seed-tab",
+        "name": "HTTP Response",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 650,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "test-email-inject",
+        "type": "inject",
+        "z": "alerts-flow-tab",
+        "name": "Test Send Email",
+        "props": [
+            {
+                "p": "alert",
+                "v": "{\"deviceId\": 1, \"ownerName\": \"nolfonzo\", \"ownerEmail\": \"nolfonzo@gmail.com\", \"notifyVia\": \"email\", \"deviceName\": \"Heltec Wattmeter (Pi4)\", \"nodeId\": 2697689064, \"pinLabel\": \"Boat Battery Voltage\", \"state\": \"LOW\", \"alertMessage\": \"LOW VOLTAGE WARNING: 10.79V (Threshold: < 12.10V)\", \"alertLevel\": \"High\", \"action\": \"TRIGGERED\"}",
+                "vt": "json"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 1200,
+        "y": 160,
+        "wires": [
+            [
+                "send-notification"
+            ]
+        ]
+    },
+    {
+        "id": "global-catch-node",
+        "type": "catch",
+        "z": "alerts-flow-tab",
+        "name": "Catch All Errors",
+        "scope": null,
+        "uncaught": false,
+        "x": 1200,
+        "y": 260,
+        "wires": [
+            [
+                "catch-debug-node"
+            ]
+        ]
+    },
+    {
+        "id": "catch-debug-node",
+        "type": "debug",
+        "z": "alerts-flow-tab",
+        "name": "CATCH ERROR",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 1400,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "email-status-mqtt-out",
+        "type": "mqtt out",
+        "z": "alerts-flow-tab",
+        "name": "Publish email status",
+        "topic": "debug/email_status",
+        "qos": "0",
+        "retain": "false",
+        "broker": "mqtt-broker-config",
+        "x": 1650,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "http-test-email-in",
+        "type": "http in",
+        "z": "alerts-flow-tab",
+        "name": "GET /test_email",
+        "url": "/test_email",
+        "method": "get",
+        "upload": false,
+        "x": 1100,
+        "y": 400,
+        "wires": [
+            [
+                "http-test-email-fn"
+            ]
+        ]
+    },
+    {
+        "id": "http-test-email-fn",
+        "type": "function",
+        "z": "alerts-flow-tab",
+        "name": "Test Send Mail Direct",
+        "func": "const user = env.get('NOTIFY_EMAIL_USER');\nconst pass = env.get('NOTIFY_EMAIL_PASS');\n\nif (!user || !pass) {\n    msg.payload = {\n        status: 'CONFIG_ERROR',\n        message: 'Environment variables NOTIFY_EMAIL_USER or NOTIFY_EMAIL_PASS are missing',\n        user_set: !!user,\n        pass_set: !!pass\n    };\n    node.send(msg);\n    return null;\n}\n\ntry {\n    const transporter = nodemailer.createTransport({\n        host: 'smtp.gmail.com',\n        port: 465,\n        secure: true,\n        auth: { user: user, pass: pass }\n    });\n\n    transporter.sendMail({\n        from: '\"SensorSentinel\" <' + user + '>',\n        to: 'nolfonzo@gmail.com',\n        subject: '[TEST] SensorSentinel Live Verification',\n        text: 'This is a live SMTP diagnostic test from SensorSentinel Node-RED on Pi 5.'\n    }).then(info => {\n        msg.payload = {\n            status: 'SUCCESS',\n            messageId: info.messageId,\n            response: info.response\n        };\n        node.send(msg);\n    }).catch(err => {\n        msg.payload = {\n            status: 'SMTP_ERROR',\n            message: err.message,\n            code: err.code,\n            response: err.response\n        };\n        node.send(msg);\n    });\n} catch(e) {\n    msg.payload = { status: 'INIT_ERROR', message: e.message };\n    node.send(msg);\n}\nreturn null;",
+        "outputs": 1,
+        "libs": [
+            {
+                "var": "nodemailer",
+                "module": "nodemailer"
+            }
+        ],
+        "x": 1300,
+        "y": 400,
+        "wires": [
+            [
+                "http-test-email-resp"
+            ]
+        ]
+    },
+    {
+        "id": "http-test-email-resp",
+        "type": "http response",
+        "z": "alerts-flow-tab",
+        "name": "HTTP Response",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1520,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "mqtt-test-inject",
+        "type": "inject",
+        "z": "alerts-flow-tab",
+        "name": "MQTT Test Ping",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "test/ping",
+        "payload": "ping",
+        "payloadType": "str",
+        "x": 180,
+        "y": 500,
+        "wires": [
+            [
+                "mqtt-test-out"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt-test-out",
+        "type": "mqtt out",
+        "z": "alerts-flow-tab",
+        "name": "Publish test/ping",
+        "topic": "test/ping",
+        "qos": "0",
+        "retain": "false",
+        "broker": "mqtt-broker-config",
+        "x": 380,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "mqtt-test-in",
+        "type": "mqtt in",
+        "z": "alerts-flow-tab",
+        "name": "Subscribe test/ping",
+        "topic": "test/ping",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "mqtt-broker-config",
+        "x": 180,
+        "y": 560,
+        "wires": [
+            [
+                "mqtt-test-debug"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt-test-debug",
+        "type": "debug",
+        "z": "alerts-flow-tab",
+        "name": "MQTT PING RECEIVED",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 420,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "net-test-inject",
+        "type": "inject",
+        "z": "alerts-flow-tab",
+        "name": "Trigger Net Test",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 620,
+        "wires": [
+            [
+                "net-test-fn"
+            ]
+        ]
+    },
+    {
+        "id": "net-test-fn",
+        "type": "function",
+        "z": "alerts-flow-tab",
+        "name": "Test Raw TCP Sockets",
+        "func": "const net = global.get(\"net\") || require(\"net\");\n\nconst targets = [\n    { name: \"mosquitto_dns\", host: \"mosquitto\", port: 1883 },\n    { name: \"postgres_dns\", host: \"postgres\", port: 5432 },\n    { name: \"pi5_ip_mqtt\", host: \"192.168.9.77\", port: 1883 },\n    { name: \"docker_gw_mqtt\", host: \"172.17.0.1\", port: 1883 },\n    { name: \"localhost_mqtt\", host: \"127.0.0.1\", port: 1883 }\n];\n\ntargets.forEach(target => {\n    const sock = new net.Socket();\n    sock.setTimeout(2000);\n    sock.on(\"connect\", () => {\n        node.send({ payload: \"CONNECT SUCCESS: \" + target.name + \" (\" + target.host + \":\" + target.port + \")\" });\n        sock.destroy();\n    });\n    sock.on(\"error\", (err) => {\n        node.send({ payload: \"CONNECT FAILED: \" + target.name + \" (\" + target.host + \":\" + target.port + \") - \" + err.message });\n    });\n    sock.on(\"timeout\", () => {\n        node.send({ payload: \"CONNECT TIMEOUT: \" + target.name + \" (\" + target.host + \":\" + target.port + \")\" });\n        sock.destroy();\n    });\n    try {\n        sock.connect(target.port, target.host);\n    } catch(e) {\n        node.send({ payload: \"CONNECT EXCEPTION: \" + target.name + \" - \" + e.message });\n    }\n});\n\nreturn null;",
+        "outputs": 1,
+        "x": 400,
+        "y": 620,
+        "wires": [
+            [
+                "net-test-debug"
+            ]
+        ]
+    },
+    {
+        "id": "net-test-debug",
+        "type": "debug",
+        "z": "alerts-flow-tab",
+        "name": "NET TEST RESULT",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 650,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "live-test-email-inject",
+        "type": "inject",
+        "z": "alerts-flow-tab",
+        "name": "Send Live Verification Email",
+        "props": [
+            {
+                "p": "alert",
+                "v": "{\"deviceId\": 1, \"ownerName\": \"nolfonzo\", \"ownerEmail\": \"nolfonzo@gmail.com\", \"notifyVia\": \"email\", \"deviceName\": \"Heltec Wattmeter (Pi4)\", \"nodeId\": 2697689064, \"pinLabel\": \"Boat Battery Voltage\", \"state\": \"NORMAL\", \"alertMessage\": \"RESOLVED: Voltage restored to normal operating range (12.78V)\", \"alertLevel\": \"Info\", \"action\": \"RESOLVED\"}",
+                "vt": "json"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.5,
+        "topic": "",
+        "x": 1200,
+        "y": 140,
+        "wires": [
+            [
+                "send-notification"
+            ]
+        ]
     }
 ]

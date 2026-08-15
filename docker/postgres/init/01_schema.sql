@@ -23,7 +23,7 @@ CREATE TABLE devices (
 CREATE TABLE digital_pins (
     id SERIAL PRIMARY KEY,
     device_id INTEGER NOT NULL REFERENCES devices(id) ON DELETE CASCADE,
-    pin_index SMALLINT NOT NULL CHECK (pin_index BETWEEN 0 AND 7),
+    pin_index SMALLINT NOT NULL CHECK (pin_index BETWEEN 0 AND 15),
     label VARCHAR(100) DEFAULT '',
     trigger VARCHAR(10) DEFAULT 'None' CHECK (trigger IN ('None', 'High', 'Low', 'Change')),
     alert_level VARCHAR(10) DEFAULT 'None' CHECK (alert_level IN ('None', 'Low', 'Medium', 'High')),
@@ -34,6 +34,17 @@ CREATE TABLE analog_pins (
     id SERIAL PRIMARY KEY,
     device_id INTEGER NOT NULL REFERENCES devices(id) ON DELETE CASCADE,
     pin_index SMALLINT NOT NULL CHECK (pin_index BETWEEN 0 AND 3),
+    label VARCHAR(100) DEFAULT '',
+    low_threshold NUMERIC,
+    high_threshold NUMERIC,
+    alert_level VARCHAR(10) DEFAULT 'None' CHECK (alert_level IN ('None', 'Low', 'Medium', 'High')),
+    UNIQUE(device_id, pin_index)
+);
+
+CREATE TABLE bus_pins (
+    id SERIAL PRIMARY KEY,
+    device_id INTEGER NOT NULL REFERENCES devices(id) ON DELETE CASCADE,
+    pin_index SMALLINT NOT NULL CHECK (pin_index BETWEEN 0 AND 7),
     label VARCHAR(100) DEFAULT '',
     low_threshold NUMERIC,
     high_threshold NUMERIC,
@@ -68,15 +79,21 @@ CREATE INDEX idx_events_created_at ON events(created_at);
 CREATE INDEX idx_events_node_id ON events(node_id);
 CREATE INDEX idx_devices_node_id ON devices(node_id);
 
--- Auto-create 8 digital + 4 analog pins when a device is added
+-- Auto-create 16 digital + 4 analog + 8 bus pins when a device is added
 CREATE OR REPLACE FUNCTION create_device_pins()
 RETURNS TRIGGER AS $$
 BEGIN
     INSERT INTO digital_pins (device_id, pin_index)
-    SELECT NEW.id, i FROM generate_series(0, 7) AS i;
+    SELECT NEW.id, i FROM generate_series(0, 15) AS i
+    ON CONFLICT DO NOTHING;
 
     INSERT INTO analog_pins (device_id, pin_index)
-    SELECT NEW.id, i FROM generate_series(0, 3) AS i;
+    SELECT NEW.id, i FROM generate_series(0, 3) AS i
+    ON CONFLICT DO NOTHING;
+
+    INSERT INTO bus_pins (device_id, pin_index)
+    SELECT NEW.id, i FROM generate_series(0, 7) AS i
+    ON CONFLICT DO NOTHING;
 
     RETURN NEW;
 END;

@@ -73,19 +73,21 @@ void SensorSentinel_read_all_analog(uint16_t* values, uint8_t arraySize) {
     }
 }
 
+#include "SensorSentinel_i2c_helper.h"
+
 /**
- * @brief Reads all boolean pins and packs them into a byte
+ * @brief Reads all boolean pins and packs them into a 16-bit word
  * 
- * @param maxBits Maximum number of bits to read (1-8)
- * @return Byte with each bit representing a pin state
+ * @return 16-bit word with each bit representing a pin state
  */
-uint8_t SensorSentinel_read_all_boolean() {
-    uint8_t result = 0;
-    uint8_t count = (8 < SensorSentinel_BOOLEAN_COUNT) ? 8 : SensorSentinel_BOOLEAN_COUNT;
+uint16_t SensorSentinel_read_all_boolean() {
+    uint16_t result = 0;
+    uint8_t count = (16 < SensorSentinel_BOOLEAN_COUNT) ? 16 : SensorSentinel_BOOLEAN_COUNT;
     
     for (uint8_t i = 0; i < count; i++) {
         uint8_t pin = SensorSentinel_boolean_pins[i];
-        pinMode(pin, INPUT);
+        if (pin == 0) continue;
+        pinMode(pin, INPUT_PULLUP);
         if (digitalRead(pin)) {
             result |= (1 << i);
         }
@@ -94,13 +96,33 @@ uint8_t SensorSentinel_read_all_boolean() {
 }
 
 /**
- * @brief Reads all sensor pins into a single structure
+ * @brief Reads all sensor pins and dynamic I2C devices into a single structure
  * 
  * @param readings Pointer to structure where readings will be stored
  */
 void SensorSentinel_read_all_pins(SensorSentinel_pin_readings_t* readings) {
-    SensorSentinel_read_all_analog(readings->analog, 4);
-    readings->boolean = SensorSentinel_read_all_boolean();
+    if (!readings) return;
+    memset(readings, 0, sizeof(SensorSentinel_pin_readings_t));
+
+    // 1. Read all discovered digital bus / I2C sensors into busTelemetry slots
+    SensorSentinel_i2c_read_all(readings->busTelemetry, SensorSentinel_BUS_SLOTS_COUNT);
+    readings->discoveredDevices = SensorSentinel_i2c_get_device_count();
+
+    // 2. Read physical GPIO analog ADC pins (skip if used by I2C bus)
+    int activeSda = SensorSentinel_i2c_get_sda_pin();
+    int activeScl = SensorSentinel_i2c_get_scl_pin();
+
+    for (uint8_t i = 0; i < SensorSentinel_GPIO_ANALOG_COUNT; i++) {
+        uint8_t pin = SensorSentinel_analog_pins[i];
+        if (pin > 0 && pin != activeSda && pin != activeScl) {
+            readings->gpioAnalog[i] = analogRead(pin);
+        } else {
+            readings->gpioAnalog[i] = 0;
+        }
+    }
+
+    // 3. Read physical digital boolean inputs
+    readings->digitalBitmask = SensorSentinel_read_all_boolean();
 }
 
 /**

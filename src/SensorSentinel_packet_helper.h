@@ -19,35 +19,43 @@
 #include <Arduino.h>
 #include "SensorSentinel_pins_helper.h"  // For SensorSentinel_pin_readings_t structure
 
+#define SENSORSENTINEL_PROTOCOL_VERSION 0x01
+
 /**
  * @brief Message types for different packet categories
  */
-#define SensorSentinel_MSG_SENSOR        0x01  // Basic sensor data packet
-#define SensorSentinel_MSG_GNSS         0x02  // GNSS location data packet
+#define SensorSentinel_MSG_SENSOR        0x01  // Strategic Telemetry Packet (48 Bytes)
+#define SensorSentinel_MSG_GNSS          0x02  // GNSS Location Data Packet
+#define SensorSentinel_MSG_ALARM         0x03  // State Transition Alarm Packet
+#define SensorSentinel_MSG_HEARTBEAT     0x04  // System Diagnostic Keepalive
 
 // Configuration
 #define MAX_LORA_PACKET_SIZE 256 // Maximum packet size we can handle
 
 /**
- * @brief Basic sensor packet structure
- * 
- * Contains sensor readings and device status information,
- * but does not include GNSS/location data.
+ * @brief Strategic Standard Sensor Telemetry Packet (48 Bytes)
  */
 typedef struct {
-  // Header information
-  uint8_t messageType;         // Always SensorSentinel_MSG_SENSOR (0x01)
+  // ── 1. Common Protocol Header (18 Bytes) ──────────────────────────────
+  uint8_t  protocolVersion;    // Always SENSORSENTINEL_PROTOCOL_VERSION (0x01)
+  uint8_t  messageType;        // SensorSentinel_MSG_SENSOR (0x01)
+  uint8_t  nodeFlags;          // Power source & operating mode
+  uint8_t  reserved0;          // Alignment
   uint32_t nodeId;             // Unique node identifier (from MAC address)
   uint32_t messageCounter;     // Sequence number
-  uint32_t uptime;             // uptime in seconds
-  uint8_t batteryLevel;        // Battery level (0-100%)
-  uint16_t batteryVoltage;     // Battery voltage in millivolts
+  uint32_t uptime;             // Uptime in seconds
+  uint8_t  batteryLevel;       // Heltec internal 18650 battery (0-100%)
+  uint16_t batteryVoltage;     // Heltec internal 18650 voltage in millivolts
+  uint8_t  reserved1;          // Alignment
 
-  // Sensor data
-  SensorSentinel_pin_readings_t pins;  // All pin readings in a standard format
-  
-  // Reserved for future expansion
-  uint8_t reserved[2];
+  // ── 2. Physical GPIO Tier (10 Bytes) ──────────────────────────────────
+  uint16_t digitalBitmask;     // 16 digital binary flags (D0..D15)
+  uint16_t gpioAnalog[SensorSentinel_GPIO_ANALOG_COUNT]; // 4 Physical ADC Channels (Tanks, Pressures)
+
+  // ── 3. Digital Bus / I2C Tier (18 Bytes) ──────────────────────────────
+  uint16_t busTelemetry[SensorSentinel_BUS_SLOTS_COUNT]; // 8 Telemetry Slots (Wattmeters, Temp/Hum)
+  uint8_t  discoveredSensors;  // Count of discovered I2C sensors
+  uint8_t  reserved2;          // Alignment to 48 bytes
 } __attribute__((packed)) SensorSentinel_sensor_packet_t;
 
 /**
@@ -58,12 +66,16 @@ typedef struct {
  */
 typedef struct {
   // Header information
-  uint8_t messageType;         // Always SensorSentinel_MSG_GNSS (0x02)
+  uint8_t  protocolVersion;    // 0x01
+  uint8_t  messageType;        // SensorSentinel_MSG_GNSS (0x02)
+  uint8_t  nodeFlags;          // Power source & operating mode
+  uint8_t  reserved0;          // Alignment
   uint32_t nodeId;             // Unique node identifier (from MAC address)
   uint32_t messageCounter;     // Sequence number
-  uint32_t uptime;             // uptime in seconds
-  uint8_t batteryLevel;        // Battery level (0-100%)
+  uint32_t uptime;             // Uptime in seconds
+  uint8_t  batteryLevel;       // Battery level (0-100%)
   uint16_t batteryVoltage;     // Battery voltage in millivolts
+  uint8_t  reserved1;
 
   // GNSS/GPS data
   float latitude;              // Degrees
@@ -73,7 +85,7 @@ typedef struct {
   float course;                // Course/heading in degrees (0-359.99)
   
   // Reserved for future expansion
-  uint8_t reserved[2];
+  uint8_t reserved2[2];
 } __attribute__((packed)) SensorSentinel_gnss_packet_t;
 
 /**
@@ -84,10 +96,13 @@ typedef struct {
  */
 typedef union {
   struct {                      // Common header fields for type detection
+    uint8_t protocolVersion;
     uint8_t messageType;
+    uint8_t nodeFlags;
+    uint8_t reserved0;
     uint32_t nodeId;
     uint32_t messageCounter;
-  } __attribute__((packed)) header;  // ← Add this!
+  } __attribute__((packed)) header;
   SensorSentinel_sensor_packet_t sensor;
   SensorSentinel_gnss_packet_t gnss;
 } SensorSentinel_packet_t;

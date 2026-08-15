@@ -5,6 +5,7 @@
 
 #include "SensorSentinel_packet_helper.h"
 #include "heltec_unofficial_revised.h"
+#include "SensorSentinel_i2c_helper.h"
 #include <string.h> // For memcpy
 
 // Add after your existing global variables:
@@ -60,21 +61,31 @@ bool SensorSentinel_init_sensor_packet(SensorSentinel_sensor_packet_t *packet, u
   // Clear the structure first
   memset(packet, 0, sizeof(SensorSentinel_sensor_packet_t));
 
-  // Set message type
+  // Set header information
+  packet->protocolVersion = SENSORSENTINEL_PROTOCOL_VERSION;
   packet->messageType = SensorSentinel_MSG_SENSOR;
-
-  // Set basic information - now uses cached NodeID
-  packet->nodeId = SensorSentinel_generate_node_id(); // ← Already correct!
+#if REPEATER_MODE
+  packet->nodeFlags = 0x80; // Repeater mode
+#else
+  packet->nodeFlags = 0x00; // Battery sender mode
+#endif
+  packet->nodeId = SensorSentinel_generate_node_id();
   packet->messageCounter = counter;
   packet->uptime = millis() / 1000; // Seconds since boot
 
-  // Get battery information
+  // 1. Read physical GPIOs and digital bus telemetry
+  SensorSentinel_pin_readings_t pinReadings;
+  SensorSentinel_read_all_pins(&pinReadings);
+
+  packet->digitalBitmask = pinReadings.digitalBitmask;
+  memcpy(packet->gpioAnalog, pinReadings.gpioAnalog, sizeof(packet->gpioAnalog));
+  memcpy(packet->busTelemetry, pinReadings.busTelemetry, sizeof(packet->busTelemetry));
+  packet->discoveredSensors = pinReadings.discoveredDevices;
+
+  // 2. Read internal 18650 supply
   float batteryVolts = heltec_vbat();
   packet->batteryVoltage = (uint16_t)(batteryVolts * 1000.0f);
   packet->batteryLevel = heltec_battery_percent(batteryVolts);
-
-  // Get pin readings
-  SensorSentinel_read_all_pins(&packet->pins);
 
   return true;
 }
@@ -192,34 +203,35 @@ bool SensorSentinel_print_packet_info(const void *packet, size_t length)
     const SensorSentinel_sensor_packet_t *sensorPacket = (const SensorSentinel_sensor_packet_t *)packet;
 
     // Print header information
-    Serial.println("Type: Sensor Data");
+    Serial.println("Type: Sensor Telemetry (Strategic Standard 48B)");
+    Serial.printf("Protocol: v%d | Flags: 0x%02X\n", sensorPacket->protocolVersion, sensorPacket->nodeFlags);
     Serial.printf("Node ID: 0x%08X\n", sensorPacket->nodeId);
     Serial.printf("Msg #: %u\n", sensorPacket->messageCounter);
     Serial.printf("Uptime: %u seconds\n", sensorPacket->uptime);
-    Serial.printf("Battery: %u%% (%.2fV)\n",
+    Serial.printf("Node 18650 Battery: %u%% (%.2fV)\n",
                   sensorPacket->batteryLevel,
                   sensorPacket->batteryVoltage / 1000.0f);
 
-    // Print analog pin readings
-    Serial.println("\nAnalog Readings:");
+    // Print physical GPIO analog readings
+    Serial.println("\nPhysical GPIO Analog Readings:");
     for (int i = 0; i < 4; i++)
     {
-      Serial.printf("  A%d: %u\n", i, sensorPacket->pins.analog[i]);
+      Serial.printf("  A%d: %u\n", i, sensorPacket->gpioAnalog[i]);
     }
 
     // Print digital pin readings
-    Serial.println("\nDigital Readings:");
-    for (int i = 0; i < 8; i++)
+    Serial.println("\nDigital Binary Readings (16-bit):");
+    for (int i = 0; i < 16; i++)
     {
-      bool pinState = (sensorPacket->pins.boolean >> i) & 0x01;
+      bool pinState = (sensorPacket->digitalBitmask >> i) & 0x01;
       Serial.printf("  D%d: %d\n", i, pinState);
     }
 
-    // Print reserved bytes
-    Serial.println("\nReserved Bytes:");
-    for (int i = 0; i < sizeof(sensorPacket->reserved); i++)
+    // Print digital bus telemetry readings
+    Serial.printf("\nDigital Bus Telemetry (Discovered I2C Devices: %d):\n", sensorPacket->discoveredSensors);
+    for (int i = 0; i < 8; i++)
     {
-      Serial.printf("  [%d]: 0x%02X\n", i, sensorPacket->reserved[i]);
+      Serial.printf("  Bus Slot %d: %u\n", i, sensorPacket->busTelemetry[i]);
     }
 
     break;
@@ -253,9 +265,9 @@ bool SensorSentinel_print_packet_info(const void *packet, size_t length)
 
     // Print reserved bytes
     Serial.println("\nReserved Bytes:");
-    for (int i = 0; i < sizeof(gnssPacket->reserved); i++)
+    for (int i = 0; i < sizeof(gnssPacket->reserved2); i++)
     {
-      Serial.printf("  [%d]: 0x%02X\n", i, gnssPacket->reserved[i]);
+      Serial.printf("  [%d]: 0x%02X\n", i, gnssPacket->reserved2[i]);
     }
     break;
   }
