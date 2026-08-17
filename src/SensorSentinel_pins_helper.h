@@ -82,6 +82,16 @@ void SensorSentinel_print_available_pins();
  * - GPIO33, 34, 35: Available on Header J2
  * - GPIO39-42, 46: Available on Header J3
  * - Note: GPIO35 is also used for LED Write Ctrl
+ *
+ * Which digital slots are actually usable for a simple switch to GND
+ * (verified on hardware 2026-08-17, V3.2):
+ * - D0/D1 (33,34) and D5/D6 (41,42): swept by I2C auto-discovery as candidate
+ *   SDA/SCL pairs, so they can be driven during a scan. Avoid.
+ * - D2 (35): also drives LED Write Ctrl. Avoid.
+ * - D3 (39): ESP32-S3 JTAG MTCK. Tested and it does NOT respond to being tied
+ *   to GND despite INPUT_PULLUP - it reads high in both states. Avoid.
+ * - D7 (46): ESP32-S3 strapping pin. Avoid.
+ * - D4 (40): free and verified working. Use this one first.
  * 
  * Wireless Tracker:
  * - GPIO4-7: ADC1 channels available on Header J3

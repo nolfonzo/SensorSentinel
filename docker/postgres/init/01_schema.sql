@@ -103,6 +103,26 @@ CREATE TRIGGER trg_create_device_pins
     AFTER INSERT ON devices
     FOR EACH ROW EXECUTE FUNCTION create_device_pins();
 
+-- Keep devices.last_seen honest. It is a field that looks authoritative during
+-- diagnosis, so it must not drift: driving it from the events insert means it
+-- stays correct regardless of what changes in the Node-RED flow.
+CREATE OR REPLACE FUNCTION update_device_last_seen()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE devices
+       SET last_seen = NEW.created_at,
+           updated_at = NOW()
+     WHERE id = NEW.device_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_update_last_seen
+    AFTER INSERT ON events
+    FOR EACH ROW
+    WHEN (NEW.device_id IS NOT NULL)
+    EXECUTE FUNCTION update_device_last_seen();
+
 -- Event retention: function to prune old events (call from cron/Node-RED)
 CREATE OR REPLACE FUNCTION prune_events(days_to_keep INTEGER DEFAULT 30)
 RETURNS INTEGER AS $$
