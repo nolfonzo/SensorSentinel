@@ -601,8 +601,8 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": true,
-        "onceDelay": 0.5,
+        "once": false,
+        "onceDelay": 0,
         "topic": "",
         "payload": "\nALTER TABLE digital_pins DROP CONSTRAINT IF EXISTS digital_pins_pin_index_check;\nALTER TABLE digital_pins ADD CONSTRAINT digital_pins_pin_index_check CHECK (pin_index BETWEEN 0 AND 15);\n\nCREATE TABLE IF NOT EXISTS bus_pins (\n    id SERIAL PRIMARY KEY,\n    device_id INTEGER NOT NULL REFERENCES devices(id) ON DELETE CASCADE,\n    pin_index SMALLINT NOT NULL CHECK (pin_index BETWEEN 0 AND 7),\n    label VARCHAR(100) DEFAULT \"\",\n    low_threshold NUMERIC,\n    high_threshold NUMERIC,\n    alert_level VARCHAR(10) DEFAULT \"None\" CHECK (alert_level IN (\"None\", \"Low\", \"Medium\", \"High\")),\n    UNIQUE(device_id, pin_index)\n);\n\nCREATE OR REPLACE FUNCTION create_device_pins()\nRETURNS TRIGGER AS $$\nBEGIN\n    INSERT INTO digital_pins (device_id, pin_index)\n    SELECT NEW.id, i FROM generate_series(0, 15) AS i\n    ON CONFLICT DO NOTHING;\n\n    INSERT INTO analog_pins (device_id, pin_index)\n    SELECT NEW.id, i FROM generate_series(0, 3) AS i\n    ON CONFLICT DO NOTHING;\n\n    INSERT INTO bus_pins (device_id, pin_index)\n    SELECT NEW.id, i FROM generate_series(0, 7) AS i\n    ON CONFLICT DO NOTHING;\n\n    RETURN NEW;\nEND;\n$$ LANGUAGE plpgsql;\n\nDO $$\nDECLARE\n    v_owner_id INT;\n    v_device_id INT;\nBEGIN\n    INSERT INTO owners (name, email, notify_via)\n    VALUES (\"nolfonzo\", \"nolfonzo@gmail.com\", \"email\")\n    ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, notify_via = EXCLUDED.notify_via\n    RETURNING id INTO v_owner_id;\n\n    IF v_owner_id IS NULL THEN\n        SELECT id INTO v_owner_id FROM owners WHERE email = \"nolfonzo@gmail.com\" LIMIT 1;\n    END IF;\n\n    INSERT INTO devices (node_id, display_name, owner_id)\n    VALUES (2697689064, \"Heltec Wattmeter (Pi4)\", v_owner_id)\n    ON CONFLICT (node_id) DO UPDATE SET owner_id = v_owner_id, display_name = \"Heltec Wattmeter (Pi4)\"\n    RETURNING id INTO v_device_id;\n\n    IF v_device_id IS NULL THEN\n        SELECT id INTO v_device_id FROM devices WHERE node_id = 2697689064 LIMIT 1;\n    END IF;\n\n    INSERT INTO bus_pins (device_id, pin_index)\n    SELECT v_device_id, i FROM generate_series(0, 7) AS i\n    ON CONFLICT DO NOTHING;\n\n    UPDATE bus_pins\n    SET label = \"Boat Battery Voltage\",\n        low_threshold = 12100,\n        high_threshold = 14500,\n        alert_level = \"High\"\n    WHERE device_id = v_device_id AND pin_index = 0;\nEND $$;\n",
         "payloadType": "str",
@@ -823,10 +823,10 @@
                 "p": "payload"
             }
         ],
-        "repeat": "5",
+        "repeat": "",
         "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
+        "once": false,
+        "onceDelay": 0,
         "topic": "test/ping",
         "payload": "ping",
         "payloadType": "str",
@@ -892,10 +892,10 @@
                 "p": "payload"
             }
         ],
-        "repeat": "2",
+        "repeat": "",
         "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
+        "once": false,
+        "onceDelay": 0,
         "topic": "",
         "payload": "",
         "payloadType": "date",
