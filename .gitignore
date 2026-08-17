@@ -31,3 +31,15 @@ docker/nodered/data/.npm/
 # Timestamped backups taken before editing configs/flows in place
 *.bak
 *.bak-*
+
+# Gmail OAuth material used by the Node-RED mail helpers. These are live
+# credentials and must never be committed.
+docker/nodered/data/credentials.json
+docker/nodered/data/token.json
+
+# Node-RED writes runtime state (including credentials) back into these on
+# every editor deploy - which is how an app password ended up in a public
+# commit on 2026-08-17.
+docker/nodered/data/flows_cred.json
+docker/nodered/data/.sessions.json
+docker/nodered/data/*.bak-*

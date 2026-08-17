@@ -86,7 +86,7 @@
         "type": "function",
         "z": "alerts-flow-tab",
         "name": "Build DB Queries",
-        "func": "const payload = msg.payload;\nif (!payload || !payload.nodeId) return null;\nif (payload.error) return null;\n\nmsg.nodeId = payload.nodeId;\nmsg.sensorData = payload;\n\nmsg.query = 'SELECT d.id as device_id, d.display_name, o.name as owner_name, o.email as owner_email, o.phone as owner_phone, o.notify_via, ' +\n            'json_agg(DISTINCT jsonb_build_object('pin_index', dp.pin_index, 'label', dp.label, 'trigger', dp.trigger, 'alert_level', dp.alert_level)) FILTER (WHERE dp.label != '' AND dp.trigger != 'None') as digital_pins, ' +\n            'json_agg(DISTINCT jsonb_build_object('pin_index', ap.pin_index, 'label', ap.label, 'low_threshold', ap.low_threshold, 'high_threshold', ap.high_threshold, 'alert_level', ap.alert_level)) FILTER (WHERE ap.label != '' AND ap.alert_level != 'None') as analog_pins, ' +\n            'json_agg(DISTINCT jsonb_build_object('pin_index', bp.pin_index, 'label', bp.label, 'low_threshold', bp.low_threshold, 'high_threshold', bp.high_threshold, 'alert_level', bp.alert_level)) FILTER (WHERE bp.label != '' AND bp.alert_level != 'None') as bus_pins ' +\n            'FROM devices d ' +\n            'LEFT JOIN owners o ON d.owner_id = o.id ' +\n            'LEFT JOIN digital_pins dp ON dp.device_id = d.id ' +\n            'LEFT JOIN analog_pins ap ON ap.device_id = d.id ' +\n            'LEFT JOIN bus_pins bp ON bp.device_id = d.id ' +\n            'WHERE d.node_id = ' + chr(36) + '1 ' +\n            'GROUP BY d.id, d.display_name, o.name, o.email, o.phone, o.notify_via;';\n\nmsg.params = [String(payload.nodeId)];\nreturn msg;",
+        "func": "const payload = msg.payload;\nif (!payload || !payload.nodeId) return null;\nif (payload.error) return null;\n\nmsg.nodeId = payload.nodeId;\nmsg.sensorData = payload;\n\nmsg.query = `SELECT d.id as device_id, d.display_name, o.name as owner_name, o.email as owner_email, o.phone as owner_phone, o.notify_via,\n  json_agg(DISTINCT jsonb_build_object('pin_index', dp.pin_index, 'label', dp.label, 'trigger', dp.trigger, 'alert_level', dp.alert_level)) FILTER (WHERE dp.label != '' AND dp.trigger != 'None') as digital_pins,\n  json_agg(DISTINCT jsonb_build_object('pin_index', ap.pin_index, 'label', ap.label, 'low_threshold', ap.low_threshold, 'high_threshold', ap.high_threshold, 'alert_level', ap.alert_level)) FILTER (WHERE ap.label != '' AND ap.alert_level != 'None') as analog_pins,\n  json_agg(DISTINCT jsonb_build_object('pin_index', bp.pin_index, 'label', bp.label, 'low_threshold', bp.low_threshold, 'high_threshold', bp.high_threshold, 'alert_level', bp.alert_level)) FILTER (WHERE bp.label != '' AND bp.alert_level != 'None') as bus_pins\n  FROM devices d\n  LEFT JOIN owners o ON d.owner_id = o.id\n  LEFT JOIN digital_pins dp ON dp.device_id = d.id\n  LEFT JOIN analog_pins ap ON ap.device_id = d.id\n  LEFT JOIN bus_pins bp ON bp.device_id = d.id\n  WHERE d.node_id = $1\n  GROUP BY d.id, d.display_name, o.name, o.email, o.phone, o.notify_via;`;\n\nmsg.params = [String(payload.nodeId)];\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -135,8 +135,7 @@
         "y": 120,
         "wires": [
             [
-                "db-upsert-alert",
-                "send-notification"
+                "db-upsert-alert"
             ],
             [
                 "db-log-event"
@@ -187,7 +186,7 @@
         "type": "function",
         "z": "alerts-flow-tab",
         "name": "Send Notification",
-        "func": "const alert = msg.alert;\nif (!alert) {\n    node.warn('send-notification: no alert data');\n    return null;\n}\n\nconst user = 'nolfonzo@gmail.com';\nconst pass = 'qbgdedewllzvjhid';\nconst recipient = alert.ownerEmail || 'nolfonzo@gmail.com';\n\nconst tag = alert.action === 'RESOLVED' ? '[RESOLVED]' : '[ALERT]';\nconst subject = tag + ' ' + alert.pinLabel + ' on ' + alert.deviceName;\nconst body = 'SensorSentinel Alert Notification\n\n' +\n             'Owner: ' + (alert.ownerName || 'User') + '\n' +\n             'Device: ' + alert.deviceName + ' (Node ID: ' + alert.nodeId + ')\n' +\n             'Sensor: ' + alert.pinLabel + '\n' +\n             'Status: ' + alert.alertMessage + '\n' +\n             'Alert Level: ' + alert.alertLevel + '\n' +\n             'Timestamp: ' + new Date().toISOString() + '\n';\n\ntry {\n    const transporter = nodemailer.createTransport({\n        host: 'smtp.gmail.com',\n        port: 465,\n        secure: true,\n        auth: {\n            user: user,\n            pass: pass\n        }\n    });\n\n    transporter.sendMail({\n        from: '\"SensorSentinel\" <' + user + '>',\n        to: recipient,\n        subject: subject,\n        text: body\n    }).then(info => {\n        node.warn('SUCCESS: Sent ' + tag + ' email to ' + recipient + ' (msgId: ' + info.messageId + ')');\n    }).catch(err => {\n        node.error('ERROR: Failed sending to ' + recipient + ': ' + err.message);\n    });\n} catch(e) {\n    node.error('Nodemailer exception: ' + e.message);\n}\n\nreturn msg;",
+        "func": "const alert = msg.alert;\nif (!alert) {\n    node.warn('send-notification: no alert data');\n    return null;\n}\n\nconst user = env.get('NOTIFY_EMAIL_USER');\nconst pass = env.get('NOTIFY_EMAIL_PASS');\nconst recipient = alert.ownerEmail || user;\n\nif (!pass) {\n    node.error('NOTIFY_EMAIL_PASS not set in the environment - cannot send mail');\n    return null;\n}\n\nconst tag = alert.action === 'RESOLVED' ? '[RESOLVED]' : '[ALERT]';\nconst subject = tag + ' ' + alert.pinLabel + ' on ' + alert.deviceName;\nconst body = `SensorSentinel Alert Notification\n\nOwner: ${alert.ownerName || 'User'}\nDevice: ${alert.deviceName} (Node ID: ${alert.nodeId})\nSensor: ${alert.pinLabel}\nStatus: ${alert.alertMessage}\nAlert Level: ${alert.alertLevel}\nTimestamp: ${new Date().toISOString()}\n`;\n\ntry {\n    const transporter = nodemailer.createTransport({\n        host: 'smtp.gmail.com',\n        port: 465,\n        secure: true,\n        auth: { user: user, pass: pass }\n    });\n\n    transporter.sendMail({\n        from: '\"SensorSentinel\" <' + user + '>',\n        to: recipient,\n        subject: subject,\n        text: body\n    }).then(info => {\n        node.warn('SUCCESS: Sent ' + tag + ' email to ' + recipient + ' (msgId: ' + info.messageId + ')');\n    }).catch(err => {\n        node.error('ERROR: Failed sending to ' + recipient + ': ' + err.message);\n    });\n} catch(e) {\n    node.error('Nodemailer exception: ' + e.message);\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": "10",
         "noerr": 0,
@@ -617,7 +616,7 @@
     },
     {
         "id": "seed-postgres-node",
-        "type": "postgres",
+        "type": "postgresql",
         "z": "admin-seed-tab",
         "name": "Execute Seed SQL",
         "query": "",
@@ -667,7 +666,7 @@
     },
     {
         "id": "http-admin-query",
-        "type": "postgres",
+        "type": "postgresql",
         "z": "admin-seed-tab",
         "name": "Query DB Dump",
         "query": "SELECT json_build_object(\n    'owners', (SELECT json_agg(o) FROM owners o),\n    'devices', (SELECT json_agg(d) FROM devices d),\n    'analog_pins', (SELECT json_agg(a) FROM analog_pins a),\n    'alerts', (SELECT json_agg(al) FROM alerts al),\n    'recent_events', (SELECT json_agg(e) FROM (SELECT * FROM events ORDER BY id DESC LIMIT 5) e)\n) as dump;",

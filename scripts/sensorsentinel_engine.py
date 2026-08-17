@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 import paho.mqtt.client as mqtt
-import json, base64, struct, time, smtplib, imaplib
+import os, json, base64, struct, time, smtplib, imaplib
 from email.mime.text import MIMEText
 
 MQTT_BROKER = '192.168.9.77'
 MQTT_PORT = 1883
-GMAIL_USER = 'nolfonzo@gmail.com'
-GMAIL_PASS = 'qbgdedewllzvjhid'
+GMAIL_USER = os.environ.get('NOTIFY_EMAIL_USER', 'nolfonzo@gmail.com')
+# Never hardcode this. The app password that used to sit here was committed
+# to a public repo, detected by GitGuardian, and had to be revoked
+# (2026-08-17). Set NOTIFY_EMAIL_PASS in the environment instead.
+GMAIL_PASS = os.environ.get('NOTIFY_EMAIL_PASS')
 RECIPIENT = 'nolfonzo@gmail.com'
 
 # Device & Threshold Profiles (Mirrors NocoDB / PostgreSQL Configuration)
