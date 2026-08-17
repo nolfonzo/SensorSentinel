@@ -17,7 +17,10 @@ docker/nodered/data/.config.*
 docker/nodered/data/flows_cred.json
 docker/nodered/data/.flows*.backup
 docker/nodered/data/package-lock.json
-docker/nodered/data/settings.js
+# settings.js is tracked on purpose: it holds deliberate configuration
+# (contextStorage, functionExternalModules) whose loss breaks things
+# silently. It contains no secrets - keep it that way; if a
+# credentialSecret is ever added, move it to an env var.
 docker/nodered/data/lib/
 
 # Runtime data volumes (not config)
@@ -43,3 +46,6 @@ docker/nodered/data/token.json
 docker/nodered/data/flows_cred.json
 docker/nodered/data/.sessions.json
 docker/nodered/data/*.bak-*
+
+# Node-RED runtime state: per-pin alert state, rewritten constantly
+docker/nodered/data/context/
