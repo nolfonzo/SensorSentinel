@@ -960,5 +960,60 @@
                 "send-notification"
             ]
         ]
+    },
+    {
+        "id": "wd-tick",
+        "type": "inject",
+        "z": "alerts-flow-tab",
+        "name": "Watchdog tick (5 min)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "*/5 * * * *",
+        "once": false,
+        "onceDelay": 0,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "wires": [
+            [
+                "wd-query"
+            ]
+        ]
+    },
+    {
+        "id": "wd-query",
+        "type": "postgresql",
+        "z": "alerts-flow-tab",
+        "name": "Query Device Liveness",
+        "postgreSQLConfig": "postgres-config",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "query": "SELECT d.id AS device_id,\n       d.display_name,\n       d.last_seen,\n       d.stale_after_minutes,\n       o.name  AS owner_name,\n       o.email AS owner_email,\n       o.notify_via,\n       ROUND(EXTRACT(EPOCH FROM (NOW() - d.last_seen)) / 60)::int AS silent_minutes,\n       (d.last_seen < NOW() - (d.stale_after_minutes || ' minutes')::INTERVAL) AS is_stale\n  FROM devices d\n  LEFT JOIN owners o ON d.owner_id = o.id\n WHERE d.watchdog_enabled\n   AND d.last_seen IS NOT NULL;",
+        "wires": [
+            [
+                "wd-check"
+            ]
+        ]
+    },
+    {
+        "id": "wd-check",
+        "type": "function",
+        "z": "alerts-flow-tab",
+        "name": "Check Device Liveness",
+        "func": "// A sensor that goes quiet looks exactly like a sensor reporting \"all fine\",\n// so silence has to raise an alarm of its own. Alerts on the transition only,\n// so a dead node does not mail every five minutes.\nconst rows = msg.payload || [];\n\nfor (const d of rows) {\n    const key = \"state_watchdog_\" + d.device_id;\n    const prev = flow.get(key) || \"ALIVE\";\n    const now = d.is_stale ? \"SILENT\" : \"ALIVE\";\n    if (now === prev) { continue; }\n    flow.set(key, now);\n\n    const mins = d.silent_minutes;\n    const human = mins >= 1440 ? Math.round(mins / 1440) + \" days\"\n                : mins >= 60   ? Math.round(mins / 60) + \" hours\"\n                :                mins + \" minutes\";\n\n    const alert = {\n        deviceId: d.device_id,\n        ownerName: d.owner_name || \"nolfonzo\",\n        ownerEmail: d.owner_email || \"nolfonzo@gmail.com\",\n        notifyVia: d.notify_via || \"email\",\n        deviceName: d.display_name,\n        nodeId: d.device_id,\n        pinLabel: \"Device Offline\",\n        state: now,\n        alertMessage: now === \"SILENT\"\n            ? (\"NO CONTACT: no packet received for \" + human +\n               \" (threshold: \" + d.stale_after_minutes + \" min). The node may have a flat \" +\n               \"battery, water ingress, or a radio/gateway fault - its sensors are NOT being monitored.\")\n            : (\"RESOLVED: device is reporting again after \" + human + \" of silence\"),\n        alertLevel: now === \"SILENT\" ? \"High\" : \"Info\",\n        action: now === \"SILENT\" ? \"TRIGGERED\" : \"RESOLVED\",\n    };\n\n    node.send({\n        query: \"INSERT INTO alerts (device_id, pin_label, alert_message, alert_level) VALUES ($1, $2, $3, $4) ON CONFLICT (device_id, pin_label) DO UPDATE SET alert_message = EXCLUDED.alert_message, alert_level = EXCLUDED.alert_level, count = alerts.count + 1, updated_at = NOW()\",\n        params: [alert.deviceId, alert.pinLabel, alert.alertMessage, alert.alertLevel],\n        payload: \"\",\n        alert: alert,\n    });\n    node.warn(\"watchdog: \" + d.display_name + \" -> \" + now + \" (\" + human + \")\");\n}\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "wires": [
+            [
+                "db-upsert-alert"
+            ]
+        ]
     }
 ]

@@ -16,6 +16,11 @@ CREATE TABLE devices (
     display_name VARCHAR(100) NOT NULL,
     owner_id INTEGER REFERENCES owners(id) ON DELETE SET NULL,
     last_seen TIMESTAMP,
+    -- Watchdog: a node that goes quiet looks identical to a node reporting
+    -- "all fine", so silence has to raise an alarm of its own. Per-device
+    -- because nodes transmit at different intervals.
+    stale_after_minutes INTEGER DEFAULT 30,
+    watchdog_enabled BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
