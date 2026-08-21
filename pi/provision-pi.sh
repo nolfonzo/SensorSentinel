@@ -82,8 +82,15 @@ say "target: $HOST  ($MODEL)"
 [[ -n "$TS_NAME" ]] || TS_NAME="$(remote hostname)"
 
 # ── packages ────────────────────────────────────────────────────────────────
-say "installing packages (slow on a Zero - a few minutes)"
-rsudo 'DEBIAN_FRONTEND=noninteractive apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq mosquitto mosquitto-clients' >/dev/null
+# apt-get update alone takes a minute or two on a Zero, and re-running this
+# script is meant to be cheap - so skip the whole step when the packages are
+# already there rather than refreshing lists to install nothing.
+if remote 'command -v mosquitto_passwd >/dev/null && test -x /usr/sbin/mosquitto' 2>/dev/null; then
+  say "packages already installed - skipping apt"
+else
+  say "installing packages (slow on a Zero - a few minutes)"
+  rsudo 'DEBIAN_FRONTEND=noninteractive apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq mosquitto mosquitto-clients' >/dev/null
+fi
 remote 'command -v tailscale >/dev/null' 2>/dev/null \
   || rsudo 'curl -fsSL https://tailscale.com/install.sh | sh' >/dev/null
 
@@ -97,6 +104,7 @@ rm -f /tmp/.jetty.conf
 # privileges. Both are load-bearing.
 rsudo "mv /tmp/jetty.conf /etc/mosquitto/conf.d/jetty.conf
        touch /etc/mosquitto/passwd
+       chmod 0700 /etc/mosquitto/passwd
        mosquitto_passwd -b /etc/mosquitto/passwd '$MQTT_USER' '$MQTT_PASS'
        chmod 0700 /etc/mosquitto/passwd
        chown mosquitto:mosquitto /etc/mosquitto/passwd
