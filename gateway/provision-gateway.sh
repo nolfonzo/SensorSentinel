@@ -95,6 +95,7 @@ PROFILE_DIR="$HERE/profiles/$PROFILE"
 SSH_OPTS=(
   -o StrictHostKeyChecking=no
   -o UserKnownHostsFile=/dev/null
+  -o LogLevel=ERROR
   -o KexAlgorithms=+diffie-hellman-group14-sha1,diffie-hellman-group1-sha1
   -o HostKeyAlgorithms=+ssh-rsa
   -o PubkeyAcceptedKeyTypes=+ssh-rsa

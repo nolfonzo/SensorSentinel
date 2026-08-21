@@ -67,8 +67,8 @@ done
 [[ -n "$HOST" ]]      || die "--host is required"
 [[ -n "$MQTT_PASS" ]] || die "--mqtt-pass is required"
 
-SSH=(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=15)
-SCP=(scp -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q)
+SSH=(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=15)
+SCP=(scp -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -q)
 
 remote()  { "${SSH[@]}" "$SSH_USER@$HOST" "$@"; }
 # sudo -S so the password arrives on stdin rather than the command line, where

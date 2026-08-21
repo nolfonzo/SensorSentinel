@@ -142,7 +142,7 @@ if [[ -z "$GATEWAY" ]]; then
     # Ask each candidate its name and drop the ones already recorded.
     UNKNOWN=""
     for c in $CANDS; do
-      nm=$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+      nm=$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
             -o KexAlgorithms=+diffie-hellman-group14-sha1,diffie-hellman-group1-sha1 \
             -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedKeyTypes=+ssh-rsa -o ConnectTimeout=8 \
             "root@$c" 'uci get wireless.ap.ssid' 2>/dev/null)
@@ -176,7 +176,7 @@ if [[ -z "$PI" ]]; then
   PI="${PI#AMBIGUOUS:}"
   CONFIRMED=""
   for cand in $PI; do
-    model=$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+    model=$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
              -o ConnectTimeout=5 "$SSH_USER_PI@$cand" 'tr -d "\0" < /proc/device-tree/model' 2>/dev/null)
     case "$model" in *"Raspberry Pi Zero"*) CONFIRMED="$CONFIRMED $cand" ;; esac
   done
@@ -195,7 +195,7 @@ fi
 # NOTE: BatchMode is deliberately NOT in here. It disables password
 # authentication outright, so sshpass can never feed the password - it is added
 # only to the key-auth probe below, where refusing to prompt is the point.
-GW_SSH=(-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+GW_SSH=(-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR
         -o KexAlgorithms=+diffie-hellman-group14-sha1,diffie-hellman-group1-sha1
         -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedKeyTypes=+ssh-rsa -o ConnectTimeout=15)
 
@@ -245,7 +245,7 @@ fi
 # Falls back to the factory MAC-derived name if the Pi is not named to the
 # pi0-<site> pattern, so an oddly-named Pi cannot produce a silly gateway name.
 if [[ -z "$NAME" ]]; then
-  PI_HOST="$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+  PI_HOST="$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
              -o ConnectTimeout=10 "$SSH_USER_PI@$PI" hostname 2>/dev/null)"
   SITE="${PI_HOST#pi0-}"; SITE="${SITE#pi-}"
   if [[ -n "$SITE" && "$SITE" != "$PI_HOST" ]]; then
@@ -288,7 +288,7 @@ hdr "pairing"
 # tunnel is the only way back in - so refuse to take the step until the tunnel
 # is demonstrably working. Getting this wrong at a site means a drive back with
 # a USB cable, or a reflash.
-TS_IP="$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+TS_IP="$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
          -o ConnectTimeout=10 "nolfonzo@$PI" 'tailscale ip -4 2>/dev/null' 2>/dev/null | tr -d '[:space:]')"
 if [[ -z "$TS_IP" ]]; then
   echo
@@ -302,7 +302,7 @@ if [[ -z "$TS_IP" ]]; then
       https://login.tailscale.com/admin/settings/keys"
 fi
 say "tunnel verified: the Pi is reachable at $TS_IP"
-PI_SSH=(-o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=15)
+PI_SSH=(-o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=15)
 pisudo() { printf '%s\n' "$PI_SUDO" | ssh "${PI_SSH[@]}" "nolfonzo@$PI" "sudo -S bash -c '$1'" 2>&1 | grep -v '^\[sudo\]' || true; }
 
 # Static address on the gateway's LAN: the gateway can only be given an IP for
@@ -314,7 +314,14 @@ pisudo "nmcli connection delete ss-gateway >/dev/null 2>&1 || true
           wifi-sec.key-mgmt wpa-psk wifi-sec.psk '$AP_PASS' \
           ipv4.method manual ipv4.addresses $PI_STATIC/24 ipv4.gateway $GW_LAN ipv4.dns $GW_LAN \
           connection.autoconnect yes connection.autoconnect-priority 10 >/dev/null
-        ${AP_BSSID:+nmcli connection modify ss-gateway 802-11-wireless.bssid '$AP_BSSID'}"
+        ${AP_BSSID:+nmcli connection modify ss-gateway 802-11-wireless.bssid '$AP_BSSID'}
+        # Creating the profile is not enough. autoconnect-priority decides which
+        # network to pick when connecting; it does not make NetworkManager
+        # abandon one that is already working. Without this the gateway moves to
+        # 192.168.8.2 and the Pi stays on the house WiFi, so nothing can reach
+        # the broker and telemetry stops.
+        nmcli connection up ss-gateway >/dev/null 2>&1 || true
+        sleep 12"
 
 # The watchdog restarts the gateway's forwarder over SSH, so it needs a key.
 say "installing the Pi's key on the gateway (for the watchdog)"
@@ -325,7 +332,7 @@ hdr "verifying the pair"
 # The Pi has just changed networks. Confirm the tunnel survived the move -
 # if it did not, say so now while the device is still on the bench.
 sleep 20
-if ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+if ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
        -o ConnectTimeout=15 "nolfonzo@$TS_IP" 'true' 2>/dev/null; then
   say "reachable over Tailscale at $TS_IP after the move"
 else
