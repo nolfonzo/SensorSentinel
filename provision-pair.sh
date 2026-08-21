@@ -237,6 +237,25 @@ else
   AP_PASS_GENERATED=0
 fi
 
+# The gateway takes its name from the Pi it is paired with: pi0-north gives
+# gateway-north. Derived rather than typed, so there is nothing to get wrong
+# and nothing to remember, but the pair is obvious at a glance - in a phone's
+# WiFi list, on the LAN, and in the register.
+#
+# Falls back to the factory MAC-derived name if the Pi is not named to the
+# pi0-<site> pattern, so an oddly-named Pi cannot produce a silly gateway name.
+if [[ -z "$NAME" ]]; then
+  PI_HOST="$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+             -o ConnectTimeout=10 "$SSH_USER_PI@$PI" hostname 2>/dev/null)"
+  SITE="${PI_HOST#pi0-}"; SITE="${SITE#pi-}"
+  if [[ -n "$SITE" && "$SITE" != "$PI_HOST" ]]; then
+    NAME="gateway-$SITE"
+    say "naming the gateway '$NAME' (from the Pi's hostname '$PI_HOST')"
+  else
+    say "Pi hostname '$PI_HOST' is not pi0-<site>, keeping the factory name"
+  fi
+fi
+
 hdr "configuring the gateway"
 "$HERE/gateway/provision-gateway.sh" \
   --host "$GATEWAY" --ssh-pass "$GW_SSH_PASS" --profile "$PROFILE" \
