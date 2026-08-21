@@ -15,7 +15,8 @@
 # uplink. Everything else is discovered or derived.
 #
 # Usage:
-#   ./provision-pair.sh --bench          # at the bench: finds both, uses BENCH_SSID
+#   ./provision-pair.sh --bench --pi pi0-north     # name it if you have several
+#   ./provision-pair.sh --bench                    # or let it find them
 #
 # or explicitly:
 #   ./provision-pair.sh --gateway 192.168.9.130 --pi 192.168.9.145 \
@@ -65,6 +66,27 @@ while [[ $# -gt 0 ]]; do
     *) die "unknown option: $1" ;;
   esac
 done
+
+# Names are better than discovery when you know them - and you do, because you
+# set the Pi's hostname when you flashed it. Accepts "pi0-north", "pi0-north.local"
+# or a bare address, and resolves the first two over mDNS. With several Zeros on
+# a bench this is the reliable way to say which one you mean.
+resolve_name() {
+  local v="$1"
+  case "$v" in
+    ''|*[!0-9.]*) : ;;              # not a bare IPv4 - fall through and resolve
+    *) echo "$v"; return 0 ;;       # looks like an address, use as-is
+  esac
+  local n="$v"
+  case "$n" in *.local) : ;; *) n="$n.local" ;; esac
+  local ip
+  ip=$(getent hosts "$n" 2>/dev/null | awk '{print $1; exit}')
+  [[ -n "$ip" ]] || die "could not resolve '$v' (tried $n) - is it powered up and on the network?"
+  say "$v → $ip"
+  echo "$ip"
+}
+[[ -n "$GATEWAY" ]] && GATEWAY="$(resolve_name "$GATEWAY")"
+[[ -n "$PI" ]]      && PI="$(resolve_name "$PI")"
 
 # Discovery, so neither address has to be known. The gateway answers on
 # 192.168.8.1 whenever you are joined to its own AP, but at the bench both
