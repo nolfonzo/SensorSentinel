@@ -106,16 +106,31 @@ SSH_OPTS=(
 
 # Prefer key auth; fall back to the password only if a key does not work. That
 # way an already-provisioned gateway with your key installed needs no password.
+# Three ways in, tried in order, so the same command works against a factory
+# unit and one that has already been provisioned - without editing the env
+# between them:
+#   1. your SSH key, installed during provisioning
+#   2. the vendor default, for a unit out of the box
+#   3. the password provisioning rotates it to
 if ssh -o BatchMode=yes "${SSH_OPTS[@]}" "$SSH_USER@$HOST" true 2>/dev/null; then
   say "auth: ssh key"
   RSH=(ssh "${SSH_OPTS[@]}")
   RCP=(scp -O "${SSH_OPTS[@]}")
 else
-  command -v sshpass >/dev/null || die "key auth failed and sshpass is not installed"
+  command -v sshpass >/dev/null || die "key auth failed and sshpass is not installed.
+  Either install sshpass, or run ssh-copy-id to this gateway once from this machine."
+  FOUND=""
+  for candidate in "$SSH_PASS" "${GW_ROOT_PASS:-}"; do
+    [[ -z "$candidate" ]] && continue
+    if SSHPASS="$candidate" sshpass -e ssh "${SSH_OPTS[@]}" -o PubkeyAuthentication=no "$SSH_USER@$HOST" true 2>/dev/null; then
+      FOUND="$candidate"; break
+    fi
+  done
+  [[ -n "$FOUND" ]] || die "no working password for $HOST (tried GW_SSH_PASS and GW_ROOT_PASS)"
   say "auth: password"
-  export SSHPASS="$SSH_PASS"
-  RSH=(sshpass -e ssh "${SSH_OPTS[@]}")
-  RCP=(sshpass -e scp -O "${SSH_OPTS[@]}")
+  export SSHPASS="$FOUND"
+  RSH=(sshpass -e ssh "${SSH_OPTS[@]}" -o PubkeyAuthentication=no)
+  RCP=(sshpass -e scp -O "${SSH_OPTS[@]}" -o PubkeyAuthentication=no)
 fi
 
 remote() { "${RSH[@]}" "$SSH_USER@$HOST" "$@"; }
