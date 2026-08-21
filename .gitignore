@@ -49,3 +49,4 @@ docker/nodered/data/*.bak-*
 
 # Node-RED runtime state: per-pin alert state, rewritten constantly
 docker/nodered/data/context/
+sensorsentinel.env

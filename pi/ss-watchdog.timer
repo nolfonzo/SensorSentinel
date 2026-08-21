@@ -1,0 +1,13 @@
+[Unit]
+Description=Run the SensorSentinel watchdog every 5 minutes
+
+[Timer]
+# First run shortly after boot, so a device that comes back from a power cut
+# checks itself rather than waiting for the first interval.
+OnBootSec=3min
+OnUnitActiveSec=5min
+AccuracySec=30s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

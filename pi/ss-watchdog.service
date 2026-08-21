@@ -1,0 +1,12 @@
+[Unit]
+Description=SensorSentinel jetty watchdog
+Documentation=https://github.com/nolfonzo/SensorSentinel
+After=network-online.target mosquitto.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/ss-watchdog.sh
+# It spends most of its run blocked waiting for a reading, so a run can
+# legitimately take a couple of minutes. Killed if it ever hangs longer.
+TimeoutStartSec=300
