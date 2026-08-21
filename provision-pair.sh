@@ -80,22 +80,39 @@ discover() {   # $1 = label, $2 = probe command template using {} for the ip
   local base
   base=$(ip route get 1.1.1.1 2>/dev/null | grep -oE 'src [0-9.]+' | cut -d' ' -f2 | cut -d. -f1-3)
   [[ -n "$base" ]] || return 1
-  for i in $(seq 1 254); do
+  local found
+  found=$(for i in $(seq 1 254); do
     ( eval "${probe//\{\}/$base.$i}" >/dev/null 2>&1 && echo "$base.$i" ) &
-  done | head -1
-  wait 2>/dev/null || true
+  done; wait) 2>/dev/null
+  found=$(echo "$found" | grep -v '^$' | sort -u)
+  local n
+  n=$(echo "$found" | grep -c . )
+  # Never guess between candidates. Two gateways on a bench is normal, and
+  # silently pairing a Pi to the wrong one produces a setup that looks right
+  # and talks to someone else's radio.
+  if [[ "$n" -gt 1 ]]; then
+    echo "AMBIGUOUS:$(echo "$found" | tr '\n' ' ')"
+    return 0
+  fi
+  echo "$found"
 }
 
 if [[ -z "$GATEWAY" ]]; then
   say "no --gateway given, searching..."
   # A Heltec gateway is the thing on the LAN with telnet AND http open.
-  GATEWAY=$(discover gateway 'timeout 2 bash -c "</dev/tcp/{}/23" && timeout 2 bash -c "</dev/tcp/{}/80"' 'HT-M7603.local HT-M7603-844A.local')
+  GATEWAY=$(discover gateway 'timeout 2 bash -c "</dev/tcp/{}/23" && timeout 2 bash -c "</dev/tcp/{}/80"' '')
+  case "$GATEWAY" in AMBIGUOUS:*)
+    die "found more than one gateway: ${GATEWAY#AMBIGUOUS:}
+  Pass --gateway to say which, or power the others down." ;; esac
   [[ -n "$GATEWAY" ]] && say "found gateway at $GATEWAY" || die "could not find a gateway - pass --gateway"
 fi
 
 if [[ -z "$PI" ]]; then
   say "no --pi given, searching..."
-  PI=$(discover pi 'timeout 2 bash -c "</dev/tcp/{}/22"' 'pi0-north.local raspberrypi.local')
+  PI=$(discover pi 'timeout 2 bash -c "</dev/tcp/{}/22"' '')
+  case "$PI" in AMBIGUOUS:*)
+    die "found more than one candidate Pi: ${PI#AMBIGUOUS:}
+  Pass --pi to say which." ;; esac
   [[ -n "$PI" ]] && say "found Pi at $PI" || die "could not find the Pi - pass --pi"
 fi
 
