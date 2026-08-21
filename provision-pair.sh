@@ -291,8 +291,12 @@ if [[ ! -f "$INV" ]]; then
   cat > "$INV" <<'HDR'
 # Deployed pairs
 
-Written automatically by `provision-pair.sh`. One row per pair, appended when
-it is provisioned. Identifiers only - credentials live in `sensorsentinel.env`.
+Written automatically by `provision-pair.sh`, one row per pair.
+
+LOCAL ONLY - gitignored. It carries WiFi SSIDs next to gateway BSSIDs, which
+together can place a site on a map, and it describes one particular network
+so it is meaningless to anyone else. Keep it wherever you keep
+`sensorsentinel.env`; both are worth having if you rebuild this laptop.
 
 | Provisioned | Gateway | Gateway BSSID | Pi | Pi Tailscale | Uplink WiFi |
 |---|---|---|---|---|---|

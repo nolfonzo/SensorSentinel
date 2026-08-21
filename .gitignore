@@ -50,3 +50,8 @@ docker/nodered/data/*.bak-*
 # Node-RED runtime state: per-pin alert state, rewritten constantly
 docker/nodered/data/context/
 sensorsentinel.env
+
+# Local register of provisioned pairs. Contains WiFi SSIDs alongside gateway
+# BSSIDs, which together are location-identifying - and it is specific to one
+# network anyway, so it is of no use to anyone else.
+INVENTORY.md
