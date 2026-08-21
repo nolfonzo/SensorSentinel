@@ -127,11 +127,43 @@ discover() {   # $1 = label, $2 = probe command template using {} for the ip
 
 if [[ -z "$GATEWAY" ]]; then
   say "no --gateway given, searching..."
+  # A gateway already in the register has been done. The one you are holding is
+  # the one that is not - so known units are excluded rather than requiring you
+  # to remember which address is which.
+  KNOWN=""
+  if [[ -f "$HERE/INVENTORY.md" ]]; then
+    KNOWN=$(awk -F'|' '/^\|/ && NF>3 {gsub(/ /,"",$3); print $3}' "$HERE/INVENTORY.md" | grep -vE '^(Gateway|-+)?$')
+    [[ -n "$KNOWN" ]] && say "register lists $(echo "$KNOWN" | grep -c .) gateway(s) already provisioned"
+  fi
   # A Heltec gateway is the thing on the LAN with telnet AND http open.
   GATEWAY=$(discover gateway 'timeout 2 bash -c "</dev/tcp/{}/23" && timeout 2 bash -c "</dev/tcp/{}/80"' '')
-  case "$GATEWAY" in AMBIGUOUS:*)
-    die "found more than one gateway: ${GATEWAY#AMBIGUOUS:}
-  Pass --gateway to say which, or power the others down." ;; esac
+  CANDS="${GATEWAY#AMBIGUOUS:}"
+  if [[ "$(echo "$CANDS" | wc -w)" -gt 1 && -n "$KNOWN" ]]; then
+    # Ask each candidate its name and drop the ones already recorded.
+    UNKNOWN=""
+    for c in $CANDS; do
+      nm=$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            -o KexAlgorithms=+diffie-hellman-group14-sha1,diffie-hellman-group1-sha1 \
+            -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedKeyTypes=+ssh-rsa -o ConnectTimeout=8 \
+            "root@$c" 'uci get wireless.ap.ssid' 2>/dev/null)
+      [[ -z "$nm" ]] && nm=$(SSHPASS="$GW_SSH_PASS" sshpass -e ssh -o StrictHostKeyChecking=no \
+            -o UserKnownHostsFile=/dev/null -o KexAlgorithms=+diffie-hellman-group14-sha1 \
+            -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAuthentication=no -o ConnectTimeout=8 \
+            "root@$c" 'uci get wireless.ap.ssid' 2>/dev/null)
+      if echo "$KNOWN" | grep -qxF "$nm"; then
+        say "  skipping $c ($nm) - already in the register"
+      else
+        UNKNOWN="$UNKNOWN $c"
+      fi
+    done
+    CANDS="$(echo "$UNKNOWN" | tr -s ' ' | sed 's/^ //;s/ $//')"
+  fi
+  case "$(echo "$CANDS" | wc -w)" in
+    0) die "every gateway found is already in the register - pass --gateway to redo one" ;;
+    1) GATEWAY="$CANDS" ;;
+    *) die "more than one unprovisioned gateway: $CANDS
+  Pass --gateway to say which, or power the others down." ;;
+  esac
   [[ -n "$GATEWAY" ]] && say "found gateway at $GATEWAY" || die "could not find a gateway - pass --gateway"
 fi
 
