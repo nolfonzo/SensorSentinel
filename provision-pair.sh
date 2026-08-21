@@ -282,6 +282,28 @@ else
   say "if it does not come back, recover over USB before this leaves the bench."
 fi
 
+# ── inventory ───────────────────────────────────────────────────────────────
+# Written by the script rather than kept by hand, because a hand-kept list is
+# accurate right up until the one time it matters. Identifiers only - no
+# passwords - so it is safe to commit and share.
+INV="$HERE/INVENTORY.md"
+if [[ ! -f "$INV" ]]; then
+  cat > "$INV" <<'HDR'
+# Deployed pairs
+
+Written automatically by `provision-pair.sh`. One row per pair, appended when
+it is provisioned. Identifiers only - credentials live in `sensorsentinel.env`.
+
+| Provisioned | Gateway | Gateway BSSID | Pi | Pi Tailscale | Uplink WiFi |
+|---|---|---|---|---|---|
+HDR
+fi
+printf '| %s | %s | %s | %s | %s | %s |\n' \
+  "$(date +%Y-%m-%d)" "$AP_SSID" "${AP_BSSID:-?}" \
+  "$(ssh "${PI_SSH[@]}" "nolfonzo@$PI" hostname 2>/dev/null || echo '?')" \
+  "${TS_IP:-?}" "${SITE_SSID:-<unchanged>}" >> "$INV"
+say "recorded in INVENTORY.md"
+
 hdr "done"
 cat <<EOF
   Pair provisioned.
