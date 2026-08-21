@@ -38,6 +38,14 @@ RTC_DATA_ATTR uint8_t  wakeCount           = 0;
 RTC_DATA_ATTR static int      _txChannel   = -1; // -1 = hop, 0-7 = locked
 RTC_DATA_ATTR static uint32_t _hopState    = 0;  // PRNG state, persists across sleeps
 RTC_DATA_ATTR static bool     _rtcSeeded   = false;
+// How many I2C sensors were seen on the last wake, for the PRG identity screen.
+// A count rather than values: the device does not know what any slot means -
+// the labels live server-side - so a raw "slot 0: 10692" is less use than
+// /status, which knows it is the boat battery. The count still answers the
+// question you have during an install: are the sensors being seen at all.
+// Cached because the OLED and the sensors share the Wire instance and the VEXT
+// rail, so reading I2C in the button path fights the display for both.
+RTC_DATA_ATTR static uint8_t  _lastSensorCount = 0;
 
 // ── Repeater state ─────────────────────────────────────────────────────────────
 #if REPEATER_MODE
@@ -94,6 +102,67 @@ static unsigned long jitteredMs(unsigned long baseMs) {
   return (result < 1000L) ? 1000UL : (unsigned long)result;
 }
 
+// ── Sleep, with PRG armed as a wake source ──────────────────────────────────
+// The library's heltec_deep_sleep() arms this, but the sender has always gone
+// to sleep through the ESP APIs directly and so never enabled a button wake -
+// which is why pressing PRG did nothing at all.
+//
+// BUTTON is GPIO0, an RTC GPIO on the ESP32-S3, so it can wake us from deep
+// sleep. (The digital sensor slots cannot, which is why wake-on-float is not
+// possible but wake-on-PRG is.)
+static void senderSleep() {
+  unsigned long sleepMs = jitteredMs((unsigned long)SensorSentinel_diag_get_interval() * 1000UL);
+  Serial.printf("[Power] Deep sleeping for %lu ms...\n\n", sleepMs);
+
+  // ext0 is level triggered: going to sleep while the button is still held
+  // would wake us immediately, in a loop. Wait for the release first.
+  pinMode(BUTTON, INPUT_PULLUP);
+  while (digitalRead(BUTTON) == LOW) delay(10);
+  esp_sleep_enable_ext0_wakeup(BUTTON, LOW);
+
+  esp_sleep_enable_timer_wakeup((uint64_t)sleepMs * 1000ULL);
+  esp_deep_sleep_start();
+}
+
+// ── PRG identity screen ─────────────────────────────────────────────────────
+// Shows the two things worth knowing while standing next to the boat: which
+// device this is, and how the batteries are doing. The code shown is what gets
+// typed into the bot to claim the device.
+static void showIdentityScreen() {
+  // The low 24 bits of the node id are the last three MAC bytes. Derived from
+  // the node id rather than read separately, so the six characters on the
+  // screen always agree with what the server sees in the packet.
+  uint32_t nodeId = SensorSentinel_generate_node_id();
+  char id6[7];
+  snprintf(id6, sizeof(id6), "%06X", (unsigned)(nodeId & 0xFFFFFFu));
+
+  float vb = heltec_vbat();
+
+  // No I2C here, deliberately. The OLED and the sensor bus share one Wire
+  // instance on different pins (display 17/18, sensors 1/2) and the same VEXT
+  // rail, so reading sensors here repoints the bus and power-cycles the panel -
+  // the serial output looks perfect and the screen stays dark. Use the value
+  // cached on the last normal wake instead.
+
+  heltec_clear_display();
+  both.printf("ID  %s\n\n", id6);
+
+  // The device's own battery is the headline figure - it is what you want to
+  // know standing next to the boat, and it is the one nothing else reports.
+  // Always show the actual number. Above ~4.5V there is no cell fitted and the
+  // ADC is sitting near the USB rail, so annotate it rather than hide it:
+  // suppressing the value loses the reading you came to see.
+  both.printf("batt %.2fV %d%%\n", vb, heltec_battery_percent(vb));
+  if (vb > 4.5f) both.printf("  (on USB, no cell)\n");
+
+  both.printf("sensors %d\n", _lastSensorCount);
+
+  heltec_display_update();
+  Serial.printf("[Ident] %s  vbat %.2f  sensors %u\n", id6, vb, _lastSensorCount);
+
+  delay(10000);
+}
+
 // ── Forward declarations ───────────────────────────────────────────────────────
 void sendSensorPacket();
 void sendGnssPacket();
@@ -144,6 +213,14 @@ void setup() {
 
 #else
   // ── Sender (deep sleep) mode ──────────────────────────────────────────────
+  // A PRG press while asleep asks the board to identify itself; it is not a
+  // request to transmit. Show the screen and go straight back down, without
+  // touching the radio or burning a message counter.
+  if (heltec_wakeup_was_button()) {
+    showIdentityScreen();
+    senderSleep();
+  }
+
   bool timerWake = heltec_wakeup_was_timer();
   initTxChannel(!timerWake);
 
@@ -177,6 +254,10 @@ void setup() {
 
   sendSensorPacket();
 
+  // Stash the sensor count for the PRG screen. Free here: the bus is already
+  // powered and pointed at the sensors, and the display is not in use.
+  _lastSensorCount = SensorSentinel_i2c_auto_discover(false);
+
 #ifdef GNSS
   if (wakeCount % 3 == 0) {
     sendGnssPacket();
@@ -191,11 +272,7 @@ void setup() {
 #endif
   SensorSentinel_i2c_power_rail(false);
 
-  unsigned long sleepMs = jitteredMs((unsigned long)SensorSentinel_diag_get_interval() * 1000UL);
-  Serial.printf("[Power] Deep sleeping for %lu ms...\n\n", sleepMs);
-  
-  esp_sleep_enable_timer_wakeup((uint64_t)sleepMs * 1000ULL);
-  esp_deep_sleep_start();
+  senderSleep();
 #endif
 }
 
@@ -218,9 +295,7 @@ void loop() {
 
 #else
   // Sender mode: loop() should never run (deep sleep restarts from setup).
-  unsigned long sleepMs = jitteredMs((unsigned long)SensorSentinel_diag_get_interval() * 1000UL);
-  esp_sleep_enable_timer_wakeup((uint64_t)sleepMs * 1000ULL);
-  esp_deep_sleep_start();
+  senderSleep();
 #endif
 }
 
