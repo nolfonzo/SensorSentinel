@@ -385,11 +385,17 @@ so it is meaningless to anyone else. Keep it wherever you keep
 |---|---|---|---|---|---|
 HDR
 fi
+# Re-provisioning the same pair should update the register, not grow it. A
+# duplicate row would also make the discovery skip count wrong.
+if [[ -f "$INV" ]] && grep -q "| $AP_SSID |" "$INV"; then
+  say "already in INVENTORY.md - leaving the existing row"
+else
 printf '| %s | %s | %s | %s | %s | %s |\n' \
   "$(date +%Y-%m-%d)" "$AP_SSID" "${AP_BSSID:-?}" \
   "$(ssh "${PI_SSH[@]}" "nolfonzo@$PI" hostname 2>/dev/null || echo '?')" \
   "${TS_IP:-?}" "${SITE_SSID:-<unchanged>}" >> "$INV"
 say "recorded in INVENTORY.md"
+fi
 
 hdr "done"
 cat <<EOF
