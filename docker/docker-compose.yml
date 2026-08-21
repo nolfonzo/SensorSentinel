@@ -92,6 +92,11 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       NOTIFY_EMAIL_USER: ${NOTIFY_EMAIL_USER}
       NOTIFY_EMAIL_PASS: ${NOTIFY_EMAIL_PASS}
+      NOTIFY_SMTP_HOST: ${NOTIFY_SMTP_HOST:-smtp.gmail.com}
+      # The bot idles harmlessly when this is empty - email is unaffected. Note
+      # that function nodes read it from the process environment, so setting it
+      # in .env needs the container recreated, not just a flow redeploy.
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
 
   # Nightly backup of the two databases and the Node-RED flows, pushed straight
   # off this Pi to the LXD, where restic versions it onto the WD Elements.
