@@ -148,9 +148,29 @@ hdr "configuring the Pi"
   --uplink-host "$UPLINK_HOST" \
   --mqtt-user heltec-jetty --mqtt-pass "$MQTT_PASS" \
   --gateway-host "$GW_LAN" \
-  ${TS_AUTHKEY:+--ts-authkey "$TS_AUTHKEY"} ${TS_AUTHKEY:---skip-tailscale}
+  ${TS_AUTHKEY:+--ts-authkey "$TS_AUTHKEY"}
 
 hdr "pairing"
+
+# ORDER MATTERS. Binding the Pi to the gateway's access point moves it behind
+# the gateway's NAT, where it is unreachable from the LAN. From that moment the
+# tunnel is the only way back in - so refuse to take the step until the tunnel
+# is demonstrably working. Getting this wrong at a site means a drive back with
+# a USB cable, or a reflash.
+TS_IP="$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+         -o ConnectTimeout=10 "nolfonzo@$PI" 'tailscale ip -4 2>/dev/null' 2>/dev/null | tr -d '[:space:]')"
+if [[ -z "$TS_IP" ]]; then
+  echo
+  die "the Pi is not on the tailnet yet, so binding it to the gateway would strand it.
+
+  Authorise it first, then re-run:
+
+      ssh nolfonzo@$PI 'sudo tailscale up'
+
+  Or put a reusable TS_AUTHKEY in sensorsentinel.env to make this automatic:
+      https://login.tailscale.com/admin/settings/keys"
+fi
+say "tunnel verified: the Pi is reachable at $TS_IP"
 PI_SSH=(-o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=15)
 pisudo() { printf '%s\n' "$PI_SUDO" | ssh "${PI_SSH[@]}" "nolfonzo@$PI" "sudo -S bash -c '$1'" 2>&1 | grep -v '^\[sudo\]' || true; }
 
@@ -169,6 +189,18 @@ pisudo "nmcli connection delete ss-gateway >/dev/null 2>&1 || true
 say "installing the Pi's key on the gateway (for the watchdog)"
 PI_PUBKEY="$(ssh "${PI_SSH[@]}" "nolfonzo@$PI" 'cat ~/.ssh/id_rsa.pub' 2>/dev/null)"
 [[ -n "$PI_PUBKEY" ]] && gw "grep -qF '$PI_PUBKEY' /etc/dropbear/authorized_keys 2>/dev/null || echo '$PI_PUBKEY' >> /etc/dropbear/authorized_keys; chmod 600 /etc/dropbear/authorized_keys"
+
+hdr "verifying the pair"
+# The Pi has just changed networks. Confirm the tunnel survived the move -
+# if it did not, say so now while the device is still on the bench.
+sleep 20
+if ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+       -o ConnectTimeout=15 "nolfonzo@$TS_IP" 'true' 2>/dev/null; then
+  say "reachable over Tailscale at $TS_IP after the move"
+else
+  say "WARNING: not reachable over Tailscale yet. It may still be associating;"
+  say "if it does not come back, recover over USB before this leaves the bench."
+fi
 
 hdr "done"
 cat <<EOF

@@ -143,13 +143,22 @@ say "pushing radio profile"
 # what selects the MQTT build of the forwarder; without it the plain UDP
 # lora_pkt_fwd runs instead and nothing reaches the broker.
 say "writing /lora/setting (MQTT mode → $MQTT_HOST:$MQTT_PORT)"
-remote "cat > /lora/setting <<'EOF'
-\"mode\":\"MQTT\"
-\"username\":\"$MQTT_USER\"
-\"password\":\"$MQTT_PASS\"
-\"serveraddr\":\"$MQTT_HOST\"
-\"port\":\"$MQTT_PORT\"
-EOF"
+# printf, not a heredoc: BusyBox ash only treats the delimiter as a terminator
+# when a newline follows it, and over SSH the closing quote swallowed that
+# newline - so a literal "EOF" line ended up in the file.
+remote "printf '%s\n' '\"mode\":\"MQTT\"' '\"username\":\"$MQTT_USER\"' '\"password\":\"$MQTT_PASS\"' '\"serveraddr\":\"$MQTT_HOST\"' '\"port\":\"$MQTT_PORT\"' > /lora/setting"
+
+# Two firmware generations in the wild, and they choose the forwarder binary
+# from different files:
+#   older (2022): mode comes from /lora/setting
+#   newer (2025): mode comes from /lora/gateway_mode, and it also supports
+#                 basicstation; /lora/setting still holds the broker details
+# Writing only /lora/setting leaves a newer unit silently running the plain
+# UDP forwarder - it looks like it started fine and publishes nothing.
+if remote 'test -f /lora/gateway_mode' 2>/dev/null; then
+  say "newer firmware detected - also setting /lora/gateway_mode"
+  remote "printf '%s\n' '\"mode\":\"MQTT\"' > /lora/gateway_mode"
+fi
 
 if [[ -n "$WIFI_SSID" ]]; then
   say "setting WiFi client → SSID '$WIFI_SSID'"
@@ -157,6 +166,7 @@ if [[ -n "$WIFI_SSID" ]]; then
           uci set wireless.sta.key='$WIFI_PASS'
           uci set wireless.sta.disabled='0'
           uci commit wireless"
+  WIFI_CHANGED=1
 fi
 
 # Install our public key so every later run - especially at a site, from a
@@ -164,9 +174,12 @@ fi
 PUBKEY="$(cat ~/.ssh/id_rsa.pub 2>/dev/null || cat ~/.ssh/id_ed25519.pub 2>/dev/null || true)"
 if [[ -n "$PUBKEY" ]]; then
   say "installing your SSH key on the gateway"
-  remote "mkdir -p /etc/dropbear
-          grep -qF '$PUBKEY' /etc/dropbear/authorized_keys 2>/dev/null || echo '$PUBKEY' >> /etc/dropbear/authorized_keys
-          chmod 600 /etc/dropbear/authorized_keys"
+  # Passed on stdin rather than embedded in the command: dropbear rejects an
+  # exec request once the command string gets long ("exec request failed on
+  # channel 0"), and a public key is long enough to trip it.
+  printf '%s\n' "$PUBKEY" | "${RSH[@]}" "$SSH_USER@$HOST" \
+    'mkdir -p /etc/dropbear; k=$(cat); grep -qF "$k" /etc/dropbear/authorized_keys 2>/dev/null || echo "$k" >> /etc/dropbear/authorized_keys; chmod 600 /etc/dropbear/authorized_keys' \
+    || say "could not install the key (continuing)"
 fi
 
 if [[ -n "$AP_PASS" ]]; then
@@ -181,6 +194,16 @@ fi
 # BusyBox here has no `nohup`, and a backgrounded forwarder inherits the SSH
 # session's stdout, which keeps the connection open until it exits. Redirecting
 # all three streams lets ssh return immediately.
+# uci commit only writes config - the radio has to be reloaded or the new SSID
+# sits there doing nothing until a reboot. Detached, and deliberately last
+# before the forwarder restart: this briefly drops the access point you are
+# most likely connected through at a site. It comes straight back.
+if [[ "${WIFI_CHANGED:-0}" == "1" ]]; then
+  say "applying the WiFi change (your connection may blink)"
+  remote '(wifi >/dev/null 2>&1 </dev/null &)' || true
+  sleep 25
+fi
+
 say "restarting the packet forwarder"
 remote '(/etc/init.d/lrgateway restart >/tmp/provision-restart.log 2>&1 </dev/null &) ; sleep 15' || true
 
