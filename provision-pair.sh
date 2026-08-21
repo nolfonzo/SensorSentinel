@@ -15,6 +15,9 @@
 # uplink. Everything else is discovered or derived.
 #
 # Usage:
+#   ./provision-pair.sh --bench          # at the bench: finds both, uses BENCH_SSID
+#
+# or explicitly:
 #   ./provision-pair.sh --gateway 192.168.9.130 --pi 192.168.9.145 \
 #       --pi-sudo-pass 'xxx' --mqtt-pass 'xxx' \
 #       --site-ssid "Neighbour WiFi" --site-pass 'xxx' \
@@ -55,6 +58,7 @@ while [[ $# -gt 0 ]]; do
     --gw-ssh-pass)  GW_SSH_PASS="$2"; shift 2 ;;
     --ap-pass)      AP_PASS="$2"; shift 2 ;;
     --pi-static)    PI_STATIC="$2"; shift 2 ;;
+    --bench)        SITE_SSID="${BENCH_SSID:-}"; SITE_PASS="${BENCH_PASS:-}"; shift ;;
     --profile)      PROFILE="$2"; shift 2 ;;
     -h|--help)      sed -n '2,22p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) die "unknown option: $1" ;;
@@ -85,7 +89,7 @@ discover() {   # $1 = label, $2 = probe command template using {} for the ip
 if [[ -z "$GATEWAY" ]]; then
   say "no --gateway given, searching..."
   # A Heltec gateway is the thing on the LAN with telnet AND http open.
-  GATEWAY=$(discover gateway 'timeout 2 bash -c "</dev/tcp/{}/23" && timeout 2 bash -c "</dev/tcp/{}/80"' 'HT-M7603.local')
+  GATEWAY=$(discover gateway 'timeout 2 bash -c "</dev/tcp/{}/23" && timeout 2 bash -c "</dev/tcp/{}/80"' 'HT-M7603.local HT-M7603-844A.local')
   [[ -n "$GATEWAY" ]] && say "found gateway at $GATEWAY" || die "could not find a gateway - pass --gateway"
 fi
 
