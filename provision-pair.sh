@@ -286,7 +286,7 @@ hdr "configuring the gateway"
   --host "$GATEWAY" --ssh-pass "$GW_SSH_PASS" --profile "$PROFILE" \
   --mqtt-host "$PI_STATIC" --mqtt-user heltec-jetty --mqtt-pass "$MQTT_PASS" \
   ${SITE_SSID:+--wifi-ssid "$SITE_SSID"} ${SITE_PASS:+--wifi-pass "$SITE_PASS"} \
-  --ap-pass "$AP_PASS" ${NAME:+--name "$NAME"}
+  --ap-pass "$AP_PASS" ${NAME:+--name "$NAME"} ${GW_ROOT_PASS:+--root-pass "$GW_ROOT_PASS"}
 
 # If it was renamed, the AP the Pi must bind to is the new one - the value read
 # before the gateway step is now stale.
@@ -359,6 +359,17 @@ say "installing the Pi's key on the gateway (for the watchdog)"
 PI_PUBKEY="$(ssh "${PI_SSH[@]}" "nolfonzo@$PI_ADDR" 'cat ~/.ssh/id_rsa.pub' 2>/dev/null)"
 [[ -n "$PI_PUBKEY" ]] && gw "grep -qF '$PI_PUBKEY' /etc/dropbear/authorized_keys 2>/dev/null || echo '$PI_PUBKEY' >> /etc/dropbear/authorized_keys; chmod 600 /etc/dropbear/authorized_keys"
 
+# USB gadget mode needs a reboot, and rebooting here does double duty: it also
+# proves the pair comes back by itself after a power cut, which is the thing
+# that actually happens at an unattended site.
+hdr "rebooting the Pi (activates USB rescue mode, and proves it recovers)"
+pisudo 'reboot' >/dev/null 2>&1 || true
+sleep 45
+for i in $(seq 1 20); do
+  ssh "${PI_SSH[@]}" "nolfonzo@$PI_ADDR" true 2>/dev/null && break
+  sleep 15
+done
+
 hdr "verifying the pair"
 # The Pi has just changed networks. Confirm the tunnel survived the move -
 # if it did not, say so now while the device is still on the bench.
@@ -418,7 +429,7 @@ cat <<EOF
 
 $( [[ "${AP_PASS_GENERATED:-0}" == "1" ]] && printf '  Record the AP password - it is the only way onto this gateway:\n\n    %s\n' "$AP_PASS" || printf '  AP password: as set in sensorsentinel.env.\n' )
 
-  Remaining, both needing a human:
-    - authorise the Pi on the tailnet   (ssh to it and run: sudo tailscale up)
-    - reboot the Pi to activate USB gadget mode
+  Nothing left to do here. At the site, join $AP_SSID and run:
+
+    ./gateway/provision-gateway.sh --wifi-ssid "<their SSID>" --wifi-pass "<their password>"
 EOF

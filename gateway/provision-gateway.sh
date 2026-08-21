@@ -51,6 +51,7 @@ MQTT_PORT="1883"
 MQTT_USER="${MQTT_USER:-heltec-jetty}"
 MQTT_PASS="${MQTT_PASS:-}"
 AP_PASS=""
+ROOT_PASS="${GW_ROOT_PASS:-}"
 NAME=""
 DRY_RUN=0
 
@@ -76,6 +77,7 @@ while [[ $# -gt 0 ]]; do
     --mqtt-pass)  MQTT_PASS="$2"; shift 2 ;;
     --ap-pass)    AP_PASS="$2"; shift 2 ;;
     --name)       NAME="$2"; shift 2 ;;
+    --root-pass)  ROOT_PASS="$2"; shift 2 ;;
     --bench)      WIFI_SSID="${BENCH_SSID:-}"; WIFI_PASS="${BENCH_PASS:-}"; shift ;;
     --dry-run)    DRY_RUN=1; shift ;;
     -h|--help)    usage 0 ;;
@@ -211,6 +213,20 @@ if [[ -n "$NAME" ]]; then
           uci commit system; uci commit wireless
           echo '$NAME' > /proc/sys/kernel/hostname"
   WIFI_CHANGED=1
+fi
+
+# Done AFTER the key is installed, so a failure here cannot lock us out: key
+# auth already works by this point.
+if [[ -n "$ROOT_PASS" ]]; then
+  say "rotating the gateway's root password off the vendor default"
+  remote "printf '%s\n%s\n' '$ROOT_PASS' '$ROOT_PASS' | passwd root >/dev/null 2>&1" || say "  (password change failed)"
+fi
+
+# The unit ships with telnet listening, which sends credentials in clear text.
+# Harmless on a trusted LAN; an open door at a site on someone else's WiFi.
+if remote 'test -x /etc/init.d/telnet' 2>/dev/null; then
+  say "disabling telnet"
+  remote '/etc/init.d/telnet stop >/dev/null 2>&1; /etc/init.d/telnet disable >/dev/null 2>&1' || true
 fi
 
 # BusyBox here has no `nohup`, and a backgrounded forwarder inherits the SSH
