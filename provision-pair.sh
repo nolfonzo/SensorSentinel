@@ -33,6 +33,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 _ENV="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/./sensorsentinel.env"
 [[ -r "$_ENV" ]] && set -a && . "$_ENV" && set +a
 
+SSH_USER_PI="${SSH_USER_PI:-nolfonzo}"
 GATEWAY=""; PI=""; PI_SUDO="${PI_SUDO_PASS:-}"; MQTT_PASS="${MQTT_PASS:-}"
 SITE_SSID="${SITE_SSID:-}"; SITE_PASS="${SITE_PASS:-}"
 UPLINK_HOST="${UPLINK_HOST:-100.114.240.29}"
@@ -109,10 +110,24 @@ fi
 
 if [[ -z "$PI" ]]; then
   say "no --pi given, searching..."
+  # "port 22 open" matches every Linux box on the network, so candidates are
+  # then asked what they are. Only a Pi Zero answers correctly, which makes
+  # this specific rather than merely plausible.
   PI=$(discover pi 'timeout 2 bash -c "</dev/tcp/{}/22"' '')
-  case "$PI" in AMBIGUOUS:*)
-    die "found more than one candidate Pi: ${PI#AMBIGUOUS:}
-  Pass --pi to say which." ;; esac
+  PI="${PI#AMBIGUOUS:}"
+  CONFIRMED=""
+  for cand in $PI; do
+    model=$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+             -o ConnectTimeout=5 "$SSH_USER_PI@$cand" 'tr -d "\0" < /proc/device-tree/model' 2>/dev/null)
+    case "$model" in *"Raspberry Pi Zero"*) CONFIRMED="$CONFIRMED $cand" ;; esac
+  done
+  CONFIRMED="$(echo "$CONFIRMED" | tr -s ' ' | sed 's/^ //;s/ $//')"
+  case "$(echo "$CONFIRMED" | wc -w)" in
+    0) die "no Raspberry Pi Zero found - pass --pi" ;;
+    1) PI="$CONFIRMED" ;;
+    *) die "found more than one Pi Zero: $CONFIRMED
+  Pass --pi to say which, or power the others down." ;;
+  esac
   [[ -n "$PI" ]] && say "found Pi at $PI" || die "could not find the Pi - pass --pi"
 fi
 
