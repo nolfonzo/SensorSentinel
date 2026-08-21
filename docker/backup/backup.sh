@@ -63,6 +63,18 @@ run_backup() {
       || { log "ERROR: node-red archive failed"; FAILED=1; }
   fi
 
+  # The .env is gitignored - correctly, it holds the database password, the
+  # notification mail credentials, and the NocoDB/Grafana admin logins. That
+  # means it exists nowhere else. Restore the databases without it and nothing
+  # can send an alert. It is a few hundred bytes; back it up.
+  if [ -f /stack/.env ]; then
+    cp /stack/.env "$WORK/env.backup" 2>/dev/null \
+      && log "  .env: $(stat -c %s "$WORK/env.backup") bytes" \
+      || { log "ERROR: could not copy .env"; FAILED=1; }
+  else
+    log "WARNING: no .env found to back up"
+  fi
+
   if [ "$FAILED" = "1" ]; then
     log "one or more dumps failed - NOT pushing a partial backup"
     return 1

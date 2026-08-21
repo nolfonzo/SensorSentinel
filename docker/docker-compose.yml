@@ -120,6 +120,8 @@ services:
       - ./backup/backup.sh:/backup.sh:ro
       - ./backup/data:/backups
       - ./nodered/data:/nodered-data:ro
+      # For the .env - secrets that exist nowhere else.
+      - ./:/stack:ro
       # The Pi's own key, so it can push to the LXD without a password.
       - /home/nolfonzo/.ssh/id_ed25519:/keys/id_ed25519:ro
     entrypoint: ["/bin/sh","-c"]
