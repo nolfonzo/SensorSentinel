@@ -21,9 +21,27 @@ GATEWAY_HOST="${GATEWAY_HOST:-192.168.8.1}"
 SSID="${1:-}"
 PASS="${2:-}"
 
+# --scan lists what the GATEWAY can reach, which is the only opinion that
+# matters - your phone standing next to it may see networks the gateway's
+# aerial cannot. Worth running before typing an SSID at a site.
+#
+# Note iwlist barely works on this MediaTek radio and reports almost nothing;
+# iwpriv's site survey is the one that gives a real answer.
+if [[ "$SSID" == "--scan" ]]; then
+  GW=(-o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+      -o LogLevel=ERROR -o KexAlgorithms=+diffie-hellman-group14-sha1,diffie-hellman-group1-sha1
+      -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedKeyTypes=+ssh-rsa -o ConnectTimeout=15)
+  echo "  networks the gateway can see:"
+  ssh "${GW[@]}" "root@$GATEWAY_HOST" \
+    'iwpriv apcli0 set SiteSurvey=1 >/dev/null 2>&1; sleep 5; iwpriv apcli0 get_site_survey 2>/dev/null' \
+    | sed 's/^/    /'
+  exit 0
+fi
+
 if [[ -z "$SSID" || -z "$PASS" ]]; then
   cat <<EOF
 usage: set-site-wifi "SSID" "password"
+       set-site-wifi --scan        list what the gateway can actually reach
 
 Points the gateway at $GATEWAY_HOST at the named WiFi network, then restarts
 the packet forwarder and reports whether it worked.
