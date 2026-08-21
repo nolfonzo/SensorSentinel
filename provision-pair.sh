@@ -82,7 +82,10 @@ resolve_name() {
   local ip
   ip=$(getent hosts "$n" 2>/dev/null | awk '{print $1; exit}')
   [[ -n "$ip" ]] || die "could not resolve '$v' (tried $n) - is it powered up and on the network?"
-  say "$v → $ip"
+  # stderr, not stdout: this function's stdout IS the return value, so a
+  # progress message here would be captured into the variable alongside the
+  # address.
+  say "$v → $ip" >&2
   echo "$ip"
 }
 [[ -n "$GATEWAY" ]] && GATEWAY="$(resolve_name "$GATEWAY")"
