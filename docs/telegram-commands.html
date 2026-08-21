@@ -1,0 +1,175 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>SensorSentinel Telegram Quick Reference</title>
+<style>
+  @page { size: A4; margin: 12mm 11mm; }
+  * { box-sizing: border-box; }
+  body { font: 8.35pt/1.4 "DejaVu Sans", Arial, sans-serif; color: #111; margin: 0; }
+  header { border-bottom: 2.17pt solid #1a3a5c; padding-bottom: 3.48pt; margin-bottom: 7.83pt; }
+  h1 { font-size: 14.79pt; margin: 0 0 0.87pt; letter-spacing: -0.26pt; color: #1a3a5c; }
+  .sub { font-size: 7.48pt; color: #667; }
+  .cols { columns: 2; column-gap: 9mm; column-rule: 0.35pt solid #dde; }
+  section { break-inside: avoid; margin-bottom: 6.96pt; }
+  h2 { font-size: 7.83pt; text-transform: uppercase; letter-spacing: 0.61pt; color: #1a3a5c;
+       margin: 0 0 2.61pt; padding-bottom: 1.74pt; border-bottom: 0.61pt solid #ccd; }
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: 1.39pt 0; vertical-align: top; }
+  td.c { font-family: "DejaVu Sans Mono", monospace; font-size: 7.31pt; padding-right: 4.35pt; color: #000; }
+  td.d { color: #444; font-size: 7.39pt; }
+  .opt { color: #7a8290; }
+  table.grid td { border-bottom: 0.35pt solid #e6e6ec; padding: 1.74pt 3.48pt 1.74pt 0; font-size: 7.22pt; }
+  table.grid th { text-align: left; font-size: 6.44pt; text-transform: uppercase; letter-spacing: 0.43pt;
+                  color: #667; border-bottom: 0.70pt solid #bbc; padding: 0 3.48pt 1.74pt 0; }
+  table.grid td:first-child { font-family: "DejaVu Sans Mono", monospace; color: #1a3a5c; }
+  .note { background: #f3f6f9; border-left: 2.17pt solid #1a3a5c; padding: 3.92pt 5.22pt; font-size: 7.31pt;
+          color: #2a3542; margin-top: 1.74pt; }
+  .note b { color: #1a3a5c; }
+  .flow { font-family: "DejaVu Sans Mono", monospace; font-size: 7.13pt; color: #1a3a5c; }
+  footer { border-top: 0.61pt solid #ccd; margin-top: 6.09pt; padding-top: 3.48pt;
+           font-size: 6.61pt; color: #778; display: flex; justify-content: space-between; }
+  code { font-family: "DejaVu Sans Mono", monospace; background: #eaeef3; padding: 0 1.74pt; }
+</style>
+
+<header>
+  <h1>SensorSentinel &mdash; Telegram Quick Reference</h1>
+  <div class="sub">Boat &amp; jetty monitoring &middot; @sensorsentinelchatbot &middot; type <code>/</code> in the chat for this list on your phone</div>
+</header>
+
+<div class="cols">
+
+<section>
+<h2>Checking on things</h2>
+<table>
+<tr><td class="c">/status <span class="opt">[device]</span></td><td class="d">Last reading from each device, with signal and age</td></tr>
+<tr><td class="c">/sensors <span class="opt">[device]</span></td><td class="d">Every channel and what it reads &mdash; named or not</td></tr>
+<tr><td class="c">/info</td><td class="d">What you own and how it is configured</td></tr>
+<tr><td class="c">/help</td><td class="d">The command list, in the chat</td></tr>
+</table>
+<div class="note"><b>Only what you own.</b> Every view is scoped to your own
+devices. With one device you can leave its name out of any command.</div>
+</section>
+
+<section>
+<h2>Watching live</h2>
+<table>
+<tr><td class="c">/watch <span class="opt">[device] [mins]</span></td><td class="d">Every reading as it arrives, ~1 per 30&thinsp;s</td></tr>
+<tr><td class="c">/unwatch <span class="opt">[device]</span></td><td class="d">Stop feeds &mdash; all of them, or one</td></tr>
+</table>
+<div class="note"><b>Feeds expire.</b> 30 minutes by default, then they stop by
+themselves &mdash; the catch for when you have walked out of signal. <b>Stop</b>
+on a feed stops that device; <b>Another 30m</b> resets it to 30 from now rather
+than adding.</div>
+</section>
+
+<section>
+<h2>Taking on a device</h2>
+<table>
+<tr><td class="c">/claim &lt;code&gt; <span class="opt">[name]</span></td><td class="d">Make it yours, and name it</td></tr>
+<tr><td class="c">/rename &lt;code&gt; &lt;name&gt;</td><td class="d">Give it a proper name</td></tr>
+<tr><td class="c">/release &lt;device&gt;</td><td class="d">Hand it to someone else</td></tr>
+</table>
+<div class="note"><b>The code is on the screen.</b> Press <b>PRG</b> on the
+device and it shows six characters for ten seconds. Claiming works even if the
+bot has never met you &mdash; no email, no invitation.<br>
+<b>A claimed device cannot be claimed.</b> Its owner must
+<code>/release</code> it first, so a code alone can never take a boat off
+someone.</div>
+</section>
+
+<section>
+<h2>Setting up sensors</h2>
+<table>
+<tr><td class="c">/sensorname &lt;ch&gt; &lt;name&gt;</td><td class="d">Name a channel so it appears elsewhere</td></tr>
+<tr><td class="c">/sensoralert &lt;Dn&gt; &lt;when&gt;</td><td class="d">When a switch matters</td></tr>
+<tr><td class="c">/limits &lt;ch&gt; &lt;low&gt; <span class="opt">[high]</span></td><td class="d">Alert outside a range</td></tr>
+<tr><td class="c">/limits &lt;ch&gt; off</td><td class="d">Stop it alerting</td></tr>
+</table>
+<table class="grid">
+<tr><th>Channel</th><th>What it is</th></tr>
+<tr><td>bus0&ndash;bus7</td><td>I&sup2;C sensors &mdash; battery monitors and the like</td></tr>
+<tr><td>A0&ndash;A3</td><td>Analog inputs, raw ADC counts</td></tr>
+<tr><td>D0&ndash;D7</td><td>Switch inputs &mdash; float switches, contacts</td></tr>
+</table>
+<div class="note"><b>Naming is not arming.</b> A named channel shows up in
+<code>/status</code> and stays silent until you give it a trigger or a limit.</div>
+</section>
+
+<section>
+<h2>Switch triggers</h2>
+<table class="grid">
+<tr><th>Word</th><th>Alerts when</th></tr>
+<tr><td>open</td><td>the contact opens &mdash; resolves when it closes</td></tr>
+<tr><td>closed</td><td>the contact closes &mdash; resolves when it opens</td></tr>
+<tr><td>change</td><td>either way, neither called an alarm</td></tr>
+<tr><td>off</td><td>never</td></tr>
+</table>
+<div class="note"><b>1 means open.</b> Inputs read <b>1</b> when nothing is
+pulling them down and <b>0</b> when closed to ground &mdash; so an unconnected
+input looks exactly like a switch sitting open.<br>
+<b>To find which input something is on:</b> toggle it, run
+<code>/sensors</code> again, and see which digit moved.</div>
+</section>
+
+<section>
+<h2>Where alerts go</h2>
+<table>
+<tr><td class="c">/alerts</td><td class="d">Telegram, email, or both</td></tr>
+<tr><td class="c">/email on|off</td><td class="d">Turn email on or off</td></tr>
+<tr><td class="c">/mute <span class="opt">[2h]</span></td><td class="d">Silence everything, every channel</td></tr>
+<tr><td class="c">/unmute</td><td class="d">Start telling you again</td></tr>
+</table>
+<div class="note"><b>You cannot leave yourself unreachable.</b>
+<code>/email off</code> is refused while email is the only way to reach you.<br>
+<b>A mute with a duration un-mutes itself.</b> Without one it lasts until you
+say otherwise &mdash; and a muted account hears nothing at all, including a
+device going offline.</div>
+</section>
+
+<section>
+<h2>Setting up a new device</h2>
+<div class="note">
+<b>1.</b> Power it up in range of a jetty gateway. It registers itself.<br>
+<b>2.</b> Press <b>PRG</b> &mdash; note the six characters on the screen.<br>
+<b>3.</b> <code>/claim 676358 Renko</code><br>
+<b>4.</b> <code>/sensors</code> to see what it is reading.<br>
+<b>5.</b> <code>/sensorname bus0 Boat battery</code> then
+<code>/limits bus0 12000 14500</code>.
+</div>
+<div class="note"><b>Check the units.</b> <code>/limits</code> shows the live
+reading next to the limit you set, and says so if what you typed is already
+outside the range. A battery reading <code>12680</code> in millivolts needs
+<code>12000</code>, not <code>12</code>.</div>
+</section>
+
+<section>
+<h2>What the numbers mean</h2>
+<table class="grid">
+<tr><th>Shown</th><th>Meaning</th></tr>
+<tr><td>rssi &minus;34</td><td>Signal strength. Closer to zero is stronger; &minus;120 is marginal</td></tr>
+<tr><td>snr 14.3</td><td>Signal above noise. Higher is better</td></tr>
+<tr><td>12s ago</td><td>Age of the reading, not the time now</td></tr>
+<tr><td>** QUIET **</td><td>Nothing heard for a while &mdash; treat every figure below it as stale</td></tr>
+<tr><td>not alerting</td><td>Named, but nothing set to make it speak up</td></tr>
+</table>
+</section>
+
+<section>
+<h2>How it reaches you</h2>
+<div class="note">
+<span class="flow">boat &rarr; LoRa &rarr; jetty gateway &rarr; Tailscale &rarr; home</span><br>
+Readings travel <b>one way only</b>. The bot cannot ask a device anything, so
+every view is the most recent message it sent &mdash; usually under a minute
+old, and older if it has gone quiet. That is why the age sits beside the name.
+</div>
+<div class="note"><b>Silence is the normal state.</b> You hear when a reading
+crosses a limit, and again when it returns to normal. A device that stops
+reporting raises an alert of its own &mdash; a silent sensor otherwise looks
+identical to one saying all is well.</div>
+</section>
+
+</div>
+
+<footer>
+  <span>Sensor &rarr; LoRa &rarr; HT-M7603 gateway &rarr; MQTT &rarr; Node-RED &rarr; Postgres on pi5 &middot; alerts by Telegram and email</span>
+  <span>22 Aug 2026</span>
+</footer>

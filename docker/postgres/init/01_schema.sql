@@ -22,6 +22,10 @@ CREATE TABLE owners (
     -- An admin may act on any device. Everyone else is scoped to their own,
     -- which is what makes it safe to let the bot answer questions later.
     is_admin BOOLEAN DEFAULT FALSE,
+    -- While in the future, every notification for this owner is suppressed on
+    -- every channel. Separate from notify_via so unmuting restores what they
+    -- actually chose, and a timestamp so a mute can expire by itself.
+    muted_until TIMESTAMP,
     -- Set when the one-time welcome email goes out. Polled rather than trigger
     -- driven, so an owner created any way at all gets welcomed.
     welcome_sent_at TIMESTAMP,
