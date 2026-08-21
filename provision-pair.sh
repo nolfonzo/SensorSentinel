@@ -35,6 +35,7 @@ _ENV="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/./sensorsentinel.env"
 [[ -r "$_ENV" ]] && set -a && . "$_ENV" && set +a
 
 SSH_USER_PI="${SSH_USER_PI:-nolfonzo}"
+NAME=""
 GATEWAY=""; PI=""; PI_SUDO="${PI_SUDO_PASS:-}"; MQTT_PASS="${MQTT_PASS:-}"
 SITE_SSID="${SITE_SSID:-}"; SITE_PASS="${SITE_PASS:-}"
 UPLINK_HOST="${UPLINK_HOST:-100.114.240.29}"
@@ -61,6 +62,7 @@ while [[ $# -gt 0 ]]; do
     --ap-pass)      AP_PASS="$2"; shift 2 ;;
     --pi-static)    PI_STATIC="$2"; shift 2 ;;
     --bench)        SITE_SSID="${BENCH_SSID:-}"; SITE_PASS="${BENCH_PASS:-}"; shift ;;
+    --name)         NAME="$2"; shift 2 ;;
     --profile)      PROFILE="$2"; shift 2 ;;
     -h|--help)      sed -n '2,22p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) die "unknown option: $1" ;;
@@ -208,10 +210,16 @@ hdr "configuring the gateway"
   --host "$GATEWAY" --ssh-pass "$GW_SSH_PASS" --profile "$PROFILE" \
   --mqtt-host "$PI_STATIC" --mqtt-user heltec-jetty --mqtt-pass "$MQTT_PASS" \
   ${SITE_SSID:+--wifi-ssid "$SITE_SSID"} ${SITE_PASS:+--wifi-pass "$SITE_PASS"} \
-  --ap-pass "$AP_PASS"
+  --ap-pass "$AP_PASS" ${NAME:+--name "$NAME"}
+
+# If it was renamed, the AP the Pi must bind to is the new one - the value read
+# before the gateway step is now stale.
+[[ -n "$NAME" ]] && AP_SSID="$NAME"
 
 # Hostname follows the AP name, so the unit is unambiguous on any network it
 # joins without anyone choosing a name.
+# Hostname follows the AP name, so a unit is unambiguous on any network it
+# joins without anyone having to choose a name.
 gw "uci set system.@system[0].hostname='$AP_SSID'; uci commit system; echo '$AP_SSID' > /proc/sys/kernel/hostname" || true
 
 hdr "configuring the Pi"

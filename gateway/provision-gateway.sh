@@ -51,6 +51,7 @@ MQTT_PORT="1883"
 MQTT_USER="${MQTT_USER:-heltec-jetty}"
 MQTT_PASS="${MQTT_PASS:-}"
 AP_PASS=""
+NAME=""
 DRY_RUN=0
 
 die() { echo "error: $*" >&2; exit 1; }
@@ -74,6 +75,7 @@ while [[ $# -gt 0 ]]; do
     --mqtt-user)  MQTT_USER="$2"; shift 2 ;;
     --mqtt-pass)  MQTT_PASS="$2"; shift 2 ;;
     --ap-pass)    AP_PASS="$2"; shift 2 ;;
+    --name)       NAME="$2"; shift 2 ;;
     --bench)      WIFI_SSID="${BENCH_SSID:-}"; WIFI_PASS="${BENCH_PASS:-}"; shift ;;
     --dry-run)    DRY_RUN=1; shift ;;
     -h|--help)    usage 0 ;;
@@ -191,6 +193,23 @@ if [[ -n "$AP_PASS" ]]; then
   say "changing the gateway's own AP password off the vendor default"
   remote "uci set wireless.ap.key='$AP_PASS'
           uci commit wireless"
+fi
+
+# Naming is optional. Left alone, a unit keeps its factory MAC-derived name,
+# which is unique automatically and impossible to duplicate by mistake. Given a
+# name, both the hostname and the access point take it - the AP matters because
+# that is what you see in a phone's WiFi list when you are standing at a site
+# trying to work out which box is which.
+#
+# Do this at build time. Changing the AP SSID later breaks a Pi that is already
+# bound to the old one, and it would have to be re-paired.
+if [[ -n "$NAME" ]]; then
+  say "naming this gateway '$NAME' (hostname and access point)"
+  remote "uci set system.@system[0].hostname='$NAME'
+          uci set wireless.ap.ssid='$NAME'
+          uci commit system; uci commit wireless
+          echo '$NAME' > /proc/sys/kernel/hostname"
+  WIFI_CHANGED=1
 fi
 
 # BusyBox here has no `nohup`, and a backgrounded forwarder inherits the SSH
