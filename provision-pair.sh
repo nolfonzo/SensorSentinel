@@ -132,7 +132,8 @@ if [[ -z "$GATEWAY" ]]; then
   # to remember which address is which.
   KNOWN=""
   if [[ -f "$HERE/INVENTORY.md" ]]; then
-    KNOWN=$(awk -F'|' '/^\|/ && NF>3 {gsub(/ /,"",$3); print $3}' "$HERE/INVENTORY.md" | grep -vE '^(Gateway|-+)?$')
+    KNOWN=$(awk -F'|' '/^\|/ && NF>3 {gsub(/ /,"",$3); print $3}' "$HERE/INVENTORY.md" \
+            | grep -vE '^$|^Gateway$|^-+$')
     [[ -n "$KNOWN" ]] && say "register lists $(echo "$KNOWN" | grep -c .) gateway(s) already provisioned"
   fi
   # A Heltec gateway is the thing on the LAN with telnet AND http open.
@@ -140,6 +141,30 @@ if [[ -z "$GATEWAY" ]]; then
   CANDS="${GATEWAY#AMBIGUOUS:}"
   if [[ "$(echo "$CANDS" | wc -w)" -gt 1 && -n "$KNOWN" ]]; then
     # Ask each candidate its name and drop the ones already recorded.
+    # A gateway with both ethernet and WiFi up answers on two addresses and
+    # looks like two devices. Identity comes from the radio MAC, which is the
+    # one thing that does not change between its interfaces.
+    declare -A SEEN=()
+    DEDUPED=""
+    for c in $CANDS; do
+      b=$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
+            -o KexAlgorithms=+diffie-hellman-group14-sha1,diffie-hellman-group1-sha1 \
+            -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedKeyTypes=+ssh-rsa -o ConnectTimeout=8 \
+            "root@$c" 'ifconfig ra0 2>/dev/null | grep -oE "HWaddr [0-9A-Fa-f:]+" | cut -d" " -f2' 2>/dev/null)
+      [[ -z "$b" ]] && b=$(SSHPASS="$GW_SSH_PASS" sshpass -e ssh -o StrictHostKeyChecking=no \
+            -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o KexAlgorithms=+diffie-hellman-group14-sha1 \
+            -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAuthentication=no -o ConnectTimeout=8 \
+            "root@$c" 'ifconfig ra0 2>/dev/null | grep -oE "HWaddr [0-9A-Fa-f:]+" | cut -d" " -f2' 2>/dev/null)
+      b="${b:-$c}"
+      if [[ -n "${SEEN[$b]:-}" ]]; then
+        say "  $c is the same device as ${SEEN[$b]} (radio $b) - ignoring the duplicate"
+      else
+        SEEN[$b]="$c"
+        DEDUPED="$DEDUPED $c"
+      fi
+    done
+    CANDS="$(echo "$DEDUPED" | tr -s ' ' | sed 's/^ //;s/ $//')"
+
     UNKNOWN=""
     for c in $CANDS; do
       nm=$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
