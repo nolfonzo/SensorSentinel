@@ -76,10 +76,34 @@ fi
 echo "  gateway: $(gw 'uci get wireless.ap.ssid' 2>/dev/null)"
 echo "  setting its uplink to '$SSID'"
 
-gw "uci set wireless.sta.ssid='$SSID'
-    uci set wireless.sta.key='$PASS'
+# Values are wrapped in single quotes for the remote shell, so an embedded
+# apostrophe would close the quote early and write garbage - losing the
+# gateway's uplink entirely. iPhone hotspots are named things like "Carl's 17",
+# so this is not hypothetical.
+#
+# The idiom below is the standard one: ' becomes '\'' - close the quote, an
+# escaped literal quote, reopen. The gateway has no base64 to encode around it.
+shq() { printf "%s" "${1//\'/\'\\\'\'}"; }
+SSID_Q="$(shq "$SSID")"
+PASS_Q="$(shq "$PASS")"
+
+gw "uci set wireless.sta.ssid='$SSID_Q'
+    uci set wireless.sta.key='$PASS_Q'
     uci set wireless.sta.disabled='0'
     uci commit wireless" || { echo "error: could not write the setting"; exit 1; }
+
+# Read it back before touching the radio. If the value did not land intact,
+# reloading now would drop the uplink and strand the gateway on a network that
+# does not exist.
+WROTE="$(gw 'uci get wireless.sta.ssid' 2>/dev/null)"
+if [[ "$WROTE" != "$SSID" ]]; then
+  echo "error: the SSID did not store correctly."
+  echo "  wanted: [$SSID]"
+  echo "  stored: [$WROTE]"
+  echo "  Nothing has been applied - the gateway is still on its old network."
+  exit 1
+fi
+echo "  stored correctly: [$WROTE]"
 
 # Reloading the radio drops the access point you are connected through, so this
 # is backgrounded on the gateway and we simply wait. The SSH session dies either
@@ -104,9 +128,21 @@ FWD="$(gw 'ps | grep -v grep | grep -c lora_pkt_fwd_mqtt' 2>/dev/null)"
 echo "    associated to: ${ASSOC:-NOTHING}"
 echo "    gateway got:   ${ADDR:-no address}"
 echo "    forwarder:     ${FWD:-0} running"
-echo "    this Pi online: $(ping -c1 -W3 1.1.1.1 >/dev/null 2>&1 && echo yes || echo no)"
+# Routing through a freshly-associated gateway takes a few seconds to settle,
+# so this retries rather than reporting a failure that fixes itself. Checking
+# once immediately after the change reports "no internet" on a setup that is
+# about to be perfectly fine.
+ONLINE="no"
+for _ in 1 2 3 4 5 6; do
+  if ping -c1 -W3 1.1.1.1 >/dev/null 2>&1; then ONLINE="yes"; break; fi
+  sleep 5
+done
+echo "    this Pi online: $ONLINE"
 
-if [[ "$ASSOC" == "$SSID" && -n "$ADDR" && "${FWD:-0}" != "0" ]]; then
+# Internet is part of success, not a footnote. Without it the Pi cannot reach
+# home, and a green "looks good" on a setup that delivers nothing is the worst
+# possible outcome - you leave the site believing it works.
+if [[ "$ASSOC" == "$SSID" && -n "$ADDR" && "${FWD:-0}" != "0" && "$ONLINE" == "yes" ]]; then
   echo
   echo "  Looks good. Confirm a reading arrives at home before you leave."
 else
