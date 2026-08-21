@@ -158,18 +158,29 @@ fi
 
 [[ -n "$MQTT_PASS" ]] || die "--mqtt-pass is required"
 
-GW_SSH=(-o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+# NOTE: BatchMode is deliberately NOT in here. It disables password
+# authentication outright, so sshpass can never feed the password - it is added
+# only to the key-auth probe below, where refusing to prompt is the point.
+GW_SSH=(-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
         -o KexAlgorithms=+diffie-hellman-group14-sha1,diffie-hellman-group1-sha1
         -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedKeyTypes=+ssh-rsa -o ConnectTimeout=15)
 
 # Key first, password only as a fallback, so a re-run needs no credentials.
-if ssh "${GW_SSH[@]}" "root@$GATEWAY" true 2>/dev/null; then
-  gw() { ssh "${GW_SSH[@]}" "root@$GATEWAY" "$@" 2>/dev/null; }
+if ssh -o BatchMode=yes "${GW_SSH[@]}" "root@$GATEWAY" true 2>/dev/null; then
+  say "gateway auth: ssh key"
+  gw() { ssh -o BatchMode=yes "${GW_SSH[@]}" "root@$GATEWAY" "$@"; }
 else
   command -v sshpass >/dev/null || die "gateway needs a password and sshpass is missing"
+  say "gateway auth: password"
   export SSHPASS="$GW_SSH_PASS"
-  gw() { sshpass -e ssh "${GW_SSH[@]}" -o PubkeyAuthentication=no "root@$GATEWAY" "$@" 2>/dev/null; }
+  gw() { sshpass -e ssh "${GW_SSH[@]}" -o PubkeyAuthentication=no "root@$GATEWAY" "$@"; }
 fi
+
+# Fail loudly. With stderr suppressed and set -e, a failed read here exited the
+# script with no output at all - the hardest kind of failure to diagnose.
+gw true >/dev/null 2>&1 || die "cannot reach the gateway at $GATEWAY.
+  Check it is powered, and that GW_SSH_PASS in sensorsentinel.env matches
+  (a provisioned unit no longer uses the vendor default)."
 
 hdr "discovering the gateway"
 AP_SSID="$(gw 'uci get wireless.ap.ssid')"
