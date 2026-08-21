@@ -92,3 +92,42 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       NOTIFY_EMAIL_USER: ${NOTIFY_EMAIL_USER}
       NOTIFY_EMAIL_PASS: ${NOTIFY_EMAIL_PASS}
+
+  # Nightly backup of the two databases and the Node-RED flows, pushed straight
+  # off this Pi to the LXD, where restic versions it onto the WD Elements.
+  #
+  # It backs up nocodb_meta as well as sensorsentinel: NocoDB keeps every view
+  # and dashboard in postgres, so a data-only backup restores the numbers and
+  # loses the interface built on them.
+  backup:
+    image: postgres:16-alpine
+    container_name: ss-backup
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      # From docker/.env, same as postgres itself. Never inline a default:
+      # this repository is public.
+      PGPASSWORD: ${DB_PASSWORD}
+      PGHOST: postgres
+      PGUSER: sensorsentinel
+      REMOTE: nolfonzo@100.107.31.26
+      REMOTE_DIR: /home/nolfonzo/backups/sensorsentinel
+      AT_HOUR: "02"
+      KEEP_LOCAL: "7"
+      RUN_NOW: "${RUN_NOW:-0}"
+    volumes:
+      - ./backup/backup.sh:/backup.sh:ro
+      - ./backup/data:/backups
+      - ./nodered/data:/nodered-data:ro
+      # The Pi's own key, so it can push to the LXD without a password.
+      - /home/nolfonzo/.ssh/id_ed25519:/keys/id_ed25519:ro
+    entrypoint: ["/bin/sh","-c"]
+    command:
+      - |
+        apk add --no-cache openssh-client >/dev/null 2>&1
+        # The key is mounted read-only, so it cannot be chmod'd in place - and
+        # ssh refuses a key with loose permissions. Copy it somewhere writable.
+        mkdir -p /root/.ssh && cp /keys/id_ed25519 /root/.ssh/id_ed25519
+        chmod 600 /root/.ssh/id_ed25519
+        exec sh /backup.sh
