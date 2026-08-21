@@ -328,7 +328,13 @@ if [[ -z "$TS_IP" ]]; then
 fi
 say "tunnel verified: the Pi is reachable at $TS_IP"
 PI_SSH=(-o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=15)
-pisudo() { printf '%s\n' "$PI_SUDO" | ssh "${PI_SSH[@]}" "nolfonzo@$PI" "sudo -S bash -c '$1'" 2>&1 | grep -v '^\[sudo\]' || true; }
+# Everything from here on talks to the Pi over TAILSCALE, not its LAN address.
+# The binding step moves the Pi off the house network, which kills any SSH
+# session running over that network - including the one issuing the command.
+# The result is a script that hangs forever on a step that already succeeded.
+# The tunnel survives the move, which is exactly why it is verified first.
+PI_ADDR="${TS_IP:-$PI}"
+pisudo() { printf '%s\n' "$PI_SUDO" | ssh "${PI_SSH[@]}" "nolfonzo@$PI_ADDR" "sudo -S bash -c '$1'" 2>&1 | grep -v '^\[sudo\]' || true; }
 
 # Static address on the gateway's LAN: the gateway can only be given an IP for
 # its broker, so the Pi's address has to be predictable. Pinned to the BSSID so
@@ -350,7 +356,7 @@ pisudo "nmcli connection delete ss-gateway >/dev/null 2>&1 || true
 
 # The watchdog restarts the gateway's forwarder over SSH, so it needs a key.
 say "installing the Pi's key on the gateway (for the watchdog)"
-PI_PUBKEY="$(ssh "${PI_SSH[@]}" "nolfonzo@$PI" 'cat ~/.ssh/id_rsa.pub' 2>/dev/null)"
+PI_PUBKEY="$(ssh "${PI_SSH[@]}" "nolfonzo@$PI_ADDR" 'cat ~/.ssh/id_rsa.pub' 2>/dev/null)"
 [[ -n "$PI_PUBKEY" ]] && gw "grep -qF '$PI_PUBKEY' /etc/dropbear/authorized_keys 2>/dev/null || echo '$PI_PUBKEY' >> /etc/dropbear/authorized_keys; chmod 600 /etc/dropbear/authorized_keys"
 
 hdr "verifying the pair"
@@ -392,7 +398,7 @@ if [[ -f "$INV" ]] && grep -q "| $AP_SSID |" "$INV"; then
 else
 printf '| %s | %s | %s | %s | %s | %s |\n' \
   "$(date +%Y-%m-%d)" "$AP_SSID" "${AP_BSSID:-?}" \
-  "$(ssh "${PI_SSH[@]}" "nolfonzo@$PI" hostname 2>/dev/null || echo '?')" \
+  "$(ssh "${PI_SSH[@]}" "nolfonzo@$PI_ADDR" hostname 2>/dev/null || echo '?')" \
   "${TS_IP:-?}" "${SITE_SSID:-<unchanged>}" >> "$INV"
 say "recorded in INVENTORY.md"
 fi
