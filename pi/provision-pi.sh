@@ -130,6 +130,15 @@ EOF
        systemctl daemon-reload
        systemctl enable --now ss-watchdog.timer >/dev/null 2>&1"
 
+# ── the one command needed at a site ────────────────────────────────────────
+# Installed here so it is on the Pi itself: at a site you join the gateway's
+# access point, ssh to the Pi from a phone, and run one command. No laptop, no
+# repo, no checkout - which matters when the alternative is discovering you
+# needed one while standing on a jetty.
+say "installing set-site-wifi"
+"${SCP[@]}" "$HERE/set-site-wifi.sh" "$SSH_USER@$HOST:/tmp/set-site-wifi.sh"
+rsudo "install -m 755 /tmp/set-site-wifi.sh /usr/local/bin/set-site-wifi; rm -f /tmp/set-site-wifi.sh"
+
 # ── key for the watchdog to act on the gateway ──────────────────────────────
 say "generating this Pi's SSH key (so the watchdog can restart the gateway)"
 remote '[ -f ~/.ssh/id_rsa ] || ssh-keygen -t rsa -b 2048 -N "" -f ~/.ssh/id_rsa -q'
