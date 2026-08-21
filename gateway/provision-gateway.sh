@@ -133,7 +133,9 @@ fi
 
 STAMP="$(date +%Y%m%d-%H%M%S)"
 say "backing up current config to /lora/backup-$STAMP.tar.gz"
-remote "cd / && tar czf /lora/backup-$STAMP.tar.gz lora/setting lora/settings.toml lora/global_conf.json etc/config/wireless 2>/dev/null || true"
+# gateway_mode matters on 2025 firmware and does not exist on 2022 - include it
+# when present, or a restore silently leaves the unit in the wrong mode.
+remote "cd / && tar czf /lora/backup-$STAMP.tar.gz lora/setting lora/settings.toml lora/global_conf.json etc/config/wireless \$([ -f /lora/gateway_mode ] && echo lora/gateway_mode) 2>/dev/null || true"
 
 say "pushing radio profile"
 "${RCP[@]}" -q "$PROFILE_DIR/global_conf.json" "$SSH_USER@$HOST:/lora/global_conf.json"
