@@ -34,9 +34,13 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 _ENV="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/./sensorsentinel.env"
 [[ -r "$_ENV" ]] && set -a && . "$_ENV" && set +a
 
-SSH_USER_PI="${SSH_USER_PI:-nolfonzo}"
+BOOTSTRAP_USER="${SSH_USER_PI:-nolfonzo}"   # the account the card was flashed with
+DEPLOY_USER="${DEPLOY_USER:-sensorsentinel}"  # the account deployed units carry
+SSH_USER_PI="$BOOTSTRAP_USER"
+PI_USER="$BOOTSTRAP_USER"                     # flips to DEPLOY_USER once it exists
 NAME=""
 GATEWAY=""; PI=""; PI_SUDO="${PI_SUDO_PASS:-}"; MQTT_PASS="${MQTT_PASS:-}"
+PI_PASS="${PI_PASS:-}"          # account password to ENFORCE (blank = leave as flashed)
 SITE_SSID="${SITE_SSID:-}"; SITE_PASS="${SITE_PASS:-}"
 UPLINK_HOST="${UPLINK_HOST:-100.114.240.29}"
 GW_SSH_PASS="${GW_SSH_PASS:-heltec.org}"
@@ -54,6 +58,8 @@ while [[ $# -gt 0 ]]; do
     --gateway)      GATEWAY="$2"; shift 2 ;;
     --pi)           PI="$2"; shift 2 ;;
     --pi-sudo-pass) PI_SUDO="$2"; shift 2 ;;
+    --pi-pass)      PI_PASS="$2"; shift 2 ;;
+    --deploy-user)  DEPLOY_USER="$2"; shift 2 ;;
     --mqtt-pass)    MQTT_PASS="$2"; shift 2 ;;
     --site-ssid)    SITE_SSID="$2"; shift 2 ;;
     --site-pass)    SITE_PASS="$2"; shift 2 ;;
@@ -314,14 +320,14 @@ hdr "pairing"
 # is demonstrably working. Getting this wrong at a site means a drive back with
 # a USB cable, or a reflash.
 TS_IP="$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
-         -o ConnectTimeout=10 "nolfonzo@$PI" 'tailscale ip -4 2>/dev/null' 2>/dev/null | tr -d '[:space:]')"
+         -o ConnectTimeout=10 "$BOOTSTRAP_USER@$PI" 'tailscale ip -4 2>/dev/null' 2>/dev/null | tr -d '[:space:]')"
 if [[ -z "$TS_IP" ]]; then
   echo
   die "the Pi is not on the tailnet yet, so binding it to the gateway would strand it.
 
   Authorise it first, then re-run:
 
-      ssh nolfonzo@$PI 'sudo tailscale up'
+      ssh $BOOTSTRAP_USER@$PI 'sudo tailscale up'
 
   Or put a reusable TS_AUTHKEY in sensorsentinel.env to make this automatic:
       https://login.tailscale.com/admin/settings/keys"
@@ -334,7 +340,63 @@ PI_SSH=(-o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/
 # The result is a script that hangs forever on a step that already succeeded.
 # The tunnel survives the move, which is exactly why it is verified first.
 PI_ADDR="${TS_IP:-$PI}"
-pisudo() { printf '%s\n' "$PI_SUDO" | ssh "${PI_SSH[@]}" "nolfonzo@$PI_ADDR" "sudo -S bash -c '$1'" 2>&1 | grep -v '^\[sudo\]' || true; }
+pisudo() { printf '%s\n' "$PI_SUDO" | ssh "${PI_SSH[@]}" "$PI_USER@$PI_ADDR" "sudo -S bash -c '$1'" 2>&1 | grep -v '^\[sudo\]' || true; }
+
+# A deployment account, so client units carry no personal login. The card may
+# already have been flashed with it - Raspberry Pi Imager can set the username
+# and password directly - in which case this only confirms it. If not, it is
+# created here, so a card flashed with any username still ends up uniform.
+#
+# On site the Pi is reachable only over its gateway's access point, from a
+# phone. If the login is not the one you expect there is no second way in and
+# nothing to look it up with, so this is verified rather than assumed.
+if [[ -n "$PI_PASS" ]]; then
+  say "ensuring the '$DEPLOY_USER' account"
+  pisudo "id -u '$DEPLOY_USER' >/dev/null 2>&1 || useradd -m -s /bin/bash '$DEPLOY_USER'
+          usermod -aG sudo '$DEPLOY_USER'
+          echo '$DEPLOY_USER:$PI_PASS' | chpasswd
+          install -d -m 700 -o '$DEPLOY_USER' -g '$DEPLOY_USER' /home/'$DEPLOY_USER'/.ssh
+          if [ -r /home/$BOOTSTRAP_USER/.ssh/authorized_keys ]; then
+            cp /home/$BOOTSTRAP_USER/.ssh/authorized_keys /home/'$DEPLOY_USER'/.ssh/authorized_keys
+            chown '$DEPLOY_USER':'$DEPLOY_USER' /home/'$DEPLOY_USER'/.ssh/authorized_keys
+            chmod 600 /home/'$DEPLOY_USER'/.ssh/authorized_keys
+          fi"
+
+  # Proved by logging in with it, not by chpasswd's exit code - it reports
+  # success on a locked account, and a login that does not work is only
+  # discovered at a site.
+  if printf '%s\n' "$PI_PASS" | ssh "${PI_SSH[@]}" "$DEPLOY_USER@$PI_ADDR" \
+       "sudo -S true" >/dev/null 2>&1; then
+    say "  verified: '$DEPLOY_USER' logs in with the deployment password"
+    PI_USER="$DEPLOY_USER"
+    PI_SUDO="$PI_PASS"
+  else
+    die "the '$DEPLOY_USER' password did not take - the unit would be unreachable at a site."
+  fi
+else
+  say "PI_PASS not set - leaving accounts as flashed"
+fi
+
+# The watchdog runs as root (no User= in the unit), so it is ROOT's key the
+# gateway must accept - not the login user's. Installing the login user's key
+# instead leaves every recovery action failing silently behind 2>/dev/null:
+# the watchdog detects faults correctly and can do nothing about them.
+say "giving root a key the gateway accepts (the watchdog runs as root)"
+ROOT_PUBKEY="$(pisudo "test -f /root/.ssh/id_rsa || ssh-keygen -t rsa -b 2048 -N '' -f /root/.ssh/id_rsa >/dev/null 2>&1
+                       cat /root/.ssh/id_rsa.pub" | tr -d '\r' | grep '^ssh-')"
+if [[ -n "$ROOT_PUBKEY" ]]; then
+  gw "grep -qF '$ROOT_PUBKEY' /etc/dropbear/authorized_keys 2>/dev/null || echo '$ROOT_PUBKEY' >> /etc/dropbear/authorized_keys; chmod 600 /etc/dropbear/authorized_keys"
+  if pisudo "ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+       -o KexAlgorithms=+diffie-hellman-group14-sha1,diffie-hellman-group1-sha1 \
+       -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedKeyTypes=+ssh-rsa -o ConnectTimeout=10 \
+       root@$GW_LAN true 2>/dev/null && echo OK" | grep -q OK; then
+    say "  verified: root can reach the gateway, so the watchdog can act"
+  else
+    say "  WARNING: root still cannot reach the gateway - watchdog recovery will not work"
+  fi
+else
+  say "  WARNING: could not read root's public key - watchdog recovery will not work"
+fi
 
 # Static address on the gateway's LAN: the gateway can only be given an IP for
 # its broker, so the Pi's address has to be predictable. Pinned to the BSSID so
@@ -356,7 +418,7 @@ pisudo "nmcli connection delete ss-gateway >/dev/null 2>&1 || true
 
 # The watchdog restarts the gateway's forwarder over SSH, so it needs a key.
 say "installing the Pi's key on the gateway (for the watchdog)"
-PI_PUBKEY="$(ssh "${PI_SSH[@]}" "nolfonzo@$PI_ADDR" 'cat ~/.ssh/id_rsa.pub' 2>/dev/null)"
+PI_PUBKEY="$(ssh "${PI_SSH[@]}" "$PI_USER@$PI_ADDR" 'cat ~/.ssh/id_rsa.pub' 2>/dev/null)"
 [[ -n "$PI_PUBKEY" ]] && gw "grep -qF '$PI_PUBKEY' /etc/dropbear/authorized_keys 2>/dev/null || echo '$PI_PUBKEY' >> /etc/dropbear/authorized_keys; chmod 600 /etc/dropbear/authorized_keys"
 
 # USB gadget mode needs a reboot, and rebooting here does double duty: it also
@@ -366,7 +428,7 @@ hdr "rebooting the Pi (activates USB rescue mode, and proves it recovers)"
 pisudo 'reboot' >/dev/null 2>&1 || true
 sleep 45
 for i in $(seq 1 20); do
-  ssh "${PI_SSH[@]}" "nolfonzo@$PI_ADDR" true 2>/dev/null && break
+  ssh "${PI_SSH[@]}" "$PI_USER@$PI_ADDR" true 2>/dev/null && break
   sleep 15
 done
 
@@ -375,7 +437,7 @@ hdr "verifying the pair"
 # if it did not, say so now while the device is still on the bench.
 sleep 20
 if ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
-       -o ConnectTimeout=15 "nolfonzo@$TS_IP" 'true' 2>/dev/null; then
+       -o ConnectTimeout=15 "$PI_USER@$TS_IP" 'true' 2>/dev/null; then
   say "reachable over Tailscale at $TS_IP after the move"
 else
   say "WARNING: not reachable over Tailscale yet. It may still be associating;"
@@ -409,7 +471,7 @@ if [[ -f "$INV" ]] && grep -q "| $AP_SSID |" "$INV"; then
 else
 printf '| %s | %s | %s | %s | %s | %s |\n' \
   "$(date +%Y-%m-%d)" "$AP_SSID" "${AP_BSSID:-?}" \
-  "$(ssh "${PI_SSH[@]}" "nolfonzo@$PI_ADDR" hostname 2>/dev/null || echo '?')" \
+  "$(ssh "${PI_SSH[@]}" "$PI_USER@$PI_ADDR" hostname 2>/dev/null || echo '?')" \
   "${TS_IP:-?}" "${SITE_SSID:-<unchanged>}" >> "$INV"
 say "recorded in INVENTORY.md"
 fi
