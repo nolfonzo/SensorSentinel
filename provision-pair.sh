@@ -377,6 +377,24 @@ else
   say "PI_PASS not set - leaving accounts as flashed"
 fi
 
+# Static address on the gateway's LAN: the gateway can only be given an IP for
+# its broker, so the Pi's address has to be predictable. Pinned to the BSSID so
+# it can only ever associate with this gateway's radio.
+say "binding the Pi to $AP_SSID (static $PI_STATIC, BSSID-pinned)"
+pisudo "nmcli connection delete ss-gateway >/dev/null 2>&1 || true
+        nmcli connection add type wifi con-name ss-gateway ifname wlan0 ssid '$AP_SSID' \
+          wifi-sec.key-mgmt wpa-psk wifi-sec.psk '$AP_PASS' \
+          ipv4.method manual ipv4.addresses $PI_STATIC/24 ipv4.gateway $GW_LAN ipv4.dns $GW_LAN \
+          connection.autoconnect yes connection.autoconnect-priority 10 >/dev/null
+        ${AP_BSSID:+nmcli connection modify ss-gateway 802-11-wireless.bssid '$AP_BSSID'}
+        # Creating the profile is not enough. autoconnect-priority decides which
+        # network to pick when connecting; it does not make NetworkManager
+        # abandon one that is already working. Without this the gateway moves to
+        # 192.168.8.2 and the Pi stays on the house WiFi, so nothing can reach
+        # the broker and telemetry stops.
+        nmcli connection up ss-gateway >/dev/null 2>&1 || true
+        sleep 12"
+
 # The watchdog runs as root (no User= in the unit), so it is ROOT's key the
 # gateway must accept - not the login user's. Installing the login user's key
 # instead leaves every recovery action failing silently behind 2>/dev/null:
@@ -406,27 +424,9 @@ else
   say "  WARNING: could not read root's public key - watchdog recovery will not work"
 fi
 
-# Static address on the gateway's LAN: the gateway can only be given an IP for
-# its broker, so the Pi's address has to be predictable. Pinned to the BSSID so
-# it can only ever associate with this gateway's radio.
-say "binding the Pi to $AP_SSID (static $PI_STATIC, BSSID-pinned)"
-pisudo "nmcli connection delete ss-gateway >/dev/null 2>&1 || true
-        nmcli connection add type wifi con-name ss-gateway ifname wlan0 ssid '$AP_SSID' \
-          wifi-sec.key-mgmt wpa-psk wifi-sec.psk '$AP_PASS' \
-          ipv4.method manual ipv4.addresses $PI_STATIC/24 ipv4.gateway $GW_LAN ipv4.dns $GW_LAN \
-          connection.autoconnect yes connection.autoconnect-priority 10 >/dev/null
-        ${AP_BSSID:+nmcli connection modify ss-gateway 802-11-wireless.bssid '$AP_BSSID'}
-        # Creating the profile is not enough. autoconnect-priority decides which
-        # network to pick when connecting; it does not make NetworkManager
-        # abandon one that is already working. Without this the gateway moves to
-        # 192.168.8.2 and the Pi stays on the house WiFi, so nothing can reach
-        # the broker and telemetry stops.
-        nmcli connection up ss-gateway >/dev/null 2>&1 || true
-        sleep 12"
-
 # The watchdog restarts the gateway's forwarder over SSH, so it needs a key.
 say "installing the Pi's key on the gateway (for the watchdog)"
-PI_PUBKEY="$(ssh "${PI_SSH[@]}" "$PI_USER@$PI_ADDR" 'cat ~/.ssh/id_rsa.pub' 2>/dev/null)"
+PI_PUBKEY="$(ssh "${PI_SSH[@]}" "$PI_USER@$PI_ADDR" 'cat ~/.ssh/id_rsa.pub' 2>/dev/null || true)"
 # Guarded: a bare `[[ ... ]] && cmd` as the last command of a line returns
 # non-zero when the test fails, which under `set -e` aborts the run. The
 # deployment account has no keypair of its own, so this is the normal case now,

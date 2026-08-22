@@ -123,7 +123,17 @@ echo
 echo "  ── result ──"
 ASSOC="$(gw 'iwconfig apcli0 2>/dev/null | grep -oE "ESSID:\"[^\"]*\"" | cut -d\" -f2' 2>/dev/null)"
 ADDR="$(gw 'ifconfig apcli0 2>/dev/null | grep -oE "inet addr:[0-9.]+" | cut -d: -f2' 2>/dev/null)"
-FWD="$(gw 'ps | grep -v grep | grep -c lora_pkt_fwd_mqtt' 2>/dev/null)"
+# Retried, like the internet check below. The forwarder takes a variable time
+# to come back after a radio reload - checking once at 20s reports "not right"
+# on a setup that is about to be fine, which at a site means re-running a
+# working configuration and doubting it. A false red costs as much as a false
+# green here.
+FWD=0
+for _ in 1 2 3 4 5 6; do
+  FWD="$(gw 'ps | grep -v grep | grep -c lora_pkt_fwd_mqtt' 2>/dev/null)"
+  [[ "${FWD:-0}" != "0" ]] && break
+  sleep 10
+done
 
 echo "    associated to: ${ASSOC:-NOTHING}"
 echo "    gateway got:   ${ADDR:-no address}"
