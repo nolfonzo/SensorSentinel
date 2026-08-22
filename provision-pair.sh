@@ -296,7 +296,7 @@ hdr "configuring the gateway"
 
 # If it was renamed, the AP the Pi must bind to is the new one - the value read
 # before the gateway step is now stale.
-[[ -n "$NAME" ]] && AP_SSID="$NAME"
+[[ -n "$NAME" ]] && AP_SSID="$NAME" || true
 
 # Hostname follows the AP name, so the unit is unambiguous on any network it
 # joins without anyone choosing a name.
@@ -352,14 +352,14 @@ pisudo() { printf '%s\n' "$PI_SUDO" | ssh "${PI_SSH[@]}" "$PI_USER@$PI_ADDR" "su
 # nothing to look it up with, so this is verified rather than assumed.
 if [[ -n "$PI_PASS" ]]; then
   say "ensuring the '$DEPLOY_USER' account"
-  pisudo "id -u '$DEPLOY_USER' >/dev/null 2>&1 || useradd -m -s /bin/bash '$DEPLOY_USER'
-          usermod -aG sudo '$DEPLOY_USER'
-          echo '$DEPLOY_USER:$PI_PASS' | chpasswd
-          install -d -m 700 -o '$DEPLOY_USER' -g '$DEPLOY_USER' /home/'$DEPLOY_USER'/.ssh
+  pisudo "id -u \"$DEPLOY_USER\" >/dev/null 2>&1 || useradd -m -s /bin/bash \"$DEPLOY_USER\"
+          usermod -aG sudo \"$DEPLOY_USER\"
+          echo \"$DEPLOY_USER:$PI_PASS\" | chpasswd
+          install -d -m 700 -o \"$DEPLOY_USER\" -g \"$DEPLOY_USER\" /home/\"$DEPLOY_USER\"/.ssh
           if [ -r /home/$BOOTSTRAP_USER/.ssh/authorized_keys ]; then
-            cp /home/$BOOTSTRAP_USER/.ssh/authorized_keys /home/'$DEPLOY_USER'/.ssh/authorized_keys
-            chown '$DEPLOY_USER':'$DEPLOY_USER' /home/'$DEPLOY_USER'/.ssh/authorized_keys
-            chmod 600 /home/'$DEPLOY_USER'/.ssh/authorized_keys
+            cp /home/$BOOTSTRAP_USER/.ssh/authorized_keys /home/\"$DEPLOY_USER\"/.ssh/authorized_keys
+            chown \"$DEPLOY_USER\":\"$DEPLOY_USER\" /home/\"$DEPLOY_USER\"/.ssh/authorized_keys
+            chmod 600 /home/\"$DEPLOY_USER\"/.ssh/authorized_keys
           fi"
 
   # Proved by logging in with it, not by chpasswd's exit code - it reports
@@ -382,8 +382,16 @@ fi
 # instead leaves every recovery action failing silently behind 2>/dev/null:
 # the watchdog detects faults correctly and can do nothing about them.
 say "giving root a key the gateway accepts (the watchdog runs as root)"
-ROOT_PUBKEY="$(pisudo "test -f /root/.ssh/id_rsa || ssh-keygen -t rsa -b 2048 -N '' -f /root/.ssh/id_rsa >/dev/null 2>&1
-                       cat /root/.ssh/id_rsa.pub" | tr -d '\r' | grep '^ssh-')"
+# NOTE ON QUOTING: pisudo wraps its argument in single quotes, so any single
+# quote here closes that wrapper early. Double quotes pass through intact and
+# still mean "empty string" to the remote shell - hence -N "" rather than -N ''.
+# The first version of this used -N '' and silently generated no key at all.
+#
+# The `|| true` matters as much: grep returns non-zero when it matches nothing,
+# and under `set -euo pipefail` that aborted the whole script here without a
+# word, leaving the pair half-provisioned.
+ROOT_PUBKEY="$(pisudo "test -f /root/.ssh/id_rsa || ssh-keygen -q -t rsa -b 2048 -N \"\" -f /root/.ssh/id_rsa
+                       cat /root/.ssh/id_rsa.pub" | tr -d '\r' | grep '^ssh-' || true)"
 if [[ -n "$ROOT_PUBKEY" ]]; then
   gw "grep -qF '$ROOT_PUBKEY' /etc/dropbear/authorized_keys 2>/dev/null || echo '$ROOT_PUBKEY' >> /etc/dropbear/authorized_keys; chmod 600 /etc/dropbear/authorized_keys"
   if pisudo "ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
@@ -419,7 +427,11 @@ pisudo "nmcli connection delete ss-gateway >/dev/null 2>&1 || true
 # The watchdog restarts the gateway's forwarder over SSH, so it needs a key.
 say "installing the Pi's key on the gateway (for the watchdog)"
 PI_PUBKEY="$(ssh "${PI_SSH[@]}" "$PI_USER@$PI_ADDR" 'cat ~/.ssh/id_rsa.pub' 2>/dev/null)"
-[[ -n "$PI_PUBKEY" ]] && gw "grep -qF '$PI_PUBKEY' /etc/dropbear/authorized_keys 2>/dev/null || echo '$PI_PUBKEY' >> /etc/dropbear/authorized_keys; chmod 600 /etc/dropbear/authorized_keys"
+# Guarded: a bare `[[ ... ]] && cmd` as the last command of a line returns
+# non-zero when the test fails, which under `set -e` aborts the run. The
+# deployment account has no keypair of its own, so this is the normal case now,
+# not an error - root's key above is what the watchdog actually uses.
+[[ -n "$PI_PUBKEY" ]] && gw "grep -qF '$PI_PUBKEY' /etc/dropbear/authorized_keys 2>/dev/null || echo '$PI_PUBKEY' >> /etc/dropbear/authorized_keys; chmod 600 /etc/dropbear/authorized_keys" || true
 
 # USB gadget mode needs a reboot, and rebooting here does double duty: it also
 # proves the pair comes back by itself after a power cut, which is the thing
