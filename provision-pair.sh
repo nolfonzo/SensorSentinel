@@ -360,7 +360,9 @@ if [[ -n "$PI_PASS" ]]; then
             cp /home/$BOOTSTRAP_USER/.ssh/authorized_keys /home/\"$DEPLOY_USER\"/.ssh/authorized_keys
             chown \"$DEPLOY_USER\":\"$DEPLOY_USER\" /home/\"$DEPLOY_USER\"/.ssh/authorized_keys
             chmod 600 /home/\"$DEPLOY_USER\"/.ssh/authorized_keys
-          fi"
+          fi
+          ln -sfn /usr/local/bin/set-site-wifi /home/\"$DEPLOY_USER\"/set-site-wifi
+          chown -h \"$DEPLOY_USER\":\"$DEPLOY_USER\" /home/\"$DEPLOY_USER\"/set-site-wifi 2>/dev/null || true"
 
   # Proved by logging in with it, not by chpasswd's exit code - it reports
   # success on a locked account, and a login that does not work is only

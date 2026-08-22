@@ -139,6 +139,16 @@ say "installing set-site-wifi"
 "${SCP[@]}" "$HERE/set-site-wifi.sh" "$SSH_USER@$HOST:/tmp/set-site-wifi.sh"
 rsudo "install -m 755 /tmp/set-site-wifi.sh /usr/local/bin/set-site-wifi; rm -f /tmp/set-site-wifi.sh"
 
+# Symlinked into every home directory too. At a site you arrive over the
+# gateway's AP on a phone keyboard, and the one thing you need is the name of
+# the one command - a plain `ls` should answer that without having to recall it.
+rsudo 'for h in /home/*; do
+         [ -d "$h" ] || continue
+         u=$(basename "$h")
+         ln -sfn /usr/local/bin/set-site-wifi "$h/set-site-wifi"
+         chown -h "$u:$u" "$h/set-site-wifi" 2>/dev/null || true
+       done'
+
 # ── key for the watchdog to act on the gateway ──────────────────────────────
 say "generating this Pi's SSH key (so the watchdog can restart the gateway)"
 remote '[ -f ~/.ssh/id_rsa ] || ssh-keygen -t rsa -b 2048 -N "" -f ~/.ssh/id_rsa -q'
