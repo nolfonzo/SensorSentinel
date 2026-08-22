@@ -92,6 +92,10 @@ password rather than trusting that setting it worked.
 
 ## At the site
 
+**Phone only — no laptop.** Everything here runs over the gateway's own access
+point from an SSH client on a phone (Termius). The laptop sections above exist
+so that this one does not need one.
+
 7. **Power both.** The Pi finds its gateway by itself — pinned to that
    gateway's BSSID, it cannot associate with another.
 
