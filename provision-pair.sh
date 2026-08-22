@@ -505,5 +505,7 @@ $( [[ "${AP_PASS_GENERATED:-0}" == "1" ]] && printf '  Record the AP password - 
 
   Nothing left to do here. At the site, join $AP_SSID and run:
 
-    ./gateway/provision-gateway.sh --wifi-ssid "<their SSID>" --wifi-pass "<their password>"
+      ssh $DEPLOY_USER@$PI_STATIC
+      set-site-wifi --scan                     # read their SSID off the gateway radio
+      set-site-wifi "<their SSID>" "<password>"
 EOF
